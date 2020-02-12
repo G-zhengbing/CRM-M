@@ -27,7 +27,7 @@
             :open-names="[active]"
             @on-open-change="namePath"
           >
-            <Submenu :name="1">
+            <Submenu name="1">
               <template slot="title">
                 <Icon type="ios-paper" />CRM系统
               </template>
@@ -70,7 +70,7 @@
               <MenuItem name="/main/uplist" to="/main/uplist" v-if="$store.state.cId != 4">上课提醒</MenuItem>
               <MenuItem name="/main/money" to="/main/money" v-if="$store.state.cId != 3">订单中心</MenuItem>
               <!-- <MenuItem name="/main/number" to="/main/number" v-if="$store.state.cId != 3">成单数</MenuItem> -->
-              <Submenu :name="3" v-if="$store.state.cId != 2">
+              <Submenu name="1-1" v-if="$store.state.cId != 2">
                 <template slot="title">教务</template>
                 <MenuItem name="/main/minestudent" to="/main/minestudent">我的学员</MenuItem>
                 <MenuItem
@@ -80,12 +80,19 @@
                 >付费学员</MenuItem>
               </Submenu>
             </Submenu>
-            <Submenu :name="2" v-if="$store.state.cId != 4 && $store.state.cId != 2">
+            <Submenu name="2" v-if="$store.state.cId != 4 && $store.state.cId != 2">
               <template slot="title">
                 <Icon type="ios-stats" />M站后台
               </template>
               <MenuItem name="/main/advertising" to="/main/advertising">广告管理</MenuItem>
-              <MenuItem name="/main/special" to="/main/special">专题管理</MenuItem>
+              <!-- <MenuItem name="/main/special" to="/main/special">专题管理</MenuItem> -->
+              <Submenu name="2-1">
+                <template slot="title">
+                  <Icon type="ios-stats" />专题管理
+                </template>
+                <MenuItem name="/main/special" to="/main/special">首页专题</MenuItem>
+                <MenuItem name="/main/bookcode" to="/main/bookcode">一书一码</MenuItem>
+              </Submenu>
               <MenuItem name="/main/curriculum" to="/main/curriculum">课程管理</MenuItem>
               <MenuItem name="/main/databank" to="/main/databank">资料管理</MenuItem>
             </Submenu>

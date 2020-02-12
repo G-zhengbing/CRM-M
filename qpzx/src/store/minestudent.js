@@ -276,14 +276,14 @@ export default {
 
       return data.map(element => {
         // if (state.status == 1) {
-        var phone = element.mobile.toString()
-        var str = phone.split('')
-        for (let i = 0; i < str.length; i++) {
-          if (i === 3 | i === 4 | i === 5 | i === 6) {
-            str[i] = '*'
-          }
-        }
-        element.mobile = str.join("")
+        // var phone = element.mobile.toString()
+        // var str = phone.split('')
+        // for (let i = 0; i < str.length; i++) {
+        //   if (i === 3 | i === 4 | i === 5 | i === 6) {
+        //     str[i] = '*'
+        //   }
+        // }
+        // element.mobile = str.join("")
         // }
         element.order_grade = maps.get(element.order_grade);
         element.sex = gender.get(element.sex);

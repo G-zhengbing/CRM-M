@@ -4,7 +4,7 @@
       <img class="back" src="../assets/img/ju.png" alt />
       <img class="logo" src="../assets/img/logo.png" alt />
     </header>
-    <section :class="{islogin:isSignin}">
+    <section>
       <div class="center">
         <van-swipe
           :show-indicators="true"
@@ -297,7 +297,7 @@ export default {
     },
     //微课
     goSmall() {
-      // this.$router.push('/smallclass')
+      this.$router.push('/smallclass')
     },
     //课程
     goCourse() {

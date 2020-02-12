@@ -15,6 +15,7 @@ import Signin from '@/components/Signin'
 import Address from '../components/address/Address'
 import Addsite from '../components/address/Addsite'
 import Databanklist from '../components/Databanklist'
+import Bookcode from '../components/book/Bookcode'
 import storage from '../uilt/storage'
 
 Vue.use(Router)
@@ -100,6 +101,10 @@ const router = new Router({
       path:"/data/databanklist/:id",
       name:"Databanklist",
       component:Databanklist
+    },
+    {
+      path:"/bookcode",
+      component:Bookcode
     }
   ]
 })

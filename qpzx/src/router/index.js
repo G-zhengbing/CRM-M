@@ -21,6 +21,7 @@ import Advertising from '../components/Mzhan/Advertising'
 import Curriculum from '../components/Mzhan/Curriculum'
 import Databank from '../components/Mzhan/Databank'
 import Special from '../components/Mzhan/Special'
+import Bookcode from '../components/Mzhan/Bookcode'
 
 import storage from '../uilt/storage'
 
@@ -50,6 +51,10 @@ const router = new Router({
       path: '/main',
       component: Main,
       children: [
+        {
+          path: '/main/bookcode',
+          component: Bookcode
+        },
         {
           path: '/main/special',
           component: Special

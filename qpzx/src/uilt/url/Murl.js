@@ -22,8 +22,10 @@ const DELEDATA_URL = "http://liveapi.canpoint.net/api/delete_material" //删除�
 const DATASHOW = "http://liveapi.canpoint.net/api/line_material" //资料首页显示状态
 const UPDATADATA_URL = "http://liveapi.canpoint.net/api/modify_material" //修改资料
 
+const BOOK_URL = "http://liveapi.canpoint.net/api/book_list"
 
 export {
+  BOOK_URL,
   UPDATAADVER_URL,
   ADVER_URL,
   ADDADVER_URL,
@@ -38,7 +40,6 @@ export {
   ADDCURR_URL,
   CURRSHOW_URL,
   CURRUPDOWN_URL,
-  
   DELECURR_URL,
   DATA_URL,
   ADDDATA_URL,
