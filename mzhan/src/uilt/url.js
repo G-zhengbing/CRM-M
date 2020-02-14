@@ -24,7 +24,7 @@ const ADDSITE = "http://liveh5.canpoint.net/create_address" //新建地址
 const ADDRESS = "http://liveh5.canpoint.net/address_list" //地址列表
 const DELADDRESS = "http://liveh5.canpoint.net/update_address" //删除/修改地址
 
-const SMALL = "http://liveh5.canpoint.net/subject_list" //免费课程列表
+const SMALL = "http://liveh5.canpoint.net/subject_list?type=2" //免费课程列表
 export {
   SMALL,
   HOME,

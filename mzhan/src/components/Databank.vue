@@ -50,7 +50,7 @@
             <span v-if="obj.type == 1">{{obj.start_date}}-{{obj.end_date}}</span>
             <span v-if="obj.update_state == 1">更新中</span>
             <span v-if="obj.update_state == 2">已完结</span>
-            <i>￥{{obj.activity_price}}</i>
+            <i>￥{{obj.activity_price == "0.00"?obj.sale_price:obj.activity_price}}</i>
             <div>服务:正品保证</div>
           </div>
         </div>
@@ -124,7 +124,6 @@ export default {
   components: {
     Loading
   },
-
   data() {
     return {
       isActive: 0,
@@ -153,7 +152,12 @@ export default {
   },
   methods: {
     goHome() {
-      this.$router.push("/");
+      if(JSON.stringify(storage.getSmall()) != "{}"){
+        this.$router.push("/smallclass")
+      }else{
+        this.$router.push("/");
+      }
+      
     },
     getVideoUrl(val, num) {
       this.isActive = num;

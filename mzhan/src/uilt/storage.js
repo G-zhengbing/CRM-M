@@ -7,8 +7,18 @@ const DRAW = "DRAW"
 const ADDRESS = "ADDRESS"
 const ADDSITE = "ADDSITE"
 const LOCATION = "LOCATION"
+const SMALL = "SMALL"
 
 export default {
+  clearSmall(){
+    LOCAL.clear(SMALL)
+  },
+  getSmall(){
+    return JSON.parse(LOCAL.getItem(SMALL) || '{}')
+  },
+  saveSmall(todo){
+    LOCAL.setItem(SMALL, JSON.stringify(todo))
+  },
   get() {
     return JSON.parse(SESSION.getItem(CLASS_LIST) || '{}')
   },

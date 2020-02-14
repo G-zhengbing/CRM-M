@@ -139,7 +139,7 @@
               <i v-if="item.update_state == 2">已完结</i>
               <span>
                 <span>￥</span>
-                {{item.activity_price}}
+                {{item.activity_price == "0.00"?item.sale_price:item.activity_price}}
               </span>
             </div>
           </li>
@@ -304,6 +304,7 @@ export default {
       // this.$router.push('/course')
     },
     goXiangqing(item) {
+      storage.clearSmall()
       storage.save(item);
       this.$router.push({ path: `/home/databank/${item}` });
     },

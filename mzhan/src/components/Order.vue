@@ -116,11 +116,16 @@ export default {
           }
         })
           .then(res => {
+            this.addressList = res.data.data
             res.data.data.map(i => {
               if (i.is_default == 1) {
                 this.address = i;
               }
               return this.address;
+              // console.log(this.$route.params.id)
+              // if(i.id == this.$route.params.id){
+              //   this.address = i
+              // }
             });
             resolve();
           })

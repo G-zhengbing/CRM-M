@@ -2,6 +2,11 @@
   <div>
     <scroller>
       <section>
+        <div class="header">
+          <img @click="goHome" src="../assets/img/fan.png" alt />
+          <span>考试题库</span>
+        </div>
+        <p class="header-bottom"></p>
         <ul>
           <li v-for="(item,i) in dataList">
             <a ref="pdf" :href="link_pdf" @click="openFile(item)">
@@ -46,6 +51,9 @@ export default {
     };
   },
   methods: {
+    goHome() {
+      this.$router.push("/");
+    },
     openFile(item) {
       this.$router.push({ path: `/data/databanklist/${item.id}` });
     },
@@ -72,6 +80,32 @@ export default {
 </script>
 
 <style scoped>
+.header > span {
+  font-size: 30px;
+  color: #333;
+  text-align: center;
+  flex: 1;
+  margin-left: -40px;
+}
+.header {
+  height: 110px;
+  display: flex;
+  align-items: center;
+  background: #fff;
+}
+.header-bottom {
+  height: 15px;
+  background: #f3f3f3;
+  width: 100%;
+}
+.header img {
+  width: 44px;
+  height: 24px;
+  transform: rotate(180deg);
+  margin-left: 40px;
+  width: 24px;
+  height: 40px;
+}
 .title-text {
   width: 568px;
   white-space: nowrap;
@@ -144,9 +178,9 @@ section ul li {
 section ul {
   display: flex;
   flex-direction: column;
+  margin: 0 20px;
 }
 section {
   background: #fff;
-  margin: 0 20px;
 }
 </style>
