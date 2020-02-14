@@ -115,7 +115,7 @@ export default {
   computed: {
     ...mapState({
       data: state => state.bookcode.bookList,
-      spCurrentPage: state => state.bookcode.spCurrentPage,
+      spCurrentPage: state => state.bookcode.currentPage,
       pageSize: state => state.bookcode.pageSize,
       total: state => state.bookcode.total
     })

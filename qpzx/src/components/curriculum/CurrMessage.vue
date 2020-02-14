@@ -376,7 +376,7 @@ export default {
             formData.append('subject',this.form.subject);
             formData.append('course_name',this.form.course_name);
             formData.append('product_content',this.form.product_content);
-            formData.append('activity_price',this.form.activity_price);
+            formData.append('activity_price',this.form.activity_price?this.form.activity_price:"");
             formData.append('sale_price',this.form.sale_price);
             if(this.form.type == 1){
               formData.append('start_date',d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate());
@@ -421,7 +421,7 @@ export default {
             formData.append('subject',this.form.subject);
             formData.append('course_name',this.form.course_name);
             formData.append('product_content',this.form.product_content);
-            formData.append('activity_price',this.form.activity_price);
+            formData.append('activity_price',this.form.activity_price?this.form.activity_price:"");
             formData.append('sale_price',this.form.sale_price);
             if(this.form.type == 1){
               if(this.form.type == 1 && this.uploadList.length == 0){

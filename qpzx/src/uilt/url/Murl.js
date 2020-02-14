@@ -22,9 +22,17 @@ const DELEDATA_URL = "http://liveapi.canpoint.net/api/delete_material" //删除�
 const DATASHOW = "http://liveapi.canpoint.net/api/line_material" //资料首页显示状态
 const UPDATADATA_URL = "http://liveapi.canpoint.net/api/modify_material" //修改资料
 
-const BOOK_URL = "http://liveapi.canpoint.net/api/book_list"
+const BOOK_URL = "http://liveapi.canpoint.net/api/book_list"//一书一码列表
+const BOOK_ADD = "http://liveapi.canpoint.net/api/store_book"//新增一书一码
+const BOOK_VIDEO = "http://liveapi.canpoint.net/api/book_fileload"//一书一码视频
+const BOOK_UPDATE = "http://liveapi.canpoint.net/api/modify_book"//修改一书一码
+const BOOK_REMOVE = "http://liveapi.canpoint.net/api/delete_book"//删除一书一码
 
 export {
+  BOOK_REMOVE,
+  BOOK_UPDATE,
+  BOOK_VIDEO,
+  BOOK_ADD,
   BOOK_URL,
   UPDATAADVER_URL,
   ADVER_URL,

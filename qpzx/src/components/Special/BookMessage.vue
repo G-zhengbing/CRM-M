@@ -8,8 +8,8 @@
         <Form ref="form" :model="form" :rules="ruleValidate" :label-width="80">
           <Row>
             <Col span="10">
-                <FormItem label="书籍名称" prop="sale_price">
-                    <Input v-model="form.sale_price" placeholder="请输入副标题"></Input>
+                <FormItem label="书籍名称" prop="book_name">
+                    <Input v-model="form.book_name" placeholder="请输入副标题"></Input>
                 </FormItem>
             </Col>
             <Col span="5" offset="2">
@@ -69,7 +69,7 @@
               </FormItem>
             </col>
             <Col span="24">
-              <FormItem label="轮播图片" prop="image_1" class="active_span">
+              <FormItem label="介绍头图" prop="book_banner" class="active_span">
                 <span class="active_red">*</span>
                 <template>
                   <div class="demo-upload-list" v-for="item in uploadList">
@@ -92,13 +92,13 @@
                     <Icon type="ios-camera" size="20"></Icon>
                   </div>
                 </Upload>
-                <p>只能上传jpg/png格式文件，文件不能超过2M，图片尺寸：180px * 180px</p>
+                <p>只能上传jpg/png格式文件，文件不能超过2M 图片尺寸：73 * 73 像素</p>
               </FormItem>
             </Col>
             </template>
             <template>
             <Col span="24">
-              <FormItem label="课节目录" prop="course_list" class="active_span">
+              <FormItem label="课节目录" prop="lesson_list" class="active_span">
                 <span class="active_red">*</span>
                  <div class="catalog">
                   <p @click="addLessons">+添加课节</p>
@@ -108,11 +108,11 @@
                     </li>
                   </ul>
                 </div>
-                <!-- <input type="file" ref="file" @change="uploadMp4($event)"> -->
               </FormItem>
             </Col>
             <Col span="24">
                 <FormItem label="推荐位" prop="course_list" class="active_span">
+                  <span class="active_red">*</span>
                     <div class="recommend">
                             <div class="recommendOne">
                             <span>推荐位1</span>
@@ -200,45 +200,23 @@ export default {
       timeArr:[],
       isVideo:false,
       uploadMp4List:[],
-      endTime:"",
-      startTime:"",
-      end:"",
-      start:"",
       file:[],
       imgUrl:"",
       imgName: '',
       visible: false,
       uploadList: [],
       form: {
-        type:'1'
       },
       ruleValidate: {
-        type: [
-          { required: true, message: '课程类型不能为空'}
-        ],
         grade: [
           { required: true, message: '年级不能为空'}
         ],
-        course_name: [
+        book_name: [
           { required: true, message: '课程名称不能为空', trigger: 'blur' }
         ],
         subject: [
           { required: true, message: '科目不能为空'}
-        ],
-        class_hour: [
-          { required: true, message: '课节数不能为空' }
-        ],
-        class_type:[
-          { required: true, message: '班级分类是必选的' }
-        ],
-        sale_price: [
-          { required: true, message: '售价不能为空', trigger: 'blur' }
-        ],
-        update_state:[
-          { required: true, message: '当前状态是必选的' }
-        ],
-        product_content:[{ required: true}],
-        start_date:[{ required: true}],
+        ]
       }
     };
   },
@@ -302,17 +280,6 @@ export default {
       })
       }
     },
-    //课程结束日期
-    getEnd(date){
-      this.end = date
-    },
-    //课程开始日期
-    getStart(date){
-      this.start = date
-    },
-		catchData(val){
-      this.form.product_content = val
-		},
     handleView (item) {
       if(this.$parent.isUpdata){
         this.imgName = item
@@ -357,61 +324,53 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if(this.$parent.isUpdata){
-            var d = new Date(this.form.start_date);
-            var b = new Date(this.form.end_date);
-            var formData = new FormData();
-            formData.append('id', this.form.id);
-            formData.append('type', this.form.type);
-            formData.append('grade',this.form.grade);
-            formData.append('subject',this.form.subject);
-            formData.append('course_name',this.form.course_name);
-            formData.append('product_content',this.form.product_content);
-            formData.append('activity_price',this.form.activity_price);
-            formData.append('sale_price',this.form.sale_price);
-            if(this.form.type == 1){
-              formData.append('start_date',d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate());
-              formData.append('end_date',b.getFullYear() + '-' + (b.getMonth() + 1) + '-' + b.getDate());
-              formData.append('course_list',JSON.stringify(this.timeArr));
-              formData.append('class_type',this.form.class_type);
-              formData.append('image_1',this.uploadList[0]?this.uploadList[0]:"");
-              formData.append('image_2',this.uploadList[1]?this.uploadList[1]:"");
-              formData.append('image_3',this.uploadList[2]?this.uploadList[2]:"");
-            }else{
-              formData.append('class_hour',this.form.class_hour);
-              formData.append('update_state',this.form.update_state?this.form.update_state:"");
-              formData.append('course_list',JSON.stringify(this.videoArr));
-            }
-            let config = {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-                Authorization: "bearer " + storage.get()
-              }
-            };
-            axios.post("http://liveapi.canpoint.net/api/update_products" , formData,config)
-            .then((response) => {
-              if(response.data.code == 100001 && response.data.error){
-                this.$Message.error(response.data.error);
-              }
-              if(response.data.code==200 && response.data.ret == true){
-                this.$Message.success("修改成功");
-                this.getCurrList()
-                this.$parent.isCurrMessage = false
-              }
-            })
+            // var d = new Date(this.form.start_date);
+            // var b = new Date(this.form.end_date);
+            // var formData = new FormData();
+            // formData.append('id', this.form.id);
+            // formData.append('type', this.form.type);
+            // formData.append('grade',this.form.grade);
+            // formData.append('subject',this.form.subject);
+            // formData.append('course_name',this.form.course_name);
+            // formData.append('product_content',this.form.product_content);
+            // formData.append('activity_price',this.form.activity_price);
+            // formData.append('sale_price',this.form.sale_price);
+            // if(this.form.type == 1){
+            //   formData.append('start_date',d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate());
+            //   formData.append('end_date',b.getFullYear() + '-' + (b.getMonth() + 1) + '-' + b.getDate());
+            //   formData.append('course_list',JSON.stringify(this.timeArr));
+            //   formData.append('class_type',this.form.class_type);
+            //   formData.append('image_1',this.uploadList[0]?this.uploadList[0]:"");
+            //   formData.append('image_2',this.uploadList[1]?this.uploadList[1]:"");
+            //   formData.append('image_3',this.uploadList[2]?this.uploadList[2]:"");
+            // }else{
+            //   formData.append('class_hour',this.form.class_hour);
+            //   formData.append('update_state',this.form.update_state?this.form.update_state:"");
+            //   formData.append('course_list',JSON.stringify(this.videoArr));
+            // }
+            // let config = {
+            //   headers: {
+            //     'Content-Type': 'multipart/form-data',
+            //     Authorization: "bearer " + storage.get()
+            //   }
+            // };
+            // axios.post("http://liveapi.canpoint.net/api/update_products" , formData,config)
+            // .then((response) => {
+            //   if(response.data.code == 100001 && response.data.error){
+            //     this.$Message.error(response.data.error);
+            //   }
+            //   if(response.data.code==200 && response.data.ret == true){
+            //     this.$Message.success("修改成功");
+            //     this.getCurrList()
+            //     this.$parent.isCurrMessage = false
+            //   }
+            // })
           }else{
-            if(!this.form.product_content){
-              this.$Message.warning('请填写专题内容')
-              return
-            }
-            var d = new Date(this.form.start_date);
-            var b = new Date(this.form.end_date);
             var formData = new FormData();
-            formData.append('type', this.form.type);
             formData.append('grade',this.form.grade);
             formData.append('subject',this.form.subject);
             formData.append('course_name',this.form.course_name);
-            formData.append('product_content',this.form.product_content);
-            formData.append('activity_price',this.form.activity_price);
+            formData.append('activity_price',this.form.activity_price); 
             formData.append('sale_price',this.form.sale_price);
             if(this.form.type == 1){
               if(this.form.type == 1 && this.uploadList.length == 0){
@@ -436,7 +395,7 @@ export default {
                 Authorization: "bearer " + storage.get()
               }
             };
-            axios.post("http://liveapi.canpoint.net/api/create_products",formData,config)
+            axios.post("http://liveapi.canpoint.net/api/store_book",formData,config)
             .then((response) => {
               if(response.data.code == 100001 && response.data.error){
                 this.$Message.error(response.data.error);
@@ -461,9 +420,8 @@ export default {
     this.$refs.wangditor.text = ""
     if(this.$parent.isUpdata){
       this.form =  this.item
-      this.$refs.wangditor.text = this.item.product_content
-      this.timeArr = this.item.course_list?this.item.course_list :[]
-      this.videoArr = this.item.course_list?this.item.course_list :[]
+      this.timeArr = this.item.lesson_list?this.item.lesson_list :[]
+      this.videoArr = this.item.lesson_list?this.item.lesson_list :[]
     }else{
       this.uploadList.length = 0
     }
