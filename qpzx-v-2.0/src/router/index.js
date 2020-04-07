@@ -22,7 +22,16 @@ import Curriculum from '../components/Mzhan/Curriculum'
 import Databank from '../components/Mzhan/Databank'
 import Special from '../components/Mzhan/Special'
 import Bookcode from '../components/Mzhan/Bookcode'
-
+import Reservation from '../components/Reservation'
+import Thread from '../components/Thread'
+import Studentpay from '../components/minecllient/Studentpay.vue'
+import Mineclient from '../components/minecllient/Mineclient.vue'
+import Notification from '../components/minecllient/Notification.vue'
+import Reserved from '../components/reserved/Reserved.vue'
+import Allreserved from '../components/reserved/Allreserved.vue'
+import Teacher from '../components/teachering/Teacher.vue'
+import Statistics from '../components/Statistics'
+ 
 import storage from '../uilt/storage'
 
 Vue.use(Router)
@@ -126,6 +135,42 @@ const router = new Router({
         {
           path: '/main/payingstudent',
           component: Payingstudent
+        },
+        {
+          path: '/main/reservation',
+          component: Reservation
+        },
+        {
+          path: '/main/thread',
+          component: Thread
+        },
+        {
+          path: '/main/studentpay',
+          component: Studentpay
+        },
+        {
+          path: '/main/mineclient',
+          component: Mineclient
+        },
+        {
+          path: '/main/notification',
+          component: Notification
+        },
+        {
+          path: '/main/reserved',
+          component: Reserved
+        },
+        {
+          path: '/main/teacher',
+          component: Teacher
+        },
+        {
+          path: '/main/allreserved',
+          component: Allreserved
+        },
+        {
+          path: '/main/statistics',
+          component: Statistics
         }
       ]
     }

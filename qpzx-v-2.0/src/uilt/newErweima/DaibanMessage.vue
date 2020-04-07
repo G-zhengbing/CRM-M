@@ -1,495 +1,418 @@
 <template>
   <div class="boxs">
     <div class="shade" v-if="type.classify == 'shade'">
-      <div class="contaner" v-if="showShade" :class="{paystu:type.status == 'payingstudent'}">
-        <div>
-          <div class="shade-top">
-            <button class="btn">分配</button>
-          </div>
-          <div class="shade-content">
-            <ul>
-              <template v-if="type.status == 'payingstudent'">
-                <li>
-                  选择人员 :
-                  <select class="selected info" v-model="form.sale_name" @change="selected()">
-                    <option
-                      v-for="(list,i) in payList"
-                      :key="i"
-                      :value="list.login_name"
-                    >{{list.login_name}}</option>
-                  </select>
-                </li>
-              </template>
-              <template v-else>
-                <li>
-                  <select class="selected info" v-model="form.sale_name" @change="selected()">
-                    <option
-                      v-for="(list,i) in fenpeiList"
-                      :key="i"
-                      :value="list.login_name"
-                    >{{list.login_name}}</option>
-                  </select>
-                </li>
-              </template>
-            </ul>
-            <div class="text" v-if="type.status != 'payingstudent'">
-              <span>分配说明 :&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              <div>
-                <input readonly="readonly" type="text" />
-                <textarea cols="30" rows="8" v-model="form.assign_note"></textarea>
-              </div>
-            </div>
-            <div class="handel">
-              <button class="btn confirm" @click="confirm">确定</button>
-              <button class="btn cancel" @click="colse">取消</button>
-            </div>
-          </div>
+      <Modal v-model="showShade" title="分配" @on-cancel="colse">
+        <template v-if="type.status == 'payingstudent'">
+          <Select
+            v-model="form.sale_name"
+            style="width:150px;margin-bottom:20px"
+            @on-change="selected"
+            placeholder="选择人员"
+          >
+            <Option
+              v-for="(list,i) in payList"
+              :key="i"
+              :value="list.login_name"
+            >{{list.login_name}}</Option>
+          </Select>
+        </template>
+        <template v-else>
+          <Select
+            v-model="form.sale_name"
+            style="width:150px;margin-bottom:20px"
+            @on-change="selected"
+            placeholder="选择人员"
+          >
+            <Option
+              v-for="(list,i) in fenpeiList"
+              :key="i"
+              :value="list.login_name"
+            >{{list.login_name}}</Option>
+          </Select>
+        </template>
+        <Input
+          v-if="type.status != 'payingstudent'"
+          v-model="form.assign_note"
+          type="textarea"
+          :rows="4"
+          placeholder="分配说明"
+        />
+        <div slot="footer">
+          <Button type="text" size="large" @click="colse">取消</Button>
+          <Button type="primary" size="large" @click="confirm">确定</Button>
         </div>
-      </div>
+      </Modal>
     </div>
     <!--  -->
-    <div class="fenpei shiftOut" v-if="showFenpei">
+    <Modal v-model="showFenpei" @on-cancel="no">
       <p>是否分配给{{form.sale_name}} ?</p>
-      <div>
-        <button class="btn confirm" @click="yes">是</button>
-        <button class="btn cancel" @click="no">否</button>
+      <div slot="footer">
+        <Button type="text" size="large" @click="no">取消</Button>
+        <Button type="primary" size="large" @click="yes">确定</Button>
       </div>
-    </div>
+    </Modal>
     <!--  -->
     <div class="message" v-if="message">
       <span>操作成功</span>
     </div>
     <!--  -->
-    <div class="datalis" v-else-if="type.classify == 'datalis'">
-      <i @click="$parent.show = false" class="datalis-colse">×</i>
-      <div class="context">
-        <div class="shade-top">
-          <div>
-            <img src="../../assets/img/touxiang/png24.png" alt />
-            <span>学员详情</span>
-          </div>
+    <div v-else-if="type.classify == 'datalis'">
+      <Modal
+        class="modal"
+        width="1100"
+        v-model="type.classify == 'datalis'"
+        title="学员详情"
+        @on-cancel="followUpColse"
+        :styles="{'margin-top' : '-70px'}"
+      >
+        <Form :model="form" label-position="top" style="height:500px;overflow-y:auto;">
+          <Row>
+            <Col span="4">
+              <FormItem style="width:150px;" label="学员姓名">
+                <Input readonly v-model="type.data.student_name" placeholder="姓名"></Input>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem style="width:150px;" label="注册手机">
+                <Input :title="type.data.tel" readonly v-model="type.data.mobile" placeholder="手机号"></Input>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem style="width:150px;" label="备用电话">
+                <Input readonly v-model="type.data.spare_phone" placeholder="电话"></Input>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem label="性别">
+                <Select v-model="type.data.sex" style="width:150px" placeholder="性别" disabled>
+                  <Option :value="1">男</Option>
+                  <Option :value="2">女</Option>
+                </Select>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem style="width:150px;" label="年龄">
+                <Input readonly v-model="type.data.age" placeholder="年龄"></Input>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem label="年级">
+                <Select v-model="type.data.grade" style="width:150px" placeholder="年级" disabled>
+                  <Option :value="1">一年级</Option>
+                  <Option :value="2">二年级</Option>
+                  <Option :value="3">三年级</Option>
+                  <Option :value="4">四年级</Option>
+                  <Option :value="5">五年级</Option>
+                  <Option :value="6">六年级</Option>
+                  <Option :value="7">七年级</Option>
+                  <Option :value="8">八年级</Option>
+                  <Option :value="9">九年级</Option>
+                </Select>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem style="width:150px;" label="微信昵称">
+                <Input readonly v-model="type.data.wechat_nick_name" placeholder="学员微信昵称"></Input>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem style="width:150px;" label="微信号">
+                <Input readonly v-model="type.data.wechat_id" placeholder="请输入微信号"></Input>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem style="width:150px;" label="学员地区">
+                <Input readonly v-model="type.data.area" placeholder="请输入学员地区"></Input>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem style="width:150px;" label="学校">
+                <Input readonly v-model="type.data.school" placeholder="就读学校"></Input>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem label="教材版本">
+                <Select
+                  v-model="type.data.textbook_version"
+                  style="width:150px"
+                  placeholder="教材版本"
+                  disabled
+                >
+                  <Option v-for="(list,i) in vaersion" :value="i*1">{{list}}</Option>
+                </Select>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem label="意向科目">
+                <Select v-model="type.data.subject" style="width:150px" placeholder="意向科目" disabled>
+                  <Option v-for="(list,i) in subject" :key="i*1" :value="list">{{list}}</Option>
+                </Select>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem label="意向度">
+                <Select
+                  v-model="type.data.intention_option"
+                  style="width:150px"
+                  placeholder="意向度"
+                  disabled
+                >
+                  <Option v-for="(list,i) in intention" :key="i*1" :value="list">{{list}}</Option>
+                </Select>
+              </FormItem>
+            </Col>
+            <Col span="24">
+              <FormItem label="呼出请况">
+                <RadioGroup class="radios" v-model="type.data.phone_status">
+                  <Radio :label="1" disabled>正常接听</Radio>
+                  <Radio :label="2" disabled>无人接听</Radio>
+                  <Radio :label="3" disabled>空号</Radio>
+                  <Radio :label="4" disabled>挂断</Radio>
+                </RadioGroup>
+              </FormItem>
+            </Col>
+            <Col span="24">
+              <FormItem label="回访内容">
+                <Input
+                  disabled
+                  v-model="vist_content"
+                  type="textarea"
+                  :rows="4"
+                  placeholder="请输入回访内容"
+                />
+              </FormItem>
+            </Col>
+            <Col span="24">
+              <FormItem label="下次回访">
+                <DatePicker
+                  disabled
+                  style="margin:0"
+                  v-model="type.data.next_follow_time"
+                  format="yyyy-MM-dd HH:mm:ss"
+                  type="datetime"
+                  class="datepicker"
+                  :title="item"
+                  confirm
+                  placeholder="下次回访日期"
+                ></DatePicker>
+              </FormItem>
+            </Col>
+            <Col span="24">
+              <span class="record">跟进记录</span>
+              <p class="record-header">
+                <i>回访内容</i>
+                <span>跟进人</span>
+                <span>回访时间</span>
+              </p>
+              <ul class="record-footer">
+                <li v-for="(item,i) in type.data.visit_content">
+                  <i>{{item.visit_content}}</i>
+                  <span>{{item.sale_name}}</span>
+                  <p>{{item.time}}</p>
+                </li>
+              </ul>
+            </Col>
+            <Col span="24">
+              <span class="record">订单记录</span>
+              <p class="record-header">
+                <i>购买课程</i>
+                <span>年级</span>
+                <span>科目</span>
+                <span>购买时间</span>
+              </p>
+              <ul class="record-footer">
+                <li v-for="(item,i) in type.data.order">
+                  <i>{{item.product_name}}</i>
+                  <span>{{item.grade}}</span>
+                  <span>{{item.subject}}</span>
+                  <p>{{item.create_time}}</p>
+                </li>
+              </ul>
+            </Col>
+          </Row>
+        </Form>
+        <div slot="footer">
+          <Button type="text" size="large" @click="followUpColse">取消</Button>
         </div>
-        <div class="shade-bottom">
-          <ul>
-            <li>
-              学&nbsp;&nbsp;员&nbsp;姓&nbsp;名:
-              <input
-                type="text"
-                readonly="readonly"
-                v-model="type.data.student_name"
-                :title="type.data.student_name"
-              />
-            </li>
-            <li>
-              跟&nbsp;&nbsp;&nbsp;&nbsp;进&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;人:
-              <input
-                type="text"
-                v-model="type.data.follow_sale_name"
-                :title="type.data.follow_sale_name"
-                readonly="readonly"
-              />
-            </li>
-            <li class="noRight">
-              渠&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;道:
-              <input
-                type="text"
-                v-model="type.data.refer"
-                :title="type.data.refer"
-                readonly="readonly"
-              />
-            </li>
-            <!--  -->
-            <li>
-              推&nbsp;&nbsp;&nbsp;荐&nbsp;&nbsp;&nbsp;&nbsp;人:
-              <input
-                type="text"
-                readonly="readonly"
-                v-model="type.data.recommend_name"
-                :title="type.data.recommend_name"
-              />
-            </li>
-            <li>
-              创&nbsp;&nbsp;建&nbsp;&nbsp;时&nbsp;&nbsp;间:
-              <input
-                type="text"
-                v-model="type.data.create_time"
-                readonly="readonly"
-                :title="type.data.create_time"
-              />
-            </li>
-            <li class="noRight">
-              学&nbsp;&nbsp;员&nbsp;&nbsp;电&nbsp;&nbsp;话:
-              <input
-                type="text"
-                readonly="readonly"
-                v-model="type.data.mobile"
-                :title="type.data.mobile"
-              />
-            </li>
-            <!--  -->
-            <li>
-              所 在 学 校 :
-              <input type="text" readonly="readonly" v-model="type.data.school" />
-            </li>
-            <li>
-              年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;龄:
-              <input
-                type="text"
-                readonly="readonly"
-                v-model="type.data.age"
-                :title="type.data.age"
-              />
-            </li>
-            <li class="noRight">
-              性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别:
-              <input
-                type="text"
-                readonly="readonly"
-                v-model="type.data.sex"
-                :title="type.data.sex"
-              />
-            </li>
-            <!--  -->
-            <li>
-              所 在 年 级 :
-              <input
-                type="text"
-                readonly="readonly"
-                v-model="type.data.grade"
-                :title="type.data.grade"
-              />
-            </li>
-            <li>
-              意向科目:
-              <input
-                type="text"
-                readonly="readonly"
-                v-model="type.data.subject"
-                :title="type.data.subject"
-              />
-            </li>
-            <li class="noRight">
-              是 &nbsp;否 &nbsp;约&nbsp; 课 :
-              <input
-                type="text"
-                readonly="readonly"
-                v-model="type.data.is_course"
-                :title="type.data.is_course"
-              />
-            </li>
-            <!--  -->
-            <li>
-              意&nbsp;&nbsp;&nbsp;向&nbsp;&nbsp;&nbsp;&nbsp;度:
-              <input
-                type="text"
-                readonly="readonly"
-                v-model="type.data.intention_option"
-                :title="type.data.intention_option"
-              />
-            </li>
-            <li>
-              下次跟进时间:
-              <input
-                type="text"
-                readonly="readonly"
-                v-model="type.data.next_follow_time"
-                :title="type.data.next_follow_time"
-              />
-            </li>
-            <li class="noRight">
-              约&nbsp;&nbsp;课&nbsp;&nbsp;时&nbsp;&nbsp;间:
-              <input
-                type="text"
-                readonly="readonly"
-                v-model="type.data.class_date"
-                :title="type.data.class_date"
-              />
-            </li>
-            <li>
-              跟进状态:
-              <input
-                type="text"
-                readonly="readonly"
-                v-model="type.data.follow_status"
-                :title="type.data.follow_status"
-              />
-            </li>
-          </ul>
-          <div class="record">
-            <span>跟进记录</span>
-            <p>
-              <i>回访内容</i>
-              <span>跟进人</span>
-              <span>回访时间</span>
-            </p>
-            <ul>
-              <li v-for="(item,i) in type.data.visit_content">
-                <i>{{item.visit_content}}</i>
-                <span>{{item.sale_name}}</span>
-                <p>{{item.time}}</p>
-              </li>
-            </ul>
-          </div>
-          <div class="record">
-            <span>订单记录</span>
-            <p>
-              <i>购买课程</i>
-              <span>年级</span>
-              <span>科目</span>
-              <span>购买时间</span>
-            </p>
-            <ul>
-              <li v-for="(item,i) in type.data.order">
-                <i>{{item.product_name}}</i>
-                <span>{{item.grade}}</span>
-                <span>{{item.subject}}</span>
-                <p>{{item.create_time}}</p>
-              </li>
-            </ul>
-          </div>
-          <div class="operation" style="justify-content: center;">
-            <span class="close" @click="$parent.show = false">关闭</span>
-          </div>
-        </div>
-      </div>
+      </Modal>
     </div>
     <!--  -->
-    <div class="followUp" v-else-if="type.classify == 'followUp'">
-      <i @click="followUpColse">×</i>
-      <div class="context">
-        <div class="shade-top">
-          <div>
-            <img src="../../assets/img/touxiang/png24.png" alt />
-            <span>线索跟进</span>
-          </div>
+    <template v-if="type.classify == 'followUp'">
+      <Modal
+        :styles="{'margin-top' : '-70px'}"
+        class="modal"
+        width="1100"
+        v-model="type.classify == 'followUp'"
+        title="线索跟进"
+        @on-cancel="followUpColse"
+      >
+        <Form :model="form" label-position="top" style="height:500px;overflow-y:auto;">
+          <Row>
+            <Col span="4">
+              <FormItem style="width:150px;" label="学员姓名">
+                <Input v-model="type.data.student_name" placeholder="姓名"></Input>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem style="width:150px;" label="注册手机">
+                <Input :title="type.data.tel" readonly v-model="type.data.mobile" placeholder="手机号"></Input>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem style="width:150px;" label="备用电话">
+                <Input v-model="type.data.spare_phone" placeholder="电话"></Input>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem label="性别">
+                <Select v-model="type.data.sex" style="width:150px" placeholder="性别">
+                  <Option :value="1">男</Option>
+                  <Option :value="2">女</Option>
+                </Select>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem style="width:150px;" label="年龄">
+                <Input v-model="type.data.age" placeholder="年龄"></Input>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem label="年级">
+                <Select v-model="type.data.grade" style="width:150px" placeholder="年级">
+                  <Option :value="1">一年级</Option>
+                  <Option :value="2">二年级</Option>
+                  <Option :value="3">三年级</Option>
+                  <Option :value="4">四年级</Option>
+                  <Option :value="5">五年级</Option>
+                  <Option :value="6">六年级</Option>
+                  <Option :value="7">七年级</Option>
+                  <Option :value="8">八年级</Option>
+                  <Option :value="9">九年级</Option>
+                </Select>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem style="width:150px;" label="微信昵称">
+                <Input v-model="type.data.wechat_nick_name" placeholder="学员微信昵称"></Input>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem style="width:150px;" label="微信号">
+                <Input v-model="type.data.wechat_id" placeholder="请输入微信号"></Input>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem style="width:150px;" label="学员地区">
+                <Input v-model="type.data.area" placeholder="请输入学员地区"></Input>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem style="width:150px;" label="学校">
+                <Input v-model="type.data.school" placeholder="就读学校"></Input>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem label="教材版本">
+                <Select v-model="type.data.textbook_version" style="width:150px" placeholder="教材版本">
+                  <Option v-for="(list,i) in vaersion" :value="i*1">{{list}}</Option>
+                </Select>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem label="意向科目">
+                <Select v-model="type.data.subject" style="width:150px" placeholder="意向科目">
+                  <Option v-for="(list,i) in subject" :value="i*1">{{list}}</Option>
+                </Select>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem label="意向度">
+                <Select v-model="type.data.intention_option" style="width:150px" placeholder="意向度">
+                  <Option v-for="(list,i) in intention" :value="i *1">{{list}}</Option>
+                </Select>
+              </FormItem>
+            </Col>
+            <Col span="24">
+              <FormItem label="呼出请况">
+                <RadioGroup class="radios" v-model="phone_status" @on-change="getPonestatus">
+                  <Radio :label="1">正常接听</Radio>
+                  <Radio :label="2">无人接听</Radio>
+                  <Radio :label="3">空号</Radio>
+                  <Radio :label="4">挂断</Radio>
+                </RadioGroup>
+              </FormItem>
+            </Col>
+            <Col span="24">
+              <FormItem
+                label="发送短信"
+                v-if="this.type.data.many_calls == 2 && this.type.data.phone_status == 2"
+              >
+                <Button type="text" size="large" @click="send">发送未接通短信提醒</Button>
+              </FormItem>
+            </Col>
+            <Col span="24">
+              <FormItem label="回访内容">
+                <Input v-model="vist_content" type="textarea" :rows="4" placeholder="请输入回访内容" />
+              </FormItem>
+            </Col>
+            <Col span="24">
+              <FormItem label="下次回访">
+                <DatePicker
+                  style="margin:0"
+                  v-model="type.data.next_follow_time"
+                  format="yyyy-MM-dd HH:mm:ss"
+                  type="datetime"
+                  class="datepicker"
+                  :options="optionsDate"
+                  :title="item"
+                  confirm
+                  placeholder="下次回访日期"
+                ></DatePicker>
+              </FormItem>
+            </Col>
+            <Col span="24">
+              <span class="record">跟进记录</span>
+              <p class="record-header">
+                <i>回访内容</i>
+                <span>跟进人</span>
+                <span>回访时间</span>
+              </p>
+              <ul class="record-footer">
+                <li v-for="(item,i) in type.data.visit_content">
+                  <i>{{item.visit_content}}</i>
+                  <span>{{item.sale_name}}</span>
+                  <span>{{item.time}}</span>
+                </li>
+              </ul>
+            </Col>
+            <Col span="24" v-if="type.status == 'studentpay'">
+              <span class="record">订单记录</span>
+              <p class="record-header">
+                <i>购买课程</i>
+                <span>年级</span>
+                <span>科目</span>
+                <span>购买时间</span>
+              </p>
+              <ul class="record-footer">
+                <li v-for="(item,i) in type.data.order">
+                  <i>{{item.product_name}}</i>
+                  <span>{{item.grade}}</span>
+                  <span>{{item.subject}}</span>
+                  <span>{{item.create_time}}</span>
+                </li>
+              </ul>
+            </Col>
+          </Row>
+        </Form>
+        <div slot="footer">
+          <Button type="text" size="large" @click="followUpColse">取消</Button>
+          <Button type="primary" size="large" @click="genjin">确定</Button>
         </div>
-        <div class="shade-bottom">
-          <ul>
-            <li>
-              学员姓名:
-              <input
-                type="text"
-                v-model="type.data.student_name"
-                readonly="readonly"
-                style="width:150px"
-              />
-            </li>
-            <li>
-              注册手机:
-              <input
-                type="text"
-                v-model="type.data.mobile"
-                readonly="readonly"
-                style="width:150px"
-              />
-            </li>
-            <li class="noRight">
-              备用电话:
-              <input
-                type="text"
-                v-model="type.data.spare_phone"
-                readonly="readonly"
-                style="width:150px"
-              />
-            </li>
-            <li>
-              微信昵称:
-              <input
-                type="text"
-                v-model="type.data.nick_name"
-                readonly="readonly"
-                style="width:150px"
-              />
-            </li>
-            <li>
-              学校:
-              <input
-                type="text"
-                v-model="type.data.school"
-                readonly="readonly"
-                style="width:150px"
-              />
-            </li>
-            <li class="noRight">
-              性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别:
-              <select
-                class="selected"
-                v-model="type.data.sex"
-                :disabled="type.status == 'minestudent'"
-              >
-                <option value="1">男</option>
-                <option value="2">女</option>
-              </select>
-            </li>
-            <li>
-              年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;龄:
-              <select
-                class="selected"
-                v-model="type.data.age"
-                :disabled="type.status == 'minestudent'"
-              >
-                <option :value="list" v-for="(list,i) in 20" :key="i" v-if="list>=5">{{list + "岁"}}</option>
-              </select>
-            </li>
+      </Modal>
+    </template>
 
-            <li>
-              年级:
-              <select
-                class="selected"
-                v-model="type.data.grade"
-                :disabled="type.status == 'minestudent'"
-              >
-                <option value="1">一年级</option>
-                <option value="2">二年级</option>
-                <option value="3">三年级</option>
-                <option value="4">四年级</option>
-                <option value="5">五年级</option>
-                <option value="6">六年级</option>
-                <option value="7">七年级</option>
-                <option value="8">八年级</option>
-                <option value="9">九年级</option>
-              </select>
-            </li>
-
-            <li class="noRight">
-              意向科目:
-              <select
-                class="selected"
-                v-model="type.data.subject"
-                :disabled="type.status == 'minestudent'"
-              >
-                <option value="1">数学</option>
-                <option value="2">英语</option>
-                <option value="3">语文</option>
-                <option value="4">物理</option>
-                <option value="5">化学</option>
-                <option value="6">政治</option>
-                <option value="7">生物</option>
-                <option value="8">地理</option>
-                <option value="9">历史</option>
-              </select>
-            </li>
-            <li>
-              意&nbsp;向&nbsp; 度 :
-              <select
-                class="selected"
-                v-model="type.data.intention_option"
-                :disabled="type.status == 'minestudent'"
-              >
-                <option value="1">A</option>
-                <option value="2">B</option>
-                <option value="3">C</option>
-                <option value="4">D</option>
-                <option value="5">E</option>
-              </select>
-            </li>
-
-            <li>
-              约课状态 :
-              <select
-                class="selected"
-                v-model="type.data.is_course"
-                :disabled="type.status == 'minestudent'"
-              >
-                <option value="1">未约课</option>
-                <option value="2">已约课</option>
-              </select>
-            </li>
-            <li style="width:100%;">
-              呼出情况:
-              <RadioGroup class="radios" v-model="type.data.phone_status">
-                <Radio :label="1" :disabled="type.status == 'minestudent'">正常接听</Radio>
-                <Radio :label="2" :disabled="type.status == 'minestudent'">无人接听</Radio>
-                <Radio :label="3" :disabled="type.status == 'minestudent'">空号</Radio>
-                <Radio :label="4" :disabled="type.status == 'minestudent'">挂断</Radio>
-              </RadioGroup>
-            </li>
-            <li style="width: 249px;">
-              下次跟进时间:
-              <DatePicker
-                :disabled="type.status == 'minestudent'"
-                v-model="nextTime"
-                format="YYYY-MM-DD HH:mm:ss"
-                type="datetime"
-                class="datepicker"
-                :lang="lang"
-                :title="item"
-                confirm
-                :not-before="new Date()"
-                @confirm="setNextTime"
-              ></DatePicker>
-            </li>
-
-            <li>
-              约 课 时 间 :
-              <DatePicker
-                :disabled="type.status == 'minestudent'"
-                value-format=" yyyy-MM-dd HH:mm:ss"
-                format="YYYY-MM-DD HH:mm:ss"
-                v-model="classTime"
-                type="datetime"
-                class="datepicker"
-                :lang="lang"
-                :title="time"
-                confirm
-                :not-before="new Date()"
-                @confirm="setClassTime"
-              ></DatePicker>
-            </li>
-          </ul>
-          <div>
-            <span>回访内容:</span>
-            <div>
-              <textarea
-                v-model="vist_content"
-                class="textarea textlet"
-                cols="30"
-                placeholder="请输入回访内容"
-                rows="10"
-              ></textarea>
-            </div>
-          </div>
-          <div class="record">
-            <span>跟进记录</span>
-            <p>
-              <i>回访内容</i>
-              <span>跟进人</span>
-              <span>回访时间</span>
-            </p>
-            <ul>
-              <li v-for="(item,i) in type.data.visit_content">
-                <i>{{item.visit_content}}</i>
-                <span>{{item.sale_name}}</span>
-                <p>{{item.time}}</p>
-              </li>
-            </ul>
-          </div>
-          <div class="record">
-            <span>订单记录</span>
-            <p>
-              <i>购买课程</i>
-              <span>年级</span>
-              <span>科目</span>
-              <span>购买时间</span>
-            </p>
-            <ul>
-              <li v-for="(item,i) in type.data.order">
-                <i>{{item.product_name}}</i>
-                <span>{{item.grade}}</span>
-                <span>{{item.subject}}</span>
-                <p>{{item.create_time}}</p>
-              </li>
-            </ul>
-          </div>
-          <div class="btnThree">
-            <span style="margin: 0 60px;" @click="genjin">保存</span>
-            <span class="cancel" @click="followUpColse">取消</span>
-          </div>
-        </div>
-      </div>
-    </div>
     <!--  -->
-    <div class="shiftOut" v-else-if="type.classify == 'shiftOut'">
+    <div class="shiftOut" v-if="type.classify == 'shiftOut'">
       <p>确定将此客户移入至公共客户区域?</p>
       <div>
         <button class="btn confirm" @click="shiftOut">是</button>
@@ -497,14 +420,14 @@
       </div>
     </div>
     <!--  -->
-    <div class="shiftOut" v-else-if="type.classify == 'shiftTo'">
+    <div class="shiftOut" v-if="type.classify == 'shiftTo'">
       <p>确定将此客户移入至代办客户区域?</p>
       <div>
         <button class="btn confirm" @click="shiftOut">是</button>
         <button class="btn cancel" @click="no">否</button>
       </div>
     </div>
-    <div class="followUp dingdan" v-else-if="type.classify == 'dingdan'">
+    <div class="followUp dingdan" v-if="type.classify == 'dingdan'">
       <i @click="$parent.show = false">×</i>
       <div class="context">
         <div class="shade-top">
@@ -574,7 +497,7 @@
         </div>
       </div>
     </div>
-    <div class="followUp dingdan ding" v-else-if="type.classify == 'ding'">
+    <div class="followUp dingdan ding" v-if="type.classify == 'ding'">
       <i @click="$parent.show = false">×</i>
       <div class="context">
         <div class="shade-top">
@@ -635,7 +558,7 @@
         </div>
       </div>
     </div>
-    <div class="report" v-else-if="type.classify == 'report'">
+    <div class="report" v-if="type.classify == 'report'">
       <div class="report-top">
         <span>学情报告</span>
         <i @click="$parent.show = false">×</i>
@@ -684,12 +607,10 @@
 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
-import DatePicker from "vue2-datepicker";
 import Loading from "../loading/loading";
 import storage from "../storage";
 export default {
   components: {
-    DatePicker,
     Loading
   },
   props: ["type"],
@@ -697,13 +618,13 @@ export default {
     if (this.type.classify == "report") {
       this.getReport(this.type.data.id);
     }
-    if (this.type.classify == "shade") {
-      if (this.type.status == "payingstudent") {
-        this.getPayList();
-      } else {
-        this.getFenpeiList();
-      }
-    }
+    // if (this.type.classify == "shade") {
+    //   if (this.type.status == "payingstudent") {
+    //     this.getPayList();
+    //   } else {
+    //     this.getReferList();
+    //   }
+    // }
     if (this.type.data) {
       if (this.type.data.class_date) {
         this.classTime = this.type.data.class_date;
@@ -722,6 +643,18 @@ export default {
     })
   },
   methods: {
+    //得到呼出情况
+    getPonestatus() {
+      if (this.type.data.many_calls == 2 && this.phone_status == 2) {
+        this.pone = true;
+      }
+    },
+    //发送短信
+    send() {
+      this.sendPone(this.type.data.tel).then(() => {
+        this.$Message.success("发送成功");
+      });
+    },
     //新增学情报告
     addreport() {
       this.isLoading = true;
@@ -759,16 +692,32 @@ export default {
       );
     },
     followUpColse() {
-      if (this.type.status == "notvisit") {
-        this.getXinfenList();
+      if(this.type.status == "mineclient"){
+        this.getClientList({  ...this.type.form,page: this.type.page })
+        this.$parent.show = false;
+        return;
+      }else if(this.type.status == "studentpay"){
+        this.getStudentList({  ...this.type.form,page: this.type.page })
+        this.$parent.show = false;
+        return;
+      }else if (this.type.status == "notvisit") {
+        this.getXinfenList({  ...this.type.form,page: this.type.page });
         this.$parent.show = false;
         return;
       } else if (this.type.status == "followup") {
-        this.getFollowUpList();
+        this.getFollowUpList({  ...this.type.form,page: this.type.page });
         this.$parent.show = false;
         return;
       } else if (this.type.status == "notcallback") {
-        this.getYuQiList();
+        this.getYuQiList({  ...this.type.form,page: this.type.page });
+        this.$parent.show = false;
+        return;
+      }else if(this.type.status == 'notification'){
+        this.getNotificationList({  ...this.type.form,page: this.type.page })
+        this.$parent.show = false;
+        return;
+      }else if(this.type.status == "reserved"){
+        this.getReservedList({  ...this.type.form,page: this.type.page })
         this.$parent.show = false;
         return;
       } else if (this.type.status == "paystudent") {
@@ -845,6 +794,15 @@ export default {
     },
     //跟进
     genjin() {
+      if (this.vist_content == "") {
+        this.$Message.error("回访内容是必填的");
+        return;
+      }
+      if (!this.phone_status) {
+        this.$Message.error("呼出情况是必选的");
+        return;
+      }
+      this.type.data.phone_status = this.phone_status;
       this.type.data.note = this.note_content;
       this.type.data.order = [];
       if (this.vist_content) {
@@ -907,6 +865,33 @@ export default {
           this.getmStudent({ page: "", form: {} });
         });
         return;
+      } else if (this.type.status == "mineclient") {
+        this.Genjin({ type: this.type, status: storage.getTabStatus() }).then(
+          res => {
+            this.$parent.show = false;
+            this.Loading = false;
+            this.getClientList({ page: "", form: {} });
+          }
+        );
+        return;
+      } else if (this.type.status == "studentpay") {
+        this.Genjin({ type: this.type, status: storage.getTabStatus() }).then(
+          res => {
+            this.$parent.show = false;
+            this.Loading = false;
+            this.getStudentList({ page: "", form: {} });
+          }
+        );
+        return;
+      } else if (this.type.status == "notification") {
+        this.Genjin({ type: this.type, status: storage.getTabStatus() }).then(
+          res => {
+            this.$parent.show = false;
+            this.Loading = false;
+            this.getNotificationList({ page: "", form: {} });
+          }
+        );
+        return;
       } else {
         this.Genjin({ type: this.type, status: storage.getTabStatus() }).then(
           res => {
@@ -919,6 +904,11 @@ export default {
     },
     ...mapMutations(["setXiaoshowId", "setType", "setXiaoshowIdPay"]),
     ...mapActions([
+      "getReservedList",
+      "getNotificationList",
+      "sendPone",
+      "getStudentList",
+      "getClientList",
       "getFenStu",
       "addRepost",
       "getReport",
@@ -926,7 +916,7 @@ export default {
       "getmStudent",
       "setPayStu",
       "getPayList",
-      "getFenpeiList",
+      "getReferList",
       "fenPai",
       "Genjin",
       "ShiftOut",
@@ -953,16 +943,13 @@ export default {
           this.message = false;
           this.$parent.show = false;
           this.Loading = false;
-          this.$parent.isChecked = false;
-          this.$parent.TableCheckedAll.length = 0;
         });
       } else {
         this.fenPai({ form: this.form, status: this.$parent.num }).then(res => {
           this.message = false;
           this.$parent.show = false;
+          this.$parent.checkall = "";
           this.Loading = false;
-          this.$parent.isChecked = false;
-          this.$parent.TableCheckedAll.length = 0;
         });
       }
     },
@@ -972,7 +959,7 @@ export default {
     },
     confirm() {
       if (!this.form.sale_name) {
-        alert("请选择人员再分配");
+        this.$Message.error("请选择人员再分配");
         return;
       }
       this.showShade = false;
@@ -996,6 +983,19 @@ export default {
   },
   data() {
     return {
+      optionsDate: {
+        disabledDate: time => {
+          let curDate = new Date().getTime();
+          let three = 7 * 24 * 3600 * 1000;
+          let threeMonths = curDate + three;
+          return time.getTime() < Date.now() || time.getTime() > threeMonths;
+        }
+      },
+      phone_status: "",
+      pone: false,
+      intention: storage.getDaiban().screen_list.inter_nation,
+      subject: storage.getDaiban().screen_list.subject,
+      vaersion: storage.getDaiban().screen_list.book_version,
       reportContent: "",
       isHuchu: true,
       vist_content: "",
@@ -1012,41 +1012,45 @@ export default {
       form: {},
       item: null,
       time: null,
-      isItem: false,
-      lang: {
-        days: ["一", "二", "三", "四", "五", "六", "日"],
-        months: [
-          "一月",
-          "二月",
-          "三月",
-          "四月",
-          "五月",
-          "六月",
-          "七月",
-          "八月",
-          "九月",
-          "十月",
-          "十一月",
-          "十二月"
-        ],
-        pickers: ["未来7天", "未来30天", "前7天", "前30天"],
-        placeholder: {
-          date: "",
-          dateRange: ""
-        }
-      }
+      isItem: false
     };
   }
 };
 </script>
 
 <style scoped>
-.datalis > i.datalis-colse {
-  position: absolute;
-  right: 20px;
-  top: 10px;
-  font-size: 25px;
-  cursor: pointer;
+.record-footer li span {
+  width: 150px;
+}
+.record-footer li i {
+  flex: 1;
+}
+.record-footer li {
+  display: flex;
+  width: 100%;
+}
+.record-footer {
+  display: flex;
+  flex-direction: column;
+}
+.record-header > span {
+  width: 150px;
+}
+.record-header > i {
+  flex: 1;
+}
+.record-header {
+  display: flex;
+  height: 30px;
+  line-height: 30px;
+}
+.record {
+  width: 100%;
+  height: 40px;
+  display: inline-block;
+  line-height: 40px;
+  background-color: rgba(242, 242, 242, 1);
+  text-indent: 15px;
 }
 .report-bottom > p.confirm > span {
   color: #fff;
@@ -1491,14 +1495,6 @@ export default {
 }
 .context {
   margin: 0 40px;
-}
-.datalis {
-  width: 999px;
-  height: 780px;
-  background-color: #fff;
-  border-radius: 10px;
-  position: relative;
-  overflow-y: auto;
 }
 .message span {
   color: #333;

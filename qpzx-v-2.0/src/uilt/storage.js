@@ -6,8 +6,29 @@ const TABSTATUS = "TAB_STATUS"
 const USERCID = "USER_CID"
 const MENUNUM = "MENUNUM"
 const BOOKUID = "BOOKUID"
+const DAIBAN = "DAIBAN"
+const RESERVEDTAB = "RESERVEDTAB"
+const STATISTICS = "STATISTICS"
 
 export default {
+  getStatistics(){
+    return JSON.parse(SESSION.getItem(STATISTICS) || '{}')
+  },
+  savaStatistics(todo){
+    SESSION.setItem(STATISTICS, JSON.stringify(todo))
+  },
+  getReseredTab(){
+    return JSON.parse(SESSION.getItem(RESERVEDTAB) || '{}')
+  },
+  savaReseredTab(todo){
+    SESSION.setItem(RESERVEDTAB, JSON.stringify(todo))
+  },
+  getDaiban(){
+    return JSON.parse(SESSION.getItem(DAIBAN) || '{}')
+  },
+  savaDaiban(todo){
+    SESSION.setItem(DAIBAN, JSON.stringify(todo))
+  },
   getBookId(){
     return JSON.parse(SESSION.getItem(BOOKUID) || '{}')
   },

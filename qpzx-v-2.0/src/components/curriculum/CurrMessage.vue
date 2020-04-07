@@ -112,7 +112,7 @@
                   <img :src="imgName" style="width: 100%">
                 </Modal>
               </FormItem>
-            </col>
+            </Col>
             <Col span="24">
               <FormItem label="轮播图片" prop="image_1" class="active_span">
                 <span class="active_red">*</span>

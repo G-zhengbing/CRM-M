@@ -73,24 +73,59 @@ export default {
         ["八年级", 8],
         ["九年级", 9],
       ])
+      var gender = new Map([
+        ["男", 1],
+        ["女", 2]
+      ])
       var subjects = new Map([
         ["数学", 1],
-        ["英语", 2]
-      ])
-      var course = new Map([
-        ["未约课", 1],
-        ["已约课", 2]
+        ["英语", 2],
+        ["语文", 3],
+        ["物理", 4],
+        ["化学", 5],
+        ["政治", 6],
+        ["生物", 7],
+        ["地理", 8],
+        ["历史", 9]
       ])
       var intention = new Map([
-        ["A", 1],
-        ["B", 2],
-        ["C", 3],
-        ["D", 4],
-        ["E", 5]
+        ["A强烈", 1],
+        ["B一般", 2],
+        ["C挖掘", 3],
+        ["D无效", 4]
       ])
+      var follow = new Map([
+        ["待分配", 1],
+        ["已分配", 2],
+        ["跟进中", 3],
+        ["已调库", 4],
+        ["已移出", 5],
+        ["已超时", -1]
+      ])
+
+      var age = new Map([
+        ["5岁", 5],
+        ["6岁", 6],
+        ["7岁", 7],
+        ["8岁", 8],
+        ["9岁", 9],
+        ["10岁", 10],
+        ["11岁", 11],
+        ["12岁", 12],
+        ["13岁", 13],
+        ["14岁", 14],
+        ["15岁", 15],
+        ["16岁", 16],
+        ["17岁", 17],
+        ["18岁", 18],
+        ["19岁", 19],
+        ["20岁", 20],
+      ])
+      type.follow_status = follow.get(type.follow_status)
+      type.age = age.get(type.age)
       type.grade = maps.get(type.grade)
       type.subject = subjects.get(type.subject)
-      type.is_course = course.get(type.is_course)
+      type.sex = gender.get(type.sex)
       type.intention_option = intention.get(type.intention_option)
       return type
     },
@@ -107,20 +142,11 @@ export default {
         [8, '八年级'],
         [9, '九年级']
       ]);
-      var subjects = new Map([
-        [1, '英语'],
-        [2, "数学"]
-      ])
-      var course = new Map([
-        [1, '未约课'],
-        [2, "已约课"]
-      ])
       var intention = new Map([
-        [1, "A"],
-        [2, "B"],
-        [3, "C"],
-        [4, "D"],
-        [5, "E"]
+        [1, "A强烈"],
+        [2, "B一般"],
+        [3, "C挖掘"],
+        [4, "D无效"]
       ])
 
       var follow = new Map([
@@ -167,8 +193,6 @@ export default {
         element.sex = gender.get(element.sex);
         element.age = age.get(element.age);
         element.follow_status = follow.get(element.follow_status);
-        element.subject = subjects.get(element.subject);
-        element.is_course = course.get(element.is_course);
         element.intention_option = intention.get(element.intention_option);
         return element;
       });

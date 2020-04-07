@@ -1,6 +1,7 @@
 import axios from 'axios'
 import {
-  KEHULIST
+  KEHULIST,
+  YIRUGONG
 } from '../uilt/url/url'
 import storage from '../uilt/storage'
 
@@ -27,6 +28,28 @@ export default {
     }
   },
   actions: {
+    //领取
+    setGet({state,commit,dispatch},uid){
+      return new Promise((resolve,reject)=>{
+        axios({
+          method:"put",
+          url:YIRUGONG +'/' + uid,
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            Authorization: "bearer " + storage.get()
+          },
+          params: {
+            status:2
+          }
+        }).then(res=>{
+          console.log(res)
+          dispatch("getPublicList")
+          resolve()
+        }).catch(e=>{
+          reject(e)
+        })
+      })
+    },
     //get客户list
     getPublicList({
       state,

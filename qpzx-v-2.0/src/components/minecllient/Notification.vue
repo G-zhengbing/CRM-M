@@ -1,10 +1,10 @@
 <template>
-  <div class="box">
+  <div class="box" ref="box">
     <header class="main-header">
       <ul>
         <li style="margin-left:30px">
           <!-- <i></i> -->
-          <span>今日回访</span>
+          <span>消息提醒</span>
         </li>
       </ul>
     </header>
@@ -17,59 +17,55 @@
               <Row>
                 <Col span="4">
                   <FormItem style="width:230px;">
-                    <Input v-model="form.name" placeholder="学员姓名" @on-change="seekKuhu"></Input>
+                    <Input v-model="form.name" placeholder="学员姓名" @on-change="seekClick"></Input>
                   </FormItem>
                 </Col>
                 <Col span="4">
                   <FormItem style="width:230px;">
-                    <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekKuhu"></Input>
+                    <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekClick"></Input>
                   </FormItem>
                 </Col>
-                <Col span="4">
+                <Col span="6">
                   <FormItem>
-                    <Select
-                      v-model="form.grade"
-                      style="width:150px"
-                      @on-change="seekKuhu"
-                      placeholder="年级"
-                    >
-                      <Option :value="1">一年级</Option>
-                      <Option :value="2">二年级</Option>
-                      <Option :value="3">三年级</Option>
-                      <Option :value="4">四年级</Option>
-                      <Option :value="5">五年级</Option>
-                      <Option :value="6">六年级</Option>
-                      <Option :value="7">七年级</Option>
-                      <Option :value="8">八年级</Option>
-                      <Option :value="9">九年级</Option>
-                    </Select>
+                    <div class="dateplc">
+                      <DatePicker
+                        v-model="startAccount"
+                        type="date"
+                        placeholder="操作时间"
+                        style="width: 200px"
+                        @on-change="getTimes2"
+                      ></DatePicker>
+                      <DatePicker
+                        v-model="endAccount"
+                        type="date"
+                        placeholder="操作时间"
+                        style="width: 200px"
+                        @on-change="getTimes2"
+                      ></DatePicker>
+                    </div>
                   </FormItem>
                 </Col>
-                <Col span="4">
+                <Col span="6">
                   <FormItem>
-                    <Select
-                      v-model="form.subject"
-                      style="width:150px"
-                      @on-change="seekKuhu"
-                      placeholder="意向科目"
-                    >
-                      <Option :value="i" v-for="(list,i) in subjectList">{{list}}</Option>
-                    </Select>
+                    <div class="dateplc">
+                      <DatePicker
+                        v-model="startTime"
+                        type="date"
+                        placeholder="注册时间"
+                        style="width: 200px"
+                        @on-change="getTimes"
+                      ></DatePicker>
+                      <DatePicker
+                        v-model="endTime"
+                        type="date"
+                        placeholder="注册时间"
+                        style="width: 200px"
+                        @on-change="getTimes"
+                      ></DatePicker>
+                    </div>
                   </FormItem>
                 </Col>
-                <Col span="4">
-                  <FormItem>
-                    <Select
-                      v-model="form.intention_option"
-                      style="width:150px"
-                      @on-change="seekKuhu"
-                      placeholder="意向度"
-                    >
-                      <Option :value="i" v-for="(list,i) in intention">{{list}}</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="4" style="text-indent: 60px;">
+                <Col span="4" style="text-indent: 60px">
                   <Button type="primary" @click="clear">清除</Button>
                 </Col>
               </Row>
@@ -77,7 +73,7 @@
             <Table
               border
               :columns="columns"
-              :data="FollowdataArr"
+              :data="notifiData"
               @on-selection-change="selectionChange"
               height="500"
             ></Table>
@@ -94,57 +90,65 @@
         </div>
       </div>
     </section>
-    <DaibanMessage v-if="show" :type="type" />
     <Loading v-show="isLoading" />
+    <DaibanMessage :type="type" v-if="show" />
     <MineclientMessage :type="type" v-if="showMine" />
   </div>
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
-import DaibanMessage from "../uilt/newErweima/DaibanMessage";
-import storage from "../uilt/storage.js";
-import Loading from "../uilt/loading/loading";
-import MineclientMessage from "./minecllient/MineclientMessage";
+import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
+import Loading from "../../uilt/loading/loading";
+import storage from "../../uilt/storage";
+import DaibanMessage from "../../uilt/newErweima/DaibanMessage";
+import MineclientMessage from "./MineclientMessage";
 export default {
   components: {
-    DaibanMessage,
     Loading,
+    DaibanMessage,
     MineclientMessage
   },
   mounted() {
     this.setCurrentPage(1);
     this.isLoading = true;
-    this.getFollowUpList().then(res => {
+    this.getNotificationList().then(res => {
       this.isLoading = false;
     });
   },
+  computed: {
+    ...mapGetters(["notifiData", "notifiTypes"]),
+    ...mapState({
+      data: state => state.notification.notifiList,
+      currentPage: state => state.notification.currentPage,
+      total: state => state.notification.total,
+      pageSize: state => state.notification.pageSize
+    })
+  },
   data() {
     return {
+      endAccount: "",
+      startAccount: "",
       showMine: false,
-      intention: storage.getDaiban().screen_list.inter_nation,
-      subjectList: storage.getDaiban().screen_list.subject,
-      transfer: storage.getDaiban().screen_list.transfer,
-      stage: storage.getDaiban().screen_list.stage,
-      isLoading: false,
-      type: {
-        page: 1,
-        status: "followup"
-      },
+      endTime: "",
+      startTime: "",
+      channel: "",
+      follow_status: "",
+      subjectList: "",
+      intention: "",
+      stage: "",
+      transfer: "",
       show: false,
+      type: {
+        status: "notification"
+      },
+      isLoading: false,
       form: {},
       columns: [
         { type: "selection", width: 60 },
         { title: "学员姓名", key: "student_name" },
         { title: "注册手机", key: "mobile" },
-        { title: "微信昵称", key: "wechat_nick_name" },
-        { title: "年级", key: "grade" },
-        { title: "意向科目", key: "subject" },
-        { title: "意向度", key: "intention_option" },
-        { title: "上次跟进时间", key: "last_follow_time" },
-        { title: "学习阶段", key: "stage" },
-        { title: "上次跟进内容", key: "last_visit_content" },
-        { title: "回访时间", key: "next_follow_time" },
+        { title: "具体内容", key: "remarks" },
+        { title: "操作时间", key: "action_create_time" },
         { title: "注册时间", key: "create_time" },
         {
           title: "操作",
@@ -204,49 +208,82 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["setNotifiTypes", "setCurrentPage", "setRefer"]),
+    ...mapActions(["getNotificationList", "RingUp", "getReferList","getUserReservedList"]),
     //试听
     audition(item) {
-      this.setGenjintypefoll(item);
+      // this.getUserReservedList({uid:item.id})
+      this.setNotifiTypes(item);
       this.showMine = true;
       this.type.classify = "audition";
-      this.type.form = this.form;
-      this.type.page = this.currentPage;
-      this.type.data = { ...this.Typesntfoll };
+      this.type.data = { ...this.notifiTypes };
+    },
+    //设置返回的时间
+    datePicker(time) {
+      var d = new Date(time);
+      let shi = d.getHours();
+      let fen = d.getMinutes();
+      let miao = d.getSeconds();
+      if (shi < 10) shi = "0" + shi;
+      if (fen < 10) fen = "0" + fen;
+      if (miao < 10) miao = "0" + miao;
+      d = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+      return d;
+    },
+    //操作日期
+    getTimes2() {
+      if (this.startAccount && this.endAccount) {
+        this.form. create_time_start = this.datePicker(this.startAccount);
+        this.form. create_time_end = this.datePicker(this.startAccount);
+        this.seekClick();
+      }
+    },
+    //创建日期
+    getTimes() {
+      if (this.startTime && this.endTime) {
+        this.form.account_time_start = this.datePicker(this.startTime);
+        this.form.account_time_end = this.datePicker(this.endTime);
+        this.seekClick();
+      }
     },
     clear() {
       this.form = {};
+      this.startTime = "";
+      this.endTime = "";
+      this.startAccount = "";
+      this.endAccount = "";
+      this.seekClick();
     },
-    seekKuhu() {
+    //查询
+    seekClick() {
       let page = 1;
       let currentPage = this.currentPage;
       if (currentPage > 1) {
         this.setCurrentPage(page);
       }
       this.isLoading = true;
-      this.getFollowUpList({ ...this.form, page }).then(res => {
-        this.setCurrentPage(page);
+      this.getNotificationList({ ...this.form, page }).then(res => {
         this.isLoading = false;
+        this.setCurrentPage(page);
       });
     },
-    ...mapActions(["getFollowUpList", "RingUp"]),
-    ...mapMutations(["setCurrentPage", "setGenjintypefoll"]),
     selectionChange() {},
     //跟进
     getBtnClick3(item) {
-      this.setGenjintypefoll(item);
+      this.setNotifiTypes(item);
       this.show = true;
       this.type.classify = "followUp";
-      this.type.page = this.currentPage;
-      this.type.form = { ...this.form };
-      this.type.data = { ...this.Typesntfoll };
+      this.type.page = this.currentPage
+      this.type.form = {...this.form}
+      this.type.data = { ...this.notifiTypes };
     },
     //呼出
     getBtnClick4(item) {
-      this.setGenjintypefoll(item);
+      this.setNotifiTypes(item);
       this.isLoading = true;
       this.show = true;
       this.type.classify = "followUp";
-      this.type.data = { ...this.Typesntfoll };
+      this.type.data = { ...this.notifiTypes };
       this.RingUp(item)
         .then(res => {
           if (res.data.code == 200) {
@@ -270,21 +307,16 @@ export default {
     pageChange(num) {
       this.isLoading = true;
       this.setCurrentPage(num);
-      this.getFollowUpList({ ...this.form }).then(res => {
+      this.getNotificationList({ ...this.form }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(num);
       });
     }
-  },
-  computed: {
-    ...mapGetters(["FollowdataArr", "Typesntfoll"]),
-    ...mapState({
-      data: state => state.followup.followUpList,
-      refer: state => state.followup.refer,
-      currentPage: state => state.followup.currentPage,
-      total: state => state.followup.total,
-      pageSize: state => state.followup.pageSize
-    })
   }
 };
 </script>
+<style scoped>
+.dateplc {
+  display: flex;
+}
+</style>

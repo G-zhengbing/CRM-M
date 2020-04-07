@@ -143,7 +143,7 @@ export default {
         });
     },
     goHome(){
-      this.$router.push("/main/home")
+      // this.$router.push("/main/home")
     },
     clear() {
       this.form = {};

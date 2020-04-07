@@ -2,12 +2,8 @@
   <div class="box">
     <header class="main-header">
       <ul>
-        <li>
-          <i></i>
-          <span>首页</span>
-        </li>
-        <li>
-          <i></i>
+        <li style="margin-left:30px">
+          <!-- <i></i> -->
           <span>付费学员</span>
         </li>
       </ul>

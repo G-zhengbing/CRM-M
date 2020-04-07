@@ -6,26 +6,47 @@ import {
   YIRUGONG,
   DINGDAN,
   HUCHU,
-  ANALLOT
+  ANALLOT,
+  REFER,
+  PONESTATUS
 } from '../uilt/url/url'
 import storage from '../uilt/storage'
 
 export default {
   state: {
+    forms: {},
     datas: [],
     status: 1,
     type: null,
     genjinType: null,
     data: [],
-    refer: [],
+    refer: storage.getDaiban().channel,
+    follow_status: {},
+    intention: {},
+    course_type: {},
     currentPage: 1,
     total: 0,
     pageSize: 10,
     fenpeiList: [],
     xiansuoId: [],
-    xiaoshowId: 0
+    xiaoshowId: 0,
   },
   mutations: {
+    setCourse_type(state, payload) {
+      state.course_type = payload
+    },
+    setIntention(state, payload) {
+      state.intention = payload
+    },
+    setFollow_status(state, payload) {
+      state.follow_status = payload
+    },
+    setRefs(state, payload) {
+      state.refer = payload
+    },
+    setForm(state, payload) {
+      state.forms = payload
+    },
     setDatas(state, payload) {
       state.datas = payload
     },
@@ -50,20 +71,66 @@ export default {
     setData(state, payload) {
       state.data = payload
     },
-    setRefer(state, payload) {
-      state.refer = payload
-    },
     setCurrentPage(state, payload) {
       state.currentPage = payload
     },
     setTotal(state, payload) {
       state.total = payload
     },
+    setPagesize(state, payload) {
+      state.pageSize = payload
+    },
     setFenpeiList(state, payload) {
       state.fenpeiList = payload
     }
   },
   actions: {
+    //发送验证码
+    sendPone({state,commit,dispatch},pone){
+      return new Promise((reoslve,reject)=>{
+        axios({
+          method:"post",
+          url:PONESTATUS,
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            Authorization: "bearer " + storage.get()
+          },
+          data:{
+            mobile:pone
+          }
+        }).then(res=>{
+          reoslve(res)
+        }).catch(e=>{
+          reject(e)
+        })
+      })
+    },
+    //渠道来源列表
+    getReferList({
+      state,
+      commit
+    }) {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "get",
+          url: REFER,
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            Authorization: "bearer " + storage.get()
+          }
+        }).then(res => {
+          storage.savaDaiban(res.data.data)
+          commit("setRefs", res.data.data.channel)
+          commit("setFenpeiList", res.data.data.sale_list)
+          commit("setFollow_status", res.data.data.screen_list.follow_status)
+          commit("setIntention", res.data.data.screen_list.intention)
+          commit("setCourse_type", res.data.data.screen_list.course_type)
+          resolve()
+        }).catch(e => {
+          reject(e)
+        })
+      })
+    },
     //呼出
     RingUp({}, form) {
       return new Promise((resolve, reject) => {
@@ -168,11 +235,18 @@ export default {
         }).then(res => {
           if (status == 3) {
             dispatch("getKehuList", {
-              status: 3
+              status: 3,
+              form: state.forms
+            })
+          } else if (status == 2) {
+            dispatch("getKehuList", {
+              status: 2,
+              form: state.forms
             })
           } else {
             dispatch("getKehuList", {
-              status: 1
+              status: 1,
+              form: state.forms
             })
           }
           resolve()
@@ -189,7 +263,8 @@ export default {
     }, {
       status,
       form,
-      page
+      page,
+      page_num
     }) {
       if (status == 3) {
         return new Promise((resolve, reject) => {
@@ -202,12 +277,12 @@ export default {
             },
             params: {
               ...form,
-              page: page ? page : state.currentPage
+              page: page ? page : state.currentPage,
+              is_allocated: 1
             }
           }).then(res => {
             commit("setDatas", res.data.data.resources)
             commit("setData", res.data.data.resources)
-            commit("setRefer", res.data.data.links.refer)
             commit("setCurrentPage", res.data.data.links.current_page)
             commit("setTotal", res.data.data.links.total)
             resolve()
@@ -227,13 +302,14 @@ export default {
             params: {
               ...form,
               highsea_status: status ? status : 1,
-              page: page ? page : state.currentPage
+              page: page ? page : state.currentPage,
+              page_num: page_num ? page_num : state.pageSize
             }
           }).then(res => {
             commit("setDatas", res.data.data.resources)
             commit("setData", res.data.data.resources)
-            commit("setRefer", res.data.data.links.refer)
             commit("setCurrentPage", res.data.data.links.current_page)
+            commit('setPagesize', res.data.data.links.per_page * 1)
             commit("setTotal", res.data.data.links.total)
             resolve()
           }).catch(e => {
@@ -270,6 +346,7 @@ export default {
   getters: {
     Types(state) {
       let type = state.genjinType
+      // console.log(type)
       var maps = new Map([
         ["一年级", 1],
         ["二年级", 2],
@@ -292,16 +369,25 @@ export default {
         ["地理", 8],
         ["历史", 9]
       ])
-      var course = new Map([
-        ["未约课", 1],
-        ["已约课", 2]
+
+      var version = new Map([
+        ["人教版",1],
+        ["北师大版",2],
+        ["华师大版",3],
+        ["苏教版",4],
+        ["鄂教版",5],
+        ["鲁教版",6],
+        ["沪教版",7],
+        ["冀教版",8],
+        ["浙教版",9],
+        ["河大版",10],
       ])
+
       var intention = new Map([
-        ["A", 1],
-        ["B", 2],
-        ["C", 3],
-        ["D", 4],
-        ["E", 5]
+        ["A强烈", 1],
+        ["B一般", 2],
+        ["C挖掘", 3],
+        ["D无效", 4]
       ])
 
       var gender = new Map([
@@ -314,7 +400,8 @@ export default {
         ["已分配", 2],
         ["跟进中", 3],
         ["已调库", 4],
-        ["已移出", 5]
+        ["已移出", 5],
+        ["已超时", -1]
       ])
 
       var age = new Map([
@@ -336,17 +423,28 @@ export default {
         ["20岁", 20],
       ])
 
+      type.textbook_version = version.get(type.textbook_version)
       type.grade = maps.get(type.grade)
       type.sex = gender.get(type.sex)
       type.age = age.get(type.age)
       type.follow_status = follow.get(type.follow_status)
       type.subject = subjects.get(type.subject)
-      type.is_course = course.get(type.is_course)
       type.intention_option = intention.get(type.intention_option)
       return type
     },
     dataArr(state) {
       let data = state.data
+      var product = new Map([
+        [1, '一年级'],
+        [2, '二年级'],
+        [3, '三年级'],
+        [4, '四年级'],
+        [5, '五年级'],
+        [6, '六年级'],
+        [7, '七年级'],
+        [8, '八年级'],
+        [9, '九年级']
+      ]);
       var maps = new Map([
         [1, '一年级'],
         [2, '二年级'],
@@ -358,39 +456,33 @@ export default {
         [8, '八年级'],
         [9, '九年级']
       ]);
-      var subjects = new Map([
-        [1, '数学'],
-        [2, "英语"],
-        [3, "语文"],
-        [4, "物理"],
-        [5, "化学"],
-        [6, "政治"],
-        [7, "生物"],
-        [8, "地理"],
-        [9, "历史"]
-      ])
-      var course = new Map([
-        [1, '未约课'],
-        [2, "已约课"]
-      ])
+      // var subjects = new Map([
+      //   [1, '数学'],
+      //   [2, "英语"],
+      //   [3, "语文"],
+      //   [4, "物理"],
+      //   [5, "化学"],
+      //   [6, "政治"],
+      //   [7, "生物"],
+      //   [8, "地理"],
+      //   [9, "历史"]
+      // ])
       var intention = new Map([
-        [1, "A"],
-        [2, "B"],
-        [3, "C"],
-        [4, "D"],
-        [5, "E"]
+        [1, "A强烈"],
+        [2, "B一般"],
+        [3, "C挖掘"],
+        [4, "D无效"]
       ])
 
       var gender = new Map([
         [1, "男"],
         [2, "女"]
       ])
-      var follow = new Map([
-        [1, "待分配"],
-        [2, "已分配"],
-        [3, "跟进中"],
-        [4, "已调库"],
-        [5, "已移出"],
+
+      var type = new Map([
+        [1, "班课"],
+        [2, "微课"],
+        [3, "一对一"]
       ])
 
       var age = new Map([
@@ -412,6 +504,19 @@ export default {
         [20, "20岁"]
       ])
 
+      // var version = new Map([
+      //   [1,"人教版"],
+      //   [2,"北师大版"],
+      //   [3,"华师大版"],
+      //   [4,"苏教版"],
+      //   [5,"鄂教版"],
+      //   [6,"鲁教版"],
+      //   [7,"沪教版"],
+      //   [8,"冀教版"],
+      //   [9,"浙教版"],
+      //   [10,"河大版"],
+      // ])
+
       return data.map(element => {
         // if (state.status == 1) {
         var phone = element.mobile.toString()
@@ -422,13 +527,21 @@ export default {
           }
         }
         element.mobile = str.join("")
+
+        state.refer.map((i => {
+          if (i.id == element.refer) {
+            return element.refer = i.channel_title
+          }
+        }))
         // }
+        // element.textbook_version = version.get(element.textbook_version);
+        element.product_grade = product.get(element.product_grade);
+        element.product_type = type.get(element.product_type);
         element.grade = maps.get(element.grade);
         element.sex = gender.get(element.sex);
         element.age = age.get(element.age);
-        element.follow_status = follow.get(element.follow_status);
-        element.subject = subjects.get(element.subject);
-        element.is_course = course.get(element.is_course);
+        // element.follow_status = follow.get(element.follow_status);
+        // element.subject = subjects.get(element.subject);
         element.intention_option = intention.get(element.intention_option);
 
         return element;

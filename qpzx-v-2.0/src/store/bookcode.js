@@ -3,7 +3,8 @@ import qs from "qs"
 import {
   BOOK_URL,
   BOOK_REMOVE,
-  CLASS_LIST
+  CLASS_LIST,
+  UPEXTENSION
 } from "../uilt/url/Murl.js";
 import storage from '../uilt/storage'
 
@@ -29,6 +30,26 @@ export default {
     }
   },
   actions: {
+    //上报推广
+    UpExtension({state,commit,dispatch},uid){
+      return new Promise((resolve,reject)=>{
+        axios({
+          method:'get',
+          url:UPEXTENSION,
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            Authorization: "bearer " + storage.get()
+          },
+          params:{
+            book_id:uid
+          }
+        }).then(res=>{
+          resolve(res)
+        }).catch(e=>{
+          reject(e)
+        })
+      })
+    },
     //课列表
     getClassList({
       state,

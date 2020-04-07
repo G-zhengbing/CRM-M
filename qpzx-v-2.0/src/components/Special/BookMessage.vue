@@ -567,6 +567,8 @@ export default {
             formData.append('popularize_url',this.form.popularize_url);
             formData.append('product_id',this.form.product_id);
             formData.append('type',this.form.type);
+            formData.append('banner_one_title',this.form.banner_one_title);
+            formData.append('banner_two_title',this.form.banner_two_title);
             formData.append('banner_one_product_type',this.form.banner_one_product_type);
             formData.append('banner_two_product_type',this.form.banner_two_product_type);
             formData.append('banner_one_type',this.form.banner_one_type);

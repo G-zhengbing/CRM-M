@@ -1,28 +1,37 @@
 <template>
-  <div id="app">
+  <div id="app" ref="app">
     <router-view />
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  mounted(){
+    this.$refs.app.style.width = "100%"
+    this.$refs.app.style.transformOrigin = "50% 0"
+  }
+};
 </script>
 
 <style>
-.active_red{
+.ive-page {
+  margin-top: 20px;
+  text-align: right;
+}
+.active_red {
   position: absolute;
   left: -80px;
   top: 3px;
   color: red;
 }
-.active_span{
+.active_span {
   position: relative;
 }
-.ivu-switch.ivu-switch-checked.ivu-switch-default{
-  width: 50px!important;
+.ivu-switch.ivu-switch-checked.ivu-switch-default {
+  width: 50px !important;
 }
-.ivu-switch-checked:after{
-  left: 31px!important;
+.ivu-switch-checked:after {
+  left: 31px !important;
 }
 * {
   margin: 0;
@@ -49,7 +58,7 @@ ul {
   min-width: 72px;
 }
 /*  */
-.main-section-top-top label>input {
+.main-section-top-top label > input {
   border: none;
   border: 1px solid #c0c0c0;
   width: 130px;

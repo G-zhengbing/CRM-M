@@ -54,7 +54,15 @@
                   </FormItem>
                 </Col>
                 <Col span="4">
-                  <DatePicker @on-change="getTime" v-model="time" type="daterange" placement="bottom-end" format="yyyy-MM-dd" placeholder="开始时间-结束时间" style="width: 200px"></DatePicker>
+                  <DatePicker
+                    @on-change="getTime"
+                    v-model="time"
+                    type="daterange"
+                    placement="bottom-end"
+                    format="yyyy-MM-dd"
+                    placeholder="开始时间-结束时间"
+                    style="width: 200px"
+                  ></DatePicker>
                   <br />
                 </Col>
                 <Col span="5">
@@ -126,7 +134,7 @@ export default {
   },
   data() {
     return {
-      time:"",
+      time: "",
       item: {},
       isUpdata: false,
       checkAll: [],
@@ -197,16 +205,16 @@ export default {
         {
           title: "详情页到达量",
           key: "join_details_count",
-          width: "80px",
+          width: "80px"
         },
         {
           title: "注册量",
           key: "register_user_count",
-          width: "80px",
+          width: "80px"
         },
         {
-          title:"页面地址",
-          key:"landing_page_url",
+          title: "页面地址",
+          key: "landing_page_url",
           width: "200px",
           align: "center"
         },
@@ -235,6 +243,21 @@ export default {
                   }
                 },
                 "编辑"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.isuue(params.row);
+                    }
+                  }
+                },
+                "发布"
               )
             ]);
           }
@@ -243,11 +266,11 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["getBookList", "deleBookList"]),
+    ...mapActions(["getBookList", "deleBookList", "UpExtension"]),
     ...mapMutations(["setCurrerntPage"]),
-    getTime(){
-      this.form.create_start_time = this.time[0]
-      this.form.create_end_time = this.time[1]
+    getTime() {
+      this.form.create_start_time = this.time[0];
+      this.form.create_end_time = this.time[1];
     },
     //loading
     loading(status) {
@@ -269,6 +292,24 @@ export default {
       } else {
         this.$Spin.hide();
       }
+    },
+    //发布
+    isuue(item) {
+      this.$Modal.confirm({
+        title: "温馨提示",
+        content: "<p>确定要进行发布操作吗?</p>",
+        onOk: () => {
+          this.loading(true);
+          this.UpExtension(item.id).then(res => {
+            if (res.data.ret) {
+              this.$Message.success("发布成功");
+            }else{
+              this.$Message.error(res.data.error);
+            }
+            this.loading(false);
+          });
+        }
+      });
     },
     //分页
     pageChange(num) {
@@ -315,13 +356,13 @@ export default {
     },
     clear() {
       this.form = {};
-      this.time = ""
+      this.time = "";
     },
     seekKuhu() {
-       let page = 1;
+      let page = 1;
       this.loading(true);
-      this.getBookList(this.form,page).then(() => {
-        this.setCurrerntPage(page)
+      this.getBookList(this.form, page).then(() => {
+        this.setCurrerntPage(page);
         this.loading(false);
       });
     },

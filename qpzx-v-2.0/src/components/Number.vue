@@ -2,12 +2,8 @@
   <div class="box">
     <header class="main-header">
       <ul>
-        <li @click="goHome">
-          <i></i>
-          <span>首页</span>
-        </li>
-        <li>
-          <i></i>
+        <li style="margin-left:30px">
+          <!-- <i></i> -->
           <span>成单数</span>
         </li>
       </ul>

@@ -18,7 +18,7 @@
           <div class="contaner">
             <div style="height:1px;"></div>
             <ul class="tabs">
-              <li @click="tab(1)" :class="[num == 1? 'active' : '']" v-if="$store.state.cId != 4">
+              <li @click="tab(1)" :class="[num == 1? 'active' : '']">
                 <span>待分配</span>
               </li>
               <li @click="tab(2)" :class="[num == 2? 'active' : '']">
@@ -122,13 +122,13 @@ export default {
     Loading
   },
   mounted() {
-    if (this.$store.state.cId == 4) {
-      this.num = 2;
-      this.setFenNum(2);
-    }else{
-      this.num = 1;
-      this.setFenNum(1);
-    }
+    // if (this.$store.state.cId == 4) {
+    //   this.num = 2;
+    //   this.setFenNum(2);
+    // }else{
+    //   this.num = 1;
+    //   this.setFenNum(1);
+    // }
     this.isLoading = true;
     if (this.num == 1) {
       this.columns = [

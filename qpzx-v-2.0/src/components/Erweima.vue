@@ -3,64 +3,62 @@
     <NewErweima v-if="show" :type="type" />
     <header>
       <ul>
-        <li>
-          <i>|</i>
-          <span>首页</span>
-        </li>
-        <li class="active">
-          <i>|</i>
+        <li style="margin-left:30px">
+          <!-- <i></i> -->
           <span>渠道管理</span>
         </li>
       </ul>
     </header>
-    <section>
-      <div>
-        <div class="section-top">
-          <form>
-            <label>
-              标题:
-              <input type="text" v-model="form.title" />
-            </label>
-            <label>
-              类型:
-              <select class="select" v-model="form.demand_type">
-                <option :value="i" v-for="(list,i) in refer" :key="i">{{list}}</option>
-              </select>
-            </label>
-            <label>
-              使用人:
-              <input type="text" v-model="form.user_name" />
-            </label>
-            <label>
-              创建时间:
-              <DatePicker
-                v-model="nextTime"
-                type="datetime"
-                class="datepicker"
-                :lang="lang"
-                confirm
-                format="YYYY-MM-DD HH:mm:ss"
-                @confirm="setNextTime"
-              ></DatePicker>——
-              <DatePicker
-                v-model="classTime"
-                type="datetime"
-                class="datepicker"
-                :lang="lang"
-                confirm
-                format="YYYY-MM-DD HH:mm:ss"
-                @confirm="setClassTime"
-              ></DatePicker>
-            </label>
-            <div>
-              <button type="button" class="seek" @click="seek">查询</button>
-              <button type="button" class="clear" @click="clear">清空</button>
-            </div>
-          </form>
+    <section class="main-section">
+      <div class="surplus">
+        <div class="main-section-top">
+          <Form :model="form" :label-width="80" style="height:111px;padding: 10px;">
+            <Row style="margin-top:30px;">
+              <Col span="4">
+                <FormItem style="width:230px;">
+                  <Input v-model="form.title" placeholder="标题"></Input>
+                </FormItem>
+              </Col>
+              <Col span="4">
+                <FormItem style="width:230px;">
+                  <Select v-model="form.demand_type" style="width:150px" placeholder="渠道">
+                    <Option v-for="(list,i) in refer" :key="i" :value="i">{{list}}</Option>
+                  </Select>
+                </FormItem>
+              </Col>
+              <Col span="4">
+                <FormItem style="width:230px;">
+                  <Input v-model="form.user_name" placeholder="使用人"></Input>
+                </FormItem>
+              </Col>
+              <Col span="6">
+                <FormItem>
+                   <DatePicker
+                        type="datetime"
+                        placeholder="开始时间"
+                        style="width: 200px"
+                        v-model="nextTime"
+                        @on-ok="setNextTime"
+                      ></DatePicker>
+                      <DatePicker
+                        type="datetime"
+                        placeholder="结束时间"
+                        style="width: 200px"
+                        v-model="classTime"
+                        @on-ok="setClassTime"
+                      ></DatePicker>
+                </FormItem>
+              </Col>
+              <Col span="4" style="margin-left:30px">
+                  <Button type="primary"  @click="seek">查询</Button>
+                  <Button  @click="clear">清空</Button>
+                </Col>
+            </Row>
+          </Form>
         </div>
         <div class="section-bottom">
           <div style="margin: 0 46px;">
-            <button class="updata" @click="addErweima">+ 新建</button>
+            <button class="updata button" @click="addErweima">+ 新建</button>
             <div></div>
           </div>
           <div style="margin:0 46px 20px;margin-top: -20px;">
@@ -87,14 +85,12 @@
 <script>
 import TablePlus from "../uilt/table/TablePlus";
 import NewErweima from "../uilt/newErweima/NewErweima";
-import DatePicker from "vue2-datepicker";
 import Loading from "../uilt/loading/loading";
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 export default {
   components: {
     TablePlus,
     NewErweima,
-    DatePicker,
     Loading
   },
   computed: {
@@ -108,7 +104,7 @@ export default {
     })
   },
   mounted() {
-    this.setCurrentPage(1)
+    this.setCurrentPage(1);
     this.isLoading = true;
     this.getErweimaList().then(res => {
       this.isLoading = false;
@@ -119,36 +115,6 @@ export default {
       isLoading: false,
       cid: [],
       checkall: [],
-      lang: {
-        days: [
-          "星期一",
-          "星期二",
-          "星期三",
-          "星期四",
-          "星期五",
-          "星期六",
-          "星期日"
-        ],
-        months: [
-          "一月",
-          "二月",
-          "三月",
-          "四月",
-          "五月",
-          "六月",
-          "七月",
-          "八月",
-          "九月",
-          "十月",
-          "十一月",
-          "十二月"
-        ],
-        pickers: ["未来7天", "未来30天", "前7天", "前30天"],
-        placeholder: {
-          date: "",
-          dateRange: ""
-        }
-      },
       classTime: "",
       nextTime: "",
       show: false,
@@ -183,12 +149,14 @@ export default {
     ...mapActions(["getErweimaList", "setDaoru"]),
     clear() {
       this.form = {};
+      this.classTime = ""
+      this.nextTime = ""
     },
     //分页
     pageChange(num) {
       this.isLoading = true;
       this.setCurrentPage(num);
-      this.getErweimaList({...this.form}).then(res => {
+      this.getErweimaList({ ...this.form,page:num }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(num);
       });
@@ -215,11 +183,11 @@ export default {
         miao;
       return d;
     },
-    setClassTime(item) {
-      this.form.create_end_time = this.datePicker(item);
+    setClassTime() {
+      this.form.create_end_time = this.datePicker(this.classTime);
     },
-    setNextTime(item) {
-      this.form.create_start_time = this.datePicker(item);
+    setNextTime() {
+      this.form.create_start_time = this.datePicker(this.nextTime);
     },
     getBtnClick1(item) {
       this.show = true;
@@ -229,7 +197,7 @@ export default {
     getBtnClick2(item) {
       this.show = true;
       this.type.classify = "erweima";
-      this.type.status = "erji"
+      this.type.status = "erji";
       this.type.data = { ...item };
     },
     getBtnClick3(item) {
@@ -263,6 +231,12 @@ export default {
 </script>
 
 <style scoped>
+.main-section-top{
+  margin-bottom: 10px;
+}
+.mx-datepicker.datepicker[data-v-765fd6a2]{
+  margin-top: 0;
+}
 .remove.file {
   position: absolute;
   margin-left: -105px;
@@ -291,14 +265,14 @@ export default {
   color: #fff;
   margin: 10px 0 25px 0;
 }
-button {
+.button {
   border: none;
-  background: #1b73b0;
+  background: #2d8cf0;
   border-radius: 3px;
   font-size: 14px;
   outline: none;
   cursor: pointer;
-  border: 2px solid #1b73b0;
+  border: 2px solid #2d8cf0;
   box-sizing: border-box;
   text-align: center;
 }

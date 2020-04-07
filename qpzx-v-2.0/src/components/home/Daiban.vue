@@ -3,12 +3,8 @@
     <DaibanMessage v-if="show" :type="type" ref="message" />
     <header class="main-header">
       <ul>
-        <li>
-          <i></i>
-          <span>首页</span>
-        </li>
-        <li>
-          <i></i>
+        <li style="margin-left:30px">
+          <!-- <i></i> -->
           <span>资源池</span>
         </li>
       </ul>
@@ -19,10 +15,10 @@
           <div class="contaner">
             <div style="height:1px;"></div>
             <ul class="tabs">
-              <li @click="tab(1)" :class="[num == 1? 'active' : '']" v-if="$store.state.cId != 2">
+              <li @click="tab(1)" :class="[num == 1? 'active' : '']" v-if="$store.state.cId.is_sales == 'H'">
                 <span>未下单待分配</span>
               </li>
-              <li @click="tab(3)" :class="[num == 3? 'active' : '']" v-if="$store.state.cId != 2">
+              <li @click="tab(3)" :class="[num == 3? 'active' : '']" v-if="$store.state.cId.is_sales == 'H'">
                 <span>已下单待分配</span>
               </li>
               <li @click="tab(2)" :class="[num == 2? 'active' : '']">
@@ -32,20 +28,59 @@
             <Form :model="form" :label-width="80">
               <Row>
                 <Col span="4">
-                  <FormItem label="学员电话" style="width:230px;">
-                    <Input v-model="form.mobile" placeholder="请输入学员电话" @on-change="seekKuhu"></Input>
+                  <FormItem style="width:230px;">
+                    <Input v-model="form.name" placeholder="学员姓名" @on-change="seekKuhu"></Input>
                   </FormItem>
                 </Col>
                 <Col span="4">
-                  <FormItem label="渠道类型">
-                    <Select v-model="form.refer" style="width:150px" @on-change="seekKuhu">
-                      <Option v-for="(list,i) in refer" :key="i" :value="i">{{list}}</Option>
+                  <FormItem style="width:230px;">
+                    <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekKuhu"></Input>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select
+                      v-model="form.follow_status"
+                      style="width:150px"
+                      @on-change="seekKuhu"
+                      placeholder="跟进状态"
+                    >
+                      <Option v-for="(list,i) in follow_status" :key="i" :value="i">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
                 <Col span="4">
-                  <FormItem label="年级">
-                    <Select v-model="form.grade" style="width:150px" @on-change="seekKuhu">
+                  <FormItem>
+                    <Select
+                      v-model="form.follow_sale_name"
+                      style="width:150px"
+                      @on-change="seekKuhu"
+                      placeholder="跟进人"
+                    >
+                      <Option v-for="(list,i) in sale_list" :key="i" :value="list.id">{{list.login_name}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select
+                      v-model="form.refer"
+                      style="width:150px"
+                      @on-change="seekKuhu"
+                      placeholder="渠道"
+                    >
+                      <Option v-for="(list,i) in refer" :key="i" :value="list.id">{{list.channel_title}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select
+                      v-model="form.grade"
+                      style="width:150px"
+                      @on-change="seekKuhu"
+                      placeholder="年级"
+                    >
                       <Option :value="1">一年级</Option>
                       <Option :value="2">二年级</Option>
                       <Option :value="3">三年级</Option>
@@ -59,86 +94,100 @@
                   </FormItem>
                 </Col>
                 <Col span="4">
-                  <FormItem label="科目">
-                    <Select v-model="form.subject" style="width:150px" @on-change="seekKuhu">
-                      <Option value="1">数学</Option>
-                      <Option value="2">英语</Option>
-                      <Option value="3">语文</Option>
-                      <Option value="4">物理</Option>
-                      <Option value="5">化学</Option>
-                      <Option value="6">政治</Option>
-                      <Option value="7">生物</Option>
-                      <Option value="8">地理</Option>
-                      <Option value="9">历史</Option>
+                  <FormItem>
+                    <Select
+                      v-model="form.subject"
+                      style="width:150px"
+                      @on-change="seekKuhu"
+                      placeholder="意向科目"
+                    >
+                      <Option :value="i" v-for="(list,i) in subjectList">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
                 <Col span="4">
-                  <FormItem label="意向度" v-if="num == 2">
+                  <FormItem v-if="num == 2">
                     <Select
                       v-model="form.intention_option"
                       style="width:150px"
                       @on-change="seekKuhu"
+                      placeholder="意向度"
                     >
-                      <Option :value="1">A高</Option>
-                      <Option :value="2">B中</Option>
-                      <Option :value="3">C低</Option>
+                     <Option :value="i" v-for="(list,i) in internation">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
                 <Col span="4">
-                  <FormItem label="约课状态" v-if="num == 2">
-                    <Select v-model="form.is_course" style="width:150px" @on-change="seekKuhu">
-                      <Option :value="1">未约课</Option>
-                      <Option :value="2">已约课</Option>
+                  <FormItem v-if="num == 2">
+                    <Select
+                      v-model="form.stage"
+                      style="width:150px"
+                      @on-change="seekKuhu"
+                      placeholder="学习阶段"
+                    >
+                      <Option v-for="(list,i) in stage" :key="i" :value="i">{{list}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem  v-if="num == 2">
+                    <Select
+                      v-model="form.transfer"
+                      style="width:150px"
+                      @on-change="seekKuhu"
+                      placeholder="流转类型"
+                    >
+                     <Option v-for="(list,i) in transfer" :key="i" :value="i">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
                 <Col span="6">
-                  <FormItem label="起始时间">
+                  <FormItem>
                     <div class="dateplc">
-                      <DatePicker
-                        @on-change="setTimes"
-                        v-model="startTime"
-                        type="date"
-                        placeholder="Select date"
-                        style="width: 200px"
-                      ></DatePicker>
-                      <DatePicker
-                        @on-change="setTimes"
-                        v-model="endTime"
-                        type="date"
-                        placeholder="Select date"
-                        style="width: 200px"
-                      ></DatePicker>
+                      <DatePicker v-model="startTime" type="date" placeholder="注册时间" style="width: 200px" @on-change="getTimes"></DatePicker>
+                      <DatePicker v-model="endTime" type="date" placeholder="注册时间" style="width: 200px" @on-change="getTimes"></DatePicker>
                     </div>
                   </FormItem>
                 </Col>
-                <Col span="4">
+                <Col span="1" style="margin-left:30px">
                   <Button type="primary" @click="clear">清除</Button>
                 </Col>
               </Row>
             </Form>
-            <div class="allot" @click="allot" v-if="num != 2">
-              <span>{{'已选择'+ checkall.length + '条'}}</span>
-              <p>分配</p>
+            <div class="selsected">
+              <div class="allot"  @click="allot">
+                <span>{{'已选择'+ checkall.length + '条'}}</span>
+                <p>分配</p>
+              </div>
+              <div style="flex:1;text-align:right">
+                <Select
+                  v-model="selectedNum"
+                  style="width:130px;"
+                  placeholder="选择显示条数"
+                  @on-change="selectedChange"
+                >
+                  <Option :value="20">每页显示20条</Option>
+                  <Option :value="50">每页显示50条</Option>
+                  <Option :value="100">每页显示100条</Option>
+                </Option>
+                </Select>
+              </div>
             </div>
             <Table
-              ref="table"
-              :isChecked="isChecked"
-              :columns="columns"
+              border
+              :columns="columns2"
               :data="dataArr"
-              :currentPage="currentPage"
+              @on-selection-change="selectionChange"
+              height="500"
+            ></Table>
+            <Page
+              @on-change="pageChange"
               :total="total"
-              :pageSize="pageSize"
-              @selection-change="selectionChange"
-              @childer1="getBtnClick1"
-              @childer2="getBtnClick2"
-              @childer3="getBtnClick3"
-              @childer5="getBtnClick5"
-              @childer4="getBtnClick4"
-              @childer6="getBtnClick6"
-              @page-change="pageChange"
+              :current="currentPage"
+              :page-size="pageSize"
+              show-total
+              show-elevator
+              class="ive-page"
             />
           </div>
         </div>
@@ -149,15 +198,14 @@
 </template>
 
 <script>
-import Table from "../../uilt/table/TablePlus";
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import DaibanMessage from "../../uilt/newErweima/DaibanMessage";
-import DatePicker from "vue2-datepicker";
 import storage from "../../uilt/storage";
 import Loading from "../../uilt/loading/loading";
 export default {
   mounted() {
-    this.setCurrentPage(1);
+    this.getReferList().then(()=>{
+      this.setCurrentPage(1);
     this.setStatus();
     this.isLoading = true;
     if (storage.getTabStatus() == null) {
@@ -170,74 +218,30 @@ export default {
     this.getKehuList({ status: this.num }).then(res => {
       this.isLoading = false;
     });
+    })
   },
   components: {
-    Table,
     DaibanMessage,
-    Loading,
-    DatePicker
+    Loading
   },
   data() {
     return {
+      subjectList:storage.getDaiban().screen_list.subject,
+      internation:storage.getDaiban().screen_list.inter_nation,
+      subjectList:storage.getDaiban().screen_list.subject,
+      transfer:storage.getDaiban().screen_list.transfer,
+      stage:storage.getDaiban().screen_list.stage,
+      follow_status:storage.getDaiban().screen_list.follow_status,
+      sale_list:storage.getDaiban().sale_list,
+      selectedNum:0,
       endTime: "",
       startTime: "",
-      lang: {
-        days: [
-          "星期一",
-          "星期二",
-          "星期三",
-          "星期四",
-          "星期五",
-          "星期六",
-          "星期日"
-        ],
-        months: [
-          "一月",
-          "二月",
-          "三月",
-          "四月",
-          "五月",
-          "六月",
-          "七月",
-          "八月",
-          "九月",
-          "十月",
-          "十一月",
-          "十二月"
-        ],
-        pickers: ["未来7天", "未来30天", "前7天", "前30天"],
-        placeholder: {
-          date: "",
-          dateRange: ""
-        }
-      },
       Time: "",
       classTime: "",
       nextTime: "",
-      TableCheckedAll: "",
-      isChecked: true, //控制表格组件的全选
       isLoading: false,
       num: storage.getTabStatus() * 1,
-      columns: [
-        { type: "selection" },
-        { type: "学员电话", key: "mobile" },
-        { type: "在读学校", key: "school" },
-        { type: "年级", key: "grade" },
-        { type: "科目", key: "subject" },
-        { type: "跟进状态", key: "follow_status" },
-        { type: "渠道", key: "refer" },
-        { type: "用户状态", key: "account_status" },
-        { type: "跟进人", key: "follow_sale_name" },
-        { type: "约课状态", key: "is_course" },
-        { type: "意向度", key: "intention_option" },
-        { type: "约课时间", key: "class_date" },
-        { type: "创建时间", key: "create_time" },
-        {
-          type: "action",
-          title: "操作",
-          buttons: [{ text: "查看", type: "info" }]
-        }
-      ],
+      columns2: [],
       show: false,
       checkall: [],
       cid: [],
@@ -253,29 +257,34 @@ export default {
       "setCurrentPage",
       "setXiansuoId",
       "setGenjinType",
-      "setStatusNum"
+      "setStatusNum",
+      "setForm",
     ]),
-    ...mapActions(["getKehuList", "getFenpeiList", "RingUp"]),
-    setTimes(time) {
-      const d = new Date(time);
-      const resDate =
-        d.getFullYear() +
-        "-" +
-        this.p(d.getMonth() + 1) +
-        "-" +
-        this.p(d.getDate());
-      const resTime =
-        this.p(d.getHours()) +
-        ":" +
-        this.p(d.getMinutes()) +
-        ":" +
-        this.p(d.getSeconds());
+    ...mapActions(["getKehuList", "getFenpeiList", "RingUp","getReferList"]),
+    //筛选每页显示条数
+    selectedChange(){
+      this.checkall.length = 0
+      this.isLoading = true;
+      this.getKehuList({form:this.form, status: this.num, page_num :this.selectedNum}).then(res => {
+        this.isLoading = false;
+      });
     },
+    getTimes() {
+      if (this.startTime && this.endTime) {
+        this.form.create_time_start = this.datePicker(this.startTime);
+        this.form.create_time_end = this.datePicker(this.endTime);
+        this.seekKuhu();
+      }
+    },
+    //分配
     getBtnClick6(item) {
+      var arr = []
+      arr.push(item.id)
       this.show = true;
       this.type.classify = "shade";
-      this.setXiansuoId(item.id);
+      this.setXiansuoId(arr);
     },
+    //设置返回的时间
     datePicker(time) {
       var d = new Date(time);
       let shi = d.getHours();
@@ -284,7 +293,12 @@ export default {
       if (shi < 10) shi = "0" + shi;
       if (fen < 10) fen = "0" + fen;
       if (miao < 10) miao = "0" + miao;
-      d = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+      d =
+        d.getFullYear() +
+        "-" +
+        (d.getMonth() + 1) +
+        "-" +
+        d.getDate()
       return d;
     },
     setTime(item) {
@@ -296,14 +310,18 @@ export default {
     setNextTime(item) {
       this.form.create_time_start = this.datePicker(item);
     },
+    //查询清空
     clear() {
       this.form = {};
+      this.startTime = "";
+      this.endTime = "";
+      this.seekKuhu();
     },
+    //搜索
     seekKuhu() {
-      console.log(this.startTime);
-      console.log(this.endTime);
       let page = 1;
       this.isLoading = true;
+      this.setForm(this.form)
       this.getKehuList({ status: this.num, form: this.form, page }).then(
         res => {
           this.isLoading = false;
@@ -311,12 +329,14 @@ export default {
         }
       );
     },
+    //当前选中条数
     allot() {
       this.type.classify = "shade";
       if (this.checkall.length > 0) {
         this.show = true;
       }
     },
+    //分页
     pageChange(num) {
       this.isLoading = true;
       this.setCurrentPage(num);
@@ -324,27 +344,31 @@ export default {
         this.isLoading = false;
       });
     },
+    //查看
     getBtnClick1(item) {
       this.show = true;
       this.type.classify = "datalis";
       this.type.data = { ...item };
     },
+    //移出
     getBtnClick2(item) {
       this.show = true;
       this.type.classify = "shiftOut";
       this.type.data = { ...item };
     },
+    //跟进
     getBtnClick3(item) {
       this.setGenjinType(item);
       this.show = true;
       this.type.classify = "followUp";
-      this.type.data = { ...this.Types };
+      // this.type.data = { ...this.Types };
     },
+    //呼出
     getBtnClick4(item) {
       this.setGenjinType(item);
       this.isLoading = true;
       this.show = true;
-      this.type.classify = "followUp";
+      this.type.classify = "datalis";
       this.type.data = { ...this.Types };
       this.RingUp(item)
         .then(res => {
@@ -371,7 +395,6 @@ export default {
       this.type.data = { ...item };
     },
     selectionChange(item) {
-      this.TableCheckedAll = this.$refs.table.checkedAll;
       this.cid.length = 0;
       let arr = [];
       this.checkall = item;
@@ -381,6 +404,9 @@ export default {
       this.setXiansuoId(arr);
     },
     tab(num) {
+      this.endTime = ""
+      this.startTime = ""
+      this.selectedNum = ""
       this.form = {};
       this.isLoading = true;
       storage.saveTabStatus(num);
@@ -388,33 +414,158 @@ export default {
       this.setStatusNum(num);
       this.setCurrentPage(1);
       this.setStatus();
-      this.getKehuList({ status: this.num }).then(res => {
+      this.getKehuList({ status: this.num,page_num:10 }).then(res => {
         this.isLoading = false;
       });
-      this.TableCheckedAll = [];
     },
     setStatus() {
-      for (var i = 0; i < this.columns.length; i++) {
-        if (this.num == 1 || this.num == null) {
-          this.columns[i].buttons = [{ text: "查看", type: "info" }];
-        } else if (this.num == 3) {
-          this.columns[i].buttons = [{ text: "分配", type: "success" }];
-        } else if (this.$store.state.cId == 1) {
-          this.columns[i].buttons = [
-            // { text: "订单", type: "primary" },
-            { text: "移出", type: "danger" },
-            { text: "跟进", type: "warning" },
-            { text: "查看", type: "info" },
-            { text: "呼出", type: "link" }
-          ];
-        } else {
-          this.columns[i].buttons = [
-            // { text: "订单", type: "primary" },
-            { text: "跟进", type: "warning" },
-            { text: "查看", type: "info" },
-            { text: "呼出", type: "link" }
-          ];
-        }
+      if (this.num == 1) {
+        this.columns2 = [
+          { type: "selection" ,width:60},
+          { title: "学员姓名", key: "student_name" },
+          { title: "注册手机", key: "mobile" },
+          { title: "在读学校", key: "school" },
+          { title: "年级", key: "grade" },
+          { title: "意向科目", key: "subject" },
+          { title: "跟进状态", key: "follow_status" },
+          { title: "渠道来源", key: "refer" },
+          { title: "数据来源", key: "data_source" },
+          { title: "数据类型", key: "data_type" },
+          { title: "注册时间", key: "create_time" },
+          {
+            title: "操作",
+            key: "action",
+            align: "center",
+            render: (h, params) => {
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    on: {
+                      click: () => {
+                        this.getBtnClick6(params.row);
+                      }
+                    }
+                  },
+                  "分配"
+                )
+              ]);
+            }
+          }
+        ];
+      } else if (this.num == 2) {
+        this.columns2 = [
+         { type: "selection" ,width:60},
+          { title: "学员姓名", key: "student_name" },
+          { title: "注册手机", key: "mobile" },
+          { title: "在读学校", key: "school" },
+          { title: "年级", key: "grade" },
+          { title: "意向科目", key: "subject" },
+          { title: "渠道来源", key: "refer" },
+          { title: "跟进人", key: "follow_sale_name" },
+          { title: "跟进状态", key: "follow_status" },
+          { title: "意向度 ", key: "intention_option" },
+          { title: "学习阶段", key: "stage" },
+          { title: "流转类型", key: "transfer" },
+          { title: "注册时间", key: "create_time" },
+          {
+            title: "操作",
+            key: "action",
+            align: "center",
+            render: (h, params) => {
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    on: {
+                      click: () => {
+                        this.getBtnClick6(params.row);
+                      }
+                    }
+                  },
+                  "分配"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    on: {
+                      click: () => {
+                        this.getBtnClick1(params.row);
+                      }
+                    }
+                  },
+                  "查看"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    on: {
+                      click: () => {
+                        this.getBtnClick4(params.row);
+                      }
+                    }
+                  },
+                  "呼出"
+                )
+              ]);
+            }
+          }
+        ];
+      } else {
+        this.columns2 = [
+         { type: "selection" ,width:60},
+          { title: "学员姓名", key: "student_name" },
+          { title: "注册手机", key: "mobile" },
+          { title: "在读学校", key: "school" },
+          { title: "购买课程", key: "product_name" },
+          { title: "课程类型", key: "product_type" },
+          { title: "年级", key: "product_grade" },
+          { title: "科目", key: "product_subject" },
+          { title: "渠道来源", key: "refer" },
+          { title: "跟进状态", key: "follow_status" },
+          { title: "交易时间", key: "create_time" },
+          { title: "注册时间", key: "create_time" },
+          {
+            title: "操作",
+            key: "action",
+            align: "center",
+            render: (h, params) => {
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    on: {
+                      click: () => {
+                        this.getBtnClick6(params.row);
+                      }
+                    }
+                  },
+                  "分配"
+                )
+              ]);
+            }
+          }
+        ];
       }
     }
   },
@@ -426,13 +577,17 @@ export default {
       currentPage: state => state.daiban.currentPage,
       total: state => state.daiban.total,
       pageSize: state => state.daiban.pageSize,
-      status: state => state.daiban.status
+      status: state => state.daiban.status,
     }),
     ...mapGetters(["dataArr", "Types"])
   }
 };
 </script>
 <style scoped>
+.selsected {
+  width: 100%;
+  display: flex;
+}
 .dateplc {
   display: flex;
 }
@@ -445,11 +600,10 @@ export default {
   text-align: center;
 }
 .allot {
-  margin-top: 30px;
   display: flex;
   width: 150px;
   height: 30px;
-  background: #1b73b0;
+  background: #2d8cf0;
   color: #fff;
   border-radius: 6px;
   justify-content: center;
@@ -457,7 +611,7 @@ export default {
   cursor: pointer;
 }
 .tabs li.active span {
-  color: #1b73b0;
+  color: #2d8cf0;
 }
 .tabs li.active {
   border: 1px solid #ccc;

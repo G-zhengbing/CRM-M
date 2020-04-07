@@ -1,27 +1,23 @@
 import axios from 'axios'
 import {
-  RETURN
+  NOTIFICATION
 } from '../uilt/url/url'
 import storage from '../uilt/storage'
 
 export default {
   state: {
-    followUpList: [],
-    refer: [],
+    notifiList: [],
     currentPage: 1,
     total: 0,
     pageSize: 10,
-    genjinType: null
+    notifiTypesList: null
   },
   mutations: {
-    setGenjintypefoll(state,payload){
-      state.genjinType = payload
+    setNotifiTypes(state, payload) {
+      state.notifiTypesList = payload
     },
-    setFollowUpList(state, payload) {
-      state.followUpList = payload
-    },
-    setRefer(state, payload) {
-      state.refer = payload
+    setnNtifiList(state, payload) {
+      state.notifiList = payload
     },
     setCurrentPage(state, payload) {
       state.currentPage = payload
@@ -31,27 +27,26 @@ export default {
     }
   },
   actions: {
-    getFollowUpList({
+    //消息提醒列表
+    getNotificationList({
       state,
       commit
     }, form, page) {
       return new Promise((resolve, reject) => {
         axios({
           method: "get",
-          url: RETURN,
+          url: NOTIFICATION,
           headers: {
             "content-type": "application/x-www-form-urlencoded",
             Authorization: "bearer " + storage.get()
           },
           params: {
             ...form,
-            type: 2,
             page: page ? page : state.currentPage
           }
         }).then(res => {
-          commit("setFollowUpList", res.data.data.resources)
+          commit("setnNtifiList", res.data.data.resources)
           commit("setCurrentPage", res.data.data.links.current_page)
-          commit("setRefer", res.data.data.links.refer)
           commit("setTotal", res.data.data.links.total)
           resolve()
         }).catch(e => {
@@ -61,8 +56,8 @@ export default {
     }
   },
   getters: {
-    Typesntfoll(state) {
-      let type = state.genjinType
+    notifiTypes(state) {
+      let type = state.notifiTypesList
       var maps = new Map([
         ["一年级", 1],
         ["二年级", 2],
@@ -73,10 +68,6 @@ export default {
         ["七年级", 7],
         ["八年级", 8],
         ["九年级", 9],
-      ])
-      var gender = new Map([
-        ["男", 1],
-        ["女", 2]
       ])
       var subjects = new Map([
         ["数学", 1],
@@ -89,12 +80,19 @@ export default {
         ["地理", 8],
         ["历史", 9]
       ])
+
       var intention = new Map([
         ["A强烈", 1],
         ["B一般", 2],
         ["C挖掘", 3],
         ["D无效", 4]
       ])
+
+      var gender = new Map([
+        ["男", 1],
+        ["女", 2]
+      ])
+
       var follow = new Map([
         ["待分配", 1],
         ["已分配", 2],
@@ -122,16 +120,17 @@ export default {
         ["19岁", 19],
         ["20岁", 20],
       ])
-      type.follow_status = follow.get(type.follow_status)
-      type.age = age.get(type.age)
+
       type.grade = maps.get(type.grade)
-      type.subject = subjects.get(type.subject)
       type.sex = gender.get(type.sex)
+      type.age = age.get(type.age)
+      type.follow_status = follow.get(type.follow_status)
+      type.subject = subjects.get(type.subject)
       type.intention_option = intention.get(type.intention_option)
       return type
     },
-    FollowdataArr(state) {
-      let data = state.followUpList
+    notifiData(state) {
+      let data = state.notifiList
       var maps = new Map([
         [1, '一年级'],
         [2, '二年级'],
@@ -150,12 +149,11 @@ export default {
         [4, "D无效"]
       ])
 
-      var follow = new Map([
-        [1, "待分配"],
-        [2, "已分配"],
-        [3, "跟进中"],
-        [4, "已调库"],
-        [5, "已移出"],
+      var pone = new Map([
+        [1, "正常接听"],
+        [2, "无人接听"],
+        [3, "空号"],
+        [4, "挂断"],
       ])
 
       var gender = new Map([
@@ -164,22 +162,22 @@ export default {
       ])
 
       var age = new Map([
-        [5,"5岁"],
-        [6,"6岁"],
-        [7,"7岁"],
-        [8,"8岁"],
-        [9,"9岁"],
-        [10,"10岁"],
-        [11,"11岁"],
-        [12,"12岁"],
-        [13,"13岁"],
-        [14,"14岁"],
-        [15,"15岁"],
-        [16,"16岁"],
-        [17,"17岁"],
-        [18,"18岁"],
-        [19,"19岁"],
-        [20,"20岁"]
+        [5, "5岁"],
+        [6, "6岁"],
+        [7, "7岁"],
+        [8, "8岁"],
+        [9, "9岁"],
+        [10, "10岁"],
+        [11, "11岁"],
+        [12, "12岁"],
+        [13, "13岁"],
+        [14, "14岁"],
+        [15, "15岁"],
+        [16, "16岁"],
+        [17, "17岁"],
+        [18, "18岁"],
+        [19, "19岁"],
+        [20, "20岁"]
       ])
       return data.map(element => {
         var phone = element.mobile.toString()
@@ -189,11 +187,12 @@ export default {
             str[i] = '*'
           }
         }
+
         element.mobile = str.join("")
+        element.phone_status = pone.get(element.phone_status);
         element.grade = maps.get(element.grade);
         element.sex = gender.get(element.sex);
         element.age = age.get(element.age);
-        element.follow_status = follow.get(element.follow_status);
         element.intention_option = intention.get(element.intention_option);
         return element;
       });

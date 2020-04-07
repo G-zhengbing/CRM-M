@@ -1,11 +1,10 @@
 <template>
-  <div class="box">
-    <DaibanMessage v-if="show" :type="type" />
+  <div class="box" ref="box">
     <header class="main-header">
       <ul>
         <li style="margin-left:30px">
           <!-- <i></i> -->
-          <span>今日新分</span>
+          <span>我的客户</span>
         </li>
       </ul>
     </header>
@@ -18,27 +17,23 @@
               <Row>
                 <Col span="4">
                   <FormItem style="width:230px;">
-                    <Input v-model="form.name" placeholder="学员姓名" @on-change="seekKuhu"></Input>
+                    <Input v-model="form.name" placeholder="学员姓名" @on-change="seekClick"></Input>
                   </FormItem>
                 </Col>
                 <Col span="4">
                   <FormItem style="width:230px;">
-                    <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekKuhu"></Input>
+                    <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekClick"></Input>
                   </FormItem>
                 </Col>
                 <Col span="4">
                   <FormItem>
                     <Select
-                      v-model="form.refer"
+                      v-model="form.follow_status"
                       style="width:150px"
-                      @on-change="seekKuhu"
-                      placeholder="渠道"
+                      @on-change="seekClick"
+                      placeholder="跟进状态"
                     >
-                      <Option
-                        v-for="(list,i) in refer"
-                        :key="i"
-                        :value="list.id"
-                      >{{list.channel_title}}</Option>
+                      <Option :value="i" v-for="(list,i) in follow_status">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
@@ -47,7 +42,7 @@
                     <Select
                       v-model="form.grade"
                       style="width:150px"
-                      @on-change="seekKuhu"
+                      @on-change="seekClick"
                       placeholder="年级"
                     >
                       <Option :value="1">一年级</Option>
@@ -65,28 +60,64 @@
                 <Col span="4">
                   <FormItem>
                     <Select
+                      v-model="form.refer"
+                      style="width:150px"
+                      @on-change="seekClick"
+                      placeholder="渠道类型"
+                    >
+                      <Option :value="list.id" v-for="(list,i) in channel">{{list.channel_title}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <!-- <Col span="4">
+                  <FormItem>
+                    <Select
                       v-model="form.subject"
                       style="width:150px"
-                      @on-change="seekKuhu"
+                      @on-change="seekClick"
                       placeholder="意向科目"
                     >
                       <Option :value="i" v-for="(list,i) in subjectList">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
+                 <Col span="4">
+                  <FormItem>
+                    <Select
+                      v-model="form.subject"
+                      style="width:150px"
+                      @on-change="seekClick"
+                      placeholder="意向度"
+                    >
+                      <Option :value="i" v-for="(list,i) in intention">{{list}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
                 <Col span="4">
+                  <FormItem>
+                    <Select
+                      v-model="form.subject"
+                      style="width:150px"
+                      @on-change="seekClick"
+                      placeholder="学习阶段"
+                    >
+                      <Option :value="i" v-for="(list,i) in stage">{{list}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                 <Col span="4">
                   <FormItem>
                     <Select
                       v-model="form.transfer"
                       style="width:150px"
-                      @on-change="seekKuhu"
+                      @on-change="seekClick"
                       placeholder="流转类型"
                     >
-                      <Option v-for="(list,i) in transfer" :key="i" :value="i">{{list}}</Option>
+                      <Option :value="i" v-for="(list,i) in transfer">{{list}}</Option>
                     </Select>
                   </FormItem>
-                </Col>
-                <Col span="8">
+                </Col>-->
+                <Col span="6">
                   <FormItem>
                     <div class="dateplc">
                       <DatePicker
@@ -106,7 +137,20 @@
                     </div>
                   </FormItem>
                 </Col>
-                <Col span="4" style="margin-left:30px">
+                <!-- <Col span="4">
+                  <FormItem>
+                    <Select
+                      v-model="form.intention_option"
+                      style="width:150px"
+                      @on-change="seekClick"
+                      placeholder="约课状态"
+                    >
+                      <Option :value="1">未约课</Option>
+                      <Option :value="2">已约课</Option>
+                    </Select>
+                  </FormItem>
+                </Col>-->
+                <Col span="4" style="text-indent: 60px">
                   <Button type="primary" @click="clear">清除</Button>
                 </Col>
               </Row>
@@ -114,7 +158,7 @@
             <Table
               border
               :columns="columns"
-              :data="NotdataArr"
+              :data="clientkData"
               @on-selection-change="selectionChange"
               height="500"
             ></Table>
@@ -132,60 +176,81 @@
       </div>
     </section>
     <Loading v-show="isLoading" />
+    <DaibanMessage :type="type" v-if="show" />
     <MineclientMessage :type="type" v-if="showMine" />
   </div>
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
-import DaibanMessage from "../uilt/newErweima/DaibanMessage";
-import MineclientMessage from "./minecllient/MineclientMessage";
-import Loading from "../uilt/loading/loading";
-import storage from "../uilt/storage";
+import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
+import Loading from "../../uilt/loading/loading";
+import storage from "../../uilt/storage";
+import DaibanMessage from "../../uilt/newErweima/DaibanMessage";
+import MineclientMessage from "./MineclientMessage";
 export default {
   components: {
-    DaibanMessage,
     Loading,
+    DaibanMessage,
     MineclientMessage
   },
   mounted() {
+    this.showMine = true
+    this.type.classify = "order"
+    this.setRefer(storage.getDaiban().channel);
+    this.follow_status = storage.getDaiban().screen_list.follow_status;
+    this.subjectList = storage.getDaiban().screen_list.subject;
+    this.intention = storage.getDaiban().screen_list.intention;
+    this.stage = storage.getDaiban().screen_list.stage;
+    this.transfer = storage.getDaiban().screen_list.transfer;
+    this.channel = storage.getDaiban().channel;
     this.setCurrentPage(1);
     this.isLoading = true;
-    this.getXinfenList().then(res => {
+    this.getClientList().then(res => {
       this.isLoading = false;
     });
+  },
+  computed: {
+    ...mapGetters(["clientkData", "clientTypes"]),
+    ...mapState({
+      data: state => state.mineclient.setMineclient,
+      refer: state => state.mineclient.refer,
+      currentPage: state => state.mineclient.currentPage,
+      total: state => state.mineclient.total,
+      pageSize: state => state.mineclient.pageSize
+    })
   },
   data() {
     return {
       showMine: false,
-      subjectList: storage.getDaiban().screen_list.subject,
-      transfer: storage.getDaiban().screen_list.transfer,
-      stage: storage.getDaiban().screen_list.stage,
-      startTime: "",
       endTime: "",
+      startTime: "",
+      channel: "",
+      follow_status: "",
+      subjectList: "",
+      intention: "",
+      stage: "",
+      transfer: "",
       show: false,
-      isLoading: false,
       type: {
-        status: "notvisit",
-        page: 1
+        status: "mineclient"
       },
-      show: false,
+      isLoading: false,
       form: {},
       columns: [
         { type: "selection", width: 60 },
         { title: "学员姓名", key: "student_name" },
         { title: "注册手机", key: "mobile" },
-        { title: "购买课程", key: "product_subject" },
+        { title: "微信昵称", key: "wechat_nick_name" },
         { title: "年级", key: "grade" },
         { title: "意向科目", key: "subject" },
-        // { title: "渠道优先级", key: "subject" },
-        // { title: "渠道类型", key: "refer" },
         { title: "渠道来源", key: "refer" },
+        { title: "跟进人", key: "follow_sale_name" },
         { title: "跟进状态", key: "follow_status" },
-        // { title: "学习阶段", key: "follow_status" },
-        { title: "呼出情况", key: "many_calls" },
+        { title: "学习阶段", key: "stage" },
+        { title: "意向度", key: "intention_option" },
+        { title: "上次呼出", key: "phone_status" },
+        { title: "下次跟进", key: "next_follow_time" },
         { title: "流转类型", key: "transfer" },
-        { title: "分配时间", key: "receive_time" },
         { title: "注册时间", key: "create_time" },
         {
           title: "操作",
@@ -193,21 +258,51 @@ export default {
           align: "center",
           render: (h, params) => {
             return h("div", [
-              // h(
-              //   "Button",
-              //   {
-              //     props: {
-              //       type: "text",
-              //       size: "small"
-              //     },
-              //     on: {
-              //       click: () => {
-              //         this.audition(params.row);
-              //       }
-              //     }
-              //   },
-              //   "试听"
-              // ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.order(params.row);
+                    }
+                  }
+                },
+                "订单"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.audition(params.row);
+                    }
+                  }
+                },
+                "试听"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.trunIntroduce(params.row);
+                    }
+                  }
+                },
+                "转介绍"
+              ),
               h(
                 "Button",
                 {
@@ -245,6 +340,31 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["setClientTypes", "setCurrentPage", "setRefer"]),
+    ...mapActions(["getClientList", "RingUp", "getReferList"]),
+    //转介绍
+    trunIntroduce(item){
+      this.setClientTypes(item);
+      this.showMine = true;
+      this.type.classify = "introduce";
+      this.type.data = { ...this.clientTypes };
+    },
+    //试听
+    audition(item) {
+      this.setClientTypes(item);
+      this.showMine = true;
+      this.type.form = this.form;
+      this.type.page = this.currentPage;
+      this.type.classify = "audition";
+      this.type.data = { ...this.clientTypes };
+    },
+    //订单
+    order(item) {
+      this.setClientTypes(item);
+      this.showMine = true;
+      this.type.classify = "order";
+      this.type.data = { ...this.clientTypes };
+    },
     //设置返回的时间
     datePicker(time) {
       var d = new Date(time);
@@ -257,63 +377,53 @@ export default {
       d = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
       return d;
     },
-    //日期选择器
+    //日期
     getTimes() {
       if (this.startTime && this.endTime) {
         this.form.create_time_start = this.datePicker(this.startTime);
         this.form.create_time_end = this.datePicker(this.endTime);
-        this.seekKuhu();
+        this.seekClick();
       }
     },
-    //试听
-    audition(item) {
-      this.setNotvisitTypes(item);
-      this.showMine = true;
-      this.type.classify = "audition";
-      this.type.form = this.form;
-      this.type.page = this.currentPage;
-      this.type.data = { ...this.notvisitType };
+    goHome() {
+      // this.$router.push("/main/home");
     },
-    //清空查询条件
     clear() {
       this.form = {};
       this.startTime = "";
       this.endTime = "";
-      this.seekKuhu();
+      this.seekClick();
     },
-    //搜索
-    seekKuhu() {
+    //查询
+    seekClick() {
       let page = 1;
       let currentPage = this.currentPage;
       if (currentPage > 1) {
         this.setCurrentPage(page);
       }
       this.isLoading = true;
-      this.getXinfenList({ ...this.form, page }).then(res => {
-        this.setCurrentPage(page);
+      this.getClientList({ ...this.form, page }).then(res => {
         this.isLoading = false;
+        this.setCurrentPage(page);
       });
     },
-    ...mapActions(["getXinfenList", "RingUp"]),
-    ...mapMutations(["setCurrentPage", "setNotvisitTypes"]),
-    //全选反选
     selectionChange() {},
     //跟进
     getBtnClick3(item) {
-      this.setNotvisitTypes(item);
+      this.setClientTypes(item);
       this.show = true;
       this.type.classify = "followUp";
       this.type.page = this.currentPage;
       this.type.form = { ...this.form };
-      this.type.data = { ...this.notvisitType };
+      this.type.data = { ...this.clientTypes };
     },
     //呼出
     getBtnClick4(item) {
-      this.setNotvisitTypes(item);
+      this.setClientTypes(item);
       this.isLoading = true;
       this.show = true;
       this.type.classify = "followUp";
-      this.type.data = { ...this.notvisitType };
+      this.type.data = { ...this.clientTypes };
       this.RingUp(item)
         .then(res => {
           if (res.data.code == 200) {
@@ -335,23 +445,13 @@ export default {
     },
     //分页
     pageChange(num) {
-      this.setCurrentPage(num);
       this.isLoading = true;
-      this.getXinfenList({ ...this.form }).then(res => {
+      this.setCurrentPage(num);
+      this.getClientList({ ...this.form }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(num);
       });
     }
-  },
-  computed: {
-    ...mapGetters(["NotdataArr", "notvisitType"]),
-    ...mapState({
-      data: state => state.notvisit.xinfenList,
-      refer: state => state.notvisit.refer,
-      currentPage: state => state.notvisit.currentPage,
-      total: state => state.notvisit.total,
-      pageSize: state => state.notvisit.pageSize
-    })
   }
 };
 </script>

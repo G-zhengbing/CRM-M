@@ -26,7 +26,10 @@ const BOOK_URL = "http://liveapi.canpoint.net/api/list_book"//一书一码列表
 const BOOK_REMOVE = "http://liveapi.canpoint.net/api/delete_book"//删除一书一码
 const CLASS_LIST = "http://liveapi.canpoint.net/api/course_list" //课列表
 
+const UPEXTENSION  = "http://liveapi.canpoint.net/api/extension" //上报推广
+
 export {
+  UPEXTENSION,
   CLASS_LIST,
   BOOK_REMOVE,
   BOOK_URL,
