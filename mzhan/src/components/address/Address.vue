@@ -42,14 +42,13 @@
 <script>
 import axios from "axios";
 import storage from "../../uilt/storage";
-import { ADDRESS } from "../../uilt/url";
+import { ADDRESS, DELADDRESS } from "../../uilt/url";
 import Loading from "../../uilt/loading/Loading";
 export default {
   components: {
     Loading
   },
   mounted() {
-    storage.clearLocal();
     this.getAddressList();
   },
   data() {
@@ -62,9 +61,28 @@ export default {
     setActive(val) {
       if (typeof this.$route.query.type == "undefined") {
       } else {
-        this.$router.push({
-          path: `/order/${JSON.parse(this.$route.query.type)}`
-        });
+        val.is_default = 1
+        axios({
+          method: "post",
+          url: DELADDRESS,
+          headers: {
+            Authorization: "bearer" + storage.getToken()
+          },
+          data: {
+            ...val,
+            address_id: val.id
+          }
+        })
+          .then(res => {
+            if (res.data.ret && res.data.code == 200) {
+              this.$router.push({
+                path: `/order/${JSON.parse(this.$route.query.type)}`
+              });
+            }
+          })
+          .catch(e => {
+            console.error(e);
+          });
       }
       storage.saveAddsite(val);
     },

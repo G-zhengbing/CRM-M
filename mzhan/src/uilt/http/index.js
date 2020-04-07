@@ -30,8 +30,9 @@ Axios.interceptors.response.use(data => {
   let arr = error.toString().split(" ")
   arr.find(i => {
     if (i == "403") {
+      storeage.saveRouter(window.location.hash.split('#')[1]);
       window.location.href = "#/login"
-      storeage.clear();
+      storeage.clearLocal();
     }
   })
   return Promise.reject(error)

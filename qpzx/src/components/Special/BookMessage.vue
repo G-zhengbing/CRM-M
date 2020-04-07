@@ -12,7 +12,7 @@
                     <Input v-model="form.book_name" placeholder="请输入副标题"></Input>
                 </FormItem>
             </Col>
-            <Col span="5" offset="2">
+            <!-- <Col span="5" offset="2">
               <FormItem label="年级" prop="grade">
                 <Select v-model="form.grade" placeholder="请选择">
                   <Option :value="1">一年级</Option> 
@@ -41,27 +41,27 @@
                   <Option :value="9">历史</Option> 
                 </Select>
               </FormItem>
-            </Col>
+            </Col> -->
             <template>
             <Col span="24">
-              <FormItem label="介绍展示" v-if="form.book_banner">
+              <FormItem label="介绍展示" v-if="form.Introduction_diagram">
                 <div class="demo-upload-list">
-                  <img :src="'http://liveapi.canpoint.net/'+form.book_banner">
+                  <img :src="form.Introduction_diagram">
                   <div class="demo-upload-list-cover">
-                    <Icon type="ios-eye-outline" @click.native="handleView('http://liveapi.canpoint.net/'+form.book_banner)"></Icon>
+                    <Icon type="ios-eye-outline" @click.native="handleView('http://liveapi.canpoint.net'+form.Introduction_diagram)"></Icon>
                   </div>
                 </div>
                 <Modal title="查看" v-model="visible">
-                  <img :src="imgName" style="width: 100%">
+                  <img :src="form.Introduction_diagram" style="width: 100%">
                 </Modal>
               </FormItem>
             </col>
             <Col span="24">
-              <FormItem label="介绍头图" prop="book_banner" class="active_span">
+              <FormItem label="介绍头图" prop="Introduction_diagram" class="active_span">
                 <span class="active_red">*</span>
-                <template>
-                  <div class="demo-upload-list" v-for="item in uploadList">
-                    <img :src="item.url">
+                <template v-if="bannerUrl">
+                  <div class="demo-upload-list">
+                    <img :src="bannerUrl">
                     <div class="demo-upload-list-cover">
                       <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
                     </div>
@@ -74,7 +74,7 @@
                   :on-format-error="handleFormatError" 
                   :on-exceeded-size="handleMaxSize" 
                   type="drag" 
-                  action="http://liveapi.canpoint.net/api/store_book" 
+                  action="http://liveapi.canpoint.net/api/upload_image" 
                   style="display: inline-block;width:58px;">
                   <div style="width: 58px;height:58px;line-height: 58px;">
                     <Icon type="ios-camera" size="20"></Icon>
@@ -85,26 +85,30 @@
             </Col>
             </template>
             <Col span="24">
-              <FormItem label="推广地址" prop="location_url">
-                <Input v-model="form.location_url" placeholder="请输入推广地址"></Input>
+              <FormItem label="推广地址" prop="popularize_url">
+                <Input v-model="form.popularize_url" placeholder="请输入推广地址"></Input>
               </FormItem>
             </Col>
             <template>
-            <Col span="24">
-              <FormItem label="课节目录" prop="lesson_list" class="active_span">
+            <Col span="12">
+              <FormItem label="选择课程">
                 <span class="active_red">*</span>
-                 <div class="catalog">
-                  <p @click="addLessons">+添加课节</p>
-                  <ul>
-                    <li v-for="(item,i) in videoArr" :key="i">
-                      <span class="filetitle">第{{i+1}}节</span><Input style="width:300px;flex:1;" v-model="item.file_name" placeholder="请输入该课程标题"></Input> <input v-model="item.file_url" type="hidden"><span class="filevideo">选择上传视频文件<input type="file" ref="file" @change="uploadMp4($event,i)"></span><span class="filename">{{item.file_url}}</span> <i class="video-icon" @click="removeVideo(i)"><Icon type="ios-trash-outline" /></i>
-                    </li>
-                  </ul>
-                </div>
+                <Select v-model="form.type" placeholder="请选择" @on-change="getSelClass3">
+                  <Option :value="1">直播课</Option> 
+                  <Option :value="2">录播课</Option> 
+                  <Option :value="3">一书一码</Option> 
+                </Select>
+            </FormItem>
+            </Col>
+            <Col span="12">
+              <FormItem prop="product_id">
+                <Select v-model="form.product_id" placeholder="请选择">
+                  <Option :value="item.id" v-for="(item,i) in classList3" :key="i">{{item.course_name}}</Option>
+                </Select>
               </FormItem>
             </Col>
             <Col span="24">
-                <FormItem label="推荐位" prop="course_list" class="active_span">
+                <FormItem label="推荐位" class="active_span">
                   <span class="active_red">*</span>
                     <div class="recommend">
                         <div class="recommendOne">
@@ -112,40 +116,45 @@
                         <Row>
                           <Col span="24" style="margin-left:25px;">
                             <FormItem prop="status" class="label-left active_span">
-                            <span class="active_red active_red_a">*</span>
-                            <RadioGroup v-model="form.location1_position_type">
-                              <Radio :label="1">有赞课程链接</Radio>
-                              <Radio :label="2">直播课录播课</Radio>
+                            <RadioGroup v-model="form.banner_one_type">
+                              <Radio :label="2">自有商品</Radio>
+                              <Radio :label="1">其他链接</Radio>
                             </RadioGroup>
                           </FormItem>
                           </Col>
-                          <Col span="24">
-                            <FormItem prop="location1_url" v-show="form.location1_position_type == 1">
-                              <Input v-model="form.location1_url" placeholder="有赞课程链接"></Input>
+                          <Col span="12">
+                            <FormItem prop="banner_one_title" v-show="form.banner_one_type == 1">
+                              <Input v-model="form.banner_one_title" placeholder="推荐位标题"></Input>
                             </FormItem>
                           </Col>
-                          <Col span="12" v-show="form.location1_position_type == 2">
+                          <Col span="12">
+                            <FormItem prop="banner_one_value" v-show="form.banner_one_type == 1">
+                              <Input v-model="form.banner_one_value" placeholder="链接地址"></Input>
+                            </FormItem>
+                          </Col>
+                          <Col span="12" v-show="form.banner_one_type == 2">
                             <FormItem>
-                              <Select v-model="form.location1_type" placeholder="请选择" @on-change="getSelClass">
+                              <Select v-model="form.banner_one_product_type" placeholder="请选择" @on-change="getSelClass">
                                 <Option :value="1">直播课</Option> 
                                 <Option :value="2">录播课</Option> 
+                                <Option :value="3">一书一码</Option> 
                               </Select>
                             </FormItem>
                           </Col>
-                          <Col span="12" v-show="form.location1_position_type == 2">
-                            <FormItem prop="location1_product_id">
-                              <Select v-model="form.location1_product_id" placeholder="请选择">
+                          <Col span="12" v-show="form.banner_one_type == 2">
+                            <FormItem prop="banner_one_value">
+                              <Select v-model="form.banner_one_value" placeholder="请选择">
                                 <Option :value="item.id" v-for="(item,i) in classList" :key="i">{{item.course_name}}</Option>
                               </Select>
                             </FormItem>
                           </Col>
                         </Row>
-                        <FormItem prop="location_pic1" class="active_span">
-                          <template>
-                          <div class="demo-upload-list" v-for="item in tuione">
-                              <img :src="item.url">
+                        <FormItem prop="banner_one_url" class="active_span">
+                          <template v-if="tuioneUrl">
+                          <div class="demo-upload-list">
+                              <img :src="tuioneUrl">
                               <div class="demo-upload-list-cover">
-                              <Icon type="ios-trash-outline" @click.native="handleRemove2(item)"></Icon>
+                              <Icon type="ios-trash-outline" @click.native="handleRemove2(tuioneUrl)"></Icon>
                               </div>
                           </div>
                           </template>
@@ -156,7 +165,7 @@
                           :on-format-error="handleFormatError2" 
                           :on-exceeded-size="handleMaxSize2" 
                           type="drag" 
-                          action="http://liveapi.canpoint.net/api/store_book" 
+                          action="http://liveapi.canpoint.net/api/upload_image" 
                           style="display: inline-block;width:58px;">
                           <div style="width: 58px;height:58px;line-height: 58px;">
                               <Icon type="ios-camera" size="20"></Icon>
@@ -164,11 +173,11 @@
                           </Upload>
                         </FormItem>
                         <span>推荐图1展示</span>
-                        <FormItem v-if="form.location_pic1">
+                        <FormItem v-if="form.banner_one_url">
                           <div class="demo-upload-list">
-                            <img :src="'http://liveapi.canpoint.net/'+form.location_pic1">
+                            <img :src="form.banner_one_url">
                             <div class="demo-upload-list-cover">
-                              <Icon type="ios-eye-outline" @click.native="handleView('http://liveapi.canpoint.net/'+form.location_pic1)"></Icon>
+                              <Icon type="ios-eye-outline" @click.native="handleView(form.banner_one_url)"></Icon>
                             </div>
                           </div>
                           <Modal title="查看" v-model="visible">
@@ -183,38 +192,43 @@
                             <Row>
                               <Col span="24" style="margin-left:25px;">
                                 <FormItem prop="status" class="label-left active_span">
-                                <span class="active_red active_red_a">*</span>
-                                <RadioGroup v-model="form.location2_position_type">
-                                  <Radio :label="1">有赞课程链接</Radio>
-                                  <Radio :label="2">直播课录播课</Radio>
+                                <RadioGroup v-model="form.banner_two_type">
+                                  <Radio :label="2">自有商品</Radio>
+                                  <Radio :label="1">其他链接</Radio>
                                 </RadioGroup>
                               </FormItem>
                               </Col>
-                              <Col span="24">
-                                <FormItem prop="location2_url" v-show="form.location2_position_type == 1">
-                                  <Input v-model="form.location2_url" placeholder="有赞课程链接"></Input>
+                              <Col span="12">
+                                <FormItem prop="banner_two_title" v-show="form.banner_two_type == 1">
+                                  <Input v-model="form.banner_two_title" placeholder="推荐位标题"></Input>
                                 </FormItem>
                               </Col>
-                              <Col span="12" v-show="form.location2_position_type == 2">
+                              <Col span="12">
+                                <FormItem prop="banner_two_value" v-show="form.banner_two_type == 1">
+                                  <Input v-model="form.banner_two_value" placeholder="链接地址"></Input>
+                                </FormItem>
+                              </Col>
+                              <Col span="12" v-show="form.banner_two_type == 2">
                                 <FormItem>
-                                  <Select v-model="form.location2_type" placeholder="请选择"  @on-change="getSelClass2">
+                                  <Select v-model="form.banner_two_product_type" placeholder="请选择"  @on-change="getSelClass2">
                                     <Option :value="1">直播课</Option> 
                                     <Option :value="2">录播课</Option> 
+                                    <Option :value="3">一书一码</Option> 
                                   </Select>
                                 </FormItem>
                               </Col>
-                              <Col span="12" v-show="form.location2_position_type == 2">
-                                <FormItem prop="location2_product_id">
-                                  <Select v-model="form.location2_product_id" placeholder="请选择">
+                              <Col span="12" v-show="form.banner_two_type == 2">
+                                <FormItem prop="banner_two_value">
+                                  <Select v-model="form.banner_two_value" placeholder="请选择">
                                     <Option :value="item.id" v-for="(item,i) in classList2" :key="i">{{item.course_name}}</Option> 
                                   </Select>
                                 </FormItem>
                               </Col>
                             </Row>
-                            <FormItem prop="location_pic2" class="active_span">
-                            <template>
-                            <div class="demo-upload-list" v-for="item in tuitow">
-                                <img :src="item.url">
+                            <FormItem prop="banner_two_url" class="active_span">
+                            <template v-if="tuitowUrl">
+                            <div class="demo-upload-list">
+                                <img :src="tuitowUrl">
                                 <div class="demo-upload-list-cover">
                                 <Icon type="ios-trash-outline" @click.native="handleRemove3(item)"></Icon>
                                 </div>
@@ -227,7 +241,7 @@
                             :on-format-error="handleFormatError3" 
                             :on-exceeded-size="handleMaxSize3" 
                             type="drag" 
-                            action="http://liveapi.canpoint.net/api/store_book" 
+                            action="http://liveapi.canpoint.net/api/upload_image" 
                             style="display: inline-block;width:58px;">
                             <div style="width: 58px;height:58px;line-height: 58px;">
                                 <Icon type="ios-camera" size="20"></Icon>
@@ -235,11 +249,11 @@
                             </Upload>
                             </FormItem>
                             <span>推荐图2展示</span>
-                            <FormItem v-if="form.location_pic2">
+                            <FormItem v-if="form.banner_two_url">
                           <div class="demo-upload-list">
-                            <img :src="'http://liveapi.canpoint.net/'+form.location_pic2">
+                            <img :src="form.banner_two_url">
                             <div class="demo-upload-list-cover">
-                              <Icon type="ios-eye-outline" @click.native="handleView('http://liveapi.canpoint.net/'+form.location_pic2)"></Icon>
+                              <Icon type="ios-eye-outline" @click.native="handleView(form.banner_two_url)"></Icon>
                             </div>
                           </div>
                           <Modal title="查看" v-model="visible">
@@ -270,6 +284,10 @@ export default {
   props:["item"],
   data() {
     return {
+      bannerUrl:'',
+      tuioneUrl:'',
+      tuitowUrl:'',
+      classList3:[],
       active1:1,
       active2:1,
       classList:[],
@@ -289,8 +307,8 @@ export default {
       tuione:[],
       tuitow:[],
       form: {
-        location1_position_type:1,
-        location2_position_type:1
+        banner_one_type:2,
+        banner_two_type:2
       },
       ruleValidate: {
         grade: [
@@ -303,7 +321,7 @@ export default {
           { required: true, message: '科目不能为空'}
         ]
         ,
-        location_url: [
+        popularize_url: [
           { required: true, message: '推广地址是必填的'}
         ]
       }
@@ -312,6 +330,11 @@ export default {
   methods: {
     ...mapActions(["getBookList","getClassList"]),
     setActive1(){
+    },
+    getSelClass3(val){
+      this.getClassList(val).then(res=>{
+        this.classList3 = res.data.data
+      })
     },
     //课列表1
     getSelClass(val){
@@ -327,20 +350,32 @@ export default {
     },
     //推荐2
     handleRemove3(file){
-      this.tuitow.splice(this.tuitow.indexOf(file), 1)
+      this.tuitowUrl = ""
     },
-    handleBeforeUpload3(file){
-      const check = this.tuitow.length;
-      if (check >=3) {
-        this.$Message.error('最多只能上传3张图片');
-        return;
-      }
+    handleBeforeUpload3(e){
+      let file = e
       let reader = new FileReader()
+      var formData = new FormData()
+      let config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: "bearer " + storage.get()
+        }
+      };
       reader.readAsDataURL(file)
       const _this = this
       reader.onloadend = function (e) {
         file.url = reader.result
-        _this.tuitow.push(file)
+        formData.append('file',file)
+        axios.post("http://liveapi.canpoint.net/api/upload_image",formData,config).then((response)=>{
+        if(response.data.error){
+          _this.$Message.error(response.data.error);
+          return;
+        }
+        if(response.status == 200 && response.data){
+          _this.tuitowUrl = "http://liveapi.canpoint.net"+ response.data.data.value
+        }
+      })
       }
     },
     handleFormatError3(file){
@@ -357,20 +392,32 @@ export default {
     },
     //推荐1
     handleRemove2(file){
-      this.tuione.splice(this.tuione.indexOf(file), 1)
+      this.tuioneUrl = ""
     },
-    handleBeforeUpload2(file){
-      const check = this.tuione.length;
-      if (check >=3) {
-        this.$Message.error('最多只能上传3张图片');
-        return;
-      }
+    handleBeforeUpload2(e){
+      let file = e
       let reader = new FileReader()
+      var formData = new FormData()
+      let config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: "bearer " + storage.get()
+        }
+      };
       reader.readAsDataURL(file)
       const _this = this
       reader.onloadend = function (e) {
         file.url = reader.result
-        _this.tuione.push(file)
+        formData.append('file',file)
+        axios.post("http://liveapi.canpoint.net/api/upload_image",formData,config).then((response)=>{
+        if(response.data.error){
+          _this.$Message.error(response.data.error);
+          return;
+        }
+        if(response.status == 200 && response.data){
+          _this.tuioneUrl = "http://liveapi.canpoint.net"+  response.data.data.value
+        }
+      })
       }
     },
     handleFormatError2(file){
@@ -451,7 +498,7 @@ export default {
       this.visible = true;
     },
     handleRemove (file) {
-      this.uploadList.splice(this.uploadList.indexOf(file), 1)
+      this.bannerUrl = ""
     },
     handleFormatError (file) {
       this.$Notice.warning({
@@ -465,19 +512,44 @@ export default {
         desc: '文件 ' + file.name + '太大了，不超过2M。'
       });
     },
-    handleBeforeUpload (file) {
-      const check = this.uploadList.length;
-      if (check >=3) {
-        this.$Message.error('最多只能上传3张图片');
-        return;
-      }
+    handleBeforeUpload (e) {
+      let file = e
       let reader = new FileReader()
+      var formData = new FormData()
+      let config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: "bearer " + storage.get()
+        }
+      };
       reader.readAsDataURL(file)
       const _this = this
       reader.onloadend = function (e) {
         file.url = reader.result
-        _this.uploadList.push(file)
+        formData.append('file',file)
+        axios.post("http://liveapi.canpoint.net/api/upload_image",formData,config).then((response)=>{
+        if(response.data.error){
+          _this.$Message.error(response.data.error);
+          return;
+        }
+        if(response.status == 200 && response.data){
+          _this.bannerUrl =  "http://liveapi.canpoint.net"+ response.data.data.value
+        }
+      })
       }
+
+      // const check = this.uploadList.length;
+      // if (check >=3) {
+      //   this.$Message.error('最多只能上传3张图片');
+      //   return;
+      // }
+      // let reader = new FileReader()
+      // reader.readAsDataURL(file)
+      // const _this = this
+      // reader.onloadend = function (e) {
+      //   file.url = reader.result
+      //   _this.uploadList.push(file)
+      // }
     },
     close() {
       this.$parent.isBookMessage = false;
@@ -487,27 +559,29 @@ export default {
         if (valid) {
           if(this.$parent.isUpdata){
             var formData = new FormData();
-            formData.append('grade',this.form.grade);
-            formData.append('subject',this.form.subject);
-            formData.append('book_name',this.form.book_name);
-            formData.append('book_banner',this.uploadList[0]?this.uploadList[0]:"");
-            formData.append('location_pic1',this.tuione[0]?this.tuione[0]:"");
-            formData.append('location_pic2',this.tuitow[0]?this.tuitow[0]:"");
-            formData.append('location_url',this.form.location_url);
-            formData.append('location2_position_type',this.form.location2_position_type);
-            formData.append('location1_position_type',this.form.location1_position_type);
-            formData.append('location1_url',this.form.location1_url);
-            formData.append('location2_url',this.form.location2_url);
-            formData.append('location1_product_id',this.form.location1_product_id);
-            formData.append('location2_product_id',this.form.location2_product_id);
-            formData.append('lesson_list',JSON.stringify(this.videoArr));
+           formData.append('book_id',this.item.id);
+           formData.append('book_name',this.form.book_name);
+            formData.append('Introduction_diagram',this.bannerUrl);
+            formData.append('banner_one_url',this.tuioneUrl);
+            formData.append('banner_two_url',this.tuitowUrl);
+            formData.append('popularize_url',this.form.popularize_url);
+            formData.append('product_id',this.form.product_id);
+            formData.append('type',this.form.type);
+            formData.append('banner_one_title',this.form.banner_one_title);
+            formData.append('banner_two_title',this.form.banner_two_title);
+            formData.append('banner_one_product_type',this.form.banner_one_product_type);
+            formData.append('banner_two_product_type',this.form.banner_two_product_type);
+            formData.append('banner_one_type',this.form.banner_one_type);
+            formData.append('banner_two_type',this.form.banner_two_type);
+            formData.append('banner_one_value',this.form.banner_one_value?this.form.banner_one_value:"");
+            formData.append('banner_two_value',this.form.banner_two_value?this.form.banner_two_value:"");
             let config = {
               headers: {
                 'Content-Type': 'multipart/form-data',
                 Authorization: "bearer " + storage.get()
               }
             };
-            axios.post("http://liveapi.canpoint.net/api/modify_book"+'/'+this.item.id,formData,config)
+            axios.post("http://liveapi.canpoint.net/api/update_book",formData,config)
             .then((response) => {
               if(response.data.code == 100001 && response.data.error){
                 this.$Message.error(response.data.error);
@@ -519,40 +593,41 @@ export default {
               }
             })
           }else{
-            if(this.uploadList.length == 0){
+            if(this.bannerUrl == ''){
               this.$Message.warning('请选择要上传的介绍头图图片')
               return
             }
-            if(this.tuione.length == 0){
+            if(this.tuioneUrl ==""){
               this.$Message.warning('请选择要上传的推荐图1图片')
               return
             }
-             if(this.tuitow.length == 0){
+             if(this.tuitowUrl == ""){
               this.$Message.warning('请选择要上传的推荐图2图片')
               return
             }
             var formData = new FormData();
-            formData.append('grade',this.form.grade);
-            formData.append('subject',this.form.subject);
             formData.append('book_name',this.form.book_name);
-            formData.append('book_banner',this.uploadList[0]?this.uploadList[0]:"");
-            formData.append('location_pic1',this.tuione[0]?this.tuione[0]:"");
-            formData.append('location_pic2',this.tuitow[0]?this.tuitow[0]:"");
-            formData.append('location_url',this.form.location_url);
-            formData.append('location2_position_type',this.form.location2_position_type);
-            formData.append('location1_position_type',this.form.location1_position_type);
-            formData.append('location1_url',this.form.location1_url?this.form.location1_url:"");
-            formData.append('location2_url',this.form.location2_url?this.form.location2_url:"");
-            formData.append('location1_product_id',this.form.location1_product_id?this.form.location1_product_id:"");
-            formData.append('location2_product_id',this.form.location2_product_id?this.form.location2_product_id:"");
-            formData.append('lesson_list',JSON.stringify(this.videoArr));
+            formData.append('Introduction_diagram',this.bannerUrl);
+            formData.append('banner_one_url',this.tuioneUrl);
+            formData.append('banner_two_url',this.tuitowUrl);
+            formData.append('popularize_url',this.form.popularize_url);
+            formData.append('product_id',this.form.product_id);
+            formData.append('type',this.form.type);
+            formData.append('banner_one_title',this.form.banner_one_title);
+            formData.append('banner_two_title',this.form.banner_two_title);
+            formData.append('banner_one_product_type',this.form.banner_one_product_type);
+            formData.append('banner_two_product_type',this.form.banner_two_product_type);
+            formData.append('banner_one_type',this.form.banner_one_type);
+            formData.append('banner_two_type',this.form.banner_two_type);
+            formData.append('banner_one_value',this.form.banner_one_value?this.form.banner_one_value:"");
+            formData.append('banner_two_value',this.form.banner_two_value?this.form.banner_two_value:"");
             let config = {
               headers: {
                 'Content-Type': 'multipart/form-data',
                 Authorization: "bearer " + storage.get()
               }
             };
-            axios.post("http://liveapi.canpoint.net/api/store_book",formData,config)
+            axios.post("http://liveapi.canpoint.net/api/create_book",formData,config)
             .then((response) => {
               if(response.data.code == 100001 && response.data.error){
                 this.$Message.error(response.data.error);
@@ -577,23 +652,11 @@ export default {
   mounted () {
     if(this.$parent.isUpdata){
       this.form =  this.item
-      this.getSelClass(this.item.location1_type)
-      this.getSelClass2(this.item.location2_type)
-      for(var i=0;i<this.item.lesson_list.length;i++){
-        for(var k in this.item.lesson_list[i]){
-          if(k == "id"){
-            delete this.item.lesson_list[i][k];
-          }
-          if(k == "book_id"){
-            delete this.item.lesson_list[i][k];
-          }
-          if(k == "is_delete"){
-            delete this.item.lesson_list[i][k];
-          }
-        }
-      }
-      this.timeArr = this.item.lesson_list?this.item.lesson_list :[]
-      this.videoArr = this.item.lesson_list?this.item.lesson_list :[]
+      this.form.banner_one_value = this.item.banner_one_value
+      this.form.banner_two_value = this.item.banner_two_value
+      this.getSelClass(this.item.banner_one_product_type)
+      this.getSelClass2(this.item.banner_two_product_type)
+      this.getSelClass3(this.item.type)
     }else{
       this.uploadList.length = 0
       this.tuione.length = 0

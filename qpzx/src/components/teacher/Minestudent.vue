@@ -29,7 +29,7 @@
               </Col>
               <Col span="8">
                 <FormItem label="起始时间">
-                  <DatePicker type="daterange" placeholder="请选择起始时间" @on-change="seekKuhu" style="width: 300px" format="yyyy-MM-dd"></DatePicker>
+                  <DatePicker type="daterange" placeholder="请选择起始时间" @on-change="seekKuhu" style="width:300px" format="yyyy-MM-dd"></DatePicker>
                 </FormItem>
               </Col>
               <!-- <Col span="6">

@@ -8,20 +8,20 @@
       <section>
         <div class="contanner">
           <div class="header-img">
-            <img :src="'http://liveapi.canpoint.net/'+ banner" alt />
+            <img :src=" banner" alt />
           </div>
           <div class="content">
             <ul>
-              <li v-for="(obj,i) in downList.vedio" @click="goDetails(i)">
+              <li v-for="(obj,i) in course.course_list" @click="goDetails(i)">
                 <div class="video">
-                  <img src="../../assets/img/cover.png" alt class="cover" />
+                  <img :src="obj.vedio.file_image" alt class="cover" />
                   <img src="../../assets/click.png" alt class="click" />
                 </div>
-                <span>第{{i+1}}节 : {{obj.file_name}}</span>
+                <span>{{course.type == 1? course.course_name: obj.value}}</span>
               </li>
-              <!-- <li class="more" @click="goBookList">
+              <li class="more" @click="goDetails(0)">
                 <p>查看更多>></p>
-              </li> -->
+              </li>
             </ul>
           </div>
           <div class="footer">
@@ -32,12 +32,12 @@
             </div>
             <ul>
               <li @click="isHome">
-                <img :src="'http://liveapi.canpoint.net/'+downList.location_pic1" alt />
-                <span>{{downList.location1_product_name}}</span>
+                <img :src="downList.banner_one_url" alt />
+                <span>{{downList.banner_one_title}}</span>
               </li>
               <li @click="isHome2">
-                <img :src="'http://liveapi.canpoint.net/'+downList.location_pic2" alt />
-                <span>{{downList.location2_product_name}}</span>
+                <img :src="downList.banner_two_url" alt />
+                <span>{{downList.banner_two_title}}</span>
               </li>
             </ul>
           </div>
@@ -45,24 +45,12 @@
       </section>
     </scroller>
     <Loading v-if="showLoading" />
-    <van-overlay :show="isShow">
-      <div class="notive">
-        <div class="n-header">
-          <p>温馨提示</p>
-          <span>全品学堂M站上观看学习体验更佳哦！</span>
-        </div>
-        <div class="n-footer">
-          <span @click="godetails">残忍拒绝</span>
-          <span @click="gosign">立即前往</span>
-        </div>
-      </div>
-    </van-overlay>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import { DOWNSPOUT, DATALISTS } from "../../uilt/url";
+import { DOWNSPOUT, DATALISTS, COUNT } from "../../uilt/url";
 import Loading from "../../uilt/loading/Loading";
 import storage from "../../uilt/storage";
 export default {
@@ -70,6 +58,10 @@ export default {
     Loading
   },
   mounted() {
+    if(window.location.hash.split('?').length >=2){
+      this.openid = window.location.hash.split('?')[1].split('&')[1]
+    }
+    this.reportCount();
     this.showLoading = true;
     this.getDownList().then(() => {
       this.showLoading = false;
@@ -77,6 +69,9 @@ export default {
   },
   data() {
     return {
+      openid:"",
+      promoter_id: "",
+      course: [],
       isShow: false,
       showLoading: false,
       downList: {},
@@ -86,45 +81,36 @@ export default {
     };
   },
   methods: {
+    //上报统计
+    reportCount() {
+      axios({
+        method: "post",
+        url: COUNT,
+        data: {
+          book_id: this.bookId,
+          type: 1
+        }
+      }).then(res => {});
+    },
     isHome() {
-      if (JSON.stringify(storage.getToken()) == "{}") {
+      if (this.downList.banner_one_type == 2) {
+        storage.saveEnterTYpe(`${this.$route.path}`);
         this.$router.push({
-          path: `/signin/2`,
-          query: {
-            promoter_id: this.downList.location_url.split("=")[1],
-            type: "bookcode",
-            uid: this.bookId
-          }
+          path: `/bookdetails/${this.downList.banner_one_value}?${this.promoter_id}`
         });
-        storage.clear();
-        return;
+      } else {
+        window.location.href = this.downList.banner_one_value;
       }
-      window.location.href = this.downList.location1_url
-      return
-      storage.saveEnterTYpe(`${this.$route.path}`);
-      this.$router.push({
-        path: `/home/databank/${this.downList.location1_product_id}`
-      });
     },
     isHome2() {
-      if (JSON.stringify(storage.getToken()) == "{}") {
+      if (this.downList.banner_two_type == 2) {
+        storage.saveEnterTYpe(`${this.$route.path}`);
         this.$router.push({
-          path: `/signin/2`,
-          query: {
-            promoter_id: this.downList.location_url.split("=")[1],
-            type: "bookcode",
-            uid: this.bookId
-          }
+          path: `/bookdetails/${this.downList.banner_two_value}?${this.promoter_id}`
         });
-        storage.clear();
-        return;
+      } else {
+        window.location.href = this.downList.banner_two_value;
       }
-      window.location.href = this.downList.location2_url
-      return
-      storage.saveEnterTYpe(`${this.$route.path}`);
-      this.$router.push({
-        path: `/home/databank/${this.downList.location2_product_id}`
-      });
     },
     gosign() {
       this.$router.push({
@@ -139,27 +125,30 @@ export default {
     goDetails(num) {
       this.num = num;
       storage.saveBook(num);
-      if (JSON.stringify(storage.getToken()) == "{}") {
-        this.isShow = true;
-      } else {
-        this.$router.push({ path: `/bookdetails/${this.bookId}/code` });
-      }
+      storage.saveEnterTYpe(`${this.$route.path}`);
+      this.$router.push({
+        path: `/bookdetails/${this.downList.product.id}?${this.promoter_id}&${this.openid}`
+      });
     },
     godetails() {
-      this.$router.push({ path: `/bookdetails/${this.bookId}/code` });
-    },
-    goBookList() {
-      this.$router.push({ path: `/booklist/${this.bookId}` });
+      this.$router.push({ path: `/bookdetails/${this.bookId}` });
     },
     getDownList() {
       return new Promise((resolve, reject) => {
         axios({
           method: "get",
-          url: DOWNSPOUT + "/" + this.bookId
+          url: DOWNSPOUT,
+          params: {
+            book_id: this.bookId
+          }
         })
           .then(res => {
-            this.downList = res.data.data.book;
-            this.banner = res.data.data.book.book_banner;
+            this.downList = res.data.data;
+            this.downList.product.course_list.splice(4, this.downList.product.course_list.length);
+            this.course = this.downList.product;
+            this.banner = res.data.data.Introduction_diagram;
+            this.promoter_id = res.data.data.landing_page_url.split("?")[1];
+            storage.saveBookcodeUid(res.data.data.id)
             resolve();
           })
           .catch(e => {
@@ -172,47 +161,6 @@ export default {
 </script>
 
 <style scoped>
-.notive .n-footer span:last-child {
-  border-left: 1px solid #ccc;
-  color: #00b578;
-}
-.notive .n-footer span {
-  font-size: 25px;
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.notive .n-footer {
-  height: 80px;
-  display: flex;
-  border-top: 1px solid #ccc;
-}
-.notive .n-header span {
-  margin: 20px 0;
-  display: inline-block;
-  font-size: 20px;
-}
-.notive .n-header p {
-  margin-top: 20px;
-  font-size: 25px;
-}
-.notive .n-header {
-  flex: 1;
-}
-.notive {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 440px;
-  height: 200px;
-  margin-left: -220px;
-  margin-top: -100px;
-  text-align: center;
-  background: #fff;
-  display: flex;
-  flex-direction: column;
-}
 .footer .footer-img img {
   height: 6px;
 }
@@ -277,12 +225,13 @@ export default {
   align-items: center;
 }
 .content ul li.more p {
-  font-size: 30px;
+  font-size: 25px;
 }
 .content ul li.more {
+  width: 100%;
   background: #f3f3f3;
-  height: 2.666667rem;
-  border-radius: 15px;
+  height: 60px;
+  border-radius: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -332,7 +281,6 @@ export default {
   color: #333;
   text-align: center;
   flex: 1;
-  margin-left: -40px;
 }
 .header {
   height: 110px;

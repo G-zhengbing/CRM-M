@@ -65,6 +65,9 @@ export default {
           url: SMALL,
           headers: {
             Authorization: "bearer" + storage.getToken()
+          },
+          params:{
+            type:2
           }
         })
           .then(res => {

@@ -28,6 +28,7 @@
                     <Select v-model="form.type" style="width:200px">
                       <Option :value="1">直播课</Option>
                       <Option :value="2">微课</Option>
+                      <Option :value="3">一书一码</Option>
                     </Select>
                   </FormItem>
                 </Col>
@@ -128,6 +129,7 @@ export default {
   },
   data() {
     return {
+      disabled:true,
       item: {},
       isUpdata: false,
       cityList: [],
@@ -191,7 +193,8 @@ export default {
               props: {
                 type: "启用/隐藏",
                 //这里可以设置它的属性
-                value: params.row.is_hot == 1 ? true : false //设置它的值比如：true或false
+                value: params.row.is_hot == 1 ? true : false, //设置它的值比如：true或false
+                disabled:params.row.show_type == 2? true:false
               },
               on: {
                 //操作事件
@@ -360,7 +363,6 @@ export default {
     },
     //编辑
     getBtnClick2(item) {
-      console.log(item)
       this.isUpdata = true;
       this.isCurrMessage = true;
       this.item = { ...item };

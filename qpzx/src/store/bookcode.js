@@ -63,8 +63,8 @@ export default {
             "content-type": "application/x-www-form-urlencoded",
             Authorization: "bearer " + storage.get()
           },
-          params: {
-            book_id: arr
+          params:{
+            ids:arr.join(',')
           }
         }).then(res => {
           dispatch("getBookList")
@@ -78,10 +78,10 @@ export default {
     getBookList({
       state,
       commit
-    }, form, page, sort) {
+    }, form, page) {
       return new Promise((resolve, reject) => {
         axios({
-          method: "get",
+          method: "post",
           url: BOOK_URL,
           headers: {
             "content-type": "application/x-www-form-urlencoded",
@@ -89,11 +89,10 @@ export default {
           },
           params: {
             page: page ? page : state.currentPage,
-            field: sort ? sort : "",
             ...form
           }
         }).then(res => {
-          commit("setBookList", res.data.data.resources)
+          commit("setBookList", res.data.data.data)
           commit("setCurrerntPage", res.data.data.links.current_page)
           commit("setPageSize", res.data.data.links.per_page)
           commit("setTotal", res.data.data.links.total)

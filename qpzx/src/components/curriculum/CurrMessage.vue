@@ -12,6 +12,7 @@
                 <Select v-model="form.type" placeholder="请选择" @on-change="getSelected" :disabled="$parent.isUpdata">
                   <Option :value="1">直播</Option> 
                   <Option :value="2">微课</Option> 
+                  <Option :value="3">一书一码</Option> 
                 </Select>
               </FormItem>
             </Col>
@@ -62,9 +63,21 @@
               </RadioGroup>
             </FormItem>
             </Col>
+            <!-- <Col span="12" offset="2">
+              <FormItem label="展示类型" prop="show_type"  style="margin-left:75px">
+                <RadioGroup v-model="form.show_type">
+                  <Radio :label="1">
+                    M站展示
+                  </Radio>
+                  <Radio :label="2">
+                    一书一码展示
+                  </Radio>
+                </RadioGroup>
+              </FormItem>
+            </Col> -->
             <template  v-if="form.type == 1">
-            <Col span="12" offset="2">
-              <FormItem label="班级分类" prop="class_type" style="margin-left:75px">
+            <Col span="24">
+              <FormItem label="班级分类" prop="class_type">
                 <RadioGroup v-model="form.class_type">
                   <Radio :label="1">春季班</Radio>
                   <Radio :label="2">秋季班</Radio>
@@ -156,8 +169,8 @@
             </Col>
             </template>
             <template v-else>
-              <Col span="12" offset="2">
-              <FormItem label="课节总数" prop="class_hour" style="width:436px;margin-left:75px">
+              <Col span="24">
+              <FormItem label="课节总数" prop="class_hour" style="width:436px;">
                 <Input v-model="form.class_hour" placeholder="请输入课节总数"></Input>
               </FormItem>
               </Col>
@@ -176,7 +189,7 @@
                   <p @click="addLessons">+添加课节</p>
                   <ul>
                     <li v-for="(item,i) in videoArr" :key="i">
-                      <span class="filetitle">第{{i+1}}节</span><Input style="width:300px;flex:1;" v-model="item.value" placeholder="请输入该课程标题"></Input> <input v-model="item.value2" type="hidden"><span class="filevideo">选择上传视频文件<input type="file" ref="file" @change="uploadMp4($event,i)"></span><span class="filename">{{item.value2.split('/')[2]}}</span> <i class="video-icon" @click="removeVideo(i)"><Icon type="ios-trash-outline" /></i>
+                      <span class="filetitle">第{{i+1}}节</span><Input style="width:300px;flex:1;" v-model="item.value" placeholder="请输入该课程标题"></Input> <Input placeholder="请输入视频地址ID" style="width:400px;" v-model="item.value2" type="text"/><i class="video-icon" @click="removeVideo(i)"><Icon type="ios-trash-outline" /></i>
                     </li>
                   </ul>
                 </div>
@@ -189,7 +202,7 @@
 				    <Wangeditor v-model="form.product_content"  :catchData="catchData" ref="wangditor"/>
           </FormItem>
         <FormItem label="售价" prop="sale_price">
-          <Input v-model="form.sale_price" placeholder="请输入副标题"></Input>
+          <Input v-model="form.sale_price" placeholder="请输入售价"></Input>
         </FormItem>
         <FormItem label="活动价" prop="activity_price">
           <Input v-model="form.activity_price" placeholder="请输入该课程优惠价格"></Input>
@@ -259,8 +272,8 @@ export default {
         update_state:[
           { required: true, message: '当前状态是必选的' }
         ],
-        product_content:[{ required: true}],
-        start_date:[{ required: true}],
+        product_content:[{ required: true, message: '课程详情是必填的'}],
+        start_date:[{ required: true, message: '课程周期是必填的'}],
         is_address:[
           { required: true, message: '是否寄送教材是必选的' }
         ]
@@ -291,7 +304,7 @@ export default {
     },
     addGradeTime(){
       this.index++
-      this.timeArr.push({value:"",value2:'',index:this.index})
+      this.timeArr.push({value:"",value2:'',index:this.index,value3:''})
     },
     getSelected(){
       if(this.form.type == 1){
@@ -302,30 +315,33 @@ export default {
     },
     //视频
     uploadMp4(e,i){
-      let file = e.target.files[0]
-      let reader = new FileReader()
-      var formData = new FormData()
-      let config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: "bearer " + storage.get()
-        }
-      };
-      reader.readAsDataURL(file)
-      const _this = this
-      reader.onloadend = function (e) {
-        file.url = reader.result
-        formData.append('file',file)
-        axios.post("http://liveapi.canpoint.net/api/upload_file",formData,config).then((response)=>{
-        if(response.error){
-          _this.$Message.error(response.data.error);
-          return;
-        }
-        if(response.status == 200 && response.data){
-          _this.videoArr[i].value2 = response.data.data.value
-        }
-      })
-      }
+      // let file = e.target.files[0]
+      // let reader = new FileReader()
+      // var formData = new FormData()
+      // let config = {
+      //   headers: {
+      //     'Content-Type': 'multipart/form-data',
+      //     Authorization: "bearer " + storage.get()
+      //   }
+      // };
+      // reader.readAsDataURL(file)
+      // const _this = this
+      // this.$parent.loading(true)
+      // reader.onloadend = function (e) {
+      //   file.url = reader.result
+      //   formData.append('file',file)
+      //   axios.post("http://liveapi.canpoint.net/api/upload_file",formData,config).then((response)=>{
+      //   if(response.error){
+      //     _this.$Message.error(response.data.error);
+      //     return;
+      //   }
+      //   if(response.status == 200 && response.data){
+      //     _this.videoArr[i].value2 = response.data.data.video_id
+      //     _this.videoArr[i].value3 = file.name
+      //   }
+      //   _this.$parent.loading(false)
+      // })
+      // }
     },
     //课程结束日期
     getEnd(date){
@@ -393,12 +409,13 @@ export default {
             formData.append('product_content',this.form.product_content);
             formData.append('activity_price',this.form.activity_price?this.form.activity_price:"");
             formData.append('sale_price',this.form.sale_price);
+            formData.append('is_address',this.form.is_address);
+            // formData.append('show_type',this.form.show_type);
             if(this.form.type == 1){
               formData.append('start_date',d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate());
               formData.append('end_date',b.getFullYear() + '-' + (b.getMonth() + 1) + '-' + b.getDate());
               formData.append('course_list',JSON.stringify(this.timeArr));
               formData.append('class_type',this.form.class_type);
-              formData.append('is_address',this.form.is_address);
               formData.append('image_1',this.uploadList[0]?this.uploadList[0]:"");
               formData.append('image_2',this.uploadList[1]?this.uploadList[1]:"");
               formData.append('image_3',this.uploadList[2]?this.uploadList[2]:"");
@@ -439,16 +456,29 @@ export default {
             formData.append('product_content',this.form.product_content);
             formData.append('activity_price',this.form.activity_price?this.form.activity_price:"");
             formData.append('sale_price',this.form.sale_price);
+            formData.append('is_address',this.form.is_address);
+            // formData.append('show_type',this.form.show_type);
             if(this.form.type == 1){
               if(this.form.type == 1 && this.uploadList.length == 0){
-              this.$Message.warning('请选择要上传的图片')
-              return
-            }
+                this.$Message.warning('请选择要上传的图片')
+                return
+              }
+              // for(var i=0;i<this.timeArr.length;i++){
+              //   if(this.timeArr[i].value == ''){
+              //     this.$Message.error(`第${i+1}节课节日期是必选的`);
+              //     return
+              //   }else if(this.timeArr[i].value2[0] == '' ||this.timeArr[i].value2[1] == ''){
+              //     this.$Message.error(`第${i+1}节课节时间是必选的`);
+              //     return
+              //   }else if(this.timeArr[i].value3 == ''){
+              //     this.$Message.error(`第${i+1}节课节链接是必填的`);
+              //     return
+              //   }
+              // }
               formData.append('start_date',d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate());
               formData.append('end_date',b.getFullYear() + '-' + (b.getMonth() + 1) + '-' + b.getDate());
               formData.append('course_list',JSON.stringify(this.timeArr));
               formData.append('class_type',this.form.class_type);
-              formData.append('is_address',this.form.is_address);
               formData.append('image_1',this.uploadList[0]?this.uploadList[0]:"");
               formData.append('image_2',this.uploadList[1]?this.uploadList[1]:"");
               formData.append('image_3',this.uploadList[2]?this.uploadList[2]:"");

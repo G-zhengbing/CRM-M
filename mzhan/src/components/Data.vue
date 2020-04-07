@@ -56,8 +56,10 @@ export default {
     },
     openFile(item) {
       if (JSON.stringify(storage.getToken()) == "{}") {
-        this.$router.push("/login");
-        storage.clear();
+        storage.saveRouter(this.$route.fullPath);
+        this.$router.push({
+          path: `/login`
+        });
         return;
       }
       this.$router.push({ path: `/data/databanklist/${item.id}` });

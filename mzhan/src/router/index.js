@@ -1,29 +1,31 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/components/Home'
-import Databank from '@/components/Databank'
-import Personage from '@/components/Personage'
-import PersonageData from '@/components/PersonageData'
-import Course from '@/components/Course'
-import SmallClass from '@/components/SmallClass'
-import Order from '@/components/Order'
-import Special from '@/components/Special'
-import Login from '@/components/Login'
-import Classify from '@/components/Classify'
-import Data from '@/components/Data'
-import Signin from '@/components/Signin'
-import Address from '../components/address/Address'
-import Addsite from '../components/address/Addsite'
-import Databanklist from '../components/Databanklist'
-import Bookcode from '../components/book/Bookcode'
-import BookList from '../components/book/BookList'
-import Bookdetails from '../components/book/Bookdetails'
-import callback from '../components/callback/callback.vue'
-import payGateWay from '../uilt/pay/payGateWay.vue'
-import Seclcen from '../components/seleclasscenter/Seclcen.vue'
 import storage from '../uilt/storage'
 import axios from 'axios'
 import store from '../store/index'
+
+const Home = ()=>import("@/components/Home")
+const Databank = ()=>import("@/components/Databank")
+const Personage = ()=>import("@/components/Personage")
+const PersonageData = ()=>import("@/components/PersonageData")
+const Course = ()=>import("@/components/Course")
+const SmallClass = ()=>import("@/components/SmallClass")
+const Order = ()=>import("@/components/Order")
+const Special = ()=>import("@/components/Special")
+const Login = ()=>import("@/components/Login")
+const Classify = ()=>import("@/components/Classify")
+const Data = ()=>import("@/components/Data")
+const Signin = ()=>import("@/components/Signin")
+const Address = ()=>import("@/components/address/Address")
+const Addsite = ()=>import("@/components/address/Addsite")
+const Databanklist = ()=>import("@/components/Databanklist")
+const Bookcode = ()=>import("@/components/book/Bookcode")
+const BookList = ()=>import("@/components/book/BookList")
+const Bookdetails = ()=>import("@/components/book/Bookdetails")
+const callback = ()=>import("@/components/callback/callback")
+const payGateWay = ()=>import("../uilt/pay/payGateWay")
+const Seclcen = ()=>import("@/components/seleclasscenter/Seclcen")
+const PersonageList = ()=>import("@/components/PersonageList")
 
 Vue.use(Router)
 
@@ -44,7 +46,7 @@ const router = new Router({
       component: Login
     },
     {
-      path: '/signin/:id',
+      path: '/signin/:type',
       name: 'Signin',
       component: Signin
     },
@@ -75,6 +77,10 @@ const router = new Router({
     {
       path: "/personagedata",
       component: PersonageData
+    },
+    {
+      path:'/personagelist',
+      component:PersonageList
     },
     {
       path: "/order/:id",
@@ -124,7 +130,7 @@ const router = new Router({
       component: BookList
     },
     {
-      path: "/bookdetails/:id/:type",
+      path: "/bookdetails/:id",
       name: "Bookdetails",
       component: Bookdetails
     },

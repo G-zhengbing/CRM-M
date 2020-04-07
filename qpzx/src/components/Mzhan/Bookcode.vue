@@ -18,14 +18,14 @@
           <div class="main-section-top-top">
             <Form :model="form" :label-width="80">
               <Row>
-                <Col span="6">
-                  <FormItem label="专题标题">
-                    <Input v-model="form.book_name" placeholder="请输入专题标题"></Input>
+                <Col span="5">
+                  <FormItem>
+                    <Input v-model="form.book_name" placeholder="请输入书籍名称"></Input>
                   </FormItem>
                 </Col>
-                <Col span="6">
-                  <FormItem label="科目">
-                    <Select v-model="form.subject" style="width:200px">
+                <Col span="4">
+                  <FormItem>
+                    <Select v-model="form.subject" style="width:200px" placeholder="请选择科目">
                       <Option :value="1">数学</Option>
                       <Option :value="2">英语</Option>
                       <Option :value="3">语文</Option>
@@ -39,8 +39,8 @@
                   </FormItem>
                 </Col>
                 <Col span="6">
-                  <FormItem label="年级">
-                    <Select v-model="form.grade" style="width:200px">
+                  <FormItem>
+                    <Select v-model="form.grade" style="width:200px" placeholder="请选择年级">
                       <Option :value="1">一年级</Option>
                       <Option :value="2">二年级</Option>
                       <Option :value="3">三年级</Option>
@@ -53,7 +53,11 @@
                     </Select>
                   </FormItem>
                 </Col>
-                <Col span="6">
+                <Col span="4">
+                  <DatePicker @on-change="getTime" v-model="time" type="daterange" placement="bottom-end" format="yyyy-MM-dd" placeholder="开始时间-结束时间" style="width: 200px"></DatePicker>
+                  <br />
+                </Col>
+                <Col span="5">
                   <FormItem>
                     <Button type="primary" @click="seekKuhu">查询</Button>
                     <Button style="margin-left: 8px" @click="clear">清空</Button>
@@ -72,19 +76,15 @@
               </div>
               <div class="batch-right">
                 <button class="btn" @click="addAd">新建书籍</button>
-                <Dropdown style="margin-left: 20px" @on-click="getSelect">
-                  <Button type="primary">
-                    排序
-                    <Icon type="ios-arrow-down"></Icon>
-                  </Button>
-                  <DropdownMenu slot="list">
-                    <DropdownItem name="1">阅读数正序</DropdownItem>
-                    <DropdownItem name="2">阅读数倒序</DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
               </div>
             </div>
-            <Table max-height="700px" border :columns="columns2" :data="data" @on-selection-change="selectionChange"></Table>
+            <Table
+              height="500"
+              border
+              :columns="columns2"
+              :data="data"
+              @on-selection-change="selectionChange"
+            ></Table>
             <Page
               @on-change="pageChange"
               :total="total"
@@ -126,6 +126,7 @@ export default {
   },
   data() {
     return {
+      time:"",
       item: {},
       isUpdata: false,
       checkAll: [],
@@ -139,19 +140,13 @@ export default {
           align: "center"
         },
         {
-          type:"书籍编号",
-          width:"60px",
-          key: "id",
-          align: "center"
-        },
-        {
           title: "书籍名称",
           key: "book_name",
           align: "center"
         },
         {
           title: "头图",
-          key: "book_banner",
+          key: "Introduction_diagram",
           align: "center",
           render: (h, params) => {
             return h("img", {
@@ -164,45 +159,55 @@ export default {
               },
               attrs: {
                 //设置属性
-                src: "http://liveapi.canpoint.net/" + params.row.book_banner
+                src: params.row.Introduction_diagram
               }
             });
           }
         },
         {
           title: "年级",
-          key: "grade_ch",
-          width:"80px",
+          key: "grade",
+          width: "80px",
           align: "center"
         },
         {
           title: "科目",
-          width:"80px",
-          key: "subject_ch",
+          width: "80px",
+          key: "subject",
           align: "center"
         },
         {
           title: "课节数",
-          width:"80px",
-          key: "lesson_nums",
+          width: "80px",
+          key: "course_count",
           align: "center"
         },
         {
-          title: "推广数",
-          width:"80px",
-          key: "promoter_account",
+          title: "扫码用户数",
+          width: "80px",
+          key: "scan_qrcode_user_count",
           align: "center"
         },
         {
-          title: "阅读数",
-          width:"80px",
-          key: "view_nums",
+          title: "扫码量",
+          width: "80px",
+          key: "scan_qrcode_count",
           align: "center"
+        },
+        {
+          title: "详情页到达量",
+          key: "join_details_count",
+          width: "80px",
+        },
+        {
+          title: "注册量",
+          key: "register_user_count",
+          width: "80px",
         },
         {
           title:"页面地址",
-          key:"web_url",
-          width:"200px",
+          key:"landing_page_url",
+          width: "200px",
           align: "center"
         },
         {
@@ -238,14 +243,11 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["getBookList","deleBookList"]),
+    ...mapActions(["getBookList", "deleBookList"]),
     ...mapMutations(["setCurrerntPage"]),
-    //排序
-    getSelect(val) {
-      this.loading(true);
-      this.getBookList({ field:val }).then(() => {
-        this.loading(false);
-      });
+    getTime(){
+      this.form.create_start_time = this.time[0]
+      this.form.create_end_time = this.time[1]
     },
     //loading
     loading(status) {
@@ -272,13 +274,13 @@ export default {
     pageChange(num) {
       this.loading(true);
       this.setCurrerntPage(num);
-      this.getBookList(this.form,{ page: num}).then(() => {
+      this.getBookList(this.form, { page: num }).then(() => {
         this.loading(false);
       });
     },
     //批量删除
     isDele() {
-      if (this.checkAll.length >= 1 ) {
+      if (this.checkAll.length >= 1) {
         this.$Modal.confirm({
           title: "温馨提示",
           content: "<p>确定要进行批量删除操作吗?</p>",
@@ -313,10 +315,13 @@ export default {
     },
     clear() {
       this.form = {};
+      this.time = ""
     },
     seekKuhu() {
+       let page = 1;
       this.loading(true);
-      this.getBookList(this.form).then(() => {
+      this.getBookList(this.form,page).then(() => {
+        this.setCurrerntPage(page)
         this.loading(false);
       });
     },

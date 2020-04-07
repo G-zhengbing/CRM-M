@@ -188,8 +188,8 @@
                 <div>
                   <i>{{item.subject}}</i>
                   <div>
-                    <span @click="goDataBank(item.product_id)" v-if="item.type == 2">进入学习</span>
-                    <a v-else :href="item.course_list[0].value3">进入教室</a>
+                    <span @click="goDataBank(item.product_id)" v-if="item.type == 2 || item.type == 3">进入学习</span>
+                    <span v-else  @click="goList(item)">进入教室</span>
                     <img src="../assets/img/fan.png" alt />
                   </div>
                 </div>
@@ -242,6 +242,11 @@ export default {
     };
   },
   methods: {
+    //进入直播课列表
+    goList(val){
+      storage.savePersonageList(val)
+      this.$router.push('/personagelist')
+    },
     goHome() {
       this.$router.push("/");
     },
@@ -336,8 +341,10 @@ export default {
             message: "您还未登录请先登陆"
           })
           .then(() => {
-            this.$router.push("/login");
-            storage.clear();
+            storage.saveRouter(this.$route.fullPath);
+            this.$router.push({
+              path: `/login`
+            });
           })
           .catch(() => {});
         return;

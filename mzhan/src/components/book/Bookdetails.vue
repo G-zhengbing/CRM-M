@@ -1,214 +1,465 @@
 <template>
-  <div class="box">
+  <div class="box" ref="box">
     <scroller>
       <div class="header">
-        <img @click="goBookdetail" src="../../assets/img/fan.png" alt />
-        <span>{{bookName}}</span>
+        <img @click="goHome" src="../../assets/img/fan.png" alt />
+        <span v-if="obj.type == 1">直播课</span>
+        <span v-if="obj.type == 2">精品微课</span>
       </div>
-      <video
-        style="width:100%"
-        ref="video"
-        class="video"
-        poster="../../assets/img/cover.png"
-        controls="controls"
-        :src="'http://liveapi.canpoint.net/'+ videoUrl"
-      ></video>
       <p class="header-bottom"></p>
+      <template v-if="obj.course_list">
+        <header>
+          <template v-if="isPlay">
+            <div class="video" @click="openVideo">
+              <img :src="videoImg" alt class="cover" />
+              <img src="../../assets/click.png" alt class="click" />
+            </div>
+          </template>
+          <template v-if="isVideo">
+            <video
+              v-if="obj.course_list"
+              ref="video"
+              class="video"
+              :poster=" videoImg"
+              controls="controls"
+              :src="videoUrl"
+            ></video>
+          </template>
+          <template v-if="obj.pic.length != 0 && obj.type == 1">
+            <van-swipe
+              :show-indicators="true"
+              :stop-propagation="true"
+              :touchable="true"
+              :autoplay="3000"
+              indicator-color="white"
+            >
+              <van-swipe-item>
+                <van-image
+                  v-for="(item,i) in obj.pic"
+                  :key="i"
+                  width="100%"
+                  height="100%"
+                  :src="'http://liveapi.canpoint.net/'+item"
+                />
+              </van-swipe-item>
+            </van-swipe>
+          </template>
+        </header>
+      </template>
       <section>
         <div class="contanner">
-          <ul>
-            <li
-              v-for="(obj,i) in videoList"
-              :key="i"
-              @click="openVideo(obj.file_url,i)"
-              :class="{activeVideo: active == i }"
-            >
-              <span>第{{i+1}}节:{{obj.file_name}}</span>
-              <!-- <i v-if="active == i">{{getTime(videoTime)}}</i> -->
-            </li>
-          </ul>
+          <div class="center">
+            <p>
+              <span>{{obj.subject}}</span>
+              &nbsp;&nbsp;&nbsp;{{obj.course_name}}
+            </p>
+            <span v-if="obj.type == 1">{{obj.start_date}}-{{obj.end_date}}</span>
+            <span v-if="obj.update_state == 1">更新中</span>
+            <span v-if="obj.update_state == 2">已完结</span>
+            <i>{{obj.activity_price == '0.00' ? '免费': '￥' + obj.activity_price}}</i>
+            <div>服务:正品保证</div>
+          </div>
         </div>
       </section>
+      <footer>
+        <div class="contanner">
+          <div class="datalis">
+            <div class="daralis-content" v-if="obj.product_content">
+              <ul v-if="obj.type == 2 || obj.type == 3">
+                <li @click="tabar(1)" :class="{active:num == 1}">
+                  <span>课程详情</span>
+                  <p></p>
+                </li>
+                <li @click="tabar(2)" :class="{active:num == 2}">
+                  <span>课程目录</span>
+                  <p></p>
+                </li>
+              </ul>
+              <div v-if="num == 1" class="content" v-html="obj.product_content"></div>
+              <div v-else class="videoList">
+                <ul>
+                  <li
+                    v-for="(list,i) in obj.course_list"
+                    :key="i"
+                    @click="getVideoUrl(list.vedio,i)"
+                    :class="{activeVideo: isActive == i }"
+                  >
+                    <p>
+                      <span>{{list.value}}</span>
+                    </p>
+                    <i>{{list.vedio.duration}}</i>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
     </scroller>
-    <footer>
-      <img @click="showEr" src="../../assets/img/ad.png" alt />
-    </footer>
-    <van-overlay :show="isShow">
-      <div class="erwei">
-        <img @click="colse" class="colse" src="../../assets/img/cl.png" alt />
-        <img class="erw" src="../../assets/img/erw.png" alt />
+    <div class="btn">
+      <img @click="showKefu" src="../../assets/img/ke.png" alt />
+      <p>
+        <span
+          class="bao"
+          @click="isLogin"
+          v-if="obj.activity_price == '0.00'&&obj.is_receive == 1"
+        >免费领取</span>
+        <span
+          class="bao"
+          @click="isLogin"
+          v-if="obj.activity_price == '0.00' && obj.is_receive == 2"
+          :class="{active:obj.is_receive == 2}"
+        >已领取</span>
+        <span class="ling" @click="goOrder" v-if="obj.activity_price != '0.00'">立即报名</span>
+      </p>
+    </div>
+    <!-- 客服 -->
+    <van-overlay :show="isKefu">
+      <div class="block">
+        <!-- <p class="alert">温馨提示</p> -->
+        <div>
+          <p class="title">
+            客服电话 :
+            <input id="span" @click="clone" value="010-57121656" readonly />
+          </p>
+          <span>*有任何问题可联系我们的客服工作时间 周二至周日12:00-21:00</span>
+        </div>
+        <p class="confirm" @click="close">确定</p>
+      </div>
+    </van-overlay>
+    <Loading v-if="showLoading" />
+    <van-overlay :show="isShowT">
+      <div class="notive">
+        <div class="n-header">
+          <p>温馨提示</p>
+          <span>登录后才能免费观看该课程哦！</span>
+        </div>
+        <div class="n-footer">
+          <span @click="godetails">残忍拒绝</span>
+          <span @click="gosign">立即前往</span>
+        </div>
       </div>
     </van-overlay>
   </div>
 </template>
 
 <script>
+import wx from "weixin-jsapi";
+import Loading from "../../uilt/loading/Loading";
 import axios from "axios";
 import storage from "../../uilt/storage";
-import { VIDEO_LIST } from "../../uilt/url";
-
+import store from "../../store";
+import { DRAW, GETDRAW, ISGETDRAW, DATALISTS, COUNT } from "../../uilt/url";
 export default {
-  mounted() {
-    this.getVideoList().then(() => {});
-    setTimeout(() => {
-      this.videoTime = this.$refs.video.duration;
-    }, 800);
-  },
-  computed: {
-    getTime() {
-      return function(value) {
-        var secondTime = parseInt(value); // 秒
-        var minuteTime = 0; // 分
-        var hourTime = 0; // 小时
-        if (secondTime > 60) {
-          //如果秒数大于60，将秒数转换成整数
-          //获取分钟，除以60取整数，得到整数分钟
-          minuteTime = parseInt(secondTime / 60);
-          //获取秒数，秒数取佘，得到整数秒数
-          secondTime = parseInt(secondTime % 60);
-          //如果分钟大于60，将分钟转换成小时
-          if (minuteTime > 60) {
-            //获取小时，获取分钟除以60，得到整数小时
-            hourTime = parseInt(minuteTime / 60);
-            //获取小时后取佘的分，获取分钟除以60取佘的分
-            minuteTime = parseInt(minuteTime % 60);
-          }
-        }
-        var result = "" + parseInt(secondTime) + "秒";
-
-        if (minuteTime > 0) {
-          result = "" + parseInt(minuteTime) + "分" + result;
-        }
-        if (hourTime > 0) {
-          result = "" + parseInt(hourTime) + "小时" + result;
-        }
-        return result;
-      };
-    }
+  components: {
+    Loading
   },
   data() {
     return {
-      isShow: false,
-      bookName: "",
-      videoList: [],
-      active: storage.getBook(),
+      isPlay: "",
+      isVideo: "",
+      openid: "",
+      videoImg: "",
+      whether: false,
+      isShowT: false,
+      isActive: storage.getBook(),
       videoUrl: "",
-      videoTime: 0,
-      type: this.$route.params.type,
-      routeId: this.$route.params.id
+      num: 2,
+      showLoading: false,
+      isKefu: false,
+      item: this.$route.params.id ? this.$route.params.id : storage.get(),
+      obj: {
+        pic: []
+      }
     };
   },
+  created() {
+    if (JSON.stringify(storage.getToken()) != "{}") {
+      this.whether = true;
+    }
+    this.showLoading = true;
+    this.getList().then(() => {
+      this.showLoading = false;
+    });
+  },
+  mounted() {
+    if (window.location.hash.split("?")[1].split("&").length >= 2) {
+      this.openid = window.location.hash
+        .split("?")[1]
+        .split("&")[1]
+        .split("=")[1];
+    }
+    storage.getBook();
+    document.documentElement.scrollTop = 0;
+    this.reportCount();
+  },
   methods: {
-    colse() {
-      this.isShow = false;
+    //上报统计
+    reportCount() {
+      axios({
+        method: "post",
+        url: COUNT,
+        data: {
+          book_id: storage.getBookcodeUid(),
+          type: 2,
+          openid: this.openid
+        }
+      }).then(res => {});
     },
-    showEr() {
-      this.isShow = true;
-    },
-    goBookdetail() {
-      if (this.type == "code") {
-        this.$router.push({ path: `/bookcode/${this.routeId}` });
-        return;
+    openVideo() {
+      if (
+        JSON.stringify(storage.getToken()) != "{}" &&
+        this.obj.activity_price == "0.00"
+      ) {
+        this.$toast.fail("免费领取后观看");
+      } else if (
+        JSON.stringify(storage.getToken()) != "{}" &&
+        this.obj.activity_price != "0.00"
+      ) {
+        this.$toast.fail("此为收费视频请付费收看");
       } else {
-        this.$router.push({ path: `/booklist/${this.routeId}` });
+        if (storage.getBook() == 0 || storage.getBook() == 1) {
+          this.isShowT = false;
+          this.isPlay = false;
+          this.isVideo = true;
+        } else {
+          this.isShowT = true;
+          this.isPlay = true;
+          this.isVideo = false;
+        }
       }
     },
-    openVideo(val, num) {
-      // console.log(this.$refs.video.duration)
-      // this.videoTime = this.$refs.video.duration;
-      this.active = num;
-      this.videoUrl = val;
+    gosign() {
+      storage.saveRouter(this.$route.fullPath);
+      this.$router.push({
+        path: `/login${this.$route.fullPath}`
+      });
     },
-    goBookcode() {
-      this.$router.push("/bookcode");
+    godetails() {
+      this.isShowT = false;
     },
-    getVideoList() {
+    goHome() {
+      this.$router.push(storage.getEnterType());
+    },
+    getVideoUrl(val, num) {
+      this.isActive = num;
+      this.videoUrl = val.video_url;
+      this.videoImg = val.file_image;
+      storage.saveBook(num);
+      if (JSON.stringify(storage.getToken()) == "{}") {
+        if (num != 0 && num != 1) {
+          this.isShowT = true;
+          this.isPlay = true;
+          this.isVideo = false;
+        }
+        this.isActive = storage.getBook();
+        return;
+      } else if (this.obj.is_receive == 1) {
+        this.$toast.fail("免费领取后观看");
+        return;
+      } else if (this.obj.pay_status == 0) {
+        this.$toast.fail("此为收费视频请付费收看");
+        return;
+      }
+    },
+    tabar(num) {
+      this.num = num;
+    },
+    clone() {
+      let link = document.getElementById("span");
+      link.select();
+      document.execCommand("Copy");
+    },
+    close() {
+      this.isKefu = false;
+    },
+    showKefu() {
+      this.isKefu = true;
+    },
+    //获取当前商品信息
+    getList() {
+      var num = storage.getBook();
       return new Promise((resolve, reject) => {
         axios({
           method: "get",
-          url: VIDEO_LIST + "/" + this.routeId
+          url: DATALISTS + "?product_id=" + this.item,
+          headers: {
+            Authorization: "bearer" + storage.getToken()
+          }
         })
           .then(res => {
-            this.videoList = res.data.data.vedio;
-            this.bookName = res.data.data.book.book_name;
-            this.videoUrl = res.data.data.vedio[this.active].file_url;
-            resolve();
+            if (res.data.data.week_day == 1) {
+              res.data.data.week_day = "一";
+            } else if (res.data.data.week_day == 2) {
+              res.data.data.week_day = "二";
+            } else if (res.data.data.week_day == 3) {
+              res.data.data.week_day = "三";
+            } else if (res.data.data.week_day == 4) {
+              res.data.data.week_day = "四";
+            } else if (res.data.data.week_day == 5) {
+              res.data.data.week_day = "五";
+            } else if (res.data.data.week_day == 6) {
+              res.data.data.week_day = "六";
+            } else if (res.data.data.week_day == 7) {
+              res.data.data.week_day = "日";
+            }
+            this.obj = res.data.data;
+            if (this.obj.type == 2 || this.obj.type == 3) {
+              this.videoUrl = this.obj.course_list[num].vedio.video_url;
+              this.videoImg = this.obj.course_list[num].vedio.file_image;
+            }
+            if (
+              (this.obj.is_receive == 2 &&
+                this.whether &&
+                this.obj.type == 3) ||
+              this.obj.type == 2
+            ) {
+              this.isVideo = true;
+            } else {
+              this.isVideo = false;
+            }
+            if (
+              (this.obj.is_receive == 1 && this.obj.type == 3) ||
+              this.obj.type == 2
+            ) {
+              this.isPlay = true;
+            } else {
+              this.isPlay = false;
+            }
+            resolve(res);
           })
           .catch(e => {
             reject(e);
           });
       });
+    },
+    isLogin() {
+      this.getDraw();
+    },
+    //是否免费领取
+    getDraw() {
+      if (JSON.stringify(storage.getToken()) == "{}") {
+        this.isShowT = true;
+        return;
+      }
+      this.showLoading = true;
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "post",
+          url: GETDRAW + "/" + this.item,
+          headers: {
+            Authorization: "bearer" + storage.getToken()
+          }
+        })
+          .then(res => {
+            if (res.data.ret) {
+              this.$notify({ type: "success", message: "领取成功" });
+              this.getList();
+            } else {
+              this.$notify({ type: "warning", message: res.data.error });
+            }
+            resolve();
+            this.showLoading = false;
+          })
+          .catch(e => {
+            this.showLoading = false;
+            reject(e);
+          });
+      });
+    },
+    getQueryString(name) {
+      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+      var r = window.location.search.substr(1).match(reg);
+      if (r != null) return unescape(r[2]);
+      return null;
+    },
+    goOrder() {
+      storage.saveRouter(this.$route.fullPath);
+      storage.saveTowOrder("bookdetauls");
+      var ua = navigator.userAgent.toLowerCase();
+      var isWeixin = ua.indexOf("micromessenger") != -1;
+      let homeUrl = `http://www.quanpinzaixian.com/#/callback/${this.item}`;
+      let encode = encodeURIComponent(homeUrl);
+      if (JSON.stringify(storage.getToken()) == "{}") {
+        this.isShowT = true;
+        return;
+      }
+      if (isWeixin) {
+        window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${store.state.appid}&redirect_uri=${encode}&response_type=code&scope=snsapi_base&state=123#wechat_redirect`;
+      } else {
+        this.$router.push({ path: `/order/${this.item}` });
+      }
     }
   }
 };
 </script>
 
 <style scoped>
-.van-overlay {
+.video > img.click {
+  position: absolute;
+  width: 80px;
+}
+.video > img.cover {
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+}
+.video {
+  height: 200px;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.erwei .erw {
-  width: 100%;
-  height: 100%;
+.notive .n-footer span:last-child {
+  border-left: 1px solid #ccc;
+  color: #00b578;
 }
-.erwei .colse {
-  width: 70px;
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin-right: 100px;
-  margin-top: -30px;
-}
-.erwei {
-  padding: 0 100px;
-  position: relative;
-}
-footer > img {
-  width: 100%;
-}
-footer {
-  padding: 0 24px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  background: #fff;
-}
-ul li.activeVideo i {
-  color: #333;
-}
-ul li.activeVideo span {
-  color: #333;
-}
-ul li:last-child {
-  border-bottom: none;
-}
-ul li i {
-  font-style: normal;
-  font-size: 30px;
-  color: #ccc;
-}
-ul li span {
+.notive .n-footer span {
+  font-size: 25px;
   flex: 1;
-  font-size: 30px;
-  color: #ccc;
-}
-.video {
-  height: 300px;
-}
-ul li {
   display: flex;
+  justify-content: center;
   align-items: center;
-  margin-top: 30px;
-  border-bottom: 1px solid #ccc;
 }
-ul {
+.notive .n-footer {
+  height: 80px;
+  display: flex;
+  border-top: 1px solid #ccc;
+}
+.notive .n-header span {
+  margin: 20px 0;
+  display: inline-block;
+  font-size: 20px;
+}
+.notive .n-header p {
+  margin-top: 20px;
+  font-size: 25px;
+}
+.notive .n-header {
+  flex: 1;
+}
+.notive {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 440px;
+  height: 200px;
+  margin-left: -220px;
+  margin-top: -100px;
+  text-align: center;
+  background: #fff;
   display: flex;
   flex-direction: column;
 }
-.contanner {
-  margin: 0 24px;
+.videoList ul li.activeVideo > i {
+  color: #ee7428;
+}
+.videoList ul li.activeVideo > p > span {
+  color: #ee7428;
+}
+.videoList {
+  margin-bottom: 160px;
 }
 .header > span {
   font-size: 30px;
@@ -236,7 +487,279 @@ ul {
   width: 24px;
   height: 40px;
 }
+.videoList ul li:last-child {
+  border-bottom: none;
+}
+.videoList ul li > i {
+  font-style: normal;
+  color: #999;
+}
+.videoList ul li {
+  display: flex;
+  border-bottom: 1px solid #dcdcdc;
+  align-items: center;
+  height: 80px;
+}
+.videoList ul li > p > span {
+  color: #333;
+}
+.videoList ul li > p {
+  color: #333;
+  font-size: 26px;
+  flex: 1;
+}
+.videoList ul {
+  display: flex;
+  flex-direction: column;
+}
+.datalis > div.daralis-content > ul > li.active span {
+  color: #333;
+}
+.datalis > div.daralis-content > ul > li.active > p {
+  background: #ee7428;
+}
+.datalis > div.daralis-content > ul > li > p {
+  width: 40px;
+  height: 4px;
+  margin-top: -20px;
+}
+.datalis > div.daralis-content > ul > li > span {
+  color: #999;
+  font-size: 28px;
+}
+.datalis > div.daralis-content > ul > li {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 80px;
+  line-height: 80px;
+  box-shadow: 0px 1px 2px 0px rgba(234, 234, 234, 1);
+  margin-bottom: 30px;
+}
+.datalis > div.daralis-content > ul {
+  display: flex;
+}
+.block > div > p > input {
+  color: #1989fa;
+  border: none;
+  outline: none;
+  width: 2.8rem;
+}
+.block > div > span {
+  color: #a5a4a4;
+  font-size: 13px;
+  width: 420px;
+  display: inline-block;
+}
+.block .confirm {
+  height: 60px;
+  border-top: 1px solid #ccc;
+  color: #1989fa;
+  line-height: 60px;
+  font-size: 32px;
+}
+.block > div {
+  flex: 1;
+  color: #646566;
+}
+.block .alert {
+  margin: 25px 0;
+  font-size: 32px;
+}
+.block .title {
+  font-size: 28px;
+  color: #333;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  height: 80px;
+  line-height: 80px;
+  display: flex;
+  justify-content: center;
+}
+.block {
+  width: 6rem;
+  height: 3rem;
+  background: #fff;
+  border-radius: 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+.van-overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.content {
+  height: 100%;
+}
+div.content > p {
+  margin-bottom: 200px;
+}
+.contanner,
+.datalis,
+.daralis-content {
+  height: 100%;
+}
+.video {
+  width: 100%;
+  height: 100%;
+}
+footer {
+  background: #fff;
+  flex: 1;
+  position: relative;
+}
+.back {
+  height: 20px;
+}
+div.btn > p > span.bao.active {
+  background: #ccc;
+  color: #575454;
+}
+div.btn > p > span.bao {
+  background: #f19a38;
+  width: 100%;
+  height: 100%;
+  border-radius: 40px;
+}
+div.btn > p > span {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ee7428;
+  border-radius: 40px;
+}
+div.btn > p {
+  flex: 1;
+  height: 70px;
+  border-radius: 40px;
+  color: #fff;
+  font-size: 28px;
+  display: flex;
+  margin-right: 0.32rem;
+}
+.content {
+  height: 18px;
+  background: #f3f3f3;
+}
+.contanner {
+  margin: 0 24px;
+  margin-top: 20px;
+}
+div.btn img {
+  width: 64px;
+  height: 76px;
+  margin-right: 20px;
+  margin-left: 0.32rem;
+}
+div.btn {
+  display: flex;
+  height: 100px;
+  align-items: center;
+  margin-bottom: 60px;
+  position: fixed;
+  bottom: -60px;
+  left: 0;
+  width: 100%;
+  background: #fff;
+}
+.datalis img {
+  width: 100%;
+}
+.datalis > div.daralis-content > p {
+  font-size: 30px;
+  color: #333;
+  margin: 20px;
+}
+.datalis > div.daralis-content > div.content > p {
+  width: 100%;
+}
+.datalis > div.daralis-content > div.content {
+  flex: 1;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin-bottom: 1.4rem;
+}
+.datalis {
+  display: flex;
+  flex-direction: column;
+}
+.center > div {
+  color: #333;
+  font-size: 24px;
+  border-top: 1px solid #dcdcdc;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 60px;
+  line-height: 60px;
+  width: 100%;
+}
+.center > i {
+  color: #ee7428;
+  font-size: 28px;
+  margin-right: 50px;
+  font-style: normal;
+  display: block;
+  margin-top: 20px;
+}
+.center > span {
+  color: #999;
+  margin-top: 18px;
+  font-size: 0.24rem;
+  margin-left: 0.133333rem;
+  display: inline-block;
+}
+.center p {
+  color: #333;
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+  font-size: 28px;
+  padding-top: 30px;
+}
+.center p span {
+  display: inline-block;
+  background: #ee7428;
+  color: #fff;
+  border-radius: 0.09rem;
+  font-size: 24px;
+  width: 0.93rem;
+  height: 0.43rem;
+  line-height: 0.43rem;
+  text-align: center;
+}
+.center {
+  position: relative;
+  height: 3.3rem;
+}
+.contarner {
+  height: 100%;
+}
 .box {
+  display: flex;
+  flex-direction: column;
+  background: #f3f3f3;
+}
+section {
+  background: #fff;
+  margin-bottom: 20px;
+  position: relative;
+}
+.van-image {
+  height: 4rem !important;
+}
+header {
+  width: 100%;
+  height: 4rem;
+  background: #fff;
   position: relative;
 }
 </style>

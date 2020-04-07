@@ -16,82 +16,65 @@
     <section class="main-section">
       <div class="surplus">
         <div class="main-section-top">
-          <div class="main-section-top-top">
-            <form>
-              <label>
-                渠道:
-                <select class="daiban-selected" v-model="form.refer">
-                  <option v-for="(list,i) in refer" :key="i" :value="i">{{list}}</option>
-                </select>
-              </label>
-              <label>
-                学员姓名:
-                <input type="text" v-model="form.name" />
-              </label>
-              <label>
-                是否约课:
-                <select class="daiban-selected" v-model="form.is_course">
-                  <option value="1">未约课</option>
-                  <option value="2">已约课</option>
-                </select>
-              </label>
-              <label>
-                学员电话:
-                <input type="text" v-model="form.mobile" />
-              </label>
-              <label>
-                科目:
-                <select class="daiban-selected" v-model="form.subject">
-                  <option value="1">数学</option>
-                  <option value="2">英语</option>
-                  <option value="3">语文</option>
-                  <option value="4">物理</option>
-                  <option value="5">化学</option>
-                  <option value="6">政治</option>
-                  <option value="7">生物</option>
-                  <option value="8">地理</option>
-                  <option value="9">历史</option>
-                </select>
-              </label>
-              <br />
-              <br />
-              <label>
-                创建时间:
-                <DatePicker
-                  v-model="nextTime"
-                  type="date"
-                  class="datepicker"
-                  :lang="lang"
-                  confirm
-                  format="YYYY-MM-DD"
-                  @confirm="setNextTime"
-                ></DatePicker>——
-                <DatePicker
-                  v-model="classTime"
-                  type="date"
-                  class="datepicker"
-                  :lang="lang"
-                  confirm
-                  format="YYYY-MM-DD"
-                  @confirm="setClassTime"
-                ></DatePicker>
-              </label>
-              <label style="margin-left: 30px;">
-                约课时间:
-                <DatePicker
-                  v-model="Time"
-                  type="date"
-                  class="datepicker"
-                  :lang="lang"
-                  confirm
-                  format="YYYY-MM-DD"
-                  @confirm="setTime"
-                ></DatePicker>
-              </label>
-              <button type="button" class="daiban-button" @click="seekKuhu">查询</button>
-              <button type="button" class="daiban-button" @click="clear">清空</button>
-            </form>
-          </div>
+            <Form :model="form" :label-width="80" style="height:111px;padding: 10px;">
+              <Row>
+                <Col span="4">
+                  <FormItem style="width:230px;">
+                    <Select v-model="form.refer" style="width:150px" placeholder="渠道">
+                      <Option v-for="(list,i) in refer" :key="i" :value="i">{{list}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem style="width:230px;">
+                    <Input v-model="form.name" placeholder="学员姓名"></Input>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem style="width:230px;">
+                    <Select v-model="form.is_course" style="width:150px" placeholder="是否约课">
+                      <Option value="1">未约课</Option>
+                      <Option value="2">已约课</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem style="width:230px;">
+                    <Input v-model="form.mobile" placeholder="学员电话"></Input>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem style="width:230px;">
+                    <Select v-model="form.subject" style="width:150px" placeholder="科目">
+                      <Option value="1">数学</Option>
+                      <Option value="2">英语</Option>
+                      <Option value="3">语文</Option>
+                      <Option value="4">物理</Option>
+                      <Option value="5">化学</Option>
+                      <Option value="6">政治</Option>
+                      <Option value="7">生物</Option>
+                      <Option value="8">地理</Option>
+                      <Option value="9">历史</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="6">
+                  <FormItem>
+                    <DatePicker v-model="nextTime"  type="date" placeholder="开始时间" @on-change="setNextTime" style="width: 200px"></DatePicker>
+                    <DatePicker v-model="classTime" type="date" placeholder="结束时间" @on-change="setClassTime" style="width: 200px"></DatePicker>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem style="width:230px;">
+                    <DatePicker v-model="Time"  type="date" placeholder="约课时间" @on-change="setTime" style="width: 200px"></DatePicker>
+                  </FormItem>
+                </Col>
+                <Col span="4" style="margin-left:30px">
+                  <Button type="primary"  @click="seekKuhu">查询</Button>
+                  <Button  @click="clear">清空</Button>
+                </Col>
+              </Row>
+            </Form>
         </div>
         <div class="main-section-bottom">
           <div class="contaner">
@@ -119,14 +102,12 @@
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import Table from "../uilt/table/TablePlus";
 import Loading from "../uilt/loading/loading";
-import DatePicker from "vue2-datepicker";
 import DaibanMessage from "../uilt/newErweima/DaibanMessage";
 export default {
   components: {
     Table,
     Loading,
     DaibanMessage,
-    DatePicker
   },
   mounted() {
     this.setCurrentPage(1);
@@ -175,9 +156,9 @@ export default {
           dateRange: ""
         }
       },
-      Time:'',
-      classTime:"",
-      nextTime:"",
+      Time: "",
+      classTime: "",
+      nextTime: "",
       type: {
         page: 1
       },
@@ -206,7 +187,7 @@ export default {
     };
   },
   methods: {
-     datePicker(time) {
+    datePicker(time) {
       var d = new Date(time);
       let shi = d.getHours();
       let fen = d.getMinutes();

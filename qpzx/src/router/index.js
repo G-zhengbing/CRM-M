@@ -22,7 +22,9 @@ import Curriculum from '../components/Mzhan/Curriculum'
 import Databank from '../components/Mzhan/Databank'
 import Special from '../components/Mzhan/Special'
 import Bookcode from '../components/Mzhan/Bookcode'
-
+import Reservation from '../components/Reservation'
+import Thread from '../components/Thread'
+ 
 import storage from '../uilt/storage'
 
 Vue.use(Router)
@@ -126,6 +128,14 @@ const router = new Router({
         {
           path: '/main/payingstudent',
           component: Payingstudent
+        },
+        {
+          path: '/main/reservation',
+          component: Reservation
+        },
+        {
+          path: '/main/thread',
+          component: Thread
         }
       ]
     }

@@ -32,20 +32,30 @@
             <Form :model="form" :label-width="80">
               <Row>
                 <Col span="4">
-                  <FormItem label="学员电话" style="width:230px;">
-                    <Input v-model="form.mobile" placeholder="请输入学员电话" @on-change="seekKuhu"></Input>
+                  <FormItem style="width:230px;">
+                    <Input v-model="form.mobile" placeholder="学员电话" @on-change="seekKuhu"></Input>
                   </FormItem>
                 </Col>
                 <Col span="4">
-                  <FormItem label="渠道类型">
-                    <Select v-model="form.refer" style="width:150px" @on-change="seekKuhu">
+                  <FormItem>
+                    <Select
+                      v-model="form.refer"
+                      style="width:150px"
+                      @on-change="seekKuhu"
+                      placeholder="渠道类型"
+                    >
                       <Option v-for="(list,i) in refer" :key="i" :value="i">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
                 <Col span="4">
-                  <FormItem label="年级">
-                    <Select v-model="form.grade" style="width:150px" @on-change="seekKuhu">
+                  <FormItem>
+                    <Select
+                      v-model="form.grade"
+                      style="width:150px"
+                      @on-change="seekKuhu"
+                      placeholder="年级"
+                    >
                       <Option :value="1">一年级</Option>
                       <Option :value="2">二年级</Option>
                       <Option :value="3">三年级</Option>
@@ -59,8 +69,13 @@
                   </FormItem>
                 </Col>
                 <Col span="4">
-                  <FormItem label="科目">
-                    <Select v-model="form.subject" style="width:150px" @on-change="seekKuhu">
+                  <FormItem>
+                    <Select
+                      v-model="form.subject"
+                      style="width:150px"
+                      @on-change="seekKuhu"
+                      placeholder="科目"
+                    >
                       <Option value="1">数学</Option>
                       <Option value="2">英语</Option>
                       <Option value="3">语文</Option>
@@ -74,11 +89,12 @@
                   </FormItem>
                 </Col>
                 <Col span="4">
-                  <FormItem label="意向度" v-if="num == 2">
+                  <FormItem v-if="num == 2">
                     <Select
                       v-model="form.intention_option"
                       style="width:150px"
                       @on-change="seekKuhu"
+                      placeholder="意向度"
                     >
                       <Option :value="1">A高</Option>
                       <Option :value="2">B中</Option>
@@ -87,12 +103,53 @@
                   </FormItem>
                 </Col>
                 <Col span="4">
-                  <FormItem label="约课状态" v-if="num == 2">
-                    <Select v-model="form.is_course" style="width:150px" @on-change="seekKuhu">
+                  <FormItem v-if="num == 2">
+                    <Select
+                      v-model="form.is_course"
+                      style="width:150px"
+                      @on-change="seekKuhu"
+                      placeholder="约课状态"
+                    >
                       <Option :value="1">未约课</Option>
                       <Option :value="2">已约课</Option>
                     </Select>
                   </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select
+                      v-model="form.data_source"
+                      style="width:150px"
+                      @on-change="seekKuhu"
+                      placeholder="数据渠道"
+                    >
+                      <Option :value="1">H5</Option>
+                      <Option :value="16">六楼总部数据</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="6">
+                  <FormItem>
+                    <div class="dateplc">
+                      <DatePicker
+                        type="datetime"
+                        placeholder="开始时间"
+                        style="width: 200px"
+                        v-model="startTime"
+                        @on-ok="getTimes"
+                      ></DatePicker>
+                      <DatePicker
+                        type="datetime"
+                        placeholder="结束时间"
+                        style="width: 200px"
+                        v-model="endTime"
+                        @on-ok="getTimes"
+                      ></DatePicker>
+                    </div>
+                  </FormItem>
+                </Col>
+                <Col span="4" style="margin-left:30px">
+                  <Button type="primary" @click="clear">清除</Button>
                 </Col>
               </Row>
             </Form>
@@ -129,7 +186,7 @@
 import Table from "../../uilt/table/TablePlus";
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import DaibanMessage from "../../uilt/newErweima/DaibanMessage";
-import DatePicker from "vue2-datepicker";
+// import DatePicker from "vue2-datepicker";
 import storage from "../../uilt/storage";
 import Loading from "../../uilt/loading/loading";
 export default {
@@ -151,11 +208,13 @@ export default {
   components: {
     Table,
     DaibanMessage,
-    Loading,
-    DatePicker
+    Loading
+    // DatePicker
   },
   data() {
     return {
+      endTime: "",
+      startTime: "",
       lang: {
         days: [
           "星期一",
@@ -200,6 +259,7 @@ export default {
         { type: "年级", key: "grade" },
         { type: "科目", key: "subject" },
         { type: "跟进状态", key: "follow_status" },
+        { type: "渠道", key: "refer" },
         { type: "用户状态", key: "account_status" },
         { type: "跟进人", key: "follow_sale_name" },
         { type: "约课状态", key: "is_course" },
@@ -230,7 +290,15 @@ export default {
       "setStatusNum"
     ]),
     ...mapActions(["getKehuList", "getFenpeiList", "RingUp"]),
+    getTimes() {
+      if (this.startTime && this.endTime) {
+        this.form.start_time = this.startTime;
+        this.form.end_time = this.endTime;
+        this.seekKuhu();
+      }
+    },
     getBtnClick6(item) {
+      // console.log(item)
       this.show = true;
       this.type.classify = "shade";
       this.setXiansuoId(item.id);
@@ -243,7 +311,18 @@ export default {
       if (shi < 10) shi = "0" + shi;
       if (fen < 10) fen = "0" + fen;
       if (miao < 10) miao = "0" + miao;
-      d = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+      d =
+        d.getFullYear() +
+        "-" +
+        (d.getMonth() + 1) +
+        "-" +
+        d.getDate() +
+        " " +
+        shi +
+        ":" +
+        fen +
+        ":" +
+        miao;
       return d;
     },
     setTime(item) {
@@ -257,9 +336,9 @@ export default {
     },
     clear() {
       this.form = {};
-      this.Time = "";
-      this.classTime = "";
-      this.nextTime = "";
+      this.startTime = "";
+      this.endTime = "";
+      this.seekKuhu()
     },
     seekKuhu() {
       let page = 1;
@@ -285,22 +364,26 @@ export default {
       });
     },
     getBtnClick1(item) {
+      // console.log(item)
       this.show = true;
       this.type.classify = "datalis";
       this.type.data = { ...item };
     },
     getBtnClick2(item) {
+      // console.log(item)
       this.show = true;
       this.type.classify = "shiftOut";
       this.type.data = { ...item };
     },
     getBtnClick3(item) {
+      // console.log(item)
       this.setGenjinType(item);
       this.show = true;
       this.type.classify = "followUp";
       this.type.data = { ...this.Types };
     },
     getBtnClick4(item) {
+      // console.log(item)
       this.setGenjinType(item);
       this.isLoading = true;
       this.show = true;
@@ -326,6 +409,7 @@ export default {
         });
     },
     getBtnClick5(item) {
+      // console.log(item)
       this.show = true;
       this.type.classify = "dingdan";
       this.type.data = { ...item };
@@ -393,6 +477,9 @@ export default {
 };
 </script>
 <style scoped>
+.dateplc {
+  display: flex;
+}
 .allot > p {
   border-left: 1px solid #fff;
 }
@@ -402,6 +489,7 @@ export default {
   text-align: center;
 }
 .allot {
+  margin-top: 30px;
   display: flex;
   width: 150px;
   height: 30px;

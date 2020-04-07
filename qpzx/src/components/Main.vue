@@ -69,6 +69,8 @@
               >付费学员</MenuItem>
               <MenuItem name="/main/uplist" to="/main/uplist" v-if="$store.state.cId != 4">上课提醒</MenuItem>
               <MenuItem name="/main/money" to="/main/money" v-if="$store.state.cId != 3">订单中心</MenuItem>
+              <MenuItem name="/main/reservation" to="/main/reservation">我的预约单</MenuItem>
+              <MenuItem name="/main/thread" to="/main/thread">线索导入</MenuItem>
               <!-- <MenuItem name="/main/number" to="/main/number" v-if="$store.state.cId != 3">成单数</MenuItem> -->
               <Submenu name="1-1" v-if="$store.state.cId != 2">
                 <template slot="title">教务</template>

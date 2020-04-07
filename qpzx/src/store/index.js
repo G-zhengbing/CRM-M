@@ -18,6 +18,7 @@ import uplist from './uplist'
 import minestudent from './minestudent'
 import payingstudent from './payingstudent'
 import bookcode from './bookcode'
+import reservation from './advertising'
 import axios from "axios";
 import {
   GETUSER,
@@ -116,5 +117,6 @@ export default new Vuex.Store({
     minestudent,//我的学员
     payingstudent,//付费学员
     bookcode,//一书一码
+    reservation,//我的预约单
   }
 })

@@ -4,19 +4,24 @@
       <div class="header">
         <img @click="goHome" src="../assets/img/fan.png" alt />
         <span v-if="obj.type == 1">直播课</span>
-        <span v-if="obj.type == 2">精品微课</span>
+        <span v-if="obj.type == 2 || obj.type ==3">精品微课</span>
       </div>
       <p class="header-bottom"></p>
       <template v-if="obj.pic.length != 0|| obj.course_list">
         <header>
-          <template v-if="obj.type == 2">
+          <template v-if="obj.is_receive == 1 && obj.type == 2">
+            <div class="video" @click="openVideo">
+              <img :src="videoImg" alt class="cover" />
+              <img src="../assets/click.png" alt class="click" />
+            </div>
+          </template>
+          <template v-if="obj.is_receive == 2 && obj.type == 2 || obj.type == 3">
             <video
-              v-if="obj.course_list"
               ref="video"
               class="video"
-              poster="../assets/img/cover.png"
+              :poster=" videoImg"
               controls="controls"
-              :src="'http://liveapi.canpoint.net'+ videoUrl"
+              :src="videoUrl"
             ></video>
           </template>
           <template v-if="obj.pic.length != 0 && obj.type == 1">
@@ -50,7 +55,7 @@
             <span v-if="obj.type == 1">{{obj.start_date}}-{{obj.end_date}}</span>
             <span v-if="obj.update_state == 1">更新中</span>
             <span v-if="obj.update_state == 2">已完结</span>
-            <i>￥{{obj.activity_price}}</i>
+            <i>{{obj.activity_price == '0.00' ||obj.activity_price ==null ? '免费': '￥' + obj.activity_price}}</i>
             <div>服务:正品保证</div>
           </div>
         </div>
@@ -59,7 +64,7 @@
         <div class="contanner">
           <div class="datalis">
             <div class="daralis-content" v-if="obj.product_content">
-              <ul v-if="obj.type == 2">
+              <ul v-if="obj.type == 2 || obj.type ==3">
                 <li @click="tabar(1)" :class="{active:num == 1}">
                   <span>课程详情</span>
                   <p></p>
@@ -75,13 +80,13 @@
                   <li
                     v-for="(list,i) in obj.course_list"
                     :key="i"
-                    @click="getVideoUrl(list.value2,i)"
+                    @click="getVideoUrl(list.vedio,i)"
                     :class="{activeVideo: isActive == i }"
                   >
                     <p>
                       <span>{{list.value}}</span>
                     </p>
-                    <i>12:00</i>
+                    <i>{{list.vedio.duration}}</i>
                   </li>
                 </ul>
               </div>
@@ -93,8 +98,17 @@
     <div class="btn">
       <img @click="showKefu" src="../assets/img/ke.png" alt />
       <p>
-        <span class="bao" @click="isLogin" v-if="obj.activity_price == '0.00'&&obj.is_receive == 1">免费领取</span>
-        <span class="bao" @click="isLogin" v-if="obj.activity_price == '0.00' && obj.is_receive == 2" :class="{active:obj.is_receive == 2}">已领取</span>
+        <span
+          class="bao"
+          @click="isLogin"
+          v-if="obj.activity_price == '0.00'&&obj.is_receive == 1"
+        >免费领取</span>
+        <span
+          class="bao"
+          @click="isLogin"
+          v-if="obj.activity_price == '0.00' && obj.is_receive == 2"
+          :class="{active:obj.is_receive == 2}"
+        >已领取</span>
         <span class="ling" @click="goOrder" v-if="obj.activity_price != '0.00'">立即报名</span>
       </p>
     </div>
@@ -129,6 +143,7 @@ export default {
   },
   data() {
     return {
+      videoImg: "",
       isActive: 0,
       videoUrl: "",
       num: 1,
@@ -154,16 +169,38 @@ export default {
     }
   },
   methods: {
-    goHome() {
-      if (storage.getEnterType() == "HOME") {
-        this.$router.push("/");
-      } else if (storage.getEnterType() == "PERSONAGE") {
-        this.$router.push("/personage");
-      } else if (storage.getEnterType() == "SMALLCLASS") {
-        this.$router.push("/smallclass");
-      } else if (storage.getEnterType().split("/")[1] == "bookcode") {
-        this.$router.push(storage.getEnterType());
+    openVideo() {
+      if (
+        JSON.stringify(storage.getToken()) != "{}" &&
+        this.obj.activity_price == "0.00"
+      ) {
+        this.$toast.fail("免费领取后观看");
+      } else if (
+        JSON.stringify(storage.getToken()) != "{}" &&
+        this.obj.activity_price != "0.00"
+      ) {
+        this.$toast.fail("此为收费视频请付费收看");
       }
+    },
+    goHome() {
+      // console.log(!storage.getEnterType())
+      // return
+      // if (JSON.stringify(storage.getEnterType()) == "{}") {
+      //   this.$router.push("/");
+      // } else {
+        if (storage.getEnterType() == "HOME") {
+          this.$router.push("/");
+        } else if (storage.getEnterType() == "SECLCEN") {
+          this.$router.push("/seclcen");
+        } else if (storage.getEnterType() == "PERSONAGE") {
+          this.$router.push("/personage");
+        } else if (storage.getEnterType() == "SMALLCLASS") {
+          this.$router.push("/smallclass");
+        } else if (storage.getEnterType().split("/")[1] == "bookcode") {
+          this.$router.push(storage.getEnterType());
+        }
+      // }
+      // storage.clear()
       // if(JSON.stringify(storage.getSmall()) != "{}"){
       //   this.$router.push("/smallclass")
       // }else{
@@ -172,11 +209,12 @@ export default {
     },
     getVideoUrl(val, num) {
       this.isActive = num;
-      if (this.obj.pay_status == 0) {
+      this.videoUrl = val.video_url;
+      this.videoImg = val.file_image;
+      if (this.obj.is_receive == 1) {
         this.$toast.fail("此为收费视频请付费收看");
         return;
       }
-      this.videoUrl = val;
     },
     tabar(num) {
       this.num = num;
@@ -219,8 +257,9 @@ export default {
               res.data.data.week_day = "日";
             }
             this.obj = res.data.data;
-            if (this.obj.type == 2) {
-              this.videoUrl = this.obj.course_list[0].value2;
+            if (this.obj.type == 2 || this.obj.type == 3) {
+              this.videoUrl = this.obj.course_list[0].vedio.video_url;
+              this.videoImg = this.obj.course_list[0].vedio.file_image;
             }
             resolve(res);
           })
@@ -235,8 +274,10 @@ export default {
     //是否免费领取
     getDraw() {
       if (JSON.stringify(storage.getToken()) == "{}") {
-        this.$router.push("/login");
-        storage.clear();
+        storage.saveRouter(this.$route.fullPath);
+        this.$router.push({
+          path: `/login/databank/${this.item}`
+        });
         return;
       }
       this.showLoading = true;
@@ -249,9 +290,9 @@ export default {
           }
         })
           .then(res => {
-            console.log(res)
             if (res.data.ret) {
               this.$notify({ type: "success", message: "领取成功" });
+              this.getList();
             } else {
               this.$notify({ type: "warning", message: res.data.error });
             }
@@ -321,13 +362,16 @@ export default {
       return null;
     },
     goOrder() {
+      storage.saveTowOrder("databank");
       var ua = navigator.userAgent.toLowerCase();
       var isWeixin = ua.indexOf("micromessenger") != -1;
       let homeUrl = `http://www.quanpinzaixian.com/#/callback/${this.item}`;
       let encode = encodeURIComponent(homeUrl);
       if (JSON.stringify(storage.getToken()) == "{}") {
-        this.$router.push("/login");
-        storage.clear();
+        storage.saveRouter(this.$route.fullPath);
+        this.$router.push({
+          path: `/login`
+        });
         return;
       }
       if (isWeixin) {
@@ -348,6 +392,22 @@ export default {
 </script>
 
 <style scoped>
+.video > img.click {
+  position: absolute;
+  width: 80px;
+}
+.video > img.cover {
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+}
+.video {
+  height: 200px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .videoList ul li.activeVideo > i {
   color: #ee7428;
 }
@@ -512,7 +572,7 @@ footer {
 .back {
   height: 20px;
 }
-div.btn > p > span.bao.active{
+div.btn > p > span.bao.active {
   background: #ccc;
   color: #575454;
 }

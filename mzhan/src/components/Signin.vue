@@ -1,41 +1,54 @@
 <template>
   <div class="box">
-    <header>
-      <img class="bei" src="../assets/img/bei5.png" alt />
-      <img class="login" src="../assets/img/login5.png" alt />
-    </header>
     <section>
-      <ul>
+      <div class="header">
+        <img @click="goHome" src="../assets/img/fan.png" alt />
+        <span>全品在线</span>
+      </div>
+      <div class="content" v-if="tab==1">
+        <p>密码登录</p>
+        <span>仅适用于已注册的用户</span>
+      </div>
+      <div class="content" v-if="tab ==2">
+        <p>重置密码</p>
+        <span>密码长度6～20位</span>
+      </div>
+      <ul v-if=" tab == 1">
         <li>
-          <input v-model="form.mobile" type="text" placeholder="手机号" />
+          <input v-model="form.mobile" type="text" placeholder="请输入手机号码" />
         </li>
         <li>
-          <input v-model="form.passwordOne" type="password" placeholder="密码" />
+          <input v-model="form.mobile_password" type="password" placeholder="请输入登录密码" />
         </li>
         <li>
-          <input v-model="form.mobile_password" type="password" placeholder="再次确认密码" />
+          <p @click="setTab">忘记密码</p>
+        </li>
+      </ul>
+      <ul v-if=" tab == 2">
+        <li>
+          <input v-model="form.mobile" type="text" placeholder="请输入手机号码" />
         </li>
         <li>
           <input v-model="form.password" type="text" placeholder="短信验证码" />
           <span @click="sion" v-if="isSion">{{text}}</span>
           <span v-else>获取验证码({{num}})</span>
         </li>
+        <li>
+          <input v-model="form.passwordOne" type="password" placeholder="请输入新的登录密码" />
+        </li>
+        <li>
+          <input v-model="form.mobile_password" type="password" placeholder="重复输入新的登录密码" />
+        </li>
       </ul>
-      <div class="text">
-        <input class="checkbox" type="checkbox" v-model="isChecked" />
-        <span style="flex:1;color:#999;" @click="showText">
-          注册即同意
-          <span style="color:#238ACB;">《用户协议》</span>
-        </span>
-        <span style="color:#999;">
-          已有账号?
-          <span style="color:#238ACB;" @click="goLogin">立即登陆</span>
-        </span>
-      </div>
       <div class="btn" @click="Login">
-        <span v-if="$route.params.id == 1">修改密码</span>
-        <span v-else>注册</span>
+        <span v-if="tab == 2">确认</span>
+        <span v-else>登录</span>
         <img src="../assets/img/login4.png" alt />
+      </div>
+      <div v-if="tab == 1" class="code" @click="goHome">验证码登录</div>
+      <div class="text" v-if="tab == 1">
+        <span class="logintext">登录即代表你已阅读并同意</span>
+        <span style="flex:1;" @click="showText">《全品学堂用户协议》</span>
       </div>
     </section>
     <van-overlay :show="isModel">
@@ -287,13 +300,16 @@
 <script>
 import axios from "axios";
 import storage from "../uilt/storage";
-import { SEND, ISSIGNIN, SIGNIN, UPDATEPASSWORD } from "../uilt/url";
+import { SEND, ISSIGNIN, SIGNIN, UPDATEPASSWORD, PASSOWRD } from "../uilt/url";
 import { mapMutations } from "vuex";
 export default {
   mounted() {
     let href = window.location.href;
-    if(href.split("?").length > 1){
-      this.location = href.split("?")[1].split("&")[0].split('=')[1];
+    if (href.split("?").length > 1) {
+      this.location = href
+        .split("?")[1]
+        .split("&")[0]
+        .split("=")[1];
     }
     if (this.$route.params.mobile) {
       this.form = this.$route.params;
@@ -301,8 +317,9 @@ export default {
   },
   data() {
     return {
-      location: "",
       isChecked: true,
+      tab: 1,
+      location: "",
       isModel: false,
       isSion: true,
       text: "发送验证码",
@@ -313,9 +330,32 @@ export default {
   },
   methods: {
     ...mapMutations(["steGiweStatus"]),
+    setTab() {
+      this.tab = 2;
+      this.form.mobile_password = "";
+    },
+    goHome() {
+      if (this.tab == 1) {
+        if (window.location.href.split("?").length > 1) {
+          this.$router.push(`/login?${window.location.href.split("?")[1]}`);
+          return;
+        } else {
+          if (JSON.stringify(storage.getLogin()) != "{}") {
+            this.$router.push(`${storage.getLogin()}`);
+          } else {
+            this.$router.push(`/login`);
+          }
+        }
+      } else {
+        this.tab = 1;
+      }
+    },
     goLogin() {
       if (this.$route.query.type == "bookcode") {
-        this.$router.push({ path: `/login/${this.$route.query.type}/${this.$route.query.uid}`,query:{promoter_id:this.location} });
+        this.$router.push({
+          path: `/login/${this.$route.query.type}/${this.$route.query.uid}`,
+          query: { promoter_id: this.location }
+        });
       } else {
         this.$router.push("/login");
       }
@@ -350,31 +390,65 @@ export default {
     },
     //登录
     Login() {
-      if (!this.form.mobile) {
-        this.$toast.fail("手机号不能为空");
-        return;
-      }
-      if (!this.myreg.test(this.form.mobile)) {
-        this.$toast.fail("手机号有误");
-        return;
-      }
-      if (!this.form.passwordOne || !this.form.mobile_password) {
-        this.$toast.fail("密码不能为空");
-        return;
-      }
-      if (this.form.passwordOne != this.form.mobile_password) {
-        this.$toast.fail("两次密码不同");
-        return;
-      }
-      if (!this.form.password) {
-        this.$toast.fail("验证码不能为空");
-        return;
-      }
-      if (!this.isChecked) {
-        this.$toast.fail("请认真阅读协议");
-        return;
-      }
-      if (this.$route.params.id == 1) {
+      if (this.tab == 1) {
+        if (!this.form.mobile) {
+          this.$toast.fail("手机号不能为空");
+          return;
+        }
+        if (!this.myreg.test(this.form.mobile)) {
+          this.$toast.fail("手机号有误");
+          return;
+        }
+        axios({
+          method: "post",
+          url: PASSOWRD,
+          data: {
+            mobile: this.form.mobile,
+            mobile_password: this.form.mobile_password
+          }
+        })
+          .then(res => {
+            if (res.data.error) {
+              this.$toast.fail(res.data.error);
+              return;
+            }
+            if (res.data.ret) {
+              this.$toast.success("登录成功");
+              storage.saveToken(res.data.data.token);
+              if (
+                JSON.stringify(storage.getRouter()) == "{}" ||
+                storage.getRouter() ==  "/login"
+              ) {
+                this.$router.push('/')
+              } else {
+                this.$router.push(storage.getRouter());
+              }
+            }
+          })
+          .catch(e => {
+            console.error(e);
+          });
+      } else {
+        if (!this.form.mobile) {
+          this.$toast.fail("手机号不能为空");
+          return;
+        }
+        if (!this.myreg.test(this.form.mobile)) {
+          this.$toast.fail("手机号有误");
+          return;
+        }
+        if (!this.form.passwordOne || !this.form.mobile_password) {
+          this.$toast.fail("密码不能为空");
+          return;
+        }
+        if (!this.form.password) {
+          this.$toast.fail("验证码不能为空");
+          return;
+        }
+        if (this.form.passwordOne != this.form.mobile_password) {
+          this.$toast.fail("两次密码不同");
+          return;
+        }
         axios({
           method: "post",
           url: UPDATEPASSWORD,
@@ -391,43 +465,7 @@ export default {
             }
             if (res.data.ret) {
               this.$toast.success("修改成功！");
-              if (this.$route.query.type == "bookcode") {
-                this.$router.push({ path: `/login/${this.$route.query.type}/${this.$route.query.uid}`,query:{promoter_id:this.location} });
-              } else {
-                this.$router.push("/login");
-              }
-            }
-          })
-          .catch(e => {
-            console.error(e);
-          });
-      } else {
-        axios({
-          method: "post",
-          url: SIGNIN,
-          data: {
-            mobile: this.form.mobile,
-            password: this.form.password,
-            mobile_password: this.form.mobile_password,
-            promoter_id:
-              typeof this.location != "undefined" ? this.location : ""
-          }
-        })
-          .then(res => {
-            if (res.data.error) {
-              this.$toast.fail(res.data.error);
-              return;
-            }
-            if (res.data.ret) {
-              this.$toast.success("注册成功！");
-              storage.saveToken(res.data.data);
-              if (this.$route.query.type == "bookcode") {
-                this.$router.push( {path: `/bookcode/${this.$route.query.uid}`} )
-                // this.$router.push({ path: `/login/${this.$route.query.type}/${this.$route.query.uid}`,query:{promoter_id:this.location} });
-              } else {
-                this.$router.push('/')
-                // this.$router.push("/login");
-              }
+              this.tab = 1;
             }
           })
           .catch(e => {
@@ -439,47 +477,18 @@ export default {
       if (!this.form.mobile || !this.myreg.test(this.form.mobile)) {
         this.$toast.fail("请填写正确的手机号码");
         return;
-      } else if (!this.form.passwordOne || !this.form.mobile_password) {
-        this.$toast.fail("密码不能为空");
-        return;
-      } else if (this.form.passwordOne != this.form.mobile_password) {
-        this.$toast.fail("两次密码不同");
-        return;
-      } else if (this.checkPwd(this.form.passwordOne) == "no") {
-        return;
       }
-      if (this.$route.params.id == 1) {
-        this.sendCode();
-      } else {
-        axios({
-          method: "post",
-          url: ISSIGNIN,
-          data: {
-            mobile: this.form.mobile
+      this.sendCode();
+      this.isSion = false;
+      if (!this.isSion) {
+        --this.num;
+        let set = window.setInterval(() => {
+          if (this.num-- <= 1) {
+            this.num = 100;
+            window.clearInterval(set);
+            this.isSion = true;
           }
-        })
-          .then(res => {
-            if (res.data.ret) {
-              this.$toast.fail("您已注册，请直接登陆");
-              return;
-            } else {
-              this.sendCode();
-              this.isSion = false;
-              if (!this.isSion) {
-                --this.num;
-                let set = window.setInterval(() => {
-                  if (this.num-- <= 1) {
-                    this.num = 100;
-                    window.clearInterval(set);
-                    this.isSion = true;
-                  }
-                }, 1000);
-              }
-            }
-          })
-          .catch(e => {
-            console.error(e);
-          });
+        }, 1000);
       }
     },
     //校验密码
@@ -510,15 +519,6 @@ export default {
 </script>
 
 <style scoped>
-.text .node {
-  color: #238acb;
-  font-size: 24px;
-}
-header .bei {
-  margin-top: -5.533333rem;
-  width: 100%;
-  position: relative;
-}
 ._v-container > ._v-content > .pull-to-refresh-layer {
   width: 100%;
   height: 120px;
@@ -533,8 +533,8 @@ header .bei {
 .colse {
   font-size: 50px;
   position: fixed;
-  top: 1.7rem;
-  right: 1.1rem;
+  top: 90px;
+  right: 36px;
   z-index: 99999;
 }
 .van-overlay {
@@ -547,10 +547,15 @@ header .bei {
   height: 14rem;
   width: 100%;
   background: #fff;
-  margin: 60px 80px;
+  margin: 30px;
+  padding: 1rem;
+}
+section > div.text > span.logintext {
+  color: #999;
 }
 section > div.text > span {
-  font-size: 24px;
+  font-size: 28px;
+  color: #ff6c00;
 }
 section > div.text > input.checkbox {
   width: 30px;
@@ -561,8 +566,59 @@ section > div.text {
   display: flex;
   justify-content: center;
   align-content: center;
-  margin: 20px 0 30px 0;
-  width: 548px;
+  margin: 20px 0;
+  margin-top: 120px;
+}
+div.code {
+  margin-top: 20px;
+  color: #ff6c00;
+  font-size: 30px;
+}
+.content p,
+.content span {
+  margin: 0 100px;
+}
+.content p {
+  font-size: 48px;
+  color: #333;
+  margin-top: 40px;
+}
+.content span {
+  color: #666;
+  font-size: 28px;
+  display: inline-block;
+  margin-top: 20px;
+  margin-bottom: 100px;
+}
+.content {
+  width: 100%;
+}
+.header > span {
+  font-size: 30px;
+  color: #333;
+  text-align: center;
+  flex: 1;
+  margin-left: -40px;
+}
+.header {
+  width: 100%;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  background: #fff;
+}
+.header-bottom {
+  height: 15px;
+  background: #f3f3f3;
+  width: 100%;
+}
+.header img {
+  width: 44px;
+  height: 24px;
+  transform: rotate(180deg);
+  margin-left: 40px;
+  width: 24px;
+  height: 40px;
 }
 section > div.btn > span {
   position: absolute;
@@ -574,6 +630,7 @@ section > div.btn {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 60px;
 }
 section > ul {
   margin-top: 40px;
@@ -589,8 +646,15 @@ ul li > span {
   top: -20px;
   font-size: 28px;
 }
-ul li:last-child {
-  position: relative;
+ul li > p {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: #ff6c00;
+  font-size: 30px;
+}
+ul li:first-child {
+  margin-bottom: 20px;
 }
 ul li {
   width: 548px;
@@ -598,6 +662,7 @@ ul li {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 input {
   border: none;

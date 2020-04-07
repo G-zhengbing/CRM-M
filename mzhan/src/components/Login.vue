@@ -1,50 +1,32 @@
 <template>
   <div class="box">
-    <header>
-      <img class="bei" src="../assets/img/bei5.png" alt />
-      <img class="login" src="../assets/img/login5.png" alt />
-    </header>
     <section>
-      <div class="tab">
-        <p :class="{active: tab == 1}" @click="setTab(1)">
-          <span>验证码登录</span>
-          <i style="width:70px;"></i>
-        </p>
-        <p :class="{active: tab == 2}" @click="setTab(2)">
-          <span>密码登录</span>
-          <i style="width:55px;"></i>
-        </p>
+      <div class="header">
+        <img @click="goHome" src="../assets/img/fan.png" alt />
+        <span>全品在线</span>
       </div>
-      <ul v-if=" tab == 1">
+      <div class="content">
+        <p>验证码登录</p>
+        <span>新用户登录后将自动创建账号</span>
+      </div>
+      <ul>
         <li>
           <input v-model="form.mobile" type="text" placeholder="请输入手机号" />
         </li>
         <li>
-          <input v-model="form.password" type="text" placeholder="请输入验证码" />
+          <input v-model="form.password" type="text" placeholder="短信验证码" />
           <span @click="sion" v-if="isSion">{{text}}</span>
           <span v-else>获取验证码({{num}})</span>
         </li>
       </ul>
-      <ul v-if=" tab == 2">
-        <li>
-          <input v-model="form.mobile" type="text" placeholder="请输入手机号" />
-        </li>
-        <li>
-          <input v-model="form.mobile_password" type="password" placeholder="请输入密码" />
-          <span @click="goSignin(1)">忘记密码?</span>
-        </li>
-      </ul>
-      <div class="text">
-        <input class="checkbox" type="checkbox" v-model="isChecked" />
-        <span style="flex:1;" @click="showText">《全品学堂用户协议》</span>
-        <span @click="goSignin(2)" class="node">
-          没有账号?
-          <span style="color:#238ACB;">立即注册</span>
-        </span>
-      </div>
       <div class="btn" @click="Login">
         <span>登录</span>
         <img src="../assets/img/login4.png" alt />
+      </div>
+      <div @click="goSignin()" class="password">密码登录</div>
+      <div class="text">
+        <span class="logintext">登录即代表你已阅读并同意</span>
+        <span style="flex:1;" @click="showText">《全品学堂用户协议》</span>
       </div>
     </section>
     <van-overlay :show="isModel">
@@ -296,7 +278,7 @@
 <script>
 import axios from "axios";
 import storage from "../uilt/storage";
-import { SEND, REPID, PASSOWRD, ISSIGNIN } from "../uilt/url";
+import { SEND, SIGNIN } from "../uilt/url";
 import { mapMutations } from "vuex";
 export default {
   mounted() {
@@ -322,34 +304,19 @@ export default {
   },
   methods: {
     ...mapMutations(["steGiweStatus"]),
-    setTab(num) {
-      this.tab = num;
-    },
-    goSignin(num) {
-      if (num == 1) {
-        this.$router.push({ path: `/signin/${num}` });
-      } else {
-        if (this.$route.params.type == "bookcode") {
-          
-          this.$router.push({
-            path: `/signin/${num}`,
-            query:{
-              promoter_id:this.location.split('%')[0],
-              type:"bookcode",
-              uid:this.uid
-            }
-          });
-        } else {
-          this.$router.push({ path: `/signin/${num}` });
-        }
-      }
-    },
     //关闭协议
     close() {
       this.isModel = false;
     },
     showText() {
       this.isModel = true;
+    },
+    goHome() {
+      this.$router.push(storage.getRouter());
+    },
+    goSignin() {
+      storage.saveLogin(this.$route.fullPath);
+      this.$router.push(`/signin/2`);
     },
     //发送验证码
     sendCode() {
@@ -376,6 +343,25 @@ export default {
     },
     //登录
     Login() {
+      var promoterId = "";
+      var Uid = "";
+      if (typeof this.uid != "undefined") {
+        Uid = this.uid;
+      }
+      if (window.location.hash.split("?").length > 1) {
+        if (window.location.hash.split("?")[1].split("=")[0] == "promoter_id") {
+          promoterId = window.location.hash.split("?")[1].split("=")[1].split('&')[0];
+        }
+      }
+      if (
+        JSON.stringify(storage.getRouter()) != "{}" &&
+        storage.getRouter().split("?").length > 1
+      ) {
+        promoterId = storage
+          .getRouter()
+          .split("?")[1]
+          .split("=")[1].split('&')[0];
+      }
       if (!this.form.mobile) {
         this.$toast.fail("手机号不能为空");
         return;
@@ -390,85 +376,47 @@ export default {
           return;
         }
       }
-      if (!this.isChecked) {
-        this.$toast.fail("请认真阅读协议");
-        return;
-      }
-      if (this.tab == 2) {
-        axios({
-          method: "post",
-          url: PASSOWRD,
-          data: {
-            mobile: this.form.mobile,
-            mobile_password: this.form.mobile_password
+      axios({
+        method: "post",
+        url: SIGNIN,
+        data: {
+          mobile: this.form.mobile,
+          password: this.form.password,
+          product_id: Uid,
+          promoter_id: promoterId
+        }
+      })
+        .then(res => {
+          if (res.data.error) {
+            this.$toast.fail(res.data.error);
+            return;
           }
-        })
-          .then(res => {
-            if (res.data.error) {
-              this.$toast.fail(res.data.error);
-              return;
-            }
-            if (res.data.ret) {
-              this.$toast.success("登录成功");
-              storage.saveToken(res.data.data.token);
-              if (this.$route.params.type == "bookcode") {
-                this.$router.push({
-                  path: `/bookcode/${this.uid}`
-                });
-              } else {
-                this.$router.push("/");
-              }
-            }
-          })
-          .catch(e => {
-            console.error(e);
-          });
-      } else {
-        axios({
-          method: "post",
-          url: ISSIGNIN,
-          data: {
-            mobile: this.form.mobile
-          }
-        })
-          .then(res => {
-            if (res.data.ret) {
-              axios({
-                method: "post",
-                url: REPID,
-                data: {
-                  mobile: this.form.mobile,
-                  password: this.form.password
-                }
-              })
-                .then(res => {
-                  if (res.data.error) {
-                    this.$toast.fail(res.data.error);
-                    return;
-                  }
-                  if (res.data.ret) {
-                    this.$toast.success("登录成功");
-                    storage.saveToken(res.data.data.token);
-                    if (this.$route.params.type == "bookcode") {
-                      this.$router.push({
-                        path: `/bookcode/${this.uid}`
-                      });
-                    } else {
-                      this.$router.push("/");
-                    }
-                  }
-                })
-                .catch(e => {
-                  console.error(e);
-                });
+          if (res.data.ret && this.uid) {
+            this.$toast.success("成功领取课程开始学习吧!");
+            storage.saveToken(res.data.data);
+            if (JSON.stringify(storage.getRouter()) == "{}") {
+              this.$router.push("/");
             } else {
-              this.$toast.fail(res.data.error);
+              this.$router.push(storage.getRouter());
             }
-          })
-          .catch(e => {
-            console.error(e);
-          });
-      }
+            return;
+          }
+          if (res.data.ret) {
+            this.$toast.success("登录成功");
+            storage.saveToken(res.data.data);
+            if (
+              JSON.stringify(storage.getRouter()) == "{}" ||
+              storage.getRouter() == "/login"
+            ) {
+              this.$router.push("/");
+            } else {
+              this.$router.push(storage.getRouter());
+            }
+          }
+        })
+        .catch(e => {
+          console.error(e);
+        });
     },
     sion() {
       if (!this.form.mobile || !this.myreg.test(this.form.mobile)) {
@@ -493,43 +441,6 @@ export default {
 </script>
 
 <style scoped>
-.tab > p.active > span {
-  color: #333;
-}
-.tab > p.active > i {
-  background: #ff6600;
-}
-.tab > p > i {
-  width: 50px;
-  height: 3px;
-}
-.tab > p {
-  font-size: 28px;
-  flex: 1;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: #999;
-}
-.tab {
-  width: 7.306667rem;
-  height: 60px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 40px;
-}
-.text .node {
-  color: #999;
-  font-size: 24px;
-}
-header .bei {
-  margin-top: -5.533333rem;
-  width: 100%;
-  position: relative;
-}
 ._v-container > ._v-content > .pull-to-refresh-layer {
   width: 100%;
   height: 120px;
@@ -561,8 +472,12 @@ header .bei {
   margin: 30px;
   padding: 1rem;
 }
+section > div.text > span.logintext {
+  color: #999;
+}
 section > div.text > span {
-  font-size: 24px;
+  font-size: 28px;
+  color: #ff6c00;
 }
 section > div.text > input.checkbox {
   width: 30px;
@@ -574,7 +489,58 @@ section > div.text {
   justify-content: center;
   align-content: center;
   margin: 20px 0;
-  width: 548px;
+  margin-top: 120px;
+}
+.content p,
+.content span {
+  margin: 0 100px;
+}
+.content p {
+  font-size: 48px;
+  color: #333;
+  margin-top: 40px;
+}
+.content span {
+  color: #666;
+  font-size: 28px;
+  display: inline-block;
+  margin-top: 20px;
+  margin-bottom: 100px;
+}
+.content {
+  width: 100%;
+}
+.header > span {
+  font-size: 30px;
+  color: #333;
+  text-align: center;
+  flex: 1;
+  margin-left: -40px;
+}
+.header {
+  width: 100%;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  background: #fff;
+}
+.header-bottom {
+  height: 15px;
+  background: #f3f3f3;
+  width: 100%;
+}
+.header img {
+  width: 44px;
+  height: 24px;
+  transform: rotate(180deg);
+  margin-left: 40px;
+  width: 24px;
+  height: 40px;
+}
+div.password {
+  margin-top: 20px;
+  color: #ff6c00;
+  font-size: 30px;
 }
 section > div.btn > span {
   position: absolute;
@@ -586,15 +552,19 @@ section > div.btn {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 50px;
+  margin-top: 100px;
+  flex-direction: column;
 }
 section > ul {
   margin-top: 20px;
 }
+ul li:first-child {
+  margin-bottom: 20px;
+}
 ul li > span {
   position: absolute;
   right: 0;
-  color: #238acb;
+  color: #333;
   padding-top: 0px;
   display: inline-block;
   height: 100%;
@@ -635,12 +605,6 @@ header img.login {
   width: 100%;
   position: absolute;
   transform: scale(0.45);
-}
-header {
-  height: 8.826667rem;
-  overflow: hidden;
-  /* position: relative; */
-  width: 100%;
 }
 .box {
   display: flex;

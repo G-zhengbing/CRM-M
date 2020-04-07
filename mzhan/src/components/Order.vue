@@ -152,7 +152,11 @@ export default {
       return null;
     },
     goBank() {
-      this.$router.push({ path: `/home/databank/${this.item}` });
+      if (storage.getTowOrder() == 'databank') {
+        this.$router.push({ path: `/home/databank/${this.item}` });
+      } else if (JSON.stringify(storage.getRouter()) != "{}") {
+        this.$router.push(storage.getRouter());
+      }
     },
     //收货地址列表
     getAddressList() {
@@ -171,10 +175,6 @@ export default {
                 this.address = i;
               }
               return this.address;
-              // console.log(this.$route.params.id)
-              // if(i.id == this.$route.params.id){
-              //   this.address = i
-              // }
             });
             resolve();
           })
@@ -218,7 +218,7 @@ export default {
         storage.clear();
         return;
       }
-      if (this.list.type == 1) {
+      if (this.list.is_address == 1) {
         if (JSON.stringify(this.address) == "{}") {
           this.$notify({ type: "warning", message: "请选择收货地址" });
           return;
@@ -231,32 +231,6 @@ export default {
       if (this.ischecked) {
         var url = "";
         payz = "aliyun";
-
-        // url = `http://liveh5.canpoint.net/create_order?product_id=${this.list.id}&address_id=${this.address.id}&pay_type=aliyun`;
-        // this.ajax(url);
-        // return
-        // store.commit("setpayType", this.ajax(url));
-        // this.$router.push("/paygateway");
-        // axios({
-        //   method: "get",
-        //   url:
-        //     ORDER +
-        //     "?product_id=" +
-        //     this.list.id +
-        //     "&address_id=" +
-        //     this.address.id +
-        //     "&pay_type=" +
-        //     payz,
-        //   headers: {
-        //     Authorization: "bearer" + storage.getToken()
-        //   }
-        // }).then(res => {
-        //   alert(res);
-        //   return;
-        //   store.commit("setpayType", res);
-        //   this.$router.push("/paygateway");
-        // });
-        // return;
       } else {
         payz = "";
       }
@@ -417,6 +391,7 @@ export default {
           }
         })
           .then(res => {
+            console.log(res)
             this.list = res.data.data;
             resolve();
           })

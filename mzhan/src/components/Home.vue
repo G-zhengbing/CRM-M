@@ -60,8 +60,8 @@
               </div>
             </div>
             <span class="zhi-money">
-              <span>￥</span>
-              {{item.activity_price}}
+              <span v-if="item.activity_price != '0.00'">￥</span>
+              {{item.activity_price == '0.00' ? '免费' :item.activity_price}}
             </span>
           </li>
         </ul>
@@ -144,8 +144,8 @@
               <i v-if="item.update_state == 1">更新中</i>
               <i v-if="item.update_state == 2">已完结</i>
               <span>
-                <span>￥</span>
-                {{item.activity_price == "0.00"?item.sale_price:item.activity_price}}
+                <span v-if="item.activity_price != '0.00'">￥</span>
+                {{item.activity_price == "0.00"? '免费' :item.activity_price}}
               </span>
             </div>
           </li>
@@ -245,8 +245,10 @@ export default {
   methods: {
     isLogin(item) {
       if (JSON.stringify(storage.getToken()) == "{}") {
-        this.$router.push("/login");
-        storage.clear();
+        storage.saveRouter(this.$route.fullPath);
+        this.$router.push({
+          path: `/login`
+        });
         return;
       } else {
         this.$router.push({ path: `/data/databanklist/${item.id}` });
@@ -284,34 +286,34 @@ export default {
     //个人中心
     goPar() {
       if (JSON.stringify(storage.getToken()) == "{}") {
-        this.$router.push("/login");
-        storage.clear();
+        storage.saveRouter(this.$route.fullPath);
+        this.$router.push({
+          path: `/login`
+        });
         return;
       }
       this.$router.push("/personage");
     },
     //资料
     goData() {
-      if (JSON.stringify(storage.getToken()) == "{}") {
-        this.$router.push("/login");
-        storage.clear();
-        return;
-      }
-      this.$router.push("/data");
+      // this.$router.push("/data?&");
+      window.location.href = "http://www.quanpinzaixian.com/#/data"
     },
     //微课
     goSmall() {
-      this.$router.push("/smallclass");
+      // this.$router.push("/smallclass?&");
+      window.location.href = "http://www.quanpinzaixian.com/#/smallclass"
     },
     //课程
     goCourse() {
-      // this.$router.push('/seclcen')
+      this.$router.push('/seclcen')
     },
     goXiangqing(item) {
       storage.saveEnterTYpe("HOME");
-      storage.clearSmall();
+      // storage.clearSmall();
       storage.save(item);
-      this.$router.push({ path: `/home/databank/${item}` });
+      window.location.href = `http://www.quanpinzaixian.com/#/home/databank/${item}`
+      // this.$router.push({ path: `/home/databank/${item}?&` });
     },
     //登陆
     goLogin() {
@@ -373,7 +375,10 @@ export default {
     },
     goDatabank() {
       if (JSON.stringify(storage.getToken()) == "{}") {
-        this.$router.push("/login");
+        storage.saveRouter(this.$route.fullPath);
+        this.$router.push({
+          path: `/login`
+        });
       } else {
         this.$router.push("/data");
       }
@@ -648,9 +653,13 @@ footer div {
   font-size: 20px;
   margin-left: 10px;
 }
+.title-top span {
+  display: inline-block;
+}
 .title-top {
   display: flex;
-  align-items: center;
+  margin-bottom: 20px;
+  align-items: baseline;
 }
 .title {
   padding: 20px;
@@ -659,7 +668,6 @@ footer div {
   width: 3.778rem;
   height: 0.32rem;
   color: #333;
-  margin-top: 8px;
   font-size: 22px;
   margin-left: 20px;
   line-height: 20px;
@@ -694,10 +702,10 @@ footer div {
   display: flex;
   flex-direction: column;
 }
-.class li:last-child .classify{
+.class li:last-child .classify {
   width: 100%;
 }
-.class li:last-child{
+.class li:last-child {
   margin-right: 0;
 }
 .class.weiclass {

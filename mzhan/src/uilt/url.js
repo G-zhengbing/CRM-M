@@ -24,15 +24,17 @@ const ADDSITE = "http://liveh5.canpoint.net/create_address" //新建地址
 const ADDRESS = "http://liveh5.canpoint.net/address_list" //地址列表
 const DELADDRESS = "http://liveh5.canpoint.net/update_address" //删除/修改地址
 
-const SMALL = "http://liveh5.canpoint.net/subject_list?type=2" //免费课程列表
+const SMALL = "http://liveh5.canpoint.net/subject_list" //免费课程列表
 
-const DOWNSPOUT = "http://liveh5.canpoint.net/book"//落地页
+const DOWNSPOUT = "http://liveh5.canpoint.net/book_info"//落地页
 const VIDEO_LIST = "http://liveh5.canpoint.net/book_video"//视频列表页
 const CLASS_LIST = "http://liveh5.canpoint.net/book_video"//课
 
 const POINTS = "http://liveh5.canpoint.net/material_view" //资料埋点
 const CLASS = "http://liveh5.canpoint.net/me_course_list" //我的课表
+const COUNT = "http://liveapi.canpoint.net/api/report_count" //上报统计
 export {
+  COUNT,
   CLASS,
   POINTS,
   CLASS_LIST,

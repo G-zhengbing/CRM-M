@@ -1,72 +1,119 @@
 <template>
   <div class="box">
-    <scroller>
+    <scroller class="scrollerStyle" :on-infinite="infinite" :on-refresh="refresh" ref="myscroller">
       <div class="header">
         <img @click="goHome" src="../../assets/img/fan.png" alt />
         <span>选课中心</span>
       </div>
-      <div class="header-bottom">
-        <p>选择年级</p>
-        <p>正在招生</p>
-      </div>
-      <van-tabs @click="onClick">
-        <van-tab title="数学">
-          <ul>
-            <li>
-              <div class="title">
-                <div class="title-top">
-                  <span class="tag">数学</span>
-                  <span class="classify">初一数学春季班</span>
-                </div>
-								<div class="title-bottom">
-									<p>2020-02-06～2020-02-20</p>
-									<p>
-										<span>每周五</span> <i>10:30～12:00</i>
-									</p>
-								</div>
-              </div>
-              <div class="money">
-								<img src="../../assets/logo.png" alt="">
-								<i>111</i>
-                <!-- <i v-if="item.update_state == 1">更新中</i>
-                <i v-if="item.update_state == 2">已完结</i> -->
-                <span>
-                  <span>￥</span>
-									{{1111}}
-                  <!-- {{item.activity_price == "0.00"?item.sale_price:item.activity_price}} -->
-                </span>
-              </div>
-            </li>
-            <!-- <li @click="goXiangqing(item.id)" v-for="(item,i) in smallList">
-              <div class="title">
-                <div class="title-top">
-                  <span class="tag">{{item.subject}}</span>
-                  <span class="classify">{{item.course_name}}</span>
-                </div>
-              </div>
-              <div class="money">
-                <i v-if="item.update_state == 1">更新中</i>
-                <i v-if="item.update_state == 2">已完结</i>
-                <span>
-                  <span>￥</span>
-                  {{item.activity_price == "0.00"?item.sale_price:item.activity_price}}
-                </span>
-              </div>
-            </li>-->
-          </ul>
-        </van-tab>
-        <van-tab title="语文">内容 2</van-tab>
-        <van-tab title="英语">内容 3</van-tab>
-        <van-tab title="物理">内容4</van-tab>
-        <van-tab title="地理">内容 5</van-tab>
-      </van-tabs>
+      <ul>
+        <li @click="goXiangqing(item.id)" v-for="(item,i) in data">
+          <div class="title">
+            <div class="title-top">
+              <span class="tag">{{item.subject}}</span>
+              <span class="classify">{{item.course_name}}</span>
+            </div>
+          </div>
+          <div class="money">
+            <i v-if="item.update_state == 1">更新中</i>
+            <i v-if="item.update_state == 2">已完结</i>
+            <span>
+              <span>￥</span>
+              {{item.activity_price == "0.00"?item.sale_price:item.activity_price}}
+            </span>
+          </div>
+        </li>
+      </ul>
     </scroller>
+    <Loading v-if="showLoading" />
   </div>
 </template>
 
 <script>
+import axios from "axios";
+import { SMALL } from "../../uilt/url";
+import storage from "../../uilt/storage";
+import Loading from "../../uilt/loading/Loading";
 export default {
+  components: {
+    Loading
+  },
+  mounted() {
+    this.currentPage = 1
+    this.showLoading = true;
+    this.getSeclcenList().then(() => {
+      this.showLoading = false;
+    });
+  },
+  data() {
+    return {
+      lastPage: false,
+      currentPage: 1,
+      pageSize: 10,
+      total: 0,
+      showLoading: false,
+      data: []
+    };
+  },
   methods: {
+    goXiangqing(uid){
+      storage.saveEnterTYpe("SECLCEN")
+      this.$router.push({ path: `/home/databank/${uid}` });
+    },
+    //下拉刷新
+    refresh() {
+      var that = this;
+      this.currentPage = 1;
+      this.lastPage = false;
+      this.getSeclcenList().then(() => {
+        that.$refs.myscroller.finishPullToRefresh();
+      });
+    },
+    //上拉加载
+    infinite(done) {
+      if (this.lastPage) {
+        this.$refs.myscroller.finishInfinite(true);
+      } else {
+        this.currentPage++;
+        this.getSeclcenList().then(() => {
+          done();
+        });
+      }
+    },
+    getSeclcenList() {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "get",
+          url: SMALL,
+          headers: {
+            Authorization: "bearer" + storage.getToken()
+          },
+          params: {
+            type: 1,
+            page: this.currentPage,
+            bendi: 1
+          }
+        })
+          .then(res => {
+            this.currentPage = res.data.data.links.current_page;
+            this.pageSize = res.data.data.links.per_page;
+            this.total = res.data.data.links.total;
+            if (
+              res.data.data.links.current_page == res.data.data.links.last_page
+            ) {
+              this.lastPage = true;
+            }
+            if (this.currentPage == 1) {
+              this.data = res.data.data.data;
+            } else {
+              this.data = this.data.concat(res.data.data.data);
+            }
+            resolve();
+          })
+          .catch(e => {
+            reject(e);
+          });
+      });
+    },
     onClick(name, title) {
       this.$toast(title);
     },
@@ -78,16 +125,6 @@ export default {
 </script>
 
 <style scoped>
-.money img{
-	width: 60px;
-	height: 60px;
-	border-radius: 50%;
-	margin-left: 30px;
-}
-.title-bottom p{
-	color: #999;
-	margin: 20px 0 20px 10px;
-}
 .money > span {
   margin-right: 20px;
   font-size: 24px;
@@ -95,21 +132,19 @@ export default {
 }
 .money > i {
   font-size: 20px;
-  color: #333;
+  color: #999;
   font-style: normal;
   display: inline-block;
   margin-right: 20px;
   flex: 1;
-  margin-left: 20px;
+  margin-left: 30px;
 }
 .money {
   flex: 1;
   display: flex;
-	align-items: center;
-	border-top: 1px solid #DCDCDC;
+  align-items: center;
 }
 .classify {
-  width: 3.778rem;
   height: 0.32rem;
   color: #333;
   margin-top: 8px;
@@ -144,7 +179,7 @@ ul {
 }
 li {
   width: 100%;
-  height: 280px;
+  height: 2.266667rem;
   background: #fff;
   border-radius: 0.126667rem;
   position: relative;
@@ -165,9 +200,6 @@ li {
 }
 li:first-child {
   margin-top: 30px;
-}
-i {
-  font-style: normal;
 }
 .header-bottom p:last-child {
   margin: 20px 40px 20px 20px;

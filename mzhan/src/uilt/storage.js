@@ -11,8 +11,49 @@ const SMALL = "SMALL"
 const ACTIVEBOOK = "ACTIVEBOOK"
 const ENTERTYPE = "ENTERTYPE"
 const REURL = "REURL"
+const ROUTER = "ROUTER"
+const LOGIN ="LOGIN"
+const TWOORDER = "TWOORDER"
+const PERSONAGELIST = "PERSONAGELIST"
+const BOOKCODEUID  = "BOOKCODEUID"
 
 export default {
+  getBookcodeUid(){
+    return JSON.parse(SESSION.getItem(BOOKCODEUID) || "{}")
+  },
+  saveBookcodeUid(todo){
+    SESSION.setItem(BOOKCODEUID, JSON.stringify(todo))
+  },
+  getPersonageList(){
+    return JSON.parse(SESSION.getItem(PERSONAGELIST) || "{}")
+  },
+  savePersonageList(todo){
+    SESSION.setItem(PERSONAGELIST, JSON.stringify(todo))
+  },
+  getTowOrder(){
+    return JSON.parse(SESSION.getItem(TWOORDER) || "{}")
+  },
+  saveTowOrder(todo){
+    SESSION.setItem(TWOORDER, JSON.stringify(todo))
+  },
+  getLogin(){
+    return JSON.parse(SESSION.getItem(LOGIN) || "{}")
+  },
+  saveLogin(todo){
+    SESSION.setItem(LOGIN, JSON.stringify(todo))
+  },
+  getLogin(){
+    return JSON.parse(SESSION.getItem(LOGIN) || "{}")
+  },
+  saveLogin(todo){
+    SESSION.setItem(LOGIN, JSON.stringify(todo))
+  },
+  getRouter(){
+    return JSON.parse(SESSION.getItem(ROUTER) || "{}")
+  },
+  saveRouter(todo){
+    SESSION.setItem(ROUTER, JSON.stringify(todo))
+  },
   getReurl(){
     return JSON.parse(SESSION.getItem(REURL) || "{}")
   },
@@ -26,10 +67,10 @@ export default {
     SESSION.setItem(ENTERTYPE, JSON.stringify(todo))
   },
   getBook(){
-    return JSON.parse(LOCAL.getItem(ACTIVEBOOK) || '{}')
+    return JSON.parse(SESSION.getItem(ACTIVEBOOK) || '{}')
   },
   saveBook(todo){
-    LOCAL.setItem(ACTIVEBOOK, JSON.stringify(todo))
+    SESSION.setItem(ACTIVEBOOK, JSON.stringify(todo))
   },
   clearSmall(){
     LOCAL.clear(SMALL)
@@ -53,10 +94,10 @@ export default {
     SESSION.setItem(FILE, JSON.stringify(todo))
   },
   getToken(){
-	return JSON.parse(SESSION.getItem(TOKEN) || '{}')
+	return JSON.parse(LOCAL.getItem(TOKEN) || '{}')
   },
   saveToken(todo){
-	SESSION.setItem(TOKEN, JSON.stringify(todo))
+    LOCAL.setItem(TOKEN, JSON.stringify(todo))
   },
   getDraw(){
 	return JSON.parse(SESSION.getItem(DRAW) || '{}')
