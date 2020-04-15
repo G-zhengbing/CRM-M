@@ -137,6 +137,7 @@ import axios from "axios";
 import storage from "../uilt/storage";
 import store from "../store";
 import { DRAW, GETDRAW, ISGETDRAW, DATALISTS } from "../uilt/url";
+// import wx from 'weixin-js-sdk'
 export default {
   components: {
     Loading
@@ -185,9 +186,9 @@ export default {
     goHome() {
       // console.log(!storage.getEnterType())
       // return
-      // if (JSON.stringify(storage.getEnterType()) == "{}") {
-      //   this.$router.push("/");
-      // } else {
+      if (JSON.stringify(storage.getEnterType()) == "{}") {
+        this.$router.push("/");
+      } else {
         if (storage.getEnterType() == "HOME") {
           this.$router.push("/");
         } else if (storage.getEnterType() == "SECLCEN") {
@@ -199,7 +200,7 @@ export default {
         } else if (storage.getEnterType().split("/")[1] == "bookcode") {
           this.$router.push(storage.getEnterType());
         }
-      // }
+      }
       // storage.clear()
       // if(JSON.stringify(storage.getSmall()) != "{}"){
       //   this.$router.push("/smallclass")
@@ -376,13 +377,6 @@ export default {
       }
       if (isWeixin) {
         window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${store.state.appid}&redirect_uri=${encode}&response_type=code&scope=snsapi_base&state=123#wechat_redirect`;
-        // this.$router.push({path:`/callback/${this.item}`})
-        // window.location.href =
-        //   "http://liveh5.canpoint.net/code.php?product_id=" + this.item;
-        // var reurl = window.location.href.split("?")[1].split("=")[1];
-        // store.commit("setCode", reurl);
-        // alert(reurl)
-        // alert(store.state.code)
       } else {
         this.$router.push({ path: `/order/${this.item}` });
       }
@@ -392,6 +386,9 @@ export default {
 </script>
 
 <style scoped>
+.content>p>img{
+  width: 100%!important;
+}
 .video > img.click {
   position: absolute;
   width: 80px;

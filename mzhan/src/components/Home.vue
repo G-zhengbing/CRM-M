@@ -296,13 +296,13 @@ export default {
     },
     //资料
     goData() {
-      // this.$router.push("/data?&");
-      window.location.href = "http://www.quanpinzaixian.com/#/data"
+      // this.$router.push("/data?from=singlemessage&isappinstalled=0");
+      window.location.href = "http://www.quanpinzaixian.com/?from=singlemessage&isappinstalled=0#/data"
     },
     //微课
     goSmall() {
-      // this.$router.push("/smallclass?&");
-      window.location.href = "http://www.quanpinzaixian.com/#/smallclass"
+      // this.$router.push("/smallclass?from=singlemessage&isappinstalled=0");
+      window.location.href = "http://www.quanpinzaixian.com/?from=singlemessage&isappinstalled=0#/smallclass"
     },
     //课程
     goCourse() {
@@ -312,8 +312,8 @@ export default {
       storage.saveEnterTYpe("HOME");
       // storage.clearSmall();
       storage.save(item);
-      window.location.href = `http://www.quanpinzaixian.com/#/home/databank/${item}`
-      // this.$router.push({ path: `/home/databank/${item}?&` });
+      window.location.href = `http://www.quanpinzaixian.com/?from=singlemessage&isappinstalled=0#/home/databank/${item}`
+      // this.$router.push({ path: `/home/databank/${item}?from=singlemessage&isappinstalled=0` });
     },
     //登陆
     goLogin() {
@@ -577,7 +577,7 @@ footer div {
   transform: scale(1.02);
 }
 .teaching {
-  height: 996px;
+  /* height: 996px; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -585,6 +585,7 @@ footer div {
   background: #fff;
   border-radius: 10px;
   margin-top: 0.233333rem;
+  height: 100%;
 }
 .selected-footer img {
   width: 690px;
@@ -619,7 +620,7 @@ footer div {
   flex-direction: column;
   background: #fff;
   border-radius: 10px;
-  height: 520px;
+  height: 100%;
 }
 .money > span {
   margin-right: 20px;
@@ -853,6 +854,7 @@ footer {
   justify-content: center;
   align-items: center;
   z-index: 99999;
+  width: 100%;
 }
 footer.images {
   display: none;

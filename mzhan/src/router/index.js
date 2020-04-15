@@ -26,6 +26,7 @@ const callback = ()=>import("@/components/callback/callback")
 const payGateWay = ()=>import("../uilt/pay/payGateWay")
 const Seclcen = ()=>import("@/components/seleclasscenter/Seclcen")
 const PersonageList = ()=>import("@/components/PersonageList")
+const Personageorder = ()=>import("@/components/Personageorder")
 
 Vue.use(Router)
 
@@ -141,6 +142,11 @@ const router = new Router({
     {
       path:'/seclcen',
       component:Seclcen
+    },
+    {
+      path:'/personageorder/:id',
+      name:"Personageorder",
+      component:Personageorder
     }
   ]
 })

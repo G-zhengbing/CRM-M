@@ -6,7 +6,7 @@
         <span>确认订单</span>
       </div>
       <div class="contanner">
-        <div class="address" v-if="list.is_address == 1" @click="goPersonage">
+        <div class="address" v-if="product.is_address == 1" @click="goPersonage">
           <img class="ding" src="../assets/img/zu (1).png" alt />
           <div class v-if="JSON.stringify(this.address) == '{}'">请填写正确的收货地址</div>
           <div class="addsite" v-else>
@@ -24,12 +24,12 @@
           <li>
             <div>
               <div>
-                <span>{{list.subject}}</span>
-                <p>{{list.course_name}}</p>
+                <span>{{product.subject}}</span>
+                <p>{{product.course_name}}</p>
               </div>
-              <p v-if="list.type == 1">{{list.start_date}} - {{list.end_date}}</p>
-              <p v-if="list.update_state ==1">更新中</p>
-              <p v-if="list.update_state ==2">已完结</p>
+              <p v-if="product.type == 1">{{product.start_date}} - {{product.end_date}}</p>
+              <p v-if="product.update_state ==1">更新中</p>
+              <p v-if="product.update_state ==2">已完结</p>
             </div>
           </li>
         </ul>
@@ -37,16 +37,16 @@
           <div>
             <div class="trade-money">
               <i>商品金额</i>
-              <span>￥{{list.sale_price}}</span>
+              <span>￥{{order.order_amount}}</span>
             </div>
             <div class="privilege-money">
               <i>优惠金额</i>
-              <span>￥{{list.activity_price}}</span>
+              <span>￥{{order.discount_amount}}</span>
             </div>
             <div class="true-money">
               <p>
-                <span>共1件,总价:</span>
-                ￥{{list.activity_price}}
+                <span>共{{order.goods_num?order.goods_num:1}}件,总价:</span>
+                ￥{{order.pay_amount}}
               </p>
             </div>
           </div>
@@ -75,8 +75,8 @@
     </section>
     <footer>
       <p>
-        <span>共1件,订单总价:</span>
-        ￥{{list.activity_price}}
+        <span>共{{order.goods_num?order.goods_num:1}}件,订单总价:</span>
+        ￥{{order.pay_amount}}
       </p>
       <span @click="goOrder">立即支付</span>
     </footer>
@@ -98,7 +98,7 @@
 <script>
 import wx from "weixin-jsapi";
 import Loading from "../uilt/loading/Loading";
-import { DATALISTS, ORDER, ADDRESS } from "../uilt/url";
+import { DATALISTS, ORDER, ADDRESS, ORDERDATA } from "../uilt/url";
 import storage from "../uilt/storage";
 import axios from "axios";
 import store from "../store";
@@ -110,6 +110,8 @@ export default {
   },
   data() {
     return {
+      order: {},
+      product: {},
       isWeixin: "",
       ischecked: false,
       ischeck: true,
@@ -118,7 +120,7 @@ export default {
       addsite: storage.getAddsite(),
       showLoading: false,
       isOrder: false,
-      list: [],
+      list: {},
       orders: [],
       item: this.$route.params.id,
       html: "",
@@ -128,11 +130,12 @@ export default {
   mounted() {
     var ua = navigator.userAgent.toLowerCase();
     this.isWeixin = ua.indexOf("micromessenger") != -1;
-    this.showLoading = true;
     this.getAddressList();
-    this.getOrderList().then(() => {
-      this.showLoading = false;
-    });
+    if (storage.getTowOrder() == "databank") {
+      this.getOrderData();
+    } else if (storage.getTowOrder() == "personage") {
+      this.getOrderList();
+    }
   },
   methods: {
     check() {
@@ -152,8 +155,10 @@ export default {
       return null;
     },
     goBank() {
-      if (storage.getTowOrder() == 'databank') {
+      if (storage.getTowOrder() == "databank") {
         this.$router.push({ path: `/home/databank/${this.item}` });
+      }else if(storage.getTowOrder() == "personage"){
+        this.$router.push('/personage')
       } else if (JSON.stringify(storage.getRouter()) != "{}") {
         this.$router.push(storage.getRouter());
       }
@@ -189,23 +194,6 @@ export default {
     close() {
       this.isOrder = false;
     },
-    ajax(url) {
-      var xhr = window.XMLHttpRequest
-        ? new XMLHttpRequest()
-        : ActiveXObject("microsoft.XMLHttp");
-      xhr.open("get", url, true);
-      xhr.setRequestHeader("Authorization", "bearer" + storage.getToken());
-      xhr.send();
-      xhr.onreadysattechange = () => {
-        if (xhr.readystate == 4) {
-          if (xhr.status == 200) {
-            var data = xhr.responseTEXT;
-            store.commit("setpayType", data);
-            this.$router.push("/paygateway");
-          }
-        }
-      };
-    },
     //支付
     goOrder() {
       var ua = navigator.userAgent.toLowerCase();
@@ -235,7 +223,7 @@ export default {
         payz = "";
       }
       this.showLoading = true;
-      if (this.$route.params.order_sn) {
+      if (storage.getTowOrder() == "personage") {
         return new Promise((resolve, reject) => {
           axios({
             method: "get",
@@ -244,7 +232,7 @@ export default {
               "?product_id=" +
               this.list.id +
               "&order_sn=" +
-              this.$route.params.order_sn +
+              this.item +
               "&address_id=" +
               this.address.id +
               "&code=" +
@@ -381,7 +369,8 @@ export default {
         });
       }
     },
-    getOrderList() {
+    getOrderData() {
+      this.showLoading = true;
       return new Promise((resolve, reject) => {
         axios({
           method: "get",
@@ -391,11 +380,41 @@ export default {
           }
         })
           .then(res => {
-            console.log(res)
-            this.list = res.data.data;
+            this.order.order_amount = res.data.data.sale_price;
+            this.order.discount_amount = res.data.data.activity_price;
+            this.order.pay_amount = res.data.data.activity_price;
+            this.product = res.data.data;
+            this.list.id = res.data.data.id
+            this.list.is_address = res.data.data.is_address
+            this.showLoading = false;
             resolve();
           })
           .catch(e => {
+            this.showLoading = false;
+            reject(e);
+          });
+      });
+    },
+    getOrderList() {
+      this.showLoading = true;
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "get",
+          url: ORDERDATA + "?order_sn=" + this.item,
+          headers: {
+            Authorization: "bearer" + storage.getToken()
+          }
+        })
+          .then(res => {
+            this.order = res.data.data.order;
+            this.product = res.data.data.product;
+            this.list.id = res.data.data.product.id
+            this.list.is_address = res.data.data.product.is_address
+            this.showLoading = false;
+            resolve();
+          })
+          .catch(e => {
+            this.showLoading = false;
             reject(e);
           });
       });

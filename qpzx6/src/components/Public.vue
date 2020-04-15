@@ -1,0 +1,276 @@
+<template>
+  <div class="box">
+    <DaibanMessage v-if="show" :type="type" />
+    <header class="main-header">
+      <ul>
+        <li style="margin-left:30px">
+          <!-- <i></i> -->
+          <span>公共资源池</span>
+        </li>
+      </ul>
+    </header>
+    <section class="main-section">
+      <div class="surplus">
+        <div class="main-section-bottom">
+          <div class="contaner">
+            <div style="height:30px;"></div>
+            <Form :model="form" :label-width="80">
+              <Row>
+                <Col span="4">
+                  <FormItem style="width:230px;">
+                    <Input v-model="form.name" placeholder="学员姓名" @on-change="seekKuhu"></Input>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem style="width:230px;">
+                    <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekKuhu"></Input>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select
+                      v-model="form.grade"
+                      style="width:150px"
+                      @on-change="seekKuhu"
+                      placeholder="年级"
+                    >
+                      <Option :value="1">一年级</Option>
+                      <Option :value="2">二年级</Option>
+                      <Option :value="3">三年级</Option>
+                      <Option :value="4">四年级</Option>
+                      <Option :value="5">五年级</Option>
+                      <Option :value="6">六年级</Option>
+                      <Option :value="7">七年级</Option>
+                      <Option :value="8">八年级</Option>
+                      <Option :value="9">九年级</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select
+                      v-model="form.subject"
+                      style="width:150px"
+                      @on-change="seekKuhu"
+                      placeholder="意向科目"
+                    >
+                      <Option :value="i" v-for="(list,i) in subjectList">{{list}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select
+                      v-model="form.intention_option"
+                      style="width:150px"
+                      @on-change="seekKuhu"
+                      placeholder="意向度"
+                    >
+                      <Option :value="i" v-for="(list,i) in intention">{{list}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="6">
+                  <FormItem>
+                    <div class="dateplc">
+                      <DatePicker
+                        v-model="startTime"
+                        type="date"
+                        placeholder="注册时间"
+                        style="width: 200px"
+                        @on-change="getTimes"
+                      ></DatePicker>
+                      <DatePicker
+                        v-model="endTime"
+                        type="date"
+                        placeholder="注册时间"
+                        style="width: 200px"
+                        @on-change="getTimes"
+                      ></DatePicker>
+                    </div>
+                  </FormItem>
+                </Col>
+                <Col span="4" style="text-indent: 60px">
+                  <Button type="primary" @click="clear">清除</Button>
+                </Col>
+              </Row>
+            </Form>
+            <Table
+              border
+              :columns="columns"
+              :data="puliceData"
+              @on-selection-change="selectionChange"
+              height="500"
+            ></Table>
+            <Page
+              @on-change="pageChange"
+              :total="total"
+              :current="currentPage"
+              :page-size="pageSize"
+              show-total
+              show-elevator
+              class="ive-page"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+    <Loading v-show="isLoading" />
+  </div>
+</template>
+
+<script>
+import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
+import Loading from "../uilt/loading/loading";
+import storage from "../uilt/storage";
+import DaibanMessage from "../uilt/newErweima/DaibanMessage";
+export default {
+  components: {
+    Loading,
+    DaibanMessage
+  },
+  mounted() {
+    this.setCurrentPage(1);
+    this.isLoading = true;
+    this.getPublicList().then(res => {
+      this.isLoading = false;
+    });
+  },
+  data() {
+    return {
+      intention: storage.getDaiban().screen_list.intention,
+      subjectList: storage.getDaiban().screen_list.subject,
+      startTime: "",
+      endTime: "",
+      type: {
+        page: 1
+      },
+      show: false,
+      isLoading: false,
+      form: {},
+      columns: [
+        { type: "selection", width: 60 },
+        { title: "学员姓名", key: "student_name" },
+        { title: "注册手机", key: "mobile" },
+        { title: "微信昵称", key: "wechat_nick_name" },
+        { title: "年级", key: "grade" },
+        { title: "科目", key: "subject" },
+        { title: "上个跟进人", key: "last_sale_name" },
+        { title: "意向度", key: "intention_option" },
+        { title: "上次回访内容", key: "last_visit_content" ,tooltip:true},
+        { title: "上次回访时间", key: "last_follow_time" },
+        { title: "说明", key: "assign_note" },
+        { title: "注册时间", key: "create_time" },
+        {
+          title: "操作",
+          key: "action",
+          align: "center",
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.getBtnClick3(params.row);
+                    }
+                  }
+                },
+                "领取"
+              )
+            ]);
+          }
+        }
+      ]
+    };
+  },
+  methods: {
+    //日期
+    getTimes() {
+      if (this.startTime && this.endTime) {
+        this.form.create_time_start = this.datePicker(this.startTime);
+        this.form.create_time_end = this.datePicker(this.endTime);
+        this.seekKuhu();
+      }
+    },
+    datePicker(time) {
+      var d = new Date(time);
+      let shi = d.getHours();
+      let fen = d.getMinutes();
+      let miao = d.getSeconds();
+      if (shi < 10) shi = "0" + shi;
+      if (fen < 10) fen = "0" + fen;
+      if (miao < 10) miao = "0" + miao;
+      d = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+      return d;
+    },
+    clear() {
+      this.form = {};
+      this.startTime = "";
+      this.endTime = "";
+      this.seekKuhu();
+    },
+    goHome() {
+      this.$router.push("/main/home");
+    },
+    //搜索
+    seekKuhu() {
+      let page = 1;
+      let currentPage = this.currentPage;
+      if (currentPage > 1) {
+        this.setCurrentPage(1);
+      }
+      this.isLoading = true;
+      this.getPublicList({ ...this.form, page }).then(res => {
+        this.isLoading = false;
+      });
+      this.setCurrentPage(page);
+    },
+    ...mapActions(["getPublicList", "setGet"]),
+    ...mapMutations(["setCurrentPage"]),
+    selectionChange() {},
+    //领取
+    getBtnClick3(item) {
+      this.$Modal.confirm({
+        title: "温馨提示",
+        content: "<p>确定要领取吗?</p>",
+        onOk: () => {
+          this.isLoading = true;
+          this.setGet(item.id).then(() => {
+            this.$Message.success("领取成功！");
+            this.isLoading = false;
+          });
+        }
+      });
+    },
+    //分页
+    pageChange(num) {
+      this.isLoading = true;
+      this.setCurrentPage(num);
+      this.getPublicList({ ...this.form }).then(res => {
+        this.isLoading = false;
+        // this.setCurrentPage(num);
+      });
+    }
+  },
+  computed: {
+    ...mapGetters(["puliceData"]),
+    ...mapState({
+      data: state => state.publics.publicList,
+      refer: state => state.publics.refer,
+      currentPage: state => state.daiban.currentPage,
+      total: state => state.daiban.total,
+      pageSize: state => state.daiban.pageSize
+    })
+  }
+};
+</script>
+<style scoped>
+.dateplc {
+  display: flex;
+}
+</style>

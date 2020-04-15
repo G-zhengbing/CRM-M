@@ -188,8 +188,11 @@
                 <div>
                   <i>{{item.subject}}</i>
                   <div>
-                    <span @click="goDataBank(item.product_id)" v-if="item.type == 2 || item.type == 3">进入学习</span>
-                    <span v-else  @click="goList(item)">进入教室</span>
+                    <span
+                      @click="goDataBank(item.product_id)"
+                      v-if="item.type == 2 || item.type == 3"
+                    >进入学习</span>
+                    <span v-else @click="goList(item)">进入教室</span>
                     <img src="../assets/img/fan.png" alt />
                   </div>
                 </div>
@@ -217,6 +220,7 @@
 <script>
 import Loading from "../uilt/loading/Loading";
 import storage from "../uilt/storage";
+import store from "../store";
 import { ORDER_LIST, UESR_DATA, CLASS } from "../uilt/url";
 import axios from "axios";
 export default {
@@ -243,9 +247,9 @@ export default {
   },
   methods: {
     //进入直播课列表
-    goList(val){
-      storage.savePersonageList(val)
-      this.$router.push('/personagelist')
+    goList(val) {
+      storage.savePersonageList(val);
+      this.$router.push("/personagelist");
     },
     goHome() {
       this.$router.push("/");
@@ -275,10 +279,26 @@ export default {
     },
     //支付
     goOrder(item) {
-      this.$router.push({
-        name: "Order",
-        params: { id: item.product_id, order_sn: item.order_sn }
-      });
+      storage.saveTowOrder("personage");
+      var ua = navigator.userAgent.toLowerCase();
+      var isWeixin = ua.indexOf("micromessenger") != -1;
+      let homeUrl = `http://www.quanpinzaixian.com/#/callback/${item.order_sn}`;
+      let encode = encodeURIComponent(homeUrl);
+      if (JSON.stringify(storage.getToken()) == "{}") {
+        storage.saveRouter(this.$route.fullPath);
+        this.$router.push({
+          path: `/login`
+        });
+        return;
+      }
+      if (isWeixin) {
+        window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${store.state.appid}&redirect_uri=${encode}&response_type=code&scope=snsapi_base&state=123#wechat_redirect`;
+      } else {
+        this.$router.push({
+          name: "Order",
+          params: { id: item.order_sn }
+        });
+      }
     },
     //订单课程列表(全部)
     getOrderList(num) {
