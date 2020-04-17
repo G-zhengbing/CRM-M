@@ -229,6 +229,12 @@ import qs from "qs";
 
 import classstudents from "@/store/classstudents";
 export default {
+  computed: {
+    ...mapState({
+      refresh: state => state.currentPage.refresh,
+      selectState: state => state.selectState
+    })
+  },
   data() {
     return {
       showMod: false,
@@ -539,18 +545,21 @@ export default {
           this.getUserData();
         }, 200);
       }
+    },
+    refresh: {
+      deep: true,
+      handler(newName, oldName) {
+        this.getUserData();
+        this.setRefresh(false);
+      }
     }
-  },
-  computed: {
-    ...mapState({
-      selectState: state => state.selectState
-    })
   },
   methods: {
     // 关闭窗口状态
     changeShowMod(val) {
       this.showMod = val;
       this.type = "";
+      // this.getUserData();
     },
     CallOut(row) {
       this.showMod = true;
@@ -590,7 +599,7 @@ export default {
       this.formItem.pay_start_time = time[0];
       this.formItem.pay_end_time = time[1];
     },
-    ...mapMutations(["setCurrentPages", "setSelectState"]),
+    ...mapMutations(["setCurrentPages", "setSelectState","setRefresh"]),
     // 改变页码
     changePages(val) {
       // this.mode.page = val;
@@ -662,7 +671,6 @@ export default {
       this.dataList = res.data.data.data;
       // 渲染年级，科目，首电呼出，交接单单元格
       this.dataList.map(item => {
-        item.class_type = 1;
         // 需求：要彩色的
         if (item.dial_up_situation == "2") {
           item.dial_up_situation = "<span style='color: #3b9d3b'>已完成</span>";
@@ -672,11 +680,8 @@ export default {
           item.dial_up_situation = "<span style='color: #ff0000'>超时</span>";
         }
 
-        if (item.give_class_hour) {
-          item.classSchedule = item.class_hour + "/" + item.give_class_hour;
-        } else {
-          item.classSchedule = item.class_hour;
-        }
+        item.classSchedule =
+          item.course_rate_of_progress + "/" + item.class_hour;
         item.reception_state = this.selectState.reception_state[
           item.reception_state
         ];

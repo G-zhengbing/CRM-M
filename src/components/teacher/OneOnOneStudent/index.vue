@@ -276,6 +276,12 @@ import qs from "qs";
 
 import oneononestudent from "@/store/oneononestudent";
 export default {
+  computed: {
+    ...mapState({
+      refresh: state => state.currentPage.refresh,
+      selectState: state => state.selectState
+    })
+  },
   data() {
     return {
       isLoading: false, // loading开关
@@ -310,18 +316,6 @@ export default {
           width: 140
         },
         {
-          title: "试听类型",
-          key: "type",
-          align: "center",
-          width: 100
-        },
-        {
-          title: "试听课程",
-          key: "course_name",
-          align: "center",
-          width: 140
-        },
-        {
           title: "年级",
           key: "grade",
           align: "center",
@@ -334,43 +328,61 @@ export default {
           width: 100
         },
         {
-          title: "教师",
-          key: "name",
-          align: "center",
-          width: 100
-        },
-        {
-          title: "上课日期",
-          key: "date_time",
-          align: "center",
-          sortable: true,
-          sortType: "asc",
-          width: 140
-        },
-        {
-          title: "上课时段",
-          key: "time_slot",
-          align: "center",
-          width: 140
-        },
-        {
-          type: "html",
-          title: "状态",
-          key: "appoint_status",
-          align: "center",
-          width: 120
-        },
-        {
-          title: "预约提交时间",
-          key: "create_time",
+          title: "购买课程",
+          key: "course_name",
           align: "center",
           width: 180
         },
         {
-          title: "备注",
-          key: "note",
+          title: "总课时",
+          key: "totalClassTime",
+          align: "center",
+          width: 100
+        },
+        {
+          title: "已消耗课时",
+          key: "course_rate_of_progress",
+          align: "center",
+          width: 120
+        },
+        {
+          title: "剩余课时",
+          key: "restOfClass",
+          align: "center",
+          width: 100
+        },
+        {
+          title: "开课日期",
+          key: "start_date",
           align: "center",
           width: 140
+        },
+        {
+          title: "实收",
+          key: "pay_amount",
+          align: "center",
+          width: 100
+        },
+        {
+          type: "html",
+          title: "首电呼出情况",
+          key: "dial_up_situation",
+          align: "center",
+          width: 160,
+          sortable: true,
+          sortType: "desc" // 排序，反排
+        },
+        {
+          title: "交接单",
+          key: "reception_state",
+          align: "center",
+          width: 100
+        },
+        {
+          title: "交易时间",
+          key: "pay_time",
+          align: "center",
+          width: 180
         },
         {
           title: "操作",
@@ -409,21 +421,6 @@ export default {
                   }
                 },
                 "跟进"
-              ),
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "text",
-                    size: "small"
-                  },
-                  on: {
-                    click: () => {
-                      this.LearningReport(params.row);
-                    }
-                  }
-                },
-                "学情报告"
               )
             ]);
           }
@@ -448,18 +445,6 @@ export default {
           width: 140
         },
         {
-          title: "试听类型",
-          key: "type",
-          align: "center",
-          width: 100
-        },
-        {
-          title: "试听课程",
-          key: "course_name",
-          align: "center",
-          width: 140
-        },
-        {
           title: "年级",
           key: "grade",
           align: "center",
@@ -472,43 +457,47 @@ export default {
           width: 100
         },
         {
-          title: "教师",
-          key: "name",
-          align: "center",
-          width: 100
-        },
-        {
-          title: "上课日期",
-          key: "date_time",
-          align: "center",
-          sortable: true,
-          sortType: "asc",
-          width: 140
-        },
-        {
-          title: "上课时段",
-          key: "time_slot",
-          align: "center",
-          width: 140
-        },
-        {
-          type: "html",
-          title: "状态",
-          key: "appoint_status",
-          align: "center",
-          width: 120
-        },
-        {
-          title: "预约提交时间",
-          key: "create_time",
+          title: "购买课程",
+          key: "course_name",
           align: "center",
           width: 180
         },
         {
-          title: "备注",
-          key: "note",
+          title: "总课时",
+          key: "totalClassTime",
+          align: "center",
+          width: 100
+        },
+        {
+          title: "开课日期",
+          key: "start_date",
           align: "center",
           width: 140
+        },
+        {
+          title: "实收",
+          key: "pay_amount",
+          align: "center",
+          width: 100
+        },
+        {
+          type: "html",
+          title: "首电呼出情况",
+          key: "dial_up_situation",
+          align: "center",
+          width: 140
+        },
+        {
+          title: "交接单",
+          key: "reception_state",
+          align: "center",
+          width: 100
+        },
+        {
+          title: "交易时间",
+          key: "pay_time",
+          align: "center",
+          width: 180
         },
         {
           title: "操作",
@@ -527,11 +516,11 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.Appraisal(params.row);
+                      this.CallOut(params.row);
                     }
                   }
                 },
-                "查看测评"
+                "呼出"
               ),
               h(
                 "Button",
@@ -542,11 +531,11 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.CallOut(params.row);
+                      this.StudentsFollowUp(params.row);
                     }
                   }
                 },
-                "呼出"
+                "跟进"
               )
             ]);
           }
@@ -562,12 +551,14 @@ export default {
           this.getUserData();
         }, 200);
       }
+    },
+    refresh: {
+      deep: true,
+      handler(newName, oldName) {
+        this.getUserData();
+        this.setRefresh(false);
+      }
     }
-  },
-  computed: {
-    ...mapState({
-      selectState: state => state.selectState
-    })
   },
   methods: {
     // 关闭窗口状态
@@ -616,7 +607,7 @@ export default {
       this.formItem.create_st_time = time[0];
       this.formItem.create_en_time = time[1];
     },
-    ...mapMutations(["setCurrentPages", "setSelectState"]),
+    ...mapMutations(["setCurrentPages", "setSelectState", "setRefresh"]),
     // 改变页码
     changePages(val) {
       this.formItem.page = val;

@@ -85,6 +85,9 @@ export default {
     async signin() {
       this.mode.appoint_status = this.phone;
       if(this.Items) {
+        if(this.Items == 0) {
+          return
+        }
         this.mode.appoint_id = []
         this.Items.map(item => {
           this.mode.appoint_id.push(item.id)

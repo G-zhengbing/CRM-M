@@ -94,7 +94,7 @@
               <!-- <MenuItem name="/main/number" to="/main/number" v-if="$store.state.cId != 3">成单数</MenuItem> -->
               <Submenu
                 name="1-3"
-                v-if="$store.state.cId.is_headmaster == 'Y' || $store.state.cId.is_headmaster == 'H'"
+                v-if="$store.state.cId.is_headmaster != 'N'"
               >
                 <template slot="title">
                   <Icon type="ios-stats" />教务
@@ -109,7 +109,7 @@
                 <!-- <MenuItem name="/main/course" to="/main/course">课程</MenuItem>
                 <MenuItem name="/main/teacher" to="/main/teacher">教师管理</MenuItem>-->
                 <!-- <MenuItem name="/main/minestudent" to="/main/minestudent">我的学员</MenuItem> -->
-                <MenuItem name="/main/payingstudents" to="/main/payingstudents">付费学员</MenuItem>
+                <MenuItem name="/main/payingstudents" to="/main/payingstudents" v-if="$store.state.cId.is_headmaster == 'H'">付费学员</MenuItem>
               </Submenu>
             </Submenu>
             <Submenu name="2" v-if="$store.state.cId.is_market != 'N'">

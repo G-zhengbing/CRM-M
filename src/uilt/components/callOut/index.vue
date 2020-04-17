@@ -20,7 +20,7 @@
             </Col>
             <Col span="4">
               <span class="keyword">性别</span>
-              <span>{{titleList.sex}}</span>
+              <span>{{titleList.sex == 1 ? '男' : titleList.sex == 2 ? "女" : ""}}</span>
             </Col>
             <Col span="4">
               <span class="keyword">年级</span>
@@ -74,11 +74,11 @@
             </Col>
             <Col span="4">
               <span class="keyword">是否住校</span>
-              <span>{{titleList.is_live}}</span>
+              <span>{{titleList.is_live == 1 ? "是" : "否"}}</span>
             </Col>
             <Col span="4">
               <span class="keyword">是否开课</span>
-              <span>{{titleList.is_class_begins}}</span>
+              <span>{{titleList.is_class_begins ? "未开课" : '开课'}}</span>
             </Col>
             <Col span="4">
               <span class="keyword">开课时间</span>
@@ -121,6 +121,7 @@
               <DatePicker
                 v-model="formValidate.visitTime"
                 type="datetime"
+                :options="options3"
                 format="yyyy-MM-dd HH:mm"
                 placeholder="请选择日期"
                 style="width: 200px"
@@ -184,6 +185,12 @@ export default {
   },
   data() {
     return {
+      // 不能点击今日以前的时间
+      options3: {
+        disabledDate(date) {
+          return date && date.valueOf() < Date.now() - 86400000;
+        }
+      },
       mode: [],
       test: false,
       isLoading: false,
@@ -331,6 +338,7 @@ export default {
           if (valid) {
             this.setUserData();
             this.$Message.success("成功!");
+            this.setRefresh(true);
             this.$emit("changeShowMod", false);
           } else {
             this.$Message.error("请填写必选项!");

@@ -50,7 +50,12 @@ export default {
     Items: {
       type: Object,
       required: true
-    },
+    }
+  },
+  computed: {
+    ...mapState({
+      selectState: state => state.selectState
+    })
   },
   data() {
     return {
@@ -59,51 +64,63 @@ export default {
         {
           title: "购买课程名称",
           key: "course_name",
-          align: "center",
+          align: "center"
         },
         {
           title: "课程类型",
-          key: "course_name",
-          align: "center",
+          key: "class_type",
+          align: "center"
         },
         {
           title: "收费形式",
-          key: "course_name",
-          align: "center",
+          key: "form_of_tariff",
+          align: "center"
         },
         {
           title: "科目",
-          key: "course_name",
-          align: "center",
-        },
+          key: "subject",
+          align: "center"
+        }
       ],
       dataList: [],
-			goods_num: 1
+      goods_num: 1
     };
   },
   methods: {
-		// 创建课程
-	async	createdOrder() {
-			let res = await this.$request({
+    // 创建课程
+    async createdOrder() {
+      let res = await this.$request({
         method: "post",
         url: ADDORDER,
         data: qs.stringify({
-					account_id: this.account_id,
-					product_id: this.Items.id,
-					goods_num: this.goods_num
-				})
-			});
-			this.$Message.success('创建成功');
-		},
+          account_id: this.account_id,
+          product_id: this.Items.id,
+          goods_num: this.goods_num
+        })
+      });
+      this.$Message.success("创建成功");
+    },
     // 点击确认回调，验证表单,不填写不让关
     confirm() {
-			this.createdOrder()
+      this.createdOrder();
       this.$emit("closeBtn", false);
     },
     // 点击取消回调，重置表单
     cancel() {
       this.$emit("closeBtn", false);
     }
+  },
+  created() {
+    this.dataList = [this.Items];
+    if (this.dataList[0].subject == -1) {
+      this.dataList[0].subject = "全科";
+    } else {
+      this.dataList[0].subject = this.selectState.subject[
+        this.dataList[0].subject
+      ];
+    }
+    this.dataList[0].class_type = "一对一";
+    this.dataList[0].form_of_tariff = "按课时";
   }
 };
 </script>

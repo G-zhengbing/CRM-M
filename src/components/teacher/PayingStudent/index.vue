@@ -1133,8 +1133,3 @@ export default {
   color: #fff;
 }
 </style>
-<style>
-.select {
-  width: 100% !important;
-}
-</style>
