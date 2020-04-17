@@ -281,12 +281,12 @@
       :showMod="showMod"
       @changeShowMod="changeShowMod"
     />
-    <StudentsFollowUp
+    <!-- <StudentsFollowUp
       v-else-if="type == 'StudentsFollowUp'"
       :row="row"
       :showMod="showMod"
       @changeShowMod="changeShowMod"
-    />
+    /> -->
     <LearningReport
       v-else-if="type == 'LearningReport'"
       :row="row"
@@ -574,21 +574,6 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.StudentsFollowUp(params.row);
-                    }
-                  }
-                },
-                "跟进"
-              ),
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "text",
-                    size: "small"
-                  },
-                  on: {
-                    click: () => {
                       this.Allocation(params.row);
                     }
                   }
@@ -840,21 +825,6 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.StudentsFollowUp(params.row);
-                    }
-                  }
-                },
-                "跟进"
-              ),
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "text",
-                    size: "small"
-                  },
-                  on: {
-                    click: () => {
                       this.Allocation(params.row);
                     }
                   }
@@ -931,11 +901,11 @@ export default {
       this.type = "Allocation";
     },
     // 跟进
-    StudentsFollowUp(row) {
-      this.showMod = true;
-      this.row = row;
-      this.type = "StudentsFollowUp";
-    },
+    // StudentsFollowUp(row) {
+    //   this.showMod = true;
+    //   this.row = row;
+    //   this.type = "StudentsFollowUp";
+    // },
     // 学情报告
     LearningReport(row) {
       this.showMod = true;
