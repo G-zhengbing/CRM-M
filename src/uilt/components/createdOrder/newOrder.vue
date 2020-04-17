@@ -1,6 +1,6 @@
 <template>
   <div class="newOrder">
-    <Modal v-model="modal5" title="创建订单" class-name="vertical-center-modal-1" width="60">
+    <Modal v-model="modal5" title="创建订单" class-name="vertical-center-modal-1" width="60" @on-cancel="cancel" @on-ok="confirm">
       <div class="content">
         <div class="baseMessage">
           <span>基本信息</span>
@@ -29,10 +29,10 @@
         <span>支付信息</span>
         <Table border :columns="columns" :data="dataList" />
       </div>
-      <div slot="footer">
+      <!-- <div slot="footer">
         <Button type="text" size="large" @click="cancel">取消</Button>
         <Button type="primary" size="large" @click="confirm">确定</Button>
-      </div>
+      </div> -->
     </Modal>
   </div>
 </template>
