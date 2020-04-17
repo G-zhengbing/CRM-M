@@ -89,7 +89,7 @@ export default {
         method: "post",
         url: APPIONTMODIFY + "/" + this.row.id,
         data: qs.stringify({
-          assess_image: '',
+          assess_image: null,
           visit_content: this.value
         })
       });

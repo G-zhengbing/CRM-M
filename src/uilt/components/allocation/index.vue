@@ -1,6 +1,6 @@
 <template>
   <div class="allocation">
-    <span class="btnSpan" @click="clickBtnAllocation">{{title ? title : '分配'}}</span>
+    <span class="btnSpan" @click="clickOpen">{{title ? title : '分配'}}</span class="btnSpan">
     <Modal :title="title ? title : '分配'" width="20" v-model="modal10" class-name="vertical-center-modal-1"  @on-ok="confirm" @on-cancel="cancel">
       <div class="content">
 				<RadioGroup v-model="mode.teacher_id" vertical>
@@ -52,6 +52,7 @@ export default {
   data() {
     return {
 			modal10: this.showMod,
+			vertical: 'apple',
 			mode: {
 				order_ids: '',
 				teacher_id: ''
@@ -61,36 +62,34 @@ export default {
 	},
 	methods: {
 		...mapMutations(["setRefresh"]),
-		// 点击批量分配
-		clickBtnAllocation() {
+		clickOpen() {
 			this.modal10 = true
+			this.getClassTeacher()
 		},
 		// 点击确认
 		async confirm() {
-			if(this.Items) {
-        if(this.Items == 0) {
-          return
-        }
-        this.Items.map(item => {
-					this.mode.order_ids += item.order_id + ','
-				})
-				this.mode.order_ids = this.mode.order_ids.substr(0,this.mode.order_ids.length - 1)
-      } else {
-        this.mode.order_ids = this.row.order_id;
-      }
+			// if(this.userIndex == 0 || this.userIndex) {
+				this.mode.order_ids = this.row.order_id
+			// } else {
+			// 	this.Items.map(item => {
+			// 		this.mode.order_ids += item.order_id + ','
+			// 	})
+			// 	this.mode.order_ids = this.mode.order_ids.substr(0,this.mode.order_ids.length - 1)
+			// }
 			// 分配接口
-			console.log(this.mode)
 			let res = await this.$request({
         method: "post",
         url: MASSDISTRIBUTION,
         data: qs.stringify(this.mode),
 			});
-			this.mode.order_ids = ''
 			this.setRefresh(true)
 			this.$emit("changeShowMod", false);
+			this.$emit("refresh")
 		},
 		// 点击取消
 		cancel() {
+			// 取消时把选中状态还原
+			this.vertical = "apple"
 			this.$emit("changeShowMod", false);
 		},
 		// 获取班主任列表

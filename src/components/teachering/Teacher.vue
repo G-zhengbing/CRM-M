@@ -98,7 +98,7 @@
           </Col>
           <Col span="12">
             <FormItem label="联系方式" prop="mobile">
-              <Input type="number" v-model="form.mobile" placeholder="请输入联系方式" style="width:300px"></Input>
+              <Input v-model="form.mobile" placeholder="请输入联系方式" style="width:300px"></Input>
             </FormItem>
           </Col>
           <Col span="12">
@@ -151,12 +151,60 @@
               <Input v-model="form.classin_user" placeholder="请输入classin账号" style="width:300px"></Input>
             </FormItem>
           </Col>
-          <Col span="24">
+          <Col span="12">
             <FormItem label="招商银行卡号" prop="bank_card_id">
               <Input v-model="form.bank_card_id" placeholder="请输入教师姓名" style="width:300px"></Input>
             </FormItem>
           </Col>
-          <Col span="6">
+          <Col span="12">
+            <FormItem label="招商银行开户行" prop="bank_card_open">
+              <Input v-model="form.bank_card_open" placeholder="请输入招商银行开户行" style="width:300px"></Input>
+            </FormItem>
+          </Col>
+          <Col span="12" style="display:flex" class="actives">
+            <span>*</span>
+            <FormItem label="老师头像" prop="avatar" class="active_span" style="margin-left:20px">
+              <template>
+                <div class="demo-upload-list" v-for="item in uploadList">
+                  <img :src="item.url" />
+                  <div class="demo-upload-list-cover">
+                    <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
+                  </div>
+                </div>
+              </template>
+              <Upload
+                ref="upload"
+                :show-upload-list="false"
+                :format="['jpg','gif','png']"
+                :max-size="2048"
+                :before-upload="handleBeforeUpload"
+                :on-format-error="handleFormatError"
+                :on-exceeded-size="handleMaxSize"
+                type="drag"
+                action="http://liveapi.canpoint.net/api/create_products"
+                style="display: inline-block;width:58px;"
+              >
+                <div style="width: 58px;height:58px;line-height: 58px;">
+                  <Icon type="ios-camera" size="20"></Icon>
+                </div>
+              </Upload>
+            </FormItem>
+            <FormItem label="老师头像展示" v-if="form.avatar">
+              <div class="demo-upload-list">
+                <img :src="'http://liveapi.canpoint.net/'+form.avatar" />
+                <div class="demo-upload-list-cover">
+                  <Icon
+                    type="ios-eye-outline"
+                    @click.native="handleView('http://liveapi.canpoint.net/'+form.avatar)"
+                  ></Icon>
+                </div>
+              </div>
+              <Modal title="预览图" v-model="visible">
+                <img :src="imgName" style="width: 100%" />
+              </Modal>
+            </FormItem>
+          </Col>
+          <Col span="12" style="display:flex">
             <FormItem label="招商银行卡" prop="bank_card_pic" class="active_span">
               <template>
                 <div class="demo-upload-list" v-for="item in uploadList2">
@@ -183,9 +231,7 @@
                 </div>
               </Upload>
             </FormItem>
-          </Col>
-          <Col span="6" v-if="form.bank_card_pic">
-            <FormItem label="招商银行卡展示">
+            <FormItem label="招商银行卡展示" v-if="form.bank_card_pic">
               <div class="demo-upload-list">
                 <img :src="'http://liveapi.canpoint.net/'+form.bank_card_pic" />
                 <div class="demo-upload-list-cover">
@@ -200,51 +246,7 @@
               </Modal>
             </FormItem>
           </Col>
-          <Col span="6">
-            <FormItem label="招商银行卡开户行" prop="bank_card_open" class="active_span">
-              <template>
-                <div class="demo-upload-list" v-for="item in uploadList3">
-                  <img :src="item.url" />
-                  <div class="demo-upload-list-cover">
-                    <Icon type="ios-trash-outline" @click.native="handleRemove3(item)"></Icon>
-                  </div>
-                </div>
-              </template>
-              <Upload
-                ref="upload"
-                :show-upload-list="false"
-                :format="['jpg','gif','png']"
-                :max-size="2048"
-                :before-upload="handleBeforeUpload3"
-                :on-format-error="handleFormatError3"
-                :on-exceeded-size="handleMaxSize3"
-                type="drag"
-                action="http://liveapi.canpoint.net/api/create_products"
-                style="display: inline-block;width:58px;"
-              >
-                <div style="width: 58px;height:58px;line-height: 58px;">
-                  <Icon type="ios-camera" size="20"></Icon>
-                </div>
-              </Upload>
-            </FormItem>
-          </Col>
-          <Col span="6" v-if="form.bank_card_open">
-            <FormItem label="招商银行卡开户行展示">
-              <div class="demo-upload-list">
-                <img :src="'http://liveapi.canpoint.net/'+form.bank_card_open" />
-                <div class="demo-upload-list-cover">
-                  <Icon
-                    type="ios-eye-outline"
-                    @click.native="handleView3('http://liveapi.canpoint.net/'+form.bank_card_open)"
-                  ></Icon>
-                </div>
-              </div>
-              <Modal title="预览图" v-model="visible">
-                <img :src="imgName3" style="width: 100%" />
-              </Modal>
-            </FormItem>
-          </Col>
-          <Col span="6">
+          <Col span="12" style="display:flex">
             <FormItem label="身份证正面照" prop="identity_id_pic1" class="active_span">
               <template>
                 <div class="demo-upload-list" v-for="item in uploadList4">
@@ -271,9 +273,7 @@
                 </div>
               </Upload>
             </FormItem>
-          </Col>
-          <Col span="6" v-if="form.identity_id_pic1">
-            <FormItem label="身份证正面照展示">
+            <FormItem label="身份证正面照展示" v-if="form.identity_id_pic1">
               <div class="demo-upload-list">
                 <img :src="'http://liveapi.canpoint.net/'+form.identity_id_pic1" />
                 <div class="demo-upload-list-cover">
@@ -288,7 +288,7 @@
               </Modal>
             </FormItem>
           </Col>
-          <Col span="6">
+          <Col span="12" style="display:flex">
             <FormItem label="身份证背面照" prop="identity_id_pic2" class="active_span">
               <template>
                 <div class="demo-upload-list" v-for="item in uploadList5">
@@ -315,9 +315,7 @@
                 </div>
               </Upload>
             </FormItem>
-          </Col>
-          <Col span="6" v-if="form.identity_id_pic2">
-            <FormItem label="身份证背面照展示">
+            <FormItem label="身份证背面照展示" v-if="form.identity_id_pic2">
               <div class="demo-upload-list">
                 <img :src="'http://liveapi.canpoint.net/'+form.identity_id_pic2" />
                 <div class="demo-upload-list-cover">
@@ -332,7 +330,7 @@
               </Modal>
             </FormItem>
           </Col>
-          <Col span="6">
+          <Col span="12" style="display:flex">
             <FormItem label="资格证" prop="nvq_pic" class="active_span">
               <template>
                 <div class="demo-upload-list" v-for="item in uploadList6">
@@ -359,9 +357,7 @@
                 </div>
               </Upload>
             </FormItem>
-          </Col>
-          <Col span="6" v-if="form.nvq_pic">
-            <FormItem label="资格证展示">
+            <FormItem label="资格证展示" v-if="form.nvq_pic">
               <div class="demo-upload-list">
                 <img :src="'http://liveapi.canpoint.net/'+form.nvq_pic" />
                 <div class="demo-upload-list-cover">
@@ -376,7 +372,7 @@
               </Modal>
             </FormItem>
           </Col>
-          <Col span="6">
+          <Col span="12" style="display:flex">
             <FormItem label="教师资格证" prop="teacher_nvq_pic" class="active_span">
               <template>
                 <div class="demo-upload-list" v-for="item in uploadList7">
@@ -403,9 +399,7 @@
                 </div>
               </Upload>
             </FormItem>
-          </Col>
-          <Col span="6" v-if="form.teacher_nvq_pic">
-            <FormItem label="教师资格证展示">
+            <FormItem label="教师资格证展示" v-if="form.teacher_nvq_pic">
               <div class="demo-upload-list">
                 <img :src="'http://liveapi.canpoint.net/'+form.teacher_nvq_pic" />
                 <div class="demo-upload-list-cover">
@@ -417,50 +411,6 @@
               </div>
               <Modal title="预览图" v-model="visible">
                 <img :src="imgName7" style="width: 100%" />
-              </Modal>
-            </FormItem>
-          </Col>
-          <Col span="6">
-            <FormItem label="老师头像" prop="avatar" class="active_span">
-              <template>
-                <div class="demo-upload-list" v-for="item in uploadList">
-                  <img :src="item.url" />
-                  <div class="demo-upload-list-cover">
-                    <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
-                  </div>
-                </div>
-              </template>
-              <Upload
-                ref="upload"
-                :show-upload-list="false"
-                :format="['jpg','gif','png']"
-                :max-size="2048"
-                :before-upload="handleBeforeUpload"
-                :on-format-error="handleFormatError"
-                :on-exceeded-size="handleMaxSize"
-                type="drag"
-                action="http://liveapi.canpoint.net/api/create_products"
-                style="display: inline-block;width:58px;"
-              >
-                <div style="width: 58px;height:58px;line-height: 58px;">
-                  <Icon type="ios-camera" size="20"></Icon>
-                </div>
-              </Upload>
-            </FormItem>
-          </Col>
-          <Col span="6" v-if="form.avatar">
-            <FormItem label="老师头像展示">
-              <div class="demo-upload-list">
-                <img :src="'http://liveapi.canpoint.net/'+form.avatar" />
-                <div class="demo-upload-list-cover">
-                  <Icon
-                    type="ios-eye-outline"
-                    @click.native="handleView('http://liveapi.canpoint.net/'+form.avatar)"
-                  ></Icon>
-                </div>
-              </div>
-              <Modal title="预览图" v-model="visible">
-                <img :src="imgName" style="width: 100%" />
               </Modal>
             </FormItem>
           </Col>
@@ -684,8 +634,7 @@ export default {
         mobile: [
           {
             required: true,
-            message: "联系方式不能为空",
-            trigger: "blur"
+            message: "联系方式不能为空"
           }
         ],
         subject: [{ required: true, message: "教授科目是必选的" }],
@@ -823,10 +772,7 @@ export default {
               "bank_card_pic",
               this.uploadList2[0] ? this.uploadList2[0] : ""
             );
-            formData.append(
-              "bank_card_open",
-              this.uploadList3[0] ? this.uploadList3[0] : ""
-            );
+            formData.append("bank_card_open", this.form.bank_card_open);
             formData.append(
               "identity_id_pic1",
               this.uploadList4[0] ? this.uploadList4[0] : ""
@@ -865,6 +811,13 @@ export default {
                 this.showTeacherMessage = false;
               }
               this.isLoading = false;
+              this.uploadList.length = 0;
+              this.uploadList2.length = 0;
+              this.uploadList3.length = 0;
+              this.uploadList4.length = 0;
+              this.uploadList5.length = 0;
+              this.uploadList6.length = 0;
+              this.uploadList7.length = 0;
             });
           } else {
             if (this.uploadList.length == 0) {
@@ -894,10 +847,7 @@ export default {
               "bank_card_pic",
               this.uploadList2[0] ? this.uploadList2[0] : ""
             );
-            formData.append(
-              "bank_card_open",
-              this.uploadList3[0] ? this.uploadList3[0] : ""
-            );
+            formData.append("bank_card_open", this.form.bank_card_open);
             formData.append(
               "identity_id_pic1",
               this.uploadList4[0] ? this.uploadList4[0] : ""
@@ -930,6 +880,13 @@ export default {
                 this.showTeacherMessage = false;
               }
               this.isLoading = false;
+              this.uploadList.length = 0;
+              this.uploadList2.length = 0;
+              this.uploadList3.length = 0;
+              this.uploadList4.length = 0;
+              this.uploadList5.length = 0;
+              this.uploadList6.length = 0;
+              this.uploadList7.length = 0;
             });
           }
         } else {
@@ -1250,6 +1207,7 @@ export default {
       this.isUpdata = true;
       this.showTeacherMessage = true;
       this.form = { ...this.teacherTypes };
+      this.getProv();
     },
     //关闭modal
     colseModal() {
@@ -1287,6 +1245,16 @@ export default {
 };
 </script>
 <style scoped>
+.actives > span {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  font-size: 20px;
+  color: red;
+}
+.actives {
+  position: relative;
+}
 /*  */
 .time_block li {
   flex: 1;

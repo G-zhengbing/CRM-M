@@ -284,7 +284,6 @@
         <div class="content-left">
           <ul>
             <li>-</li>
-            <li>00:00 - 00:30</li>
             <li>00:30 - 01:00</li>
             <li>01:00 - 01:30</li>
             <li>01:30 - 02:00</li>
@@ -347,14 +346,14 @@
           <div class="content-right-footer">
             <ul>
               <li
-                :class="{active:setActive == k}"
+                :class="{active:setActive == k,disable:k-1 % num == 0}"
                 @click="getNum(i,$event)"
                 v-for="(k,i) in num"
               >{{k -1}}</li>
             </ul>
             <ul>
               <li
-                :class="{active:setActive == k}"
+                :class="{active:setActive == k,disable:k-1 % num == 48}"
                 @click="getNum(i,$event)"
                 v-for="(k,i) in num*2"
                 v-if=" k > num"
@@ -362,7 +361,7 @@
             </ul>
             <ul>
               <li
-                :class="{active:setActive == k}"
+                :class="{active:setActive == k,disable:k-1 % num == 96}"
                 @click="getNum(i,$event)"
                 v-for="(k,i) in num*3"
                 v-if=" k > num*2"
@@ -370,7 +369,7 @@
             </ul>
             <ul>
               <li
-                :class="{active:setActive == k}"
+                :class="{active:setActive == k,disable:k-1 % num == 144}"
                 @click="getNum(i,$event)"
                 v-for="(k,i) in num*4"
                 v-if=" k > num*3"
@@ -378,7 +377,7 @@
             </ul>
             <ul>
               <li
-                :class="{active:setActive == k}"
+                :class="{active:setActive == k,disable:k-1 % num == 192}"
                 @click="getNum(i,$event)"
                 v-for="(k,i) in num*5"
                 v-if=" k > num*4"
@@ -386,7 +385,7 @@
             </ul>
             <ul>
               <li
-                :class="{active:setActive == k}"
+                :class="{active:setActive == k,disable:k-1 % num == 240}"
                 @click="getNum(i,$event)"
                 v-for="(k,i) in num*6"
                 v-if=" k > num*5"
@@ -394,7 +393,7 @@
             </ul>
             <ul>
               <li
-                :class="{active:setActive == k}"
+                :class="{active:setActive == k,disable:k-1 % num == 288}"
                 @click="getNum(i,$event)"
                 v-for="(k,i) in num*7"
                 v-if=" k > num*6"
@@ -899,7 +898,7 @@ export default {
   },
   data() {
     return {
-      upgradeColumns:[
+      upgradeColumns: [
         { title: "购买课程名称", key: "course_name", width: 200 },
         {
           title: "课程类型",
@@ -947,7 +946,7 @@ export default {
           }
         }
       ],
-      upgradeList:[],
+      upgradeList: [],
       upgradeForm: {},
       showTableLoading: false,
       disableBtn: false,
@@ -1484,6 +1483,7 @@ export default {
     },
     //获取预约单老师列表
     getTeachers() {
+      this.teachersV.length = 0
       var form = {};
       this.createAuditionForm.date_time = this.datePicker(
         this.createAuditionForm.date_time
@@ -1502,6 +1502,10 @@ export default {
         this.createAuditionForm.type
       ) {
         this.getTeacherListN(form).then(res => {
+          if (!res.data.ret) {
+            this.$Message.error(res.data.error);
+            return;
+          }
           if (res.data.data.length == 0) {
             this.$Message.error("暂无老师");
             this.getUserReservedList({ page: 1, uid: this.type.data.id });
@@ -1788,6 +1792,10 @@ export default {
   display: flex;
   flex-wrap: wrap;
 }
+.content-right-header li.disable,
+.content-right-footer li.disable{
+  display: none;
+} 
 .content-right-header li,
 .content-right-footer li {
   width: 136px;

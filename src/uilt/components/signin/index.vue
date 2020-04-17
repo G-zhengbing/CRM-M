@@ -85,10 +85,6 @@ export default {
     async signin() {
       this.mode.appoint_status = this.phone;
       if(this.Items) {
-        if(this.Items == 0) {
-          return
-        }
-        console.log(this.Items)
         this.mode.appoint_id = []
         this.Items.map(item => {
           this.mode.appoint_id.push(item.id)
@@ -101,7 +97,6 @@ export default {
         url: BATCHSTAGE,
         data: qs.stringify(this.mode)
       });
-      console.log(res)
       this.setRefresh(true);
     },
 

@@ -75,7 +75,7 @@
               <MenuItem
                 name="/main/importdata"
                 to="/main/importdata"
-                v-if="$store.state.cId.is_sales != 'N'"
+                v-if="$store.state.cId.is_sales == 'H'"
               >线索导入</MenuItem>
               <MenuItem
                 name="/main/statistics"

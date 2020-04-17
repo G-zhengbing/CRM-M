@@ -1,18 +1,18 @@
 <template>
   <div class="tableBox">
     <div class="title">
-      <div class="allocation" v-if="allocationData">
+      <!-- <div class="allocation" v-if="allocationData">
         <span>已选条{{Items.length}}数</span>
         <Signin v-if="allocationData == '签到'" :btnSignin="true" :Items="Items" style="display: inline-block;padding-left: 15px;"/>
-        <!-- <Button v-if="allocationData == '删除'" class="btn" type="primary" @click="batchSignIn">批量删除</Button> -->
+        <Button v-if="allocationData == '删除'" class="btn" type="primary" @click="batchSignIn">批量删除</Button>
         <Allocation
-          @clearItems="clearItems"
+          @refresh="refresh"
           :Items="Items"
           v-if="allocationData == '分配'"
           class="btn"
           :title="'批量分配'"
         />
-      </div>
+      </div> -->
       <div class="select" v-if="selectData">
         <Select v-model="model1">
           <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -115,9 +115,8 @@ export default {
 
     },
     // 分配完毕，刷新页面
-    clearItems() {
-      // console.log(this.Items,'这是外面')
-      // this.$emit("refresh");
+    refresh() {
+      this.$emit("refresh");
     },
     // 选择整行信息
     selectItem(selection) {
