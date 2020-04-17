@@ -216,6 +216,7 @@ export default {
     // 关闭创建订单页面
     closeBtn(val) {
       this.modal = val;
+      this.$emit("changeShowMod", false);
     },
     // 选择整行信息
     selectItem(selection) {

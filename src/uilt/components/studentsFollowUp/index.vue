@@ -19,7 +19,7 @@
             </Col>
             <Col span="4">
               <span class="keyword">性别</span>
-              <span>{{titleList.sex == 1 ? '男' : "女"}}</span>
+              <span>{{titleList.sex == 1 ? '男' : titleList.sex == 2 ? "女" : ""}}</span>
             </Col>
             <Col span="4">
               <span class="keyword">年级</span>
@@ -302,6 +302,7 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["setRefresh"]),
     // 转换日期格式
     changeDate(time) {
       this.formValidate.next_follow_time = time;
@@ -322,6 +323,7 @@ export default {
             this.$refs["formValidate"].resetFields();
             this.formValidate = {};
             this.$Message.success("成功!");
+            this.setRefresh(true)
             this.$emit("changeShowMod", false);
           } else {
             this.$Message.error("请填写必选项!");

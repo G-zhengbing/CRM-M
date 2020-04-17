@@ -195,12 +195,12 @@ export default {
 .useBgc {
   background-color: #fff !important;
 }
-..vertical-center-modal-1 {
+.vertical-center-modal-1 {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-..vertical-center-modal-1 .ivu-modal {
+.vertical-center-modal-1 .ivu-modal {
   top: 0;
 }
 </style>

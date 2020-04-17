@@ -524,6 +524,7 @@ import qs from "qs";
 export default {
   computed: {
     ...mapState({
+      refresh: state => state.currentPage.refresh,
       selectState: state => state.selectState
     })
   },
@@ -1171,6 +1172,13 @@ export default {
           this.getUserData();
         }, 200);
       }
+    },
+    refresh: {
+      deep: true,
+      handler(newName, oldName) {
+        this.getUserData();
+        this.setRefresh(false);
+      }
     }
   },
   methods: {
@@ -1211,7 +1219,7 @@ export default {
         page_num: "10" // 每页条数
       };
     },
-    ...mapMutations(["setCurrentPages", "setSelectState"]),
+    ...mapMutations(["setCurrentPages", "setSelectState","setRefresh"]),
     // 设置当前页码
     changePages(val) {
       this.mode.page = val;

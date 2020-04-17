@@ -79,7 +79,6 @@ export default {
         this.mode.order_ids = this.row.order_id;
       }
 			// 分配接口
-			console.log(this.mode)
 			let res = await this.$request({
         method: "post",
         url: MASSDISTRIBUTION,
