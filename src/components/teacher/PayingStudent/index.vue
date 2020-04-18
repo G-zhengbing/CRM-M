@@ -84,9 +84,9 @@
                     placeholder="首电呼出情况"
                     style="width: 120px;"
                   >
-                    <Option value="accomplish">已完成</Option>
-                    <Option value="underway">进行中</Option>
-                    <Option value="overtime">超时</Option>
+                    <Option value="1">已完成</Option>
+                    <Option value="2">进行中</Option>
+                    <Option value="3">超时</Option>
                   </Select>
                 </FormItem>
                 <FormItem>
@@ -198,9 +198,9 @@
                     placeholder="首电呼出情况"
                     style="width: 120px;"
                   >
-                    <Option value="accomplish">已完成</Option>
-                    <Option value="underway">进行中</Option>
-                    <Option value="overtime">超时</Option>
+                    <Option value="1">已完成</Option>
+                    <Option value="2">进行中</Option>
+                    <Option value="3">超时</Option>
                   </Select>
                 </FormItem>
                 <FormItem>
@@ -944,11 +944,11 @@ export default {
       this.pitchonStyle = 1;
       if (value == "name1") {
         this.product_type = 1;
-        this.formItem.product_type = this.product_type;
+        // this.formItem.product_type = this.product_type;
         this.pitchon(1);
       } else if (value == "name2") {
         this.product_type = 4;
-        this.formItem.product_type = this.product_type;
+        // this.formItem.product_type = this.product_type;
         this.pitchon(3);
       }
     },
@@ -961,24 +961,28 @@ export default {
         this.columns = this.columns1;
         this.is_distribution = 0;
         this.formItem.is_distribution = this.is_distribution;
+        this.formItem.product_type = this.product_type;
         this.getPayingData();
       } else if (this.pitchonStyle == 2) {
         this.deleteFormData();
         this.columns = this.columns2;
         this.is_distribution = 1;
         this.formItem.is_distribution = this.is_distribution;
+        this.formItem.product_type = this.product_type;
         this.getPayingData();
       } else if (this.pitchonStyle == 3) {
         this.deleteFormData();
         this.columns = this.columns3;
         this.is_distribution = 0;
         this.formItem.is_distribution = this.is_distribution;
+        this.formItem.product_type = this.product_type;
         this.getPayingData();
       } else if (this.pitchonStyle == 4) {
         this.deleteFormData();
         this.columns = this.columns4;
         this.is_distribution = 1;
         this.formItem.is_distribution = this.is_distribution;
+        this.formItem.product_type = this.product_type;
         this.getPayingData();
       }
     },

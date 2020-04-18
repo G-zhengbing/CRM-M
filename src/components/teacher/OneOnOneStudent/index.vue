@@ -62,9 +62,9 @@
                     placeholder="首电呼出情况"
                     style="width: 120px;"
                   >
-                    <Option value="accomplish">已完成</Option>
-                    <Option value="underway">进行中</Option>
-                    <Option value="overtime">超时</Option>
+                    <Option value="1">已完成</Option>
+                    <Option value="2">进行中</Option>
+                    <Option value="3">超时</Option>
                   </Select>
                 </FormItem>
                 <FormItem>
@@ -144,9 +144,9 @@
                     placeholder="首电呼出情况"
                     style="width: 120px;"
                   >
-                    <Option value="accomplish">已完成</Option>
-                    <Option value="underway">进行中</Option>
-                    <Option value="overtime">超时</Option>
+                    <Option value="1">已完成</Option>
+                    <Option value="2">进行中</Option>
+                    <Option value="3">超时</Option>
                   </Select>
                 </FormItem>
                 <FormItem>
