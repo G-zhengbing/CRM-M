@@ -517,7 +517,7 @@
 
 <script>
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
-import { INCLASS } from "@/uilt/url/url";
+import { INCLASS, UPDATELEARNINGSTATE } from "@/uilt/url/url";
 import qs from "qs";
 
 // import Inclass from "@/store/inclass";
@@ -619,39 +619,101 @@ export default {
           title: "本周到课情况",
           key: "class_attendance",
           align: "center",
-          width: 140
-          // render: (h, params) => {
-          // 	return h("div", [
-          // 		h(
-          // 			"StateSelection",
-          // 			{
-          // 				props: {
-          // 					type: "text",
-          // 					size: "small",
-          // 					classify: 1,
-          // 					userIndex: params.index
-          // 				},
-          // 			},
-          // 		)
-          // 	]);
-          // }
+          width: 140,
+          render: (h, params) => {
+            return h(
+              "Poptip",
+              {
+                props: {
+                  placement: "bottom"
+                }
+              },
+              [
+                h("span", params.row.class_attendance),
+                h(
+                  "div",
+                  {
+                    slot: "content",
+                    style: {
+                      display: "flex",
+                      "flex-direction": "column",
+                      "align-content": "center",
+                      "text-align": "center"
+                    }
+                  },
+                  this.monicker.map((item, index) => {
+                    return h(
+                      "Button",
+                      {
+                        style: {
+                          textAlign: "center",
+                          padding: "4px",
+                          width: "80px",
+                          margin: "5px 0"
+                        },
+                        on: {
+                          click: () => {
+                            this.ClassState(params.row, index);
+                          }
+                        }
+                      },
+                      item
+                    );
+                  })
+                )
+              ]
+            );
+          }
         },
         {
           title: "上周交作业情况",
           key: "delivery_of_work",
           align: "center",
-          width: 140
-          // render: (h, params) => {
-          // 	return h('StateSelection', {
-          // 		props: {
-          // 			type: "text",
-          // 			size: "small",
-          // 			classify: 2,
-          // 			userIndex: params.index
-          // 		},
-          // 	},
-          // 	)
-          // }
+          width: 140,
+          render: (h, params) => {
+            return h(
+              "Poptip",
+              {
+                props: {
+                  placement: "bottom"
+                }
+              },
+              [
+                h("span", params.row.delivery_of_work),
+                h(
+                  "div",
+                  {
+                    slot: "content",
+                    style: {
+                      display: "flex",
+                      "flex-direction": "column",
+                      "align-content": "center",
+                      "text-align": "center"
+                    }
+                  },
+                  this.jobMonicker.map((item, index) => {
+                    return h(
+                      "Button",
+                      {
+                        style: {
+                          textAlign: "center",
+                          padding: "4px",
+                          width: "80px",
+                          margin: "5px 0"
+                        },
+                        on: {
+                          click: () => {
+                            this.JobMonicker(params.row, index);
+                          }
+                        }
+                      },
+                      item
+                    );
+                  })
+                )
+              ]
+            );
+          }
         },
         {
           title: "操作",
@@ -780,33 +842,101 @@ export default {
           title: "本周到课情况",
           key: "class_attendance",
           align: "center",
-          width: 140
-          // render: (h, params) => {
-          // 	return h('StateSelection', {
-          // 		props: {
-          // 			type: "text",
-          // 			size: "small",
-          // 			classify: 1
-          // 		},
-          // 	},
-          // 	)
-          // }
+          width: 140,
+          render: (h, params) => {
+            return h(
+              "Poptip",
+              {
+                props: {
+                  placement: "bottom"
+                }
+              },
+              [
+                h("span", params.row.class_attendance),
+                h(
+                  "div",
+                  {
+                    slot: "content",
+                    style: {
+                      display: "flex",
+                      "flex-direction": "column",
+                      "align-content": "center",
+                      "text-align": "center"
+                    }
+                  },
+                  this.monicker.map((item, index) => {
+                    return h(
+                      "Button",
+                      {
+                        style: {
+                          textAlign: "center",
+                          padding: "4px",
+                          width: "80px",
+                          margin: "5px 0"
+                        },
+                        on: {
+                          click: () => {
+                            this.ClassState(params.row, index);
+                          }
+                        }
+                      },
+                      item
+                    );
+                  })
+                )
+              ]
+            );
+          }
         },
         {
           title: "上周交作业情况",
           key: "delivery_of_work",
           align: "center",
-          width: 140
-          // render: (h, params) => {
-          // 	return h('StateSelection', {
-          // 		props: {
-          // 			type: "text",
-          // 			size: "small",
-          // 			classify: 2
-          // 		},
-          // 	},
-          // 	)
-          // }
+          width: 140,
+          render: (h, params) => {
+            return h(
+              "Poptip",
+              {
+                props: {
+                  placement: "bottom"
+                }
+              },
+              [
+                h("span", params.row.delivery_of_work),
+                h(
+                  "div",
+                  {
+                    slot: "content",
+                    style: {
+                      display: "flex",
+                      "flex-direction": "column",
+                      "align-content": "center",
+                      "text-align": "center"
+                    }
+                  },
+                  this.jobMonicker.map((item, index) => {
+                    return h(
+                      "Button",
+                      {
+                        style: {
+                          textAlign: "center",
+                          padding: "4px",
+                          width: "80px",
+                          margin: "5px 0"
+                        },
+                        on: {
+                          click: () => {
+                            this.JobMonicker(params.row, index);
+                          }
+                        }
+                      },
+                      item
+                    );
+                  })
+                )
+              ]
+            );
+          }
         },
         {
           title: "操作",
@@ -941,33 +1071,101 @@ export default {
           title: "本周到课情况",
           key: "class_attendance",
           align: "center",
-          width: 140
-          // render: (h, params) => {
-          // 	return h('StateSelection', {
-          // 		props: {
-          // 			type: "text",
-          // 			size: "small",
-          // 			classify: 1
-          // 		},
-          // 	},
-          // 	)
-          // }
+          width: 140,
+          render: (h, params) => {
+            return h(
+              "Poptip",
+              {
+                props: {
+                  placement: "bottom"
+                }
+              },
+              [
+                h("span", params.row.class_attendance),
+                h(
+                  "div",
+                  {
+                    slot: "content",
+                    style: {
+                      display: "flex",
+                      "flex-direction": "column",
+                      "align-content": "center",
+                      "text-align": "center"
+                    }
+                  },
+                  this.monicker.map((item, index) => {
+                    return h(
+                      "Button",
+                      {
+                        style: {
+                          textAlign: "center",
+                          padding: "4px",
+                          width: "80px",
+                          margin: "5px 0"
+                        },
+                        on: {
+                          click: () => {
+                            this.ClassState(params.row, index);
+                          }
+                        }
+                      },
+                      item
+                    );
+                  })
+                )
+              ]
+            );
+          }
         },
         {
           title: "上周交作业情况",
           key: "delivery_of_work",
           align: "center",
-          width: 140
-          // render: (h, params) => {
-          // 	return h('StateSelection', {
-          // 		props: {
-          // 			type: "text",
-          // 			size: "small",
-          // 			classify: 2
-          // 		},
-          // 	},
-          // 	)
-          // }
+          width: 140,
+          render: (h, params) => {
+            return h(
+              "Poptip",
+              {
+                props: {
+                  placement: "bottom"
+                }
+              },
+              [
+                h("span", params.row.delivery_of_work),
+                h(
+                  "div",
+                  {
+                    slot: "content",
+                    style: {
+                      display: "flex",
+                      "flex-direction": "column",
+                      "align-content": "center",
+                      "text-align": "center"
+                    }
+                  },
+                  this.jobMonicker.map((item, index) => {
+                    return h(
+                      "Button",
+                      {
+                        style: {
+                          textAlign: "center",
+                          padding: "4px",
+                          width: "80px",
+                          margin: "5px 0"
+                        },
+                        on: {
+                          click: () => {
+                            this.JobMonicker(params.row, index);
+                          }
+                        }
+                      },
+                      item
+                    );
+                  })
+                )
+              ]
+            );
+          }
         },
         {
           title: "操作",
@@ -1112,7 +1310,7 @@ export default {
           width: 200,
           render: (h, params) => {
             return h("div", [
-            h(
+              h(
                 "Button",
                 {
                   props: {
@@ -1182,6 +1380,36 @@ export default {
     }
   },
   methods: {
+    // 选择本周到课状态
+    async ClassState(row, index) {
+      // console.log(row);
+      let modeArr = new FormData();
+      modeArr.account_work_id = row.account_work_id;
+      modeArr.class_attendance = index + 1;
+      let res = await this.$request({
+        method: "post",
+        url: UPDATELEARNINGSTATE,
+        data: qs.stringify(modeArr)
+      });
+      if (res.data.code == 200) {
+        this.getUserData();
+      }
+    },
+    // 选择上周交作业情况
+    async JobMonicker(row, index) {
+      // console.log(row);
+      let modeArr = new FormData();
+      modeArr.account_work_id = row.account_work_id;
+      modeArr.delivery_of_work = index + 1;
+      let res = await this.$request({
+        method: "post",
+        url: UPDATELEARNINGSTATE,
+        data: qs.stringify(modeArr)
+      });
+      if (res.data.code == 200) {
+        this.getUserData();
+      }
+    },
     // 关闭窗口状态
     changeShowMod(val) {
       this.showMod = val;
@@ -1219,7 +1447,7 @@ export default {
         page_num: "10" // 每页条数
       };
     },
-    ...mapMutations(["setCurrentPages", "setSelectState","setRefresh"]),
+    ...mapMutations(["setCurrentPages", "setSelectState", "setRefresh"]),
     // 设置当前页码
     changePages(val) {
       this.mode.page = val;
@@ -1285,7 +1513,7 @@ export default {
         url: INCLASS,
         data: qs.stringify(this.formItem)
       });
-      
+
       let links = res.data.data.links;
       // 设置搜索选项
       this.setSelectState(links);
@@ -1326,5 +1554,10 @@ export default {
 .card {
   margin: 5px;
   overflow: hidden;
+}
+</style>
+<style>
+.ivu-poptip-popper {
+  min-width: 0 !important;
 }
 </style>
