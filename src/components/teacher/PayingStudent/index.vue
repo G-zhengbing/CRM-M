@@ -100,6 +100,16 @@
                 </FormItem>
                 <FormItem>
                   <DatePicker
+                    v-model="formItem.create_sts_time"
+                    type="datetimerange"
+                    placement="bottom-end"
+                    placeholder="分配时间 - 分配时间"
+                    style="width: 165px"
+                    @on-change="changeCreateDate"
+                  ></DatePicker>
+                </FormItem>
+                <FormItem>
+                  <DatePicker
                     v-model="formItem.tradingHour"
                     type="datetimerange"
                     placement="bottom-end"
@@ -219,6 +229,16 @@
                     placeholder="开课时间"
                     style="width: 120px;"
                     @on-change="changeCurriculumTime"
+                  ></DatePicker>
+                </FormItem>
+                <FormItem>
+                  <DatePicker
+                    v-model="formItem.create_sts_time"
+                    type="datetimerange"
+                    placement="bottom-end"
+                    placeholder="分配时间 - 分配时间"
+                    style="width: 165px"
+                    @on-change="changeCreateDate"
                   ></DatePicker>
                 </FormItem>
                 <FormItem>
@@ -900,12 +920,6 @@ export default {
       this.row = row;
       this.type = "Allocation";
     },
-    // 跟进
-    // StudentsFollowUp(row) {
-    //   this.showMod = true;
-    //   this.row = row;
-    //   this.type = "StudentsFollowUp";
-    // },
     // 学情报告
     LearningReport(row) {
       this.showMod = true;
@@ -926,6 +940,11 @@ export default {
     },
     changeCurriculumTime(time) {
       this.formItem.start_date = time;
+    },
+    // 转换date
+    changeCreateDate(time) {
+      this.formItem.create_st_time = time[0];
+      this.formItem.create_en_time = time[1];
     },
     ...mapMutations(["setCurrentPages", "setSelectState", "setRefresh"]),
     // 设置当前页码
@@ -991,6 +1010,7 @@ export default {
       // 打开弹层
       this.isLoading = true;
       this.num++;
+      console.log(this.formItem)
       let res = await this.$request({
         method: "post",
         url: PAYINGSTUDENT,

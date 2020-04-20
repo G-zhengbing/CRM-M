@@ -643,7 +643,7 @@ export default {
     async getUserData() {
       // loading 开
       this.isLoading = true;
-      this.mode.product_type = 4; // 设置一对一接口
+      this.formItem.product_type = 4; // 设置一对一接口
       let res = await this.$request({
         method: "post",
         url: CLASSSTUDENTS,

@@ -625,7 +625,8 @@ export default {
               "Poptip",
               {
                 props: {
-                  placement: "bottom"
+                  trigger: 'hover',
+                  placement: "bottom",
                 }
               },
               [
@@ -675,6 +676,7 @@ export default {
               "Poptip",
               {
                 props: {
+                  trigger: 'hover',
                   placement: "bottom"
                 }
               },
@@ -848,6 +850,7 @@ export default {
               "Poptip",
               {
                 props: {
+                  trigger: 'hover',
                   placement: "bottom"
                 }
               },
@@ -898,6 +901,7 @@ export default {
               "Poptip",
               {
                 props: {
+                  trigger: 'hover',
                   placement: "bottom"
                 }
               },
@@ -1127,6 +1131,7 @@ export default {
               "Poptip",
               {
                 props: {
+                  trigger: 'hover',
                   placement: "bottom"
                 }
               },

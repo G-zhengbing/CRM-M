@@ -50,6 +50,16 @@
                   ></DatePicker>
                 </FormItem>
                 <FormItem>
+                  <DatePicker
+                    v-model="formItem.create_sts_time"
+                    type="datetimerange"
+                    placement="bottom-end"
+                    placeholder="分配时间 - 分配时间"
+                    style="width: 165px"
+                    @on-change="changeCreateDate"
+                  ></DatePicker>
+                </FormItem>
+                <FormItem>
                   <Button @click="deleteFormData" style="margin-left: 8px">清空选项</Button>
                 </FormItem>
               </Form>
@@ -102,6 +112,16 @@
                     placeholder="交易时间 - 交易时间"
                     style="width: 165px"
                     @on-change="changeDate"
+                  ></DatePicker>
+                </FormItem>
+                <FormItem>
+                  <DatePicker
+                    v-model="formItem.create_sts_time"
+                    type="datetimerange"
+                    placement="bottom-end"
+                    placeholder="分配时间 - 分配时间"
+                    style="width: 165px"
+                    @on-change="changeCreateDate"
                   ></DatePicker>
                 </FormItem>
                 <FormItem>
@@ -168,6 +188,16 @@
                     placeholder="交易时间 - 交易时间"
                     style="width: 165px"
                     @on-change="changeDate"
+                  ></DatePicker>
+                </FormItem>
+                <FormItem>
+                  <DatePicker
+                    v-model="formItem.create_sts_time"
+                    type="datetimerange"
+                    placement="bottom-end"
+                    placeholder="分配时间 - 分配时间"
+                    style="width: 165px"
+                    @on-change="changeCreateDate"
                   ></DatePicker>
                 </FormItem>
                 <FormItem>
@@ -313,6 +343,12 @@ export default {
           key: "pay_amount",
           align: "center",
           width: 100
+        },
+        {
+          title: "分配时间",
+          key: "create_time",
+          align: "center",
+          width: 180
         },
         {
           type: "html",
@@ -471,6 +507,12 @@ export default {
           width: 100
         },
         {
+          title: "分配时间",
+          key: "create_time",
+          align: "center",
+          width: 180
+        },
+        {
           type: "html",
           title: "首电呼出情况",
           key: "dial_up_situation",
@@ -598,6 +640,11 @@ export default {
     changeDate(time) {
       this.formItem.pay_start_time = time[0];
       this.formItem.pay_end_time = time[1];
+    },
+    // 转换date
+    changeCreateDate(time) {
+      this.formItem.create_st_time = time[0];
+      this.formItem.create_en_time = time[1];
     },
     ...mapMutations(["setCurrentPages", "setSelectState","setRefresh"]),
     // 改变页码
