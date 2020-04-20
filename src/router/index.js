@@ -32,6 +32,7 @@ import Allreserved from '../components/reserved/Allreserved.vue'
 import Teacher from '../components/teachering/Teacher.vue'
 import Statistics from '../components/Statistics'
 import Importdata from '../components/minecllient/Importdata.vue'
+import Timeblock from '../uilt/timeblock/Timeblock.vue'
  
 import storage from '../uilt/storage'
 
@@ -172,6 +173,10 @@ const router = new Router({
         {
           path: '/main/statistics',
           component: Statistics
+        },
+        {
+          path: '/main/timeblock',
+          component: Timeblock
         },
         {
           path: '/main/importdata',
