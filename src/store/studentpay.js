@@ -1,6 +1,9 @@
 import axios from 'axios'
 import {
-  ANALLOT
+  ANALLOT,
+  ACCOUNTORDER,
+  CLIENTTYPE,
+  CREATEUPGRADE
 } from '../uilt/url/url'
 import storage from '../uilt/storage'
 
@@ -11,9 +14,17 @@ export default {
     currentPage: 1,
     total: 0,
     pageSize: 10,
-    studentpayTypesList: null
+    studentpayTypesList: null,
+    accountList:[],
+    ordersnList:[]
   },
   mutations: {
+    setOrdersnList(state,payload){
+      state.ordersnList = payload
+    },
+    setAccountList(state,payload){
+      state.accountList = payload
+    },
     setStudentpayTypes(state, payload) {
       state.studentpayTypesList = payload
     },
@@ -28,6 +39,70 @@ export default {
     }
   },
   actions: {
+    //创建升级订单
+    createUpOrder({state,commit,dispatch},form){
+      return new Promise((resolve,reject)=>{
+        axios({
+          method:"post",
+          url:CREATEUPGRADE,
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            Authorization: "bearer " + storage.get()
+          },
+          params:{
+            ...form
+          }
+        }).then(res=>{
+          resolve(res)
+        }).catch(e=>{
+          reject(e)
+        })
+      })
+    },
+    //订单列表
+    getOrdersnList({state,commit,dispatch},form){
+      return new Promise((resolve,reject)=>{
+        axios({
+          method:"get",
+          url:CLIENTTYPE,
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            Authorization: "bearer " + storage.get()
+          },
+          params:{
+            ...form
+          }
+        }).then(res=>{
+          commit("setOrdersnList",res.data.data.resources)
+          resolve(res)
+        }).catch(e=>{
+          reject(e)
+        })
+      })
+    },
+    //补款升级列表
+    getAccountList({
+      state,
+      commit,
+      dispatch
+    }, uid) {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "get",
+          url: ACCOUNTORDER + '/' + uid,
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            Authorization: "bearer " + storage.get()
+          }
+        }).then(res => {
+          commit("setAccountList",res.data.data.resources)
+          resolve(res)
+        }).catch(e => {
+          reject(e)
+        })
+      })
+    },
+    //付费学员列表
     getStudentList({
       state,
       commit

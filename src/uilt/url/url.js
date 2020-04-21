@@ -58,6 +58,8 @@ const CREATEORDER = "http://liveapi.canpoint.net/api/create_order"//创建订单
 const HANDOVER  = "http://liveapi.canpoint.net/api/handover"//交接单
 const IMPORTANT = 'http://liveapi.canpoint.net/api/import_list'//导入订单列表
 const IMPORTLIST = "http://liveapi.canpoint.net/api/upload_csv"//导入线索
+const ACCOUNTORDER = "http://liveapi.canpoint.net/api/account_order"//升级订单列表
+const CREATEUPGRADE = "http://liveapi.canpoint.net/api/create_upgrade_order"//创建升级订单
 
 const PAYINGSTUDENT = BASEURL + "paying_student" //教务/付费学员
 const CLASSTEACH = BASEURL + "teacher_list" //教务/select/班主任列表
@@ -88,6 +90,8 @@ const SCREENLIST = BASEURL + "screen_list" //教务/ 公共接口，select状态
 // 39.107.156.22/canpoint
 
 export {
+  CREATEUPGRADE,
+  ACCOUNTORDER,
   GETACCOUNTSFOLLOW,
   ADDORDER,
   ORDERPRODUCT,

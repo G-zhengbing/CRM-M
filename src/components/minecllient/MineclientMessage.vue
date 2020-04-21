@@ -778,20 +778,12 @@
           <Col span="8">
             <FormItem label="选择课时包">
               <Select
-                v-model="form.grade"
+                v-model="upgradeForm.order_sn"
                 style="width:150px"
-                @on-change="seekClick"
-                placeholder="年级"
+                @on-change="getClass"
+                placeholder="课时包"
               >
-                <Option :value="1">一年级</Option>
-                <Option :value="2">二年级</Option>
-                <Option :value="3">三年级</Option>
-                <Option :value="4">四年级</Option>
-                <Option :value="5">五年级</Option>
-                <Option :value="6">六年级</Option>
-                <Option :value="7">七年级</Option>
-                <Option :value="8">八年级</Option>
-                <Option :value="9">九年级</Option>
+                <Option :value="i" v-for="(list,i) in accountList">{{list.product_name}}</Option>
               </Select>
             </FormItem>
           </Col>
@@ -803,27 +795,58 @@
           <Col span="8">
             <FormItem label="升级至">
               <Select
-                v-model="form.grade"
+                v-model="upgradeForm.product_id"
                 style="width:150px"
-                @on-change="seekClick"
-                placeholder="年级"
+                @on-change="getClassAll"
+                placeholder="课时包"
               >
-                <Option :value="1">一年级</Option>
-                <Option :value="2">二年级</Option>
-                <Option :value="3">三年级</Option>
-                <Option :value="4">四年级</Option>
-                <Option :value="5">五年级</Option>
-                <Option :value="6">六年级</Option>
-                <Option :value="7">七年级</Option>
-                <Option :value="8">八年级</Option>
-                <Option :value="9">九年级</Option>
+                <Option :value="i" v-for="(list,i) in ordersnList">{{list.course_name}}</Option>
               </Select>
             </FormItem>
           </Col>
           <Col span="24">
-            <FormItem>
-              <Table border :columns="upgradeColumns" :data="upgradeList" height="100"></Table>
+            <FormItem class="tables">
+              <ul>
+                <li></li>
+                <li>课程名称</li>
+                <li>课程类型</li>
+                <li>收费模式</li>
+                <li>课时包等级</li>
+                <li>课时总数</li>
+                <li>总金额</li>
+              </ul>
+              <ul v-if="JSON.stringify(classNum) != '{}'">
+                <li>升级前</li>
+                <li>{{classNum.product_name}}</li>
+                <li>一对一</li>
+                <li>按课时</li>
+                <li>{{classNum.product_level == 1? '中级':'中级' || classNum.product_level == 2? '高级':'高级' || classNum.product_level == 3? '特级':'特级'}}</li>
+                <li>{{classNum.total_class_hour + '+' + classNum.give_class_hour}}</li>
+                <li>{{classNum.pay_amount}}</li>
+              </ul>
+              <ul v-if="JSON.stringify(classAll) != '{}'">
+                <li>升级后</li>
+                <li>{{classAll.course_name}}</li>
+                <li>一对一</li>
+                <li>按课时</li>
+                <li>{{classAll.level}}</li>
+                <li>{{(classAll.class_hour + '+' + classAll.give_class_hour) }}</li>
+                <li>{{classAll.total_price}}</li>
+              </ul>
+              <div v-else>暂无数据</div>
             </FormItem>
+          </Col>
+          <Col
+            span="24"
+            class="totalprice"
+            v-if="JSON.stringify(classNum) != '{}' && JSON.stringify(classAll) != '{}'"
+          >
+            <p>{{classAll.total_price}}</p>
+            <p style="margin:5px 0">{{ '-' + classNum.pay_amount}}</p>
+            <div>
+              <span>应补总计</span>
+              {{classAll.total_price - classNum.pay_amount}}
+            </div>
           </Col>
         </Row>
       </Form>
@@ -863,7 +886,9 @@ export default {
       notifiPageSize: state => state.mineclient.notifiPageSize,
       notifiData: state => state.mineclient.notifiData,
       provinceList: state => state.mineclient.provinceList,
-      city: state => state.mineclient.city
+      city: state => state.mineclient.city,
+      accountList: state => state.studentpay.accountList,
+      ordersnList: state => state.studentpay.ordersnList
     })
   },
   mounted() {
@@ -1160,12 +1185,15 @@ export default {
         { title: "活动价", key: "activity_price" },
         { title: "课时总金额", key: "total_price", width: 120 }
       ],
-      form: {}
+      form: {},
+      classNum: {},
+      classAll: {}
     };
   },
   methods: {
     ...mapMutations(["setClientCurrentpage", "setNotifiCurrentPage"]),
     ...mapActions([
+      "createUpOrder",
       "getCity",
       "handover",
       "createOrderList",
@@ -1187,8 +1215,37 @@ export default {
       "getTeacherListN",
       "removeMineclient"
     ]),
+    getClass(num) {
+      this.classNum = this.accountList[num];
+    },
+    getClassAll(num) {
+      this.classAll = this.ordersnList[num];
+    },
     //补款升级
-    upgrade() {},
+    upgrade() {
+      var page = this.type.currentPage;
+      if (
+        JSON.stringify(this.classNum) != "{}" &&
+        JSON.stringify(this.classAll) != "{}"
+      ) {
+        this.upgradeForm.order_sn = this.classNum.order_sn;
+        this.upgradeForm.product_id = this.classAll.id;
+      }
+      this.upgradeForm.account_id = this.type.data.id;
+      this.createUpOrder(this.upgradeForm).then(res => {
+        if (!res.data.ret) {
+          this.$Message.error(res.data.error);
+          this.$parent.showMine = false;
+          this.getStudentList({ ...this.type.form, page });
+          return;
+        }
+        if (res.data.ret) {
+          this.$Message.success("订单升级成功");
+          this.$parent.showMine = false;
+          this.getStudentList({ ...this.type.form, page });
+        }
+      });
+    },
     //移出
     remove() {
       if (!this.removeNote) {
@@ -1483,7 +1540,7 @@ export default {
     },
     //获取预约单老师列表
     getTeachers() {
-      this.teachersV.length = 0
+      this.teachersV.length = 0;
       var form = {};
       this.createAuditionForm.date_time = this.datePicker(
         this.createAuditionForm.date_time
@@ -1718,6 +1775,29 @@ export default {
 </script>
 
 <style scoped>
+.totalprice > div span {
+  margin-right: 30px;
+}
+.totalprice {
+  text-align: right;
+}
+.tables div {
+  height: 30px;
+  line-height: 30px;
+  color: #333;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+.tables ul li {
+  flex: 1;
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  text-align: center;
+  color: #333;
+}
+.tables ul {
+  display: flex;
+}
 .procued-footer div {
   flex: 1;
   text-align: right;
@@ -1793,9 +1873,9 @@ export default {
   flex-wrap: wrap;
 }
 .content-right-header li.disable,
-.content-right-footer li.disable{
+.content-right-footer li.disable {
   display: none;
-} 
+}
 .content-right-header li,
 .content-right-footer li {
   width: 136px;

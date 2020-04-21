@@ -181,6 +181,7 @@ export default {
         // { title: "渠道优先级", key: "subject" },
         // { title: "渠道类型", key: "refer" },
         { title: "渠道来源", key: "refer" },
+        { title: "跟进人", key: "follow_sale_name" },
         { title: "跟进状态", key: "follow_status" },
         // { title: "学习阶段", key: "follow_status" },
         { title: "呼出情况", key: "many_calls" },
