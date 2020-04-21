@@ -20,7 +20,7 @@
                     <Input v-model="form.name" placeholder="学员姓名" @on-change="seekClick"></Input>
                   </FormItem>
                 </Col>
-                 <Col span="4">
+                <Col span="4">
                   <FormItem style="width:230px;">
                     <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekClick"></Input>
                   </FormItem>
@@ -57,7 +57,7 @@
                     </Select>
                   </FormItem>
                 </Col>
-                <Col span="4">
+                <Col span="6">
                   <FormItem>
                     <Select
                       v-model="form.intention_option"
@@ -66,6 +66,22 @@
                       placeholder="意向度"
                     >
                       <Option :value="i" v-for="(list,i) in intention">{{list}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select
+                      v-model="form.sale_id"
+                      style="width:150px"
+                      @on-change="seekClick"
+                      placeholder="跟进人"
+                    >
+                      <Option
+                        v-for="(list,i) in sale_list"
+                        :key="i"
+                        :value="list.id"
+                      >{{list.login_name}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
@@ -81,7 +97,7 @@
                       <Option :value="2">已约课</Option>
                     </Select>
                   </FormItem>
-                </Col> -->
+                </Col>-->
                 <Col span="4" style="text-indent: 60px">
                   <Button type="primary" @click="clear">清除</Button>
                 </Col>
@@ -116,9 +132,9 @@
 <script>
 import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
 import Loading from "../uilt/loading/loading";
-import storage from '../uilt/storage'
+import storage from "../uilt/storage";
 import DaibanMessage from "../uilt/newErweima/DaibanMessage";
-import MineclientMessage from './minecllient/MineclientMessage'
+import MineclientMessage from "./minecllient/MineclientMessage";
 export default {
   components: {
     Loading,
@@ -128,7 +144,7 @@ export default {
   mounted() {
     this.setCurrentPage(1);
     this.isLoading = true;
-    this.getYuQiList().then(res => {
+    this.getYuQiList({form:{},page:1}).then(res => {
       this.isLoading = false;
     });
   },
@@ -144,7 +160,8 @@ export default {
   },
   data() {
     return {
-      showMine:false,
+      sale_list: storage.getDaiban().sale_list,
+      showMine: false,
       subjectList: storage.getDaiban().screen_list.subject,
       intention: storage.getDaiban().screen_list.inter_nation,
       stage: storage.getDaiban().screen_list.stage,
@@ -164,18 +181,18 @@ export default {
         { title: "意向度", key: "intention_option" },
         { title: "学习阶段", key: "stage" },
         { title: "跟进人", key: "follow_sale_name" },
-        { title: "上次跟进内容", key: "last_visit_content",tooltip:true },
-        { title: "上次跟进时间", key: "last_follow_time"  },
+        { title: "上次跟进内容", key: "last_visit_content", tooltip: true },
+        { title: "上次跟进时间", key: "last_follow_time" },
         { title: "回访时间", key: "next_follow_time" },
         { title: "注册时间", key: "create_time" },
         {
-            title: "操作",
-            key: "action",
-            align: "center",
-            width:140,
-            render: (h, params) => {
-              return h("div", [
-                h(
+          title: "操作",
+          key: "action",
+          align: "center",
+          width: 140,
+          render: (h, params) => {
+            return h("div", [
+              h(
                 "Button",
                 {
                   props: {
@@ -205,7 +222,7 @@ export default {
                 },
                 "转介绍"
               ),
-                h(
+              h(
                 "Button",
                 {
                   props: {
@@ -220,47 +237,47 @@ export default {
                 },
                 "试听"
               ),
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "text",
-                      size: "small"
-                    },
-                    on: {
-                      click: () => {
-                        this.getBtnClick3(params.row);
-                      }
-                    }
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
                   },
-                  "跟进"
-                ),
-                 h(
-                  "Button",
-                  {
-                    props: {
-                      type: "text",
-                      size: "small"
-                    },
-                    on: {
-                      click: () => {
-                        this.getBtnClick4(params.row);
-                      }
+                  on: {
+                    click: () => {
+                      this.getBtnClick3(params.row);
                     }
+                  }
+                },
+                "跟进"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
                   },
-                  "呼出"
-                )
-              ]);
-            }
+                  on: {
+                    click: () => {
+                      this.getBtnClick4(params.row);
+                    }
+                  }
+                },
+                "呼出"
+              )
+            ]);
           }
+        }
       ]
     };
   },
   methods: {
     ...mapMutations(["setNotCallBackTyps", "setCurrentPage"]),
-    ...mapActions(["getYuQiList","RingUp"]),
+    ...mapActions(["getYuQiList", "RingUp"]),
     //试听
-    audition(item){
+    audition(item) {
       this.setNotCallBackTyps(item);
       this.showMine = true;
       this.type.classify = "audition";
@@ -279,24 +296,28 @@ export default {
         this.setCurrentPage(page);
       }
       this.isLoading = true;
-      this.getYuQiList({ ...this.form, page }).then(res => {
+      this.getYuQiList({ form:this.form, page }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(page);
       });
     },
     selectionChange() {},
     //转介绍
-    introduce(item){
+    introduce(item) {
       this.setNotCallBackTyps(item);
       this.showMine = true;
       this.type.classify = "introduce";
+      this.type.page = this.currentPage;
+      this.type.form = this.form ;
       this.type.data = { ...this.notcallbackTypes };
     },
     //订单
-    order(item){
+    order(item) {
       this.setNotCallBackTyps(item);
       this.showMine = true;
       this.type.classify = "order";
+      this.type.page = this.currentPage;
+      this.type.form = this.form ;
       this.type.data = { ...this.notcallbackTypes };
     },
     //跟进
@@ -304,37 +325,43 @@ export default {
       this.setNotCallBackTyps(item);
       this.show = true;
       this.type.classify = "followUp";
-      this.type.page = this.currentPage
-      this.type.form = {...this.form}
+      this.type.page = this.currentPage;
+      this.type.form = this.form;
       this.type.data = { ...this.notcallbackTypes };
     },
     //呼出
-    getBtnClick4(item){
+    getBtnClick4(item) {
       this.setNotCallBackTyps(item);
       this.show = true;
       this.type.classify = "followUp";
+      this.type.page = this.currentPage;
+      this.type.form = this.form ;
       this.type.data = { ...this.notcallbackTypes };
-      if(typeof item.spare_phone == 'undefined' ||item.spare_phone == "" || item.spare_phone == null){
+      if (
+        typeof item.spare_phone == "undefined" ||
+        item.spare_phone == "" ||
+        item.spare_phone == null
+      ) {
         this.isLoading = true;
-        this.RingUp({form:item})
-        .then(res => {
-          if (res.data.code == 200) {
-            this.$Message.success("呼出成功");
-          }
-          if (res.data.code == 1000) {
-            this.$Message.error({
-              content: res.data.error,
-              duration: 4
-            });
-          }
-          this.isLoading = false;
-        })
-        .catch(e => {
-          if (e) {
+        this.RingUp({ form: item })
+          .then(res => {
+            if (res.data.code == 200) {
+              this.$Message.success("呼出成功");
+            }
+            if (res.data.code == 1000) {
+              this.$Message.error({
+                content: res.data.error,
+                duration: 4
+              });
+            }
             this.isLoading = false;
-          }
-        });
-      }else{
+          })
+          .catch(e => {
+            if (e) {
+              this.isLoading = false;
+            }
+          });
+      } else {
         this.type.classify = "ringupFollowUp";
       }
     },
@@ -342,7 +369,7 @@ export default {
     pageChange(num) {
       this.isLoading = true;
       this.setCurrentPage(num);
-      this.getYuQiList({ ...this.form }).then(res => {
+      this.getYuQiList({ form:this.form }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(num);
       });

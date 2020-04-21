@@ -111,7 +111,12 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["getReservedList", "setSignin", "setAppraisal"]),
+    ...mapActions([
+      "getReservedList",
+      "setSignin",
+      "setAppraisal",
+      "getReservedAllList"
+    ]),
     //查看测评
     appraisal() {
       this.isLoading = true;
@@ -132,9 +137,15 @@ export default {
           }
           if (response.data.code == 200 && response.data.ret == true) {
             this.$Message.success("新增测评成功");
-            this.getReservedList({ tab_type: this.$parent.num }).then(res => {
-              this.isLoading = false;
-            });
+            if (this.type.status == "reserved") {
+              this.getReservedList({ tab_type: this.$parent.num }).then(res => {
+                this.isLoading = false;
+              });
+            } else {
+              this.getReservedAllList({ tab_type: this.$parent.num }).then(res => {
+                this.isLoading = false;
+              });
+            }
             this.$parent.showMoadl = false;
           }
           this.isLoading = false;
@@ -188,9 +199,15 @@ export default {
         if (res.data.ret) {
           this.$Message.success("预约取消成功");
           this.isLoading = true;
-          this.getReservedList({ tab_type: this.$parent.num }).then(res => {
-            this.isLoading = false;
-          });
+          if (this.type.status == "reserved") {
+              this.getReservedList({ tab_type: this.$parent.num }).then(res => {
+                this.isLoading = false;
+              });
+            } else {
+              this.getReservedAllList({ tab_type: this.$parent.num }).then(res => {
+                this.isLoading = false;
+              });
+            }
         } else {
           this.$Message.success(res.data.error);
         }
@@ -205,9 +222,15 @@ export default {
             if (res.data.ret) {
               this.$Message.success("批量签到成功");
               this.isLoading = true;
+              if (this.type.status == "reserved") {
               this.getReservedList({ tab_type: this.$parent.num }).then(res => {
                 this.isLoading = false;
               });
+            } else {
+              this.getReservedAllList({ tab_type: this.$parent.num }).then(res => {
+                this.isLoading = false;
+              });
+            }
             } else {
               this.$Message.success(res.data.error);
             }
@@ -222,9 +245,15 @@ export default {
           if (res.data.ret) {
             this.$Message.success("签到成功");
             this.isLoading = true;
-            this.getReservedList({ tab_type: this.$parent.num }).then(res => {
-              this.isLoading = false;
-            });
+            if (this.type.status == "reserved") {
+              this.getReservedList({ tab_type: this.$parent.num }).then(res => {
+                this.isLoading = false;
+              });
+            } else {
+              this.getReservedAllList({ tab_type: this.$parent.num }).then(res => {
+                this.isLoading = false;
+              });
+            }
           } else {
             this.$Message.success(res.data.error);
           }

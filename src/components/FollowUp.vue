@@ -57,7 +57,7 @@
                     </Select>
                   </FormItem>
                 </Col>
-                <Col span="4">
+                <Col span="6">
                   <FormItem>
                     <Select
                       v-model="form.intention_option"
@@ -66,6 +66,18 @@
                       placeholder="意向度"
                     >
                       <Option :value="i" v-for="(list,i) in intention">{{list}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                 <Col span="4">
+                  <FormItem>
+                    <Select
+                      v-model="form.sale_id"
+                      style="width:150px"
+                      @on-change="seekKuhu"
+                      placeholder="跟进人"
+                    >
+                      <Option v-for="(list,i) in sale_list" :key="i" :value="list.id">{{list.login_name}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
@@ -115,12 +127,13 @@ export default {
   mounted() {
     this.setCurrentPage(1);
     this.isLoading = true;
-    this.getFollowUpList().then(res => {
+    this.getFollowUpList({form:{},page:1}).then(res => {
       this.isLoading = false;
     });
   },
   data() {
     return {
+      sale_list:storage.getDaiban().sale_list,
       showMine: false,
       intention: storage.getDaiban().screen_list.inter_nation,
       subjectList: storage.getDaiban().screen_list.subject,
@@ -143,7 +156,7 @@ export default {
         { title: "意向度", key: "intention_option" },
         { title: "学习阶段", key: "stage" },
         { title: "跟进人", key: "follow_sale_name" },
-        { title: "上次跟进内容", key: "last_visit_content" },
+        { title: "上次跟进内容", key: "last_visit_content" , tooltip: true},
         { title: "上次跟进时间", key: "last_follow_time" },
         { title: "回访时间", key: "next_follow_time" },
         { title: "注册时间", key: "create_time" },
@@ -247,6 +260,7 @@ export default {
     },
     clear() {
       this.form = {};
+      this.seekKuhu()
     },
     seekKuhu() {
       let page = 1;
@@ -255,7 +269,7 @@ export default {
         this.setCurrentPage(page);
       }
       this.isLoading = true;
-      this.getFollowUpList({ ...this.form, page }).then(res => {
+      this.getFollowUpList({ form:this.form, page }).then(res => {
         this.setCurrentPage(page);
         this.isLoading = false;
       });
@@ -268,6 +282,8 @@ export default {
       this.setGenjintypefoll(item);
       this.showMine = true;
       this.type.classify = "introduce";
+      this.type.page = this.currentPage;
+      this.type.form = this.form ;
       this.type.data = { ...this.Typesntfoll };
     },
     //订单
@@ -275,6 +291,8 @@ export default {
       this.setGenjintypefoll(item);
       this.showMine = true;
       this.type.classify = "order";
+      this.type.page = this.currentPage;
+      this.type.form = this.form ;
       this.type.data = { ...this.Typesntfoll };
     },
     //跟进
@@ -283,7 +301,7 @@ export default {
       this.show = true;
       this.type.classify = "followUp";
       this.type.page = this.currentPage;
-      this.type.form = { ...this.form };
+      this.type.form = this.form ;
       this.type.data = { ...this.Typesntfoll };
     },
     //呼出
@@ -291,6 +309,8 @@ export default {
       this.setGenjintypefoll(item);
       this.show = true;
       this.type.classify = "followUp";
+      this.type.page = this.currentPage;
+      this.type.form = this.form ;
       this.type.data = { ...this.Typesntfoll };
       if(typeof item.spare_phone == 'undefined' ||item.spare_phone == "" || item.spare_phone == null){
         this.isLoading = true;
@@ -320,7 +340,7 @@ export default {
     pageChange(num) {
       this.isLoading = true;
       this.setCurrentPage(num);
-      this.getFollowUpList({ ...this.form }).then(res => {
+      this.getFollowUpList({ form:this.form }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(num);
       });

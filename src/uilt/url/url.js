@@ -38,7 +38,8 @@ const MINECLIENT = "http://liveapi.canpoint.net/api/mine_clues"//我的客户
 const NOTIFICATION = "http://liveapi.canpoint.net/api/action_list"//我的客户/消息提醒
 const PONESTATUS = "http://liveh5.canpoint.net/send_message" //跟进/发送短信验证码
 const CLIENTTYPE = "http://liveapi.canpoint.net/api/order_product" //创建订单/选择课程
-const RESERVED = "http://liveapi.canpoint.net/api/mine_appoint_list" //全部预约单/
+const RESERVED = "http://liveapi.canpoint.net/api/mine_appoint_list" //预约单/
+const RESERVEDAll = "http://liveapi.canpoint.net/api/system_appoint_list" //全部预约单/
 const USERRESERVED = "http://liveapi.canpoint.net/api/appoint_list" //用户预约单列表
 const CREATERESERVED = "http://liveapi.canpoint.net/api/appoint_store" //创建预约单
 const TEACHERLIST  = "http://liveapi.canpoint.net/api/coach_list" //教师管理
@@ -90,6 +91,7 @@ const SCREENLIST = BASEURL + "screen_list" //教务/ 公共接口，select状态
 // 39.107.156.22/canpoint
 
 export {
+  RESERVEDAll,
   CREATEUPGRADE,
   ACCOUNTORDER,
   GETACCOUNTSFOLLOW,

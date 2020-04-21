@@ -72,6 +72,18 @@
                     </Select>
                   </FormItem>
                 </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select
+                      v-model="form.sale_id"
+                      style="width:150px"
+                      @on-change="seekClick"
+                      placeholder="跟进人"
+                    >
+                      <Option v-for="(list,i) in sale_list" :key="i" :value="list.id">{{list.login_name}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
                 <Col span="6">
                   <FormItem>
                     <div class="dateplc">
@@ -151,7 +163,7 @@ export default {
   mounted() {
     this.setCurrentPage(1);
     this.isLoading = true;
-    this.getStudentList().then(res => {
+    this.getStudentList({form:{},page:1}).then(res => {
       this.isLoading = false;
     });
   },
@@ -167,6 +179,7 @@ export default {
   },
   data() {
     return {
+      sale_list:storage.getDaiban().sale_list,
       showMine: false,
       endTime: "",
       startTime: "",
@@ -357,7 +370,7 @@ export default {
       this.showMine = true;
       this.type.classify = "upgrade";
       this.type.form = this.form
-      this.type.currentPage = this.currentPage
+      this.type.page = this.currentPage
       this.type.data = { ...this.studentpayTypes };
     },
     //转介绍
@@ -365,6 +378,8 @@ export default {
       this.setStudentpayTypes(item);
       this.showMine = true;
       this.type.classify = "introduce";
+      this.type.form = this.form
+      this.type.page = this.currentPage
       this.type.data = { ...this.studentpayTypes };
     },
     //订单
@@ -372,6 +387,8 @@ export default {
       this.setStudentpayTypes(item);
       this.showMine = true;
       this.type.classify = "order";
+      this.type.form = this.form
+      this.type.page = this.currentPage
       this.type.data = { ...this.studentpayTypes };
     },
     //交接单
@@ -429,7 +446,7 @@ export default {
         this.setCurrentPage(page);
       }
       this.isLoading = true;
-      this.getStudentList({ ...this.form, page }).then(res => {
+      this.getStudentList({ form:this.form, page }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(page);
       });
@@ -441,7 +458,7 @@ export default {
       this.show = true;
       this.type.classify = "followUp";
       this.type.page = this.currentPage;
-      this.type.form = { ...this.form };
+      this.type.form = this.form ;
       this.type.data = { ...this.studentpayTypes };
     },
     //呼出
@@ -449,6 +466,8 @@ export default {
       this.setStudentpayTypes(item);
       this.show = true;
       this.type.classify = "followUp";
+      this.type.page = this.currentPage;
+      this.type.form = this.form ;
       this.type.data = { ...this.studentpayTypes };
       if (
         typeof item.spare_phone == "undefined" ||
@@ -482,7 +501,7 @@ export default {
     pageChange(num) {
       this.isLoading = true;
       this.setCurrentPage(num);
-      this.getStudentList({ ...this.form }).then(res => {
+      this.getStudentList({ form:this.form }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(num);
       });

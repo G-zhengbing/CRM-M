@@ -22,7 +22,7 @@ export default {
     city: [],
     provinceList: [],
     mineclient: [],
-    refer: storage.getDaiban().channel ? storage.getDaiban().channel : [],
+    refer: storage.getDaiban().channel,
     currentPage: 1,
     total: 0,
     pageSize: 10,
@@ -446,7 +446,7 @@ export default {
     getClientList({
       state,
       commit
-    }, form, page) {
+    }, {form, page}) {
       return new Promise((resolve, reject) => {
         axios({
           method: "get",

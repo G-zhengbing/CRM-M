@@ -153,7 +153,7 @@
           </Col>
           <Col span="12">
             <FormItem label="招商银行卡号" prop="bank_card_id">
-              <Input v-model="form.bank_card_id" placeholder="请输入教师姓名" style="width:300px"></Input>
+              <Input v-model="form.bank_card_id" placeholder="请输入16位招商银行卡号" style="width:300px"></Input>
             </FormItem>
           </Col>
           <Col span="12">
@@ -664,8 +664,9 @@ export default {
       columns: [
         { type: "selection", width: 60 },
         { title: "教师姓名", key: "name" },
-        { title: "性别", key: "mobile" },
+        { title: "性别", key: "sex" },
         { title: "联系方式", key: "mobile" },
+        { title: "教师等级", key: "level" },
         { title: "年级", key: "grade_ch" },
         { title: "教授科目", key: "subject" },
         { title: "创建时间", key: "create_time" },

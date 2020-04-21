@@ -92,6 +92,22 @@
                     </Select>
                   </FormItem>
                 </Col>
+                <Col span="4" v-if="num == 3">
+                  <FormItem>
+                    <Select
+                      v-model="form.create_user"
+                      style="width:150px"
+                      @on-change="seekClick"
+                      placeholder="创建人"
+                    >
+                      <Option
+                        v-for="(list,i) in sale_list"
+                        :key="i"
+                        :value="list.id"
+                      >{{list.login_name}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
                 <Col span="6" v-if="num == 3">
                   <FormItem>
                     <div class="dateplc">
@@ -137,14 +153,14 @@
                 </Col>
               </Row>
             </Form>
-            <div class="allot" v-if="num == 1">
+            <div class="allot" v-if="num == 1" @click="allot">
               <span>{{'已选择'+ checkall.length + '条'}}</span>
               <p>批量签到</p>
             </div>
             <Table
               border
               :columns="columns"
-              :data="reservedData"
+              :data="reservedAllData"
               @on-selection-change="selectionChange"
               height="500"
             ></Table>
@@ -164,7 +180,6 @@
     <Loading v-show="isLoading" />
     <DaibanMessage :type="type" v-if="show" />
     <ReservedMessage :type="type" v-if="showMoadl" />
-    <!-- <MineclientMessage :type="type" v-if="showMine" /> -->
   </div>
 </template>
 
@@ -174,7 +189,6 @@ import Loading from "../../uilt/loading/loading";
 import storage from "../../uilt/storage";
 import DaibanMessage from "../../uilt/newErweima/DaibanMessage";
 import ReservedMessage from "./ReservedMessage";
-// import MineclientMessage from "./MineclientMessage";
 export default {
   components: {
     Loading,
@@ -182,29 +196,32 @@ export default {
     ReservedMessage
   },
   mounted() {
-    if (JSON.stringify(storage.getReseredTab()) == "{}") {
+    if (JSON.stringify(storage.getReseredAllTab()) == "{}") {
       this.num = 3;
     }
+    this.setStatus();
     this.setCurrentPage(1);
     this.isLoading = true;
-    this.getReservedList({ tab_type: this.num }).then(res => {
+    this.getReservedAllList({ tab_type: this.num }).then(res => {
       this.isLoading = false;
     });
   },
   computed: {
-    ...mapGetters(["reservedData", "reservedTypes"]),
+    ...mapGetters(["reservedAllData", "reservedAllTypes"]),
     ...mapState({
-      data: state => state.reserved.reserved,
-      currentPage: state => state.reserved.currentPage,
-      total: state => state.reserved.total,
-      pageSize: state => state.reserved.pageSize
+      data: state => state.allreserved.reserved,
+      currentPage: state => state.allreserved.currentPage,
+      total: state => state.allreserved.total,
+      pageSize: state => state.allreserved.pageSize
     })
   },
   data() {
     return {
+      sale_list: storage.getDaiban().sale_list,
+      allUid: [],
       showMoadl: false,
       checkall: [],
-      num: storage.getReseredTab(),
+      num: storage.getReseredAllTab(),
       course: storage.getDaiban().screen_list.course_type,
       appoint: storage.getDaiban().screen_list.appoint_status,
       subjectList: storage.getDaiban().screen_list.subject,
@@ -220,64 +237,261 @@ export default {
       transfer: "",
       show: false,
       type: {
-        status: "reserved"
+        status: "reservedall"
       },
       isLoading: false,
       form: {},
-      columns: [
-        { type: "selection", width: 60 },
-        { title: "学员姓名", key: "student_name" },
-        { title: "注册手机", key: "mobile" },
-        { title: "试听类型", key: "type" },
-        { title: "试听课程", key: "course_name" },
-        { title: "年级", key: "grade" },
-        { title: "科目", key: "subject" },
-        { title: "教师", key: "coach_id" },
-        { title: "上课日期", key: "date_time" },
-        { title: "上课时段", key: "time_block" },
-        { title: "状态", key: "appoint_status" },
-        { title: "归属人", key: "appoint_status" },
-        { title: "预约提交时间", key: "create_time" },
-        { title: "备注", key: "note" },
-        {
-          title: "操作",
-          key: "action",
-          align: "center",
-          render: (h, params) => {
-            return h("div", [
-             
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "text",
-                    size: "small"
-                  },
-                  on: {
-                    click: () => {
-                      this.appraisal(params.row);
-                    }
-                  }
-                },
-                "查看测评"
-              )
-            ]);
-          }
-        }
-      ]
+      columns: []
     };
   },
   methods: {
-    ...mapMutations(["setReservedTypes", "setCurrentPage"]),
-    ...mapActions(["getReservedList", "RingUp"]),
+    ...mapMutations(["setreservedAllTypes", "setCurrentPage"]),
+    ...mapActions(["getReservedAllList", "RingUp", "setSignin"]),
+    //批量签到
+    allot() {
+      this.type.classify = "signin";
+      this.showMoadl = true;
+      this.type.uid = this.allUid;
+    },
+    //设置展示的操作内容
+    setStatus() {
+      if (this.num == "2") {
+        this.columns = [
+          { type: "selection", width: 60 },
+          { title: "学员姓名", key: "student_name" },
+          { title: "注册手机", key: "mobile" },
+          { title: "试听类型", key: "type" },
+          { title: "试听课程", key: "course_name" },
+          { title: "年级", key: "grade" },
+          { title: "科目", key: "subject" },
+          { title: "教师", key: "coach_id" },
+          { title: "上课日期", key: "date_time" },
+          { title: "上课时段", key: "time_block" },
+          { title: "状态", key: "appoint_status" },
+          { title: "预约提交时间", key: "create_time" },
+          { title: "备注", key: "note", tooltip: true, ellipsis: true },
+          {
+            title: "操作",
+            key: "action",
+            align: "center",
+            render: (h, params) => {
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    on: {
+                      click: () => {
+                        this.appraisal(params.row);
+                      }
+                    }
+                  },
+                  "查看测评"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    on: {
+                      click: () => {
+                        this.getBtnClick4(params.row);
+                      }
+                    }
+                  },
+                  "呼出"
+                )
+              ]);
+            }
+          }
+        ];
+      } else if (this.num == "1") {
+        this.columns = [
+          { type: "selection", width: 60 },
+          { title: "学员姓名", key: "student_name" },
+          { title: "注册手机", key: "mobile" },
+          { title: "试听类型", key: "type" },
+          { title: "试听课程", key: "course_name" },
+          { title: "年级", key: "grade" },
+          { title: "科目", key: "subject" },
+          { title: "教师", key: "coach_id" },
+          { title: "上课日期", key: "date_time" },
+          { title: "上课时段", key: "time_block" },
+          { title: "状态", key: "appoint_status" },
+          { title: "预约提交时间", key: "create_time" },
+          { title: "备注", key: "note", tooltip: true, ellipsis: true },
+          {
+            title: "操作",
+            key: "action",
+            align: "center",
+            render: (h, params) => {
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    on: {
+                      click: () => {
+                        this.signin(params.row);
+                      }
+                    }
+                  },
+                  "签到"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    on: {
+                      click: () => {
+                        this.appraisal(params.row);
+                      }
+                    }
+                  },
+                  "查看测评"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    on: {
+                      click: () => {
+                        this.subscribe(params.row);
+                      }
+                    }
+                  },
+                  "取消预约"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    on: {
+                      click: () => {
+                        this.getBtnClick4(params.row);
+                      }
+                    }
+                  },
+                  "呼出"
+                )
+              ]);
+            }
+          }
+        ];
+      } else {
+        this.columns = [
+          { type: "selection", width: 60 },
+          { title: "学员姓名", key: "student_name" },
+          { title: "注册手机", key: "mobile" },
+          { title: "试听类型", key: "type" },
+          { title: "试听课程", key: "course_name" },
+          { title: "年级", key: "grade" },
+          { title: "科目", key: "subject" },
+          { title: "教师", key: "coach_id" },
+          { title: "上课日期", key: "date_time" },
+          { title: "上课时段", key: "time_block" },
+          { title: "状态", key: "appoint_status" },
+          { title: "创建人", key: "create_user" },
+          { title: "预约提交时间", key: "create_time" },
+          { title: "备注", key: "note", tooltip: true, ellipsis: true },
+          {
+            title: "操作",
+            key: "action",
+            align: "center",
+            render: (h, params) => {
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    on: {
+                      click: () => {
+                        this.signin(params.row);
+                      }
+                    }
+                  },
+                  "签到"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    on: {
+                      click: () => {
+                        this.appraisal(params.row);
+                      }
+                    }
+                  },
+                  "查看测评"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    on: {
+                      click: () => {
+                        this.subscribe(params.row);
+                      }
+                    }
+                  },
+                  "取消预约"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    on: {
+                      click: () => {
+                        this.getBtnClick4(params.row);
+                      }
+                    }
+                  },
+                  "呼出"
+                )
+              ]);
+            }
+          }
+        ];
+      }
+    },
     //tabs
     tab(num) {
-      this.form = {};
       this.num = num;
-      storage.savaReseredTab(num);
+      this.setStatus();
+      this.form = {};
+      storage.savaReseredAllTab(num);
       this.setCurrentPage(1);
       this.isLoading = true;
-      this.getReservedList({ page: 1, tab_type: num }).then(() => {
+      this.getReservedAllList({ page: 1, tab_type: num }).then(() => {
         this.isLoading = false;
       });
     },
@@ -343,49 +557,60 @@ export default {
         this.setCurrentPage(page);
       }
       this.isLoading = true;
-      this.getReservedList({
+      this.getReservedAllList({
         tab_type: this.num,
-        form:this.form,
+        form: this.form,
         page: this.currentPage
       }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(page);
       });
     },
-    selectionChange() {},
+    selectionChange(item) {
+      let arr = [];
+      this.checkall = item;
+      for (var i = 0; i < item.length; i++) {
+        arr.push(item[i].id);
+      }
+      this.allUid = arr;
+    },
     //呼出
     getBtnClick4(item) {
-      this.setReservedTypes(item);
-      this.isLoading = true;
+      this.setreservedAllTypes(item);
       this.show = true;
       this.type.classify = "datalis";
-      this.type.data = { ...this.reservedTypes };
-      this.type.currentPage = this.currentPage;
+      this.type.data = { ...this.reservedAllTypes };
+      this.type.page = this.currentPage;
       this.type.form = this.form;
-      this.RingUp(item)
-        .then(res => {
-          if (res.data.code == 200) {
-            this.$Message.success("呼出成功");
-          }
-          if (res.data.code == 1000) {
-            this.$Message.error({
-              content: res.data.error,
-              duration: 4
-            });
-          }
-          this.isLoading = false;
-        })
-        .catch(e => {
-          if (e) {
+      if (typeof item.spare_phone == "undefined") {
+        this.isLoading = true;
+        this.RingUp({ form: item })
+          .then(res => {
+            if (res.data.code == 200) {
+              this.$Message.success("呼出成功");
+            }
+            if (res.data.code == 1000) {
+              this.$Message.error({
+                content: res.data.error,
+                duration: 4
+              });
+            }
             this.isLoading = false;
-          }
-        });
+          })
+          .catch(e => {
+            if (e) {
+              this.isLoading = false;
+            }
+          });
+      } else {
+        this.type.classify = "ringupFollowUp";
+      }
     },
     //分页
     pageChange(num) {
       this.isLoading = true;
       this.setCurrentPage(num);
-      this.getReservedList({ ...this.form }).then(res => {
+      this.getReservedAllList({ ...this.form }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(num);
       });

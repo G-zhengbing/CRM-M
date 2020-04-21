@@ -1223,7 +1223,7 @@ export default {
     },
     //补款升级
     upgrade() {
-      var page = this.type.currentPage;
+      var page = this.type.page;
       if (
         JSON.stringify(this.classNum) != "{}" &&
         JSON.stringify(this.classAll) != "{}"
@@ -1236,13 +1236,13 @@ export default {
         if (!res.data.ret) {
           this.$Message.error(res.data.error);
           this.$parent.showMine = false;
-          this.getStudentList({ ...this.type.form, page });
+          this.getStudentList({ form:this.type.form, page });
           return;
         }
         if (res.data.ret) {
           this.$Message.success("订单升级成功");
           this.$parent.showMine = false;
-          this.getStudentList({ ...this.type.form, page });
+          this.getStudentList({ form:this.type.form, page });
         }
       });
     },

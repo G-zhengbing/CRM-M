@@ -86,6 +86,22 @@
                     </Select>
                   </FormItem>
                 </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select
+                      v-model="form.sale_id"
+                      style="width:150px"
+                      @on-change="seekKuhu"
+                      placeholder="跟进人"
+                    >
+                      <Option
+                        v-for="(list,i) in sale_list"
+                        :key="i"
+                        :value="list.id"
+                      >{{list.login_name}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
                 <Col span="8">
                   <FormItem>
                     <div class="dateplc">
@@ -151,12 +167,13 @@ export default {
   mounted() {
     this.setCurrentPage(1);
     this.isLoading = true;
-    this.getXinfenList().then(res => {
+    this.getXinfenList({form:{},page:1}).then(res => {
       this.isLoading = false;
     });
   },
   data() {
     return {
+      sale_list: storage.getDaiban().sale_list,
       showMine: false,
       subjectList: storage.getDaiban().screen_list.subject,
       transfer: storage.getDaiban().screen_list.transfer,
@@ -290,7 +307,7 @@ export default {
         this.setCurrentPage(page);
       }
       this.isLoading = true;
-      this.getXinfenList({ ...this.form, page }).then(res => {
+      this.getXinfenList({ form:this.form, page }).then(res => {
         this.setCurrentPage(page);
         this.isLoading = false;
       });
@@ -342,7 +359,7 @@ export default {
     pageChange(num) {
       this.setCurrentPage(num);
       this.isLoading = true;
-      this.getXinfenList({ ...this.form }).then(res => {
+      this.getXinfenList({ form:this.form }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(num);
       });

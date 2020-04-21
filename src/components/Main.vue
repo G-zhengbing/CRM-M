@@ -48,10 +48,10 @@
                 name="/main/reserved"
                 to="/main/reserved"
               >我的预约单</MenuItem>
-              <!-- <MenuItem
+              <MenuItem
                 name="/main/allreserved"
                 to="/main/allreserved"
-              >全部预约单</MenuItem>-->
+              >全部预约单</MenuItem>
               <MenuItem
                 name="/main/daiban"
                 to="/main/daiban"
@@ -70,7 +70,7 @@
               <MenuItem
                 name="/main/teacher"
                 to="/main/teacher"
-                v-if="$store.state.cId.is_market != 'N'"
+                v-if="$store.state.cId.is_teacher != 'N'"
               >教师管理</MenuItem>
               <MenuItem
                 name="/main/importdata"
@@ -88,14 +88,11 @@
                 v-if="$store.state.cId != 4"
               >付费学员</MenuItem>-->
               <!-- <MenuItem name="/main/uplist" to="/main/uplist" v-if="$store.state.cId != 4">上课提醒</MenuItem> -->
-              <MenuItem name="/main/money" to="/main/money">订单中心</MenuItem>
+              <MenuItem name="/main/money" to="/main/money" v-if="$store.state.cId.is_sales != 'N'">订单中心</MenuItem>
               <!--  <MenuItem name="/main/reservation" to="/main/reservation">我的预约单</MenuItem>
               <MenuItem name="/main/thread" to="/main/thread">线索导入</MenuItem>-->
               <!-- <MenuItem name="/main/number" to="/main/number" v-if="$store.state.cId != 3">成单数</MenuItem> -->
-              <Submenu
-                name="1-3"
-                v-if="$store.state.cId.is_headmaster != 'N'"
-              >
+              <Submenu name="1-3" v-if="$store.state.cId.is_headmaster != 'N'">
                 <template slot="title">
                   <Icon type="ios-stats" />教务
                 </template>
@@ -109,7 +106,11 @@
                 <!-- <MenuItem name="/main/course" to="/main/course">课程</MenuItem>
                 <MenuItem name="/main/teacher" to="/main/teacher">教师管理</MenuItem>-->
                 <!-- <MenuItem name="/main/minestudent" to="/main/minestudent">我的学员</MenuItem> -->
-                <MenuItem name="/main/payingstudents" to="/main/payingstudents" v-if="$store.state.cId.is_headmaster == 'H'">付费学员</MenuItem>
+                <MenuItem
+                  name="/main/payingstudents"
+                  to="/main/payingstudents"
+                  v-if="$store.state.cId.is_headmaster == 'H'"
+                >付费学员</MenuItem>
               </Submenu>
             </Submenu>
             <Submenu name="2" v-if="$store.state.cId.is_market != 'N'">
@@ -143,6 +144,8 @@ import storeage from "../uilt/storage";
 import { mapState, mapMutations, mapActions } from "vuex";
 export default {
   mounted() {
+    var s = window.screen.width / 1920;
+    document.body.style.zoom = s;
     this.active = storeage.getMenuNum();
     this.getReferList();
     this.getUser().then();
@@ -343,7 +346,7 @@ section {
   height: 100%;
   background-color: #eae9ee;
   display: flex;
-  min-height: 875px;
+  /* min-height: 875px; */
 }
 header .right div {
   margin: 0 10px;

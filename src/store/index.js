@@ -23,6 +23,7 @@ import studentpay from './studentpay'
 import mineclient from './mineclient'
 import notification from './notification'
 import reserved from './reserved'
+import allreserved from './allreserved'
 import teacher from './teacher'
 import statistics from './statistics'
 import importdata from './importdata'
@@ -136,6 +137,7 @@ export default new Vuex.Store({
   },
   getters: {},
   modules: {
+    allreserved,//全部预约单
     learningReport, // 学情报告
     classStudents, // 班课学员
     currentPage, // 储存当前页面信息

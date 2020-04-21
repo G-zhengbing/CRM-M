@@ -40,6 +40,22 @@
                 <Col span="4">
                   <FormItem>
                     <Select
+                      v-model="form.sale_id"
+                      style="width:150px"
+                      @on-change="seekClick"
+                      placeholder="跟进人"
+                    >
+                      <Option
+                        v-for="(list,i) in sale_list"
+                        :key="i"
+                        :value="list.id"
+                      >{{list.login_name}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select
                       v-model="form.grade"
                       style="width:150px"
                       @on-change="seekClick"
@@ -226,7 +242,7 @@ export default {
     this.channel = storage.getDaiban().channel;
     this.setCurrentPage(1);
     this.isLoading = true;
-    this.getClientList().then(res => {
+    this.getClientList({ form: {}, page: 1 }).then(res => {
       this.isLoading = false;
     });
   },
@@ -242,6 +258,7 @@ export default {
   },
   data() {
     return {
+      sale_list: storage.getDaiban().sale_list,
       endTime2: "",
       startTime2: "",
       showMine: false,
@@ -264,7 +281,28 @@ export default {
         { title: "学员姓名", key: "student_name", width: 80, fixed: "left" },
         { title: "注册手机", key: "mobile", width: 100, fixed: "left" },
         { title: "微信昵称", key: "wechat_nick_name", width: 80 },
-        { title: "回访次数", key: "visit_num", width: 60 },
+        {
+          title: "回访次数",
+          key: "visit_num",
+          width: 60,
+          render: (h, params) => {
+            return h("div", [
+              h("span", {
+                on: {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  click: () => {
+                    this.visit(params.row);
+                  }
+                }
+              },
+              params.row.visit_num
+              )
+            ]);
+          }
+        },
         { title: "年级", key: "grade", width: 80 },
         { title: "意向科目", key: "subject", width: 80 },
         { title: "渠道来源", key: "refer", width: 100 },
@@ -384,6 +422,10 @@ export default {
   methods: {
     ...mapMutations(["setClientTypes", "setCurrentPage", "setRefer"]),
     ...mapActions(["getClientList", "RingUp", "getReferList"]),
+    //回访记录
+    visit(item){
+      console.log(item)
+    },
     //创建用户
     createUsers() {
       this.showMine = true;
@@ -394,6 +436,8 @@ export default {
       this.setClientTypes(item);
       this.showMine = true;
       this.type.classify = "remove";
+      this.type.form = this.form;
+      this.type.page = this.currentPage;
       this.type.data = { ...this.clientTypes };
     },
     //转介绍
@@ -401,6 +445,8 @@ export default {
       this.setClientTypes(item);
       this.showMine = true;
       this.type.classify = "introduce";
+      this.type.form = this.form;
+      this.type.page = this.currentPage;
       this.type.data = { ...this.clientTypes };
     },
     //试听
@@ -417,6 +463,8 @@ export default {
       this.setClientTypes(item);
       this.showMine = true;
       this.type.classify = "order";
+      this.type.form = this.form;
+      this.type.page = this.currentPage;
       this.type.data = { ...this.clientTypes };
     },
     //设置返回的时间
@@ -465,7 +513,7 @@ export default {
         this.setCurrentPage(page);
       }
       this.isLoading = true;
-      this.getClientList({ ...this.form, page }).then(res => {
+      this.getClientList({ form: this.form, page }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(page);
       });
@@ -477,7 +525,7 @@ export default {
       this.show = true;
       this.type.classify = "followUp";
       this.type.page = this.currentPage;
-      this.type.form = { ...this.form };
+      this.type.form = this.form;
       this.type.data = { ...this.clientTypes };
     },
     //呼出
@@ -485,6 +533,8 @@ export default {
       this.setClientTypes(item);
       this.show = true;
       this.type.classify = "followUp";
+      this.type.page = this.currentPage;
+      this.type.form = this.form;
       this.type.data = { ...this.clientTypes };
       if (
         typeof item.spare_phone == "undefined" ||
@@ -518,7 +568,7 @@ export default {
     pageChange(num) {
       this.isLoading = true;
       this.setCurrentPage(num);
-      this.getClientList({ ...this.form }).then(res => {
+      this.getClientList({ form: this.form }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(num);
       });

@@ -255,7 +255,7 @@
             </Col>
             <Col span="4">
               <FormItem style="width:150px;" label="注册手机">
-                <Input :title="type.data.tel" readonly v-model="type.data.mobile" placeholder="手机号"></Input>
+                <Input :title="type.data.tel" readonly v-model="type.data.tel" placeholder="手机号"></Input>
               </FormItem>
             </Col>
             <Col span="4">
@@ -775,23 +775,34 @@ export default {
     },
     followUpColse() {
       if (this.type.status == "mineclient") {
-        this.getClientList({ ...this.type.form, page: this.type.page });
+        this.getClientList({ form: this.type.form, page: this.type.page });
         this.$parent.show = false;
         return;
+      } else if (this.type.status == "reserved") {
+        this.$parent.show = false;
+        this.getReservedList({ form: this.type.form, page: this.type.page });
+        return;
+      } else if (this.type.status == "reservedall") {
+        this.$parent.show = false;
+        this.getReservedAllList({
+          form: this.type.form,
+          page: this.type.page
+        });
+        return;
       } else if (this.type.status == "studentpay") {
-        this.getStudentList({ ...this.type.form, page: this.type.page });
+        this.getStudentList({ form: this.type.form, page: this.type.page });
         this.$parent.show = false;
         return;
       } else if (this.type.status == "notvisit") {
-        this.getXinfenList({ ...this.type.form, page: this.type.page });
+        this.getXinfenList({ form: this.type.form, page: this.type.page });
         this.$parent.show = false;
         return;
       } else if (this.type.status == "followup") {
-        this.getFollowUpList({ ...this.type.form, page: this.type.page });
+        this.getFollowUpList({ form: this.type.form, page: this.type.page });
         this.$parent.show = false;
         return;
       } else if (this.type.status == "notcallback") {
-        this.getYuQiList({ ...this.type.form, page: this.type.page });
+        this.getYuQiList({ form: this.type.form, page: this.type.page });
         this.$parent.show = false;
         return;
       } else if (this.type.status == "notification") {
@@ -857,9 +868,12 @@ export default {
       this.ShiftOut(this.type).then(res => {
         if (this.type.classify == "shiftOut") {
           if (this.type.status == "notvisit") {
-            this.getXinfenList();
+            this.getXinfenList({ form: this.type.form, page: this.type.page });
           } else if (this.type.status == "followup") {
-            this.getFollowUpList();
+            this.getFollowUpList({
+              form: this.type.form,
+              page: this.type.page
+            });
           } else {
             this.getKehuList({ status: storage.getTabStatus() });
           }
@@ -899,7 +913,7 @@ export default {
           res => {
             this.$parent.show = false;
             this.Loading = false;
-            this.getXinfenList();
+            this.getXinfenList({ form: this.type.form, page: this.type.page });
           }
         );
         return;
@@ -917,7 +931,7 @@ export default {
           res => {
             this.$parent.show = false;
             this.Loading = false;
-            this.getYuQiList();
+            this.getYuQiList({ form: this.type.form, page: this.type.page });
           }
         );
         return;
@@ -953,7 +967,7 @@ export default {
           res => {
             this.$parent.show = false;
             this.Loading = false;
-            this.getClientList({ page: "", form: {} });
+            this.getClientList({ form: this.type.form, page: this.type.page });
           }
         );
         return;
@@ -962,7 +976,7 @@ export default {
           res => {
             this.$parent.show = false;
             this.Loading = false;
-            this.getStudentList({ page: "", form: {} });
+            this.getStudentList({ form: this.type.form, page: this.type.page });
           }
         );
         return;
@@ -988,6 +1002,7 @@ export default {
     },
     ...mapMutations(["setXiaoshowId", "setType", "setXiaoshowIdPay"]),
     ...mapActions([
+      "getReservedAllList",
       "removeData",
       "RingUp",
       "getReservedList",

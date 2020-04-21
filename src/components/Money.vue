@@ -10,31 +10,79 @@
     </header>
     <section class="main-section">
       <div class="surplus">
-        <div class="main-section-top">
+        <!-- <div class="main-section-top">
           <div class="main-section-top-top">
-            <form>
-              <!-- <label>
-                渠道:
-                <select class="daiban-selected" v-model="form.refer">
-                  <option :value="i" v-for="(list,i) in refer" :key="i">{{list}}</option>
-                </select>
-              </label> -->
-              <label>
-                学员姓名:
-                <input type="text" v-model="form.name" />
-              </label>
-              <label>
-                学员电话:
-                <input type="text" v-model="form.mobile" />
-              </label>
-              <button type="button" class="daiban-button" @click="seekClick">查询</button>
-              <button type="button" class="daiban-button" @click="clear">清空</button>
-            </form>
+            <Form :model="form" :label-width="80">
+              <Row>
+                <Col span="5">
+                  <FormItem style="width:230px;">
+                    <Input v-model="form.name" placeholder="学员姓名" @on-change="seekClick"></Input>
+                  </FormItem>
+                </Col>
+                <Col span="5">
+                  <FormItem style="width:230px;">
+                    <Input v-model="form.mobile" placeholder="学员电话" @on-change="seekClick"></Input>
+                  </FormItem>
+                </Col>
+                 <Col span="5" v-if="num == 3">
+                  <FormItem>
+                    <Select
+                      v-model="form.create_user"
+                      style="width:150px"
+                      @on-change="seekClick"
+                      placeholder="创建人"
+                    >
+                      <Option
+                        v-for="(list,i) in sale_list"
+                        :key="i"
+                        :value="list.id"
+                      >{{list.login_name}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="5" style="text-indent: 60px">
+                  <Button type="primary" @click="clear">清除</Button>
+                </Col>
+              </Row>
+            </Form>
           </div>
-        </div>
+        </div> -->
         <div class="main-section-bottom">
           <div class="contaner">
-            <div style="height:1px;"></div>
+            <div style="height:30px;"></div>
+            <Form :model="form" :label-width="80">
+              <Row>
+                <Col span="4">
+                  <FormItem style="width:230px;">
+                    <Input v-model="form.name" placeholder="学员姓名" @on-change="seekClick"></Input>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem style="width:230px;">
+                    <Input v-model="form.mobile" placeholder="学员电话" @on-change="seekClick"></Input>
+                  </FormItem>
+                </Col>
+                 <Col span="4">
+                  <FormItem>
+                    <Select
+                      v-model="form.market_sale_id"
+                      style="width:150px"
+                      @on-change="seekClick"
+                      placeholder="创建人"
+                    >
+                      <Option
+                        v-for="(list,i) in sale_list"
+                        :key="i"
+                        :value="list.id"
+                      >{{list.login_name}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="5" style="text-indent: 60px">
+                  <Button type="primary" @click="clear">清除</Button>
+                </Col>
+              </Row>
+            </Form>
             <Table
               :columns="columns"
               :data="dataArrmoney"
@@ -61,6 +109,7 @@ import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import Table from "../uilt/table/TablePlus";
 import Loading from "../uilt/loading/loading";
 import DaibanMessage from "../uilt/newErweima/DaibanMessage";
+import storage from '../uilt/storage'
 export default {
   components: {
     Table,
@@ -70,7 +119,7 @@ export default {
   mounted() {
     this.setCurrentPage(1);
     this.isLoading = true;
-    this.getMoneyList().then(res => {
+    this.getMoneyList({form:{},page:1}).then(res => {
       this.isLoading = false;
     });
   },
@@ -86,6 +135,7 @@ export default {
   },
   data() {
     return {
+      sale_list: storage.getDaiban().sale_list,
       form: {},
       type: {},
       show: false,
@@ -103,6 +153,7 @@ export default {
         { type: "实付金额", key: "pay_amount" },
         { type: "支付方式", key: "pay_type" },
         { type: "支付时间", key: "pay_time" },
+        { type: "签约人", key: "market_sale_name" },
         // { type: "用户来源", key: "refer" },
         { type: "创建时间", key: "order_create_time" },
         // {
@@ -149,6 +200,7 @@ export default {
     },
     clear() {
       this.form = {};
+      this.seekClick()
     },
     //查询
     seekClick() {
@@ -158,7 +210,7 @@ export default {
         this.setCurrentPage(page);
       }
       this.isLoading = true;
-      this.getMoneyList({ ...this.form, page }).then(res => {
+      this.getMoneyList({ form:this.form, page }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(page);
       });
@@ -175,7 +227,7 @@ export default {
     pageChange(num) {
       this.isLoading = true;
       this.setCurrentPage(num);
-      this.getMoneyList({ ...this.form }).then(res => {
+      this.getMoneyList({ form:this.form }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(num);
       });
