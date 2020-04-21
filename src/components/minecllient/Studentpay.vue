@@ -189,6 +189,7 @@ export default {
         { title: "科目", key: "product_subject", width: 100 },
         { title: "意向度", key: "intention_option", width: 100 },
         { title: "课程类型", key: "product_type", width: 100 },
+        { title: "跟进人", key: "follow_sale_name", width: 100 },
         { title: "上次跟进时间", key: "last_follow_time", width: 133 },
         { title: "学习阶段", key: "stage", width: 100 },
         {
@@ -237,21 +238,21 @@ export default {
                 },
                 "订单"
               ),
-              // h(
-              //   "Button",
-              //   {
-              //     props: {
-              //       type: "text",
-              //       size: "small"
-              //     },
-              //     on: {
-              //       click: () => {
-              //         this.upgrade(params.row);
-              //       }
-              //     }
-              //   },
-              //   "补款升级"
-              // ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.upgrade(params.row);
+                    }
+                  }
+                },
+                "补款升级"
+              ),
               h(
                 "Button",
                 {
@@ -320,12 +321,43 @@ export default {
   },
   methods: {
     ...mapMutations(["setStudentpayTypes", "setCurrentPage"]),
-    ...mapActions(["getStudentList", "RingUp"]),
+    ...mapActions([
+      "getStudentList",
+      "RingUp",
+      "getAccountList",
+      "getOrdersnList"
+    ]),
     //补款升级
     upgrade(item) {
+      var form = {};
+      this.getAccountList(item.id).then(res => {
+        if (res.data.data.resources) {
+          if (res.data.data.resources.length == 0) return  this.$Message.error("当前订单不可升级");;
+          if (res.data.data.resources[0].product_level == "中级") {
+            res.data.data.resources[0].product_level = 1;
+          } else if (res.data.data.resources[0].product_level == "高级") {
+            res.data.data.resources[0].product_level = 2;
+          } else if (res.data.data.resources[0].product_level == "特级") {
+            res.data.data.resources[0].product_level = 3;
+          }
+          form.grade = res.data.data.resources[0].product_grade;
+          form.level = res.data.data.resources[0].product_level;
+          form.class_hour = res.data.data.resources[0].total_class_hour;
+          form.class_type = 1;
+          this.getOrdersnList(form).then(res => {
+            if (res.data.data.resources) {
+              if (res.data.data.resources.length == 0) {
+                this.$Message.error("当前订单不可升级");
+              }
+            }
+          });
+        }
+      });
       this.setStudentpayTypes(item);
       this.showMine = true;
       this.type.classify = "upgrade";
+      this.type.form = this.form
+      this.type.currentPage = this.currentPage
       this.type.data = { ...this.studentpayTypes };
     },
     //转介绍

@@ -163,6 +163,7 @@ export default {
         { title: "意向科目", key: "subject" },
         { title: "意向度", key: "intention_option" },
         { title: "学习阶段", key: "stage" },
+        { title: "跟进人", key: "follow_sale_name" },
         { title: "上次跟进内容", key: "last_visit_content",tooltip:true },
         { title: "上次跟进时间", key: "last_follow_time"  },
         { title: "回访时间", key: "next_follow_time" },
