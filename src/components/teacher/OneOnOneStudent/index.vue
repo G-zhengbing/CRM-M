@@ -611,6 +611,7 @@ export default {
     // 改变页码
     changePages(val) {
       this.formItem.page = val;
+      this.getUserData()
     },
     // 设置mode搜索词汇
     formData(val) {
@@ -654,10 +655,10 @@ export default {
       // 设置搜索选项
       this.setSelectState(links);
       // 设置页码
-      this.total = links.total;
-      this.per_page = links.per_page;
-      this.current_page = links.current_page;
-      this.last_page = links.last_page;
+      // this.total = links.total;
+      // this.per_page = links.per_page;
+      // this.current_page = links.current_page;
+      // this.last_page = links.last_page;
 
       this.dataList = res.data.data.data;
       // 渲染年级，科目，首电呼出，交接单单元格
