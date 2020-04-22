@@ -689,6 +689,7 @@ export default {
     // 设置当前页码
     changePages(val) {
       this.formItem.page = val;
+      this.getUserData();
     },
     // 设置mode搜索词汇
     formData(val) {
