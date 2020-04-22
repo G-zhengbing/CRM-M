@@ -278,13 +278,14 @@ export default {
       form: {},
       columns: [
         { type: "selection", width: 60, fixed: "left" },
-        { title: "学员姓名", key: "student_name", width: 80, fixed: "left" },
+        { title: "学员姓名", key: "student_name", width: 100, fixed: "left" },
         { title: "注册手机", key: "mobile", width: 100, fixed: "left" },
-        { title: "微信昵称", key: "wechat_nick_name", width: 80 },
+        { title: "地址", key: "area",width:100 },
+        { title: "微信昵称", key: "wechat_nick_name", width: 100 },
         {
           title: "回访次数",
           key: "visit_num",
-          width: 60,
+          width: 100,
           render: (h, params) => {
             return h("div", [
               h("span", {
@@ -304,13 +305,13 @@ export default {
           }
         },
         { title: "年级", key: "grade", width: 80 },
-        { title: "意向科目", key: "subject", width: 80 },
+        { title: "意向科目", key: "subject", width: 100 },
         { title: "渠道来源", key: "refer", width: 100 },
         { title: "跟进人", key: "follow_sale_name", width: 80 },
-        { title: "跟进状态", key: "follow_status", width: 80 },
-        { title: "学习阶段", key: "stage", width: 80 },
+        { title: "跟进状态", key: "follow_status", width: 100 },
+        { title: "学习阶段", key: "stage", width: 100 },
         { title: "意向度", key: "intention_option", width: 80 },
-        { title: "上次呼出", key: "phone_status", width: 80 },
+        { title: "上次呼出", key: "phone_status", width: 100 },
         { title: "下次跟进", key: "next_follow_time", width: 150 },
         { title: "分配时间", key: "receive_time", width: 150 },
         { title: "流转类型", key: "transfer", width: 100 },
