@@ -1,4 +1,5 @@
 <template>
+<!-- amend: 2020.04.21 LC -->
   <div class="shade">
     <Card>
       <p slot="title" v-if="$parent.isUpdata">编辑课程</p>
@@ -190,7 +191,20 @@
                   <p @click="addLessons">+添加课节</p>
                   <ul>
                     <li v-for="(item,i) in videoArr" :key="i">
-                      <span class="filetitle">第{{i+1}}节</span><Input style="width:300px;flex:1;" v-model="item.value" placeholder="请输入该课程标题"></Input> <Input placeholder="请输入视频地址ID" style="width:400px;" v-model="item.value2" type="text"/><i class="video-icon" @click="removeVideo(i)"><Icon type="ios-trash-outline" /></i>
+                      <div class="oneLine">
+                        <span class="filetitle">第{{i+1}}节</span>
+                          <Input style="width:300px;flex:1;" v-model="item.value" placeholder="请输入该课程标题"></Input>
+                          <Input placeholder="请输入视频地址ID" style="width:400px;" v-model="item.value2" type="text"/>
+                          <div class="upImg" >
+                            <Upload action="//jsonplaceholder.typicode.com/posts/" :before-upload="handleBeforeUpload1" :show-upload-list="false">
+                              <Button icon="ios-cloud-upload-outline" @click="upImages(i)">上传图片</Button>
+                            </Upload>
+                          </div>
+                      </div>
+                      <div class="twoLine">
+                        <Input style="width:300px;flex:1;margin-right:10px" v-model="item.video_desc" placeholder="课程简介"></Input>
+                        <i style="position: static;display: block;padding-right:10px;" class="video-icon" @click="removeVideo(i)"><Icon type="ios-trash-outline" /></i>
+                      </div>
                     </li>
                   </ul>
                 </div>
@@ -230,6 +244,8 @@ export default {
 	},
   data() {
     return {
+      // 用来控制上传哪个图片
+      imageIndex: "",
       videoIndex:0,
       videoArr:[],
       index:0,
@@ -390,6 +406,33 @@ export default {
       reader.onloadend = function (e) {
         file.url = reader.result
         _this.uploadList.push(file)
+      }
+    },
+    upImages(index){
+      this.imageIndex = index
+    },
+    handleBeforeUpload1 (file,i) {
+      let config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: "bearer " + storage.get()
+        }
+      };
+      var formData = new FormData()
+      let reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onloadend = (e) => {
+        // 这是，图片地址，发送给后端
+        formData.append('file',file);
+        axios.post("http://liveapi.canpoint.net/api/upload_image",formData,config).then((response)=>{
+        if(response.error){
+          _this.$Message.error(response.data.error);
+          return;
+        }
+        if(response.status == 200 && response.data){
+          this.videoArr[this.imageIndex].video_image = `http://liveapi.canpoint.net${response.data.value}`
+        }
+      })
       }
     },
     close() {
@@ -573,13 +616,23 @@ export default {
 }
 .catalog ul li{
   width: 100%;
-  height: 40px;
+  /* height: 40px; */
   border: 1px solid #ccc;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  /* display: flex; */
+  /* justify-content: center;
+  align-items: center; */
   margin-top:5px;
   position: relative;
+}
+.oneLine {
+  display: flex;
+  margin-top: 5px;
+}
+.twoLine {
+  display: flex;
+  padding-left: 55px;
+  box-sizing: border-box;
+  margin-bottom: 5px;
 }
 .catalog ul{
   display: flex;

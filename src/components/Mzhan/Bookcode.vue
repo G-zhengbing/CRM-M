@@ -228,38 +228,71 @@ export default {
           key: "action",
           align: "center",
           render: (h, params) => {
-            return h("div", [
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "text",
-                    size: "small"
-                  },
-                  on: {
-                    click: () => {
-                      this.getBtnClick1(params.row);
+            if (params.row.is_publish == 1) {
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    on: {
+                      click: () => {
+                        this.getBtnClick1(params.row);
+                      }
                     }
-                  }
-                },
-                "编辑"
-              ),
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "text",
-                    size: "small"
                   },
-                  on: {
-                    click: () => {
-                      this.isuue(params.row);
+                  "编辑"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    on: {
+                      click: () => {
+                        this.isuue(params.row);
+                      }
                     }
-                  }
-                },
-                "发布"
-              )
-            ]);
+                  },
+                  "发布"
+                )
+              ]);
+            } else {
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    on: {
+                      click: () => {
+                        this.getBtnClick1(params.row);
+                      }
+                    }
+                  },
+                  "编辑"
+                ),
+                h(
+                  "span",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    style: {
+                      color: '#ccc'
+                    }
+                  },
+                  "已发布"
+                )
+              ]);
+            }
           }
         }
       ]
@@ -303,7 +336,7 @@ export default {
           this.UpExtension(item.id).then(res => {
             if (res.data.ret) {
               this.$Message.success("发布成功");
-            }else{
+            } else {
               this.$Message.error(res.data.error);
             }
             this.loading(false);

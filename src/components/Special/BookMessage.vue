@@ -1,4 +1,5 @@
 <template>
+<!-- amend: 2020.04.21 LC -->
   <div class="shade">
     <Card>
       <p slot="title" v-if="$parent.isUpdata">编辑课程</p>
@@ -80,6 +81,31 @@
                     <Icon type="ios-camera" size="20"></Icon>
                   </div>
                 </Upload>
+                <div class="linkURL">
+                  <div class="URLSelect">
+                    <RadioGroup v-model="form.Introduction_diagram_type">
+                      <Radio :label="2">
+                          <span>自有商品</span>
+                      </Radio>
+                      <Radio :label="1">
+                          <span>其它链接</span>
+                      </Radio>
+                    </RadioGroup>
+                  </div>
+                  <div class="URLContent">
+                    <Input v-if="form.Introduction_diagram_type == 1" v-model="form.Introduction_diagram_value" placeholder="链接地址" style="width: 300px" />
+                    <template v-if="form.Introduction_diagram_type == 2">
+                      <Select v-model="form.Introduction_diagram_product_type" style="width:200px" @on-change="getSelectClass">
+                        <Option :value="1">直播课</Option> 
+                        <Option :value="2">录播课</Option> 
+                        <Option :value="3">一书一码</Option> 
+                      </Select>
+                      <Select v-model="form.Introduction_diagram_value" style="width:200px">
+                        <Option :value="item.id" v-for="(item,i) in inClassList" :key="i">{{item.course_name}}</Option>
+                      </Select>
+                    </template>
+                  </div>
+                </div>
                 <p>只能上传jpg/png格式文件，文件不能超过2M 图片尺寸：73 * 73 像素</p>
               </FormItem>
             </Col>
@@ -284,6 +310,12 @@ export default {
   props:["item"],
   data() {
     return {
+      // 介绍头图课程列表
+      type: "",
+      product_id: "",
+      banner_type_value: "",
+      inClassList: [],
+      banner_type: 2,
       bannerUrl:'',
       tuioneUrl:'',
       tuitowUrl:'',
@@ -308,7 +340,8 @@ export default {
       tuitow:[],
       form: {
         banner_one_type:2,
-        banner_two_type:2
+        banner_two_type:2,
+        Introduction_diagram_type: 2
       },
       ruleValidate: {
         grade: [
@@ -330,6 +363,12 @@ export default {
   methods: {
     ...mapActions(["getBookList","getClassList"]),
     setActive1(){
+    },
+    // 获取介绍头图 课程列表
+    getSelectClass(val){
+      this.getClassList(val).then(res=>{
+        this.inClassList = res.data.data
+      })
     },
     getSelClass3(val){
       this.getClassList(val).then(res=>{
@@ -555,6 +594,7 @@ export default {
       this.$parent.isBookMessage = false;
     },
     handleSubmit (name) {
+      console.log(this.form.Introduction_diagram_value)
       this.$refs[name].validate((valid) => {
         if (valid) {
           if(this.$parent.isUpdata){
@@ -575,6 +615,9 @@ export default {
             formData.append('banner_two_type',this.form.banner_two_type);
             formData.append('banner_one_value',this.form.banner_one_value?this.form.banner_one_value:"");
             formData.append('banner_two_value',this.form.banner_two_value?this.form.banner_two_value:"");
+            formData.append('Introduction_diagram_type',this.form.Introduction_diagram_type);
+            formData.append('Introduction_diagram_product_type',this.form.Introduction_diagram_type == 2 ? this.form.Introduction_diagram_product_type : "");
+            formData.append('Introduction_diagram_value',this.form.Introduction_diagram_value);
             let config = {
               headers: {
                 'Content-Type': 'multipart/form-data',
@@ -621,6 +664,9 @@ export default {
             formData.append('banner_two_type',this.form.banner_two_type);
             formData.append('banner_one_value',this.form.banner_one_value?this.form.banner_one_value:"");
             formData.append('banner_two_value',this.form.banner_two_value?this.form.banner_two_value:"");
+            formData.append('Introduction_diagram_type',this.form.Introduction_diagram_type);
+            formData.append('Introduction_diagram_product_type',this.form.Introduction_diagram_type == 2 ? this.form.Introduction_diagram_product_type : "");
+            formData.append('Introduction_diagram_value',this.form.Introduction_diagram_value);
             let config = {
               headers: {
                 'Content-Type': 'multipart/form-data',
@@ -651,22 +697,32 @@ export default {
   },
   mounted () {
     if(this.$parent.isUpdata){
-      this.form =  this.item
+      this.form = this.item
       this.form.banner_one_value = this.item.banner_one_value
       this.form.banner_two_value = this.item.banner_two_value
+      this.form.Introduction_diagram_value = this.item.Introduction_diagram_value
       this.getSelClass(this.item.banner_one_product_type)
       this.getSelClass2(this.item.banner_two_product_type)
       this.getSelClass3(this.item.type)
+      this.getSelectClass(this.item.Introduction_diagram_product_type)
     }else{
       this.uploadList.length = 0
       this.tuione.length = 0
       this.tuitow.length = 0
     }
-  }
+  },
 };
 </script>
 
 <style scoped>
+/* 添加介绍头图 自选商品,其他链接 */
+.linkURL {
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: -60px;
+  padding-left: 10px;
+  box-sizing: border-box;
+}
 .recommendThree{
     margin: 0 30px;
 }
