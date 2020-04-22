@@ -120,6 +120,9 @@
                 <Option :value="7">七年级</Option>
                 <Option :value="8">八年级</Option>
                 <Option :value="9">九年级</Option>
+                <Option :value="10">高一</Option>
+                <Option :value="11">高二</Option>
+                <Option :value="12">高三</Option>
               </Select>
             </FormItem>
           </Col>
@@ -330,7 +333,7 @@
               </Modal>
             </FormItem>
           </Col>
-          <Col span="12" style="display:flex">
+          <!-- <Col span="12" style="display:flex">
             <FormItem label="资格证" prop="nvq_pic" class="active_span">
               <template>
                 <div class="demo-upload-list" v-for="item in uploadList6">
@@ -371,7 +374,7 @@
                 <img :src="imgName6" style="width: 100%" />
               </Modal>
             </FormItem>
-          </Col>
+          </Col>-->
           <Col span="12" style="display:flex">
             <FormItem label="教师资格证" prop="teacher_nvq_pic" class="active_span">
               <template>
@@ -415,12 +418,6 @@
             </FormItem>
           </Col>
           <Col span="24">开放时间信息</Col>
-          <Col span="24" v-if="isUpdata">
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;已选时间段</p>
-            <ul class="time_block">
-              <li v-for="(list,i) in activeArr">{{list}}</li>
-            </ul>
-          </Col>
           <Col span="24">
             <div class="content">
               <div class="content-left">
@@ -489,14 +486,14 @@
                 <div class="content-right-footer">
                   <ul>
                     <li
-                      :class="{active:setActive == k}"
-                      @click="getNum(i,$event)"
                       v-for="(k,i) in num"
+                      :class="{active:timeBlock(k-1) == 'ok'}"
+                      @click="getNum(i,$event)"
                     ></li>
                   </ul>
                   <ul>
                     <li
-                      :class="{active:setActive == k}"
+                      :class="{active:timeBlock(k-1) == 'ok'}"
                       @click="getNum(i,$event)"
                       v-for="(k,i) in num*2"
                       v-if=" k > num"
@@ -504,7 +501,7 @@
                   </ul>
                   <ul>
                     <li
-                      :class="{active:setActive == k}"
+                      :class="{active:timeBlock(k-1) == 'ok'}"
                       @click="getNum(i,$event)"
                       v-for="(k,i) in num*3"
                       v-if=" k > num*2"
@@ -512,7 +509,7 @@
                   </ul>
                   <ul>
                     <li
-                      :class="{active:setActive == k}"
+                      :class="{active:timeBlock(k-1) == 'ok'}"
                       @click="getNum(i,$event)"
                       v-for="(k,i) in num*4"
                       v-if=" k > num*3"
@@ -520,7 +517,7 @@
                   </ul>
                   <ul>
                     <li
-                      :class="{active:setActive == k}"
+                      :class="{active:timeBlock(k-1) == 'ok'}"
                       @click="getNum(i,$event)"
                       v-for="(k,i) in num*5"
                       v-if=" k > num*4"
@@ -528,7 +525,7 @@
                   </ul>
                   <ul>
                     <li
-                      :class="{active:setActive == k}"
+                      :class="{active:timeBlock(k-1) == 'ok'}"
                       @click="getNum(i,$event)"
                       v-for="(k,i) in num*6"
                       v-if=" k > num*5"
@@ -536,7 +533,7 @@
                   </ul>
                   <ul>
                     <li
-                      :class="{active:setActive == k}"
+                      :class="{active:timeBlock(k-1) == 'ok'}"
                       @click="getNum(i,$event)"
                       v-for="(k,i) in num*7"
                       v-if=" k > num*6"
@@ -586,6 +583,17 @@ export default {
       provinceList: state => state.mineclient.provinceList,
       city: state => state.mineclient.city
     })
+    // timeBlock() {
+    //   return function(value) {
+    //     return function() {
+    //       if (this.setActive.indexOf(value) > -1) {
+    //         return true;
+    //       } else {
+    //         return false;
+    //       }
+    //     };
+    //   };
+    // }
   },
   data() {
     return {
@@ -607,7 +615,7 @@ export default {
       visible: false,
       seekForm: {},
       num: 48,
-      setActive: 0,
+      setActive: [],
       acArr: [],
       isUpdata: false,
       uploadList: [],
@@ -705,6 +713,13 @@ export default {
       "getCity"
     ]),
     ...mapMutations(["setTeacherTypes", "setCurrentPage"]),
+    timeBlock(value) {
+      if (this.setActive.indexOf(value) > -1) {
+        return 'ok';
+      } else {
+        return 'no';
+      }
+    },
     //获取省市
     getProv() {
       this.getProvince().then(res => {
@@ -1203,7 +1218,8 @@ export default {
       for (var i = 0; i < item.grade.length; i++) {
         item.grade[i] = item.grade[i] * 1;
       }
-      this.activeArr = item.timeblock;
+      this.setActive = item.timeblock;
+      this.acArr = item.timeblock;
       this.setTeacherTypes(item);
       this.isUpdata = true;
       this.showTeacherMessage = true;

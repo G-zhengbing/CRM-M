@@ -144,8 +144,8 @@ import storeage from "../uilt/storage";
 import { mapState, mapMutations, mapActions } from "vuex";
 export default {
   mounted() {
-    var s = window.screen.width / 1920;
-    document.body.style.zoom = s;
+    // var s = window.screen.width / 1920;
+    // document.body.style.zoom = s;
     this.active = storeage.getMenuNum();
     this.getReferList();
     this.getUser().then();
@@ -346,7 +346,7 @@ section {
   height: 100%;
   background-color: #eae9ee;
   display: flex;
-  /* min-height: 875px; */
+  min-height: 875px;
 }
 header .right div {
   margin: 0 10px;

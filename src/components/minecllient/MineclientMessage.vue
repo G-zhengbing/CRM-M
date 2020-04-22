@@ -18,15 +18,13 @@
                 @on-change="seekClick"
                 placeholder="年级"
               >
-                <Option :value="1">一年级</Option>
-                <Option :value="2">二年级</Option>
-                <Option :value="3">三年级</Option>
-                <Option :value="4">四年级</Option>
-                <Option :value="5">五年级</Option>
-                <Option :value="6">六年级</Option>
+                <Option :value="6">小学</Option>
                 <Option :value="7">七年级</Option>
                 <Option :value="8">八年级</Option>
                 <Option :value="9">九年级</Option>
+                <Option :value="10">高一</Option>
+                <Option :value="11">高二</Option>
+                <Option :value="12">高三</Option>
               </Select>
             </FormItem>
           </Col>
@@ -218,9 +216,19 @@
                 <Option :value="7">七年级</Option>
                 <Option :value="8">八年级</Option>
                 <Option :value="9">九年级</Option>
+                <Option :value="10">高一</Option>
+                <Option :value="11">高二</Option>
+                <Option :value="12">高三</Option>
               </Select>
             </FormItem>
           </Col>
+          <Col span="24">
+              <FormItem label="教材版本">
+                <Select v-model="createAuditionForm.textbook_version" placeholder="教材版本">
+                  <Option v-for="(list,i) in vaersion" :value="i*1">{{list}}</Option>
+                </Select>
+              </FormItem>
+            </Col>
           <Col span="24">
             <FormItem label="科目">
               <Select v-model="createAuditionForm.subject">
@@ -257,12 +265,12 @@
             </FormItem>
           </Col>
           <Col span="24">
-            <FormItem label="备注">
+            <FormItem label="听课内容">
               <Input
                 v-model="createAuditionForm.note"
                 type="textarea"
                 :autosize="{minRows: 5,maxRows: 15}"
-                placeholder="请填写备注"
+                placeholder="请填写听课内容"
               ></Input>
             </FormItem>
           </Col>
@@ -349,7 +357,7 @@
                 :class="{active:setActive == k,disable:k-1 % num == 0}"
                 @click="getNum(i,$event)"
                 v-for="(k,i) in num"
-              >{{k -1}}</li>
+              ></li>
             </ul>
             <ul>
               <li
@@ -357,7 +365,7 @@
                 @click="getNum(i,$event)"
                 v-for="(k,i) in num*2"
                 v-if=" k > num"
-              >{{k-1}}</li>
+              ></li>
             </ul>
             <ul>
               <li
@@ -365,7 +373,7 @@
                 @click="getNum(i,$event)"
                 v-for="(k,i) in num*3"
                 v-if=" k > num*2"
-              >{{k-1}}</li>
+              ></li>
             </ul>
             <ul>
               <li
@@ -373,7 +381,7 @@
                 @click="getNum(i,$event)"
                 v-for="(k,i) in num*4"
                 v-if=" k > num*3"
-              >{{k-1}}</li>
+              ></li>
             </ul>
             <ul>
               <li
@@ -381,7 +389,7 @@
                 @click="getNum(i,$event)"
                 v-for="(k,i) in num*5"
                 v-if=" k > num*4"
-              >{{k-1}}</li>
+              ></li>
             </ul>
             <ul>
               <li
@@ -389,7 +397,7 @@
                 @click="getNum(i,$event)"
                 v-for="(k,i) in num*6"
                 v-if=" k > num*5"
-              >{{k-1}}</li>
+              ></li>
             </ul>
             <ul>
               <li
@@ -397,88 +405,8 @@
                 @click="getNum(i,$event)"
                 v-for="(k,i) in num*7"
                 v-if=" k > num*6"
-              >{{k-1}}</li>
+              ></li>
             </ul>
-            <!-- <ul class="one-url">
-                    <template v-if="activeArr.length == 0">
-                      <li @click="getNum(i,$event)" v-for="(k,i) in num">{{k-1}}</li>
-                    </template>
-                    <template v-else v-for="r in activeArr">
-                      <li v-for="(k,i) in num" :class="{active:k-1 == r}" @click="getNum(i,$event)">{{k-1}}</li>
-                    </template>
-                  </ul>
-                  <ul class="tow-url">
-                    <template v-if="activeArr.length == 0">
-                      <li @click="getNum(i,$event)" v-for="(k,i) in num*2" v-if=" k > num">{{k-1}}</li>
-                    </template>
-                    <template v-else v-for="r in activeArr">
-                      <li
-                        :class="{active:k-1 == r}"
-                        @click="getNum(i,$event)"
-                        v-for="(k,i) in num*2"
-                      >{{k-1}}</li>
-                    </template>
-                  </ul>
-                  <ul class="three-url">
-                    <template v-if="activeArr.length == 0">
-                      <li @click="getNum(i,$event)" v-for="(k,i) in num*3" v-if=" k > num*2">{{k-1}}</li>
-                    </template>
-                    <template v-else v-for="r in activeArr">
-                      <li
-                        :class="{active:k-1 == r}"
-                        @click="getNum(i,$event)"
-                        v-for="(k,i) in num*3"
-                      >{{k-1}}</li>
-                    </template>
-                  </ul>
-                  <ul class="four-url">
-                    <template v-if="activeArr.length == 0">
-                      <li @click="getNum(i,$event)" v-for="(k,i) in num*4" v-if=" k > num*3">{{k-1}}</li>
-                    </template>
-                    <template v-for="r in activeArr">
-                      <li
-                        :class="{active:k-1 == r}"
-                        @click="getNum(i,$event)"
-                        v-for="(k,i) in num*4"
-                      >{{k-1}}</li>
-                    </template>
-                  </ul>
-                  <ul class="five-url">
-                    <template v-if="activeArr.length == 0">
-                      <li @click="getNum(i,$event)" v-for="(k,i) in num*5" v-if=" k > num*4">{{k-1}}</li>
-                    </template>
-                    <template v-for="r in activeArr">
-                      <li
-                        :class="{active:k-1 == r}"
-                        @click="getNum(i,$event)"
-                        v-for="(k,i) in num*5"
-                      >{{k-1}}</li>
-                    </template>
-                  </ul>
-                  <ul class="six-url">
-                    <template v-if="activeArr.length == 0">
-                      <li @click="getNum(i,$event)" v-for="(k,i) in num*6" v-if=" k > num*5">{{k-1}}</li>
-                    </template>
-                    <template v-for="r in activeArr">
-                      <li
-                        :class="{active:k-1 == r}"
-                        @click="getNum(i,$event)"
-                        v-for="(k,i) in num*6"
-                      >{{k-1}}</li>
-                    </template>
-                  </ul>
-                  <ul class="seven-url">
-                    <template v-if="activeArr.length == 0">
-                      <li @click="getNum(i,$event)" v-for="(k,i) in num*7" v-if=" k > num*6">{{k-1}}</li>
-                    </template>
-                    <template v-for="r in activeArr">
-                      <li
-                        :class="{active:k-1 == r}"
-                        @click="getNum(i,$event)"
-                        v-for="(k,i) in num*7"
-                      >{{k-1}}</li>
-                    </template>
-            </ul>-->
           </div>
         </div>
       </div>
@@ -923,6 +851,7 @@ export default {
   },
   data() {
     return {
+      vaersion:storage.getDaiban().screen_list.book_version,
       upgradeColumns: [
         { title: "购买课程名称", key: "course_name", width: 200 },
         {
@@ -1886,6 +1815,7 @@ export default {
   margin-top: -1px;
   text-align: center;
   cursor: pointer;
+  height: 20.8px;
 }
 .content-right-header {
   height: 27px;

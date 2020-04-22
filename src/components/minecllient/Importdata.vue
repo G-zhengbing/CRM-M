@@ -43,7 +43,7 @@
               <i>1</i>
               步骤 1:
               <span>
-                <a href="http://liveapi.canpoint.net/file/demo.csv">点击下载excel模板</a>
+                <a href="http://liveapi.canpoint.net/api/uoload_file">点击下载excel模板</a>
               </span>
             </p>
             <div>导入前，请先下载文件模板，并按模板格式要求填写数据</div>
