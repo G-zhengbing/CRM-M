@@ -417,6 +417,7 @@ export default {
         }
       })
       }
+      return false
     },
     handleFormatError3(file){
       this.$Notice.warning({
@@ -459,6 +460,7 @@ export default {
         }
       })
       }
+      return false
     },
     handleFormatError2(file){
       this.$Notice.warning({
@@ -577,7 +579,7 @@ export default {
         }
       })
       }
-
+      return false
       // const check = this.uploadList.length;
       // if (check >=3) {
       //   this.$Message.error('最多只能上传3张图片');
@@ -602,9 +604,9 @@ export default {
             var formData = new FormData();
            formData.append('book_id',this.item.id);
            formData.append('book_name',this.form.book_name);
-            formData.append('Introduction_diagram',this.bannerUrl);
-            formData.append('banner_one_url',this.tuioneUrl);
-            formData.append('banner_two_url',this.tuitowUrl);
+            formData.append('Introduction_diagram',this.bannerUrl?this.bannerUrl:this.form.Introduction_diagram);
+            formData.append('banner_one_url',this.tuioneUrl?this.tuioneUrl:this.form.banner_one_url);
+            formData.append('banner_two_url',this.tuitowUrl?this.tuitowUrl:this.form.banner_two_url);
             formData.append('popularize_url',this.form.popularize_url);
             formData.append('product_id',this.form.product_id);
             formData.append('type',this.form.type);
