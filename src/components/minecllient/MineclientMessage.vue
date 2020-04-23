@@ -518,14 +518,14 @@
     </Modal>
     <!-- 移出 -->
     <Modal
-      width="300"
+      width="500"
       v-model="type.classify == 'remove'"
       title="确定要移出吗?"
       @on-cancel="colseReserved"
       :styles="{'margin-top' : '-70px'}"
     >
       <div>
-        <Input v-model="removeNote" type="textarea" :rows="4" placeholder="请备注移出说明" />
+        <Input readonly v-model="type.data.last_visit_content" type="textarea" :rows="8" placeholder="最后一次跟进内容" />
       </div>
       <div slot="footer">
         <Button type="text" size="large" @click="colseReserved">取消</Button>
@@ -750,7 +750,6 @@ export default {
       upgradeForm: {},
       showTableLoading: false,
       disableBtn: false,
-      removeNote: "",
       isDisable: false,
       price: 0,
       book_version: storage.getDaiban().screen_list.book_version,
@@ -1039,14 +1038,9 @@ export default {
     },
     //移出
     remove() {
-      if (!this.removeNote) {
-        this.$Message.error("请填写移出说明");
-        return;
-      }
       this.isLoading = true;
       this.removeMineclient({
         uid: this.type.data.id,
-        note: this.removeNote
       }).then(res => {
         if (res.data.ret) {
           this.$Message.success("移出成功");

@@ -408,7 +408,7 @@
           </Row>
         </Form>
         <div slot="footer">
-          <Button class="followup" type="warning" size="large" @click="followUpRemove">移出</Button>
+          <Button class="followup" type="warning" size="large" @click="followUpRemoveOk">移出</Button>
           <Button class="order" type="warning" size="large" @click="createOrder">订单</Button>
           <Button type="text" size="large" @click="followUpColse">取消</Button>
           <Button :loading="disableBtn" type="primary" size="large" @click="genjin">确定</Button>
@@ -626,7 +626,7 @@
       </div>
     </div>
     <!-- 移出 -->
-    <Modal
+    <!-- <Modal
       width="300"
       v-model="showRemove"
       title="确定要移出吗?"
@@ -634,13 +634,13 @@
       :styles="{'margin-top' : '-70px'}"
     >
       <div>
-        <Input v-model="removeNote" type="textarea" :rows="4" placeholder="请备注移出说明" />
+        <Input v-model="vist_content" type="textarea" :rows="4" placeholder="请备注移出说明" />
       </div>
       <div slot="footer">
         <Button type="text" size="large" @click="followUpColse">取消</Button>
         <Button type="primary" size="large" @click="followUpRemoveOk">确定</Button>
       </div>
-    </Modal>
+    </Modal>-->
     <Loading v-show="Loading" />
   </div>
 </template>
@@ -688,14 +688,14 @@ export default {
       this.$parent.showMine = true;
       this.$parent.type.classify = "order";
     },
-    //跟进/移出操作
-    followUpRemove() {
-      this.showRemove = true;
-    },
     //跟进/移出
     followUpRemoveOk() {
+      if (this.vist_content == "") {
+        this.$Message.error("请先填写回访内容");
+        return;
+      }
       this.isLoading = true;
-      this.removeData({ uid: this.type.data.id, note: this.removeNote }).then(
+      this.removeData({ uid: this.type.data.id, note: this.vist_content }).then(
         res => {
           if (res.data.ret) {
             this.$Message.success("移出成功");
