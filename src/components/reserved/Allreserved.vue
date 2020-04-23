@@ -44,7 +44,7 @@
                       @on-change="seekClick"
                       placeholder="试听类型"
                     >
-                      <Option :value="i" v-for="(list,i) in course">{{list}}</Option>
+                      <Option :value="i" v-for="(list,i) in course" :key="i">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
@@ -56,7 +56,7 @@
                       @on-change="seekClick"
                       placeholder="状态"
                     >
-                      <Option :value="i" v-for="(list,i) in appoint">{{list}}</Option>
+                      <Option :value="i" v-for="(list,i) in appoint" :key="i">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
@@ -68,7 +68,7 @@
                       @on-change="seekClick"
                       placeholder="科目"
                     >
-                      <Option :value="i" v-for="(list,i) in subjectList">{{list}}</Option>
+                      <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>

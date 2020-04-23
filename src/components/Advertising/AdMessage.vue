@@ -23,7 +23,7 @@
           <FormItem label="广告图片" prop="banner_pic" class="active_span">
             <span class="active_red">*</span>
             <template>
-              <div class="demo-upload-list" v-for="item in uploadList">
+              <div class="demo-upload-list" v-for="(item,i) in uploadList"  :key="i">
                 <img :src="item.url">
                 <div class="demo-upload-list-cover">
                   <!-- <Icon type="ios-eye-outline" @click.native="handleView(item)"></Icon> -->

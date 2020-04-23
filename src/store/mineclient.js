@@ -22,7 +22,6 @@ export default {
     city: [],
     provinceList: [],
     mineclient: [],
-    refer: storage.getDaiban().channel,
     currentPage: 1,
     total: 0,
     pageSize: 10,
@@ -79,9 +78,6 @@ export default {
     },
     setClientCurrentpage(state, payload) {
       state.clientCurrentpage = payload
-    },
-    setRefer(state, payload) {
-      state.refer = payload
     },
     setClientTypes(state, payload) {
       state.clientTypesList = payload
@@ -655,7 +651,7 @@ export default {
           }
         }
 
-        state.refer.map((i => {
+        storage.getDaiban().channel.map((i => {
           if (i.id == element.refer) {
             return element.refer = i.channel_title
           }

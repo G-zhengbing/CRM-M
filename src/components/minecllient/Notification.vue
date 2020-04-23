@@ -171,6 +171,21 @@ export default {
                 },
                 "试听"
               ),
+               h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.order(params.row);
+                    }
+                  }
+                },
+                "订单"
+              ),
               h(
                 "Button",
                 {
@@ -210,6 +225,15 @@ export default {
   methods: {
     ...mapMutations(["setNotifiTypes", "setCurrentPage", "setRefer"]),
     ...mapActions(["getNotificationList", "RingUp", "getReferList","getUserReservedList"]),
+     //订单
+    order(item) {
+      this.setNotifiTypes(item);
+      this.showMine = true;
+      this.type.classify = "order";
+      this.type.form = this.form;
+      this.type.page = this.currentPage;
+      this.type.data = { ...this.notifiTypes };
+    },
     //试听
     audition(item) {
       // this.getUserReservedList({uid:item.id})

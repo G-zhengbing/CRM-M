@@ -53,7 +53,7 @@
                       @on-change="seekClick"
                       placeholder="意向科目"
                     >
-                      <Option :value="i" v-for="(list,i) in subjectList">{{list}}</Option>
+                      <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
@@ -65,7 +65,7 @@
                       @on-change="seekClick"
                       placeholder="意向度"
                     >
-                      <Option :value="i" v-for="(list,i) in intention">{{list}}</Option>
+                      <Option :value="i" v-for="(list,i) in intention" :key="i">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>

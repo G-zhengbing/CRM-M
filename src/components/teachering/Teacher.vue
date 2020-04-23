@@ -33,7 +33,7 @@
                       @on-change="seekClick"
                       placeholder="意向科目"
                     >
-                      <Option :value="i" v-for="(list,i) in subject">{{list}}</Option>
+                      <Option :value="i" v-for="(list,i) in subject" :key="i">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
@@ -104,7 +104,7 @@
           <Col span="12">
             <FormItem label="教授科目" prop="subject">
               <Select v-model="form.subject" style="width:300px">
-                <Option :value="i*1" v-for="(list,i) in subject">{{list}}</Option>
+                <Option :value="i*1" v-for="(list,i) in subject" :key="i">{{list}}</Option>
               </Select>
             </FormItem>
           </Col>
@@ -142,10 +142,10 @@
                 v-model="form.address_province_id"
                 style="width:100px"
               >
-                <Option :value="list.Id" v-for="(list,i) in provinceList">{{list.Name}}</Option>
+                <Option :value="list.Id" v-for="(list,i) in provinceList" :key="i">{{list.Name}}</Option>
               </Select>
               <Select v-model="form.address_city_id" style="width:100px">
-                <Option :value="list.Id" v-for="(list,i) in city">{{list.Name}}</Option>
+                <Option :value="list.Id" v-for="(list,i) in city" :key="i">{{list.Name}}</Option>
               </Select>
             </FormItem>
           </Col>
@@ -168,7 +168,7 @@
             <span>*</span>
             <FormItem label="老师头像" prop="avatar" class="active_span" style="margin-left:20px">
               <template>
-                <div class="demo-upload-list" v-for="item in uploadList">
+                <div class="demo-upload-list" v-for="(item,i) in uploadList" :key="i">
                   <img :src="item.url" />
                   <div class="demo-upload-list-cover">
                     <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
@@ -210,7 +210,7 @@
           <Col span="12" style="display:flex">
             <FormItem label="招商银行卡" prop="bank_card_pic" class="active_span">
               <template>
-                <div class="demo-upload-list" v-for="item in uploadList2">
+                <div class="demo-upload-list" v-for="(item,i) in uploadList2" :key="i">
                   <img :src="item.url" />
                   <div class="demo-upload-list-cover">
                     <Icon type="ios-trash-outline" @click.native="handleRemove2(item)"></Icon>
@@ -252,7 +252,7 @@
           <Col span="12" style="display:flex">
             <FormItem label="身份证正面照" prop="identity_id_pic1" class="active_span">
               <template>
-                <div class="demo-upload-list" v-for="item in uploadList4">
+                <div class="demo-upload-list" v-for="(item,i) in uploadList4" :key="i">
                   <img :src="item.url" />
                   <div class="demo-upload-list-cover">
                     <Icon type="ios-trash-outline" @click.native="handleRemove4(item)"></Icon>
@@ -294,7 +294,7 @@
           <Col span="12" style="display:flex">
             <FormItem label="身份证背面照" prop="identity_id_pic2" class="active_span">
               <template>
-                <div class="demo-upload-list" v-for="item in uploadList5">
+                <div class="demo-upload-list" v-for="(item,i) in uploadList5" :key="i">
                   <img :src="item.url" />
                   <div class="demo-upload-list-cover">
                     <Icon type="ios-trash-outline" @click.native="handleRemove5(item)"></Icon>
@@ -378,7 +378,7 @@
           <Col span="12" style="display:flex">
             <FormItem label="教师资格证" prop="teacher_nvq_pic" class="active_span">
               <template>
-                <div class="demo-upload-list" v-for="item in uploadList7">
+                <div class="demo-upload-list" v-for="(item,i) in uploadList7" :key="i">
                   <img :src="item.url" />
                   <div class="demo-upload-list-cover">
                     <Icon type="ios-trash-outline" @click.native="handleRemove7(item)"></Icon>
@@ -487,6 +487,7 @@
                   <ul>
                     <li
                       v-for="(k,i) in num"
+                      :key="i"
                       :class="{active:timeBlock(k-1) == 'ok'}"
                       @click="getNum(i,$event)"
                     ></li>
@@ -497,6 +498,7 @@
                       @click="getNum(i,$event)"
                       v-for="(k,i) in num*2"
                       v-if=" k > num"
+                      :key="i"
                     ></li>
                   </ul>
                   <ul>
@@ -505,6 +507,7 @@
                       @click="getNum(i,$event)"
                       v-for="(k,i) in num*3"
                       v-if=" k > num*2"
+                      :key="i"
                     ></li>
                   </ul>
                   <ul>
@@ -513,6 +516,7 @@
                       @click="getNum(i,$event)"
                       v-for="(k,i) in num*4"
                       v-if=" k > num*3"
+                      :key="i"
                     ></li>
                   </ul>
                   <ul>
@@ -521,6 +525,7 @@
                       @click="getNum(i,$event)"
                       v-for="(k,i) in num*5"
                       v-if=" k > num*4"
+                      :key="i"
                     ></li>
                   </ul>
                   <ul>
@@ -529,6 +534,7 @@
                       @click="getNum(i,$event)"
                       v-for="(k,i) in num*6"
                       v-if=" k > num*5"
+                      :key="i"
                     ></li>
                   </ul>
                   <ul>
@@ -537,6 +543,7 @@
                       @click="getNum(i,$event)"
                       v-for="(k,i) in num*7"
                       v-if=" k > num*6"
+                      :key="i"
                     ></li>
                   </ul>
                 </div>
@@ -715,9 +722,9 @@ export default {
     ...mapMutations(["setTeacherTypes", "setCurrentPage"]),
     timeBlock(value) {
       if (this.setActive.indexOf(value) > -1) {
-        return 'ok';
+        return "ok";
       } else {
-        return 'no';
+        return "no";
       }
     },
     //获取省市

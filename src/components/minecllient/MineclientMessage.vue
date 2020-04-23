@@ -112,24 +112,6 @@
                 style="width:300px"
               />
             </FormItem>
-            <!-- <FormItem label="报读年级">
-              <Select v-model="orderForm.grade" style="width:300px" disabled>
-                <Option :value="1">一年级</Option>
-                <Option :value="2">二年级</Option>
-                <Option :value="3">三年级</Option>
-                <Option :value="4">四年级</Option>
-                <Option :value="5">五年级</Option>
-                <Option :value="6">六年级</Option>
-                <Option :value="7">七年级</Option>
-                <Option :value="8">八年级</Option>
-                <Option :value="9">九年级</Option>
-              </Select>
-            </FormItem>-->
-            <!-- <FormItem label="报读科目">
-              <Select v-model="orderForm.subject" style="width:300px" disabled>
-                <Option :value="i" v-for="(list,i) in subject">{{list}}</Option>
-              </Select>
-            </FormItem>-->
           </div>
           <div class="procued-footer">
             <span>价格</span>
@@ -223,16 +205,16 @@
             </FormItem>
           </Col>
           <Col span="24">
-              <FormItem label="教材版本">
-                <Select v-model="createAuditionForm.textbook_version" placeholder="教材版本">
-                  <Option v-for="(list,i) in vaersion" :value="i*1">{{list}}</Option>
-                </Select>
-              </FormItem>
-            </Col>
+            <FormItem label="教材版本">
+              <Select v-model="createAuditionForm.textbook_version" placeholder="教材版本">
+                <Option v-for="(list,i) in vaersion" :value="i*1" :key="i">{{list}}</Option>
+              </Select>
+            </FormItem>
+          </Col>
           <Col span="24">
             <FormItem label="科目">
               <Select v-model="createAuditionForm.subject">
-                <Option :value="i" v-for="(list,i) in subject">{{list}}</Option>
+                <Option :value="i" v-for="(list,i) in subject" :key="i">{{list}}</Option>
               </Select>
             </FormItem>
           </Col>
@@ -248,19 +230,15 @@
           </Col>
           <Col span="24">
             <FormItem label="试听课时段">
-              <!-- <TimePicker
-                v-model="createAuditionForm.class_hour"
-                type="time"
-                placeholder="选择时间范围"
-                style="width: 168px"
-              ></TimePicker>-->
-              <Input @on-focus="getFocus" v-model="time" placeholder="选择时间范围"></Input>
+              <Select v-model="createAuditionForm.time_block">
+                <Option :value="list.split('-')[0]" v-for="(list,i) in timeNum" :key="i">{{list}}</Option>
+              </Select>
             </FormItem>
           </Col>
           <Col span="24">
             <FormItem label="老师">
               <Select v-model="createAuditionForm.coach_id" @on-open-change="getTeachers">
-                <Option :value="list.id" v-for="(list,i) in teachersV">{{list.name}}</Option>
+                <Option :value="list.id" v-for="(list,i) in teachersV" :key="i">{{list.name}}</Option>
               </Select>
             </FormItem>
           </Col>
@@ -279,140 +257,6 @@
       <div slot="footer">
         <Button type="text" size="large" @click="clearForm">取消</Button>
         <Button :loading="disableBtn" type="primary" size="large" @click="createAuditionOk">确定</Button>
-      </div>
-    </Modal>
-    <Modal
-      width="1100"
-      v-model="showTimeBlock"
-      title="开放时间"
-      @on-cancel="showTimeBlock = false"
-      :styles="{'margin-top' : '-70px'}"
-    >
-      <div class="content">
-        <div class="content-left">
-          <ul>
-            <li>-</li>
-            <li>00:30 - 01:00</li>
-            <li>01:00 - 01:30</li>
-            <li>01:30 - 02:00</li>
-            <li>02:00 - 02:30</li>
-            <li>02:30 - 03:00</li>
-            <li>03:00 - 03:30</li>
-            <li>03:30 - 04:00</li>
-            <li>04:00 - 04:30</li>
-            <li>04:30 - 05:00</li>
-            <li>05:00 - 05:30</li>
-            <li>05:30 - 06:00</li>
-            <li>06:00 - 06:30</li>
-            <li>06:30 - 07:00</li>
-            <li>07:00 - 07:30</li>
-            <li>07:30 - 08:00</li>
-            <li>08:00 - 08:30</li>
-            <li>08:30 - 09:00</li>
-            <li>09:00 - 09:30</li>
-            <li>09:30 - 10:00</li>
-            <li>10:00 - 10:30</li>
-            <li>10:30 - 11:00</li>
-            <li>11:00 - 11:30</li>
-            <li>11:30 - 12:00</li>
-            <li>12:00 - 12:30</li>
-            <li>12:30 - 13:00</li>
-            <li>13:00 - 13:30</li>
-            <li>13:30 - 14:00</li>
-            <li>14:00 - 14:30</li>
-            <li>14:30 - 15:00</li>
-            <li>15:00 - 15:30</li>
-            <li>15:30 - 16:00</li>
-            <li>16:00 - 16:30</li>
-            <li>16:30 - 17:00</li>
-            <li>17:00 - 17:30</li>
-            <li>17:30 - 18:00</li>
-            <li>18:00 - 18:30</li>
-            <li>18:30 - 19:00</li>
-            <li>19:00 - 19:30</li>
-            <li>19:30 - 20:00</li>
-            <li>20:00 - 20:30</li>
-            <li>20:30 - 21:00</li>
-            <li>21:00 - 21:30</li>
-            <li>21:30 - 22:00</li>
-            <li>22:00 - 22:30</li>
-            <li>22:30 - 23:00</li>
-            <li>23:00 - 23:30</li>
-            <li>23:30 - 24:00</li>
-          </ul>
-        </div>
-        <div class="content-right">
-          <ul class="content-right-header">
-            <li>一</li>
-            <li>二</li>
-            <li>三</li>
-            <li>四</li>
-            <li>五</li>
-            <li>六</li>
-            <li>日</li>
-          </ul>
-          <div class="content-right-footer">
-            <ul>
-              <li
-                :class="{active:setActive == k,disable:k-1 % num == 0}"
-                @click="getNum(i,$event)"
-                v-for="(k,i) in num"
-              ></li>
-            </ul>
-            <ul>
-              <li
-                :class="{active:setActive == k,disable:k-1 % num == 48}"
-                @click="getNum(i,$event)"
-                v-for="(k,i) in num*2"
-                v-if=" k > num"
-              ></li>
-            </ul>
-            <ul>
-              <li
-                :class="{active:setActive == k,disable:k-1 % num == 96}"
-                @click="getNum(i,$event)"
-                v-for="(k,i) in num*3"
-                v-if=" k > num*2"
-              ></li>
-            </ul>
-            <ul>
-              <li
-                :class="{active:setActive == k,disable:k-1 % num == 144}"
-                @click="getNum(i,$event)"
-                v-for="(k,i) in num*4"
-                v-if=" k > num*3"
-              ></li>
-            </ul>
-            <ul>
-              <li
-                :class="{active:setActive == k,disable:k-1 % num == 192}"
-                @click="getNum(i,$event)"
-                v-for="(k,i) in num*5"
-                v-if=" k > num*4"
-              ></li>
-            </ul>
-            <ul>
-              <li
-                :class="{active:setActive == k,disable:k-1 % num == 240}"
-                @click="getNum(i,$event)"
-                v-for="(k,i) in num*6"
-                v-if=" k > num*5"
-              ></li>
-            </ul>
-            <ul>
-              <li
-                :class="{active:setActive == k,disable:k-1 % num == 288}"
-                @click="getNum(i,$event)"
-                v-for="(k,i) in num*7"
-                v-if=" k > num*6"
-              ></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div slot="footer">
-        <Button type="text" size="large" @click="showTimeBlock = false">取消</Button>
-        <Button type="primary" size="large" @click="loseFocus">确定</Button>
       </div>
     </Modal>
     <!-- 签到 -->
@@ -446,7 +290,7 @@
       <Form :form="appraisalForm" label-position="top" style="height:300px;overflow-y:auto;">
         <FormItem label="测评上传" prop="avatar" class="active_span">
           <template>
-            <div class="demo-upload-list" v-for="item in uploadList">
+            <div class="demo-upload-list" v-for="(item,i) in uploadList" :key="i">
               <img :src="item.url" />
               <div class="demo-upload-list-cover">
                 <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
@@ -576,10 +420,10 @@
                 v-model="connectForm.reside_province_id"
                 style="width:100px"
               >
-                <Option :value="list.Id" v-for="(list,i) in provinceList">{{list.Name}}</Option>
+                <Option :value="list.Id" v-for="(list,i) in provinceList" :key="i">{{list.Name}}</Option>
               </Select>
               <Select v-model="connectForm.reside_city_id" style="width:100px">
-                <Option :value="list.Id" v-for="(list,i) in city">{{list.Name}}</Option>
+                <Option :value="list.Id" v-for="(list,i) in city" :key="i">{{list.Name}}</Option>
               </Select>
             </FormItem>
           </Col>
@@ -614,17 +458,17 @@
                 v-model="connectForm.college_province_id"
                 style="width:100px"
               >
-                <Option :value="list.Id" v-for="(list,i) in provinceList">{{list.Name}}</Option>
+                <Option :value="list.Id" v-for="(list,i) in provinceList" :key="i">{{list.Name}}</Option>
               </Select>
               <Select v-model="connectForm.college_city_id" style="width:100px">
-                <Option :value="list.Id" v-for="(list,i) in city">{{list.Name}}</Option>
+                <Option :value="list.Id" v-for="(list,i) in city" :key="i">{{list.Name}}</Option>
               </Select>
             </FormItem>
           </Col>
           <Col span="6">
             <FormItem label="教材版本" prop="textbook_version">
               <Select v-model="connectForm.textbook_version" style="width:200px">
-                <Option :value="i" v-for="(list,i) in book_version">{{list}}</Option>
+                <Option :value="i" v-for="(list,i) in book_version" :key="i">{{list}}</Option>
               </Select>
             </FormItem>
           </Col>
@@ -711,7 +555,7 @@
                 @on-change="getClass"
                 placeholder="课时包"
               >
-                <Option :value="i" v-for="(list,i) in accountList">{{list.product_name}}</Option>
+                <Option :value="i" v-for="(list,i) in accountList" :key="i">{{list.product_name}}</Option>
               </Select>
             </FormItem>
           </Col>
@@ -728,7 +572,7 @@
                 @on-change="getClassAll"
                 placeholder="课时包"
               >
-                <Option :value="i" v-for="(list,i) in ordersnList">{{list.course_name}}</Option>
+                <Option :value="i" v-for="(list,i) in ordersnList" :key="i">{{list.course_name}}</Option>
               </Select>
             </FormItem>
           </Col>
@@ -843,6 +687,7 @@ export default {
         this.showLoading = false;
       });
     } else if (this.type.classify == "audition") {
+      this.getTimeBlock();
       this.showLoading = true;
       this.getUserReservedList({ page: 1, uid: this.type.data.id }).then(() => {
         this.showLoading = false;
@@ -851,7 +696,8 @@ export default {
   },
   data() {
     return {
-      vaersion:storage.getDaiban().screen_list.book_version,
+      timeNum: [],
+      vaersion: storage.getDaiban().screen_list.book_version,
       upgradeColumns: [
         { title: "购买课程名称", key: "course_name", width: 200 },
         {
@@ -1001,8 +847,6 @@ export default {
       showSignin: false,
       time: "",
       teachersV: [],
-      showTimeBlock: false,
-      acArr: [],
       setActive: 0,
       num: 48,
       subject: storage.getDaiban().screen_list.subject,
@@ -1144,6 +988,24 @@ export default {
       "getTeacherListN",
       "removeMineclient"
     ]),
+    //计算时间段
+    getTimeBlock() {
+      var start = "";
+      var end = "";
+      var b = 7;
+      for (var i = 1; i < 29; i++) {
+        if (i % 2 == 0) {
+          start = b + ":" + "30";
+          b++;
+          end = b + ":" + "00";
+          this.timeNum.push(start + "-" + end);
+        } else {
+          start = b + ":" + "00";
+          end = b + ":" + "30";
+          this.timeNum.push(start + "-" + end);
+        }
+      }
+    },
     getClass(num) {
       this.classNum = this.accountList[num];
     },
@@ -1165,13 +1027,13 @@ export default {
         if (!res.data.ret) {
           this.$Message.error(res.data.error);
           this.$parent.showMine = false;
-          this.getStudentList({ form:this.type.form, page });
+          this.getStudentList({ form: this.type.form, page });
           return;
         }
         if (res.data.ret) {
           this.$Message.success("订单升级成功");
           this.$parent.showMine = false;
-          this.getStudentList({ form:this.type.form, page });
+          this.getStudentList({ form: this.type.form, page });
         }
       });
     },
@@ -1474,7 +1336,6 @@ export default {
       this.createAuditionForm.date_time = this.datePicker(
         this.createAuditionForm.date_time
       );
-      this.createAuditionForm.time_block = this.acArr[0];
       form.subject = this.createAuditionForm.subject;
       form.grade = this.createAuditionForm.grade;
       form.time_block = this.createAuditionForm.time_block;
@@ -1499,36 +1360,6 @@ export default {
             this.teachersV = res.data.data;
           }
         });
-      }
-    },
-    //点击时间块失去光标
-    loseFocus() {
-      this.showTimeBlock = false;
-      this.createAuditionForm.time_block = this.acArr;
-    },
-    //点击时间块获取焦点
-    getFocus() {
-      this.showTimeBlock = true;
-    },
-    //获取当前时间块
-    getNum(num, e) {
-      var arr = this.acArr;
-      e.path[0].className = "active";
-      if (arr.indexOf(num) > -1) {
-        arr.splice(arr.indexOf(num), 1);
-        e.path[0].className = " ";
-      } else {
-        if (arr.length > 0) {
-          this.$Message.error("只可选择一个时间段");
-          e.path[0].className = " ";
-        } else {
-          arr.push(num);
-          this.showLoading = true;
-          this.setTimeBlock(num).then(res => {
-            this.time = res.data;
-            this.showLoading = false;
-          });
-        }
       }
     },
     //创建订单

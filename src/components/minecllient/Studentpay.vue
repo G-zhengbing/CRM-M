@@ -33,7 +33,7 @@
                       @on-change="seekClick"
                       placeholder="课程类型"
                     >
-                      <Option :value="i" v-for="(list,i) in course_type">{{list}}</Option>
+                      <Option :value="i" v-for="(list,i) in course_type" :key="i">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
@@ -68,7 +68,7 @@
                       @on-change="seekClick"
                       placeholder="意向科目"
                     >
-                      <Option :value="i" v-for="(list,i) in subjectList">{{list}}</Option>
+                      <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>

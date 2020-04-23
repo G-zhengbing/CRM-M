@@ -101,7 +101,7 @@
                       @on-change="seekKuhu"
                       placeholder="意向科目"
                     >
-                      <Option :value="i" v-for="(list,i) in subjectList">{{list}}</Option>
+                      <Option :value="i" v-for="(list,i) in subjectList"  :key="i">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
@@ -113,7 +113,7 @@
                       @on-change="seekKuhu"
                       placeholder="意向度"
                     >
-                     <Option :value="i" v-for="(list,i) in internation">{{list}}</Option>
+                     <Option :value="i" v-for="(list,i) in internation"  :key="i">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
