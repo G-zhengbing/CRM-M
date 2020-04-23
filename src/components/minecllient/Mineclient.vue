@@ -440,21 +440,21 @@ export default {
                 },
                 "呼出"
               ),
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "text",
-                    size: "small"
-                  },
-                  on: {
-                    click: () => {
-                      this.remove(params.row);
-                    }
-                  }
-                },
-                "移出"
-              )
+              // h(
+              //   "Button",
+              //   {
+              //     props: {
+              //       type: "text",
+              //       size: "small"
+              //     },
+              //     on: {
+              //       click: () => {
+              //         this.remove(params.row);
+              //       }
+              //     }
+              //   },
+              //   "移出"
+              // )
             ]);
           }
         }
