@@ -79,7 +79,9 @@ export default {
     ...mapMutations(["setRefresh"]),
     // 点击按钮状态，批量签到
     batchSignin() {
-      this.modal5 = true;
+      if(this.Items.length) {
+        this.modal5 = true;
+      }
     },
     // 点击签到，写接口
     async signin() {
