@@ -305,7 +305,7 @@
 <script>
 import { mapActions } from 'vuex'
 import storage from '../../uilt/storage'
-import { UPDATABOOK,CREATEBOOK } from "../../uilt/url/Murl";
+import { UPDATABOOK,CREATEBOOK,UPLOADIMAGE } from "../../uilt/url/Murl";
 import axios from 'axios'
 export default {
   props:["item"],
