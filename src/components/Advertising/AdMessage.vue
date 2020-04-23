@@ -81,7 +81,7 @@
 import { mapActions} from 'vuex'
 import axios from 'axios'
 import storage from '../../uilt/storage'
-import { ADDADVER_URL } from '../../uilt/url/Murl'
+import { ADDADVER_URL,UPDATAADVER_URL } from '../../uilt/url/Murl'
 import qs from 'qs'
 export default {
   props:["item"],
@@ -162,7 +162,7 @@ export default {
               Authorization: "bearer " + storage.get()
             }
           };
-          axios.post("http://liveapi.canpoint.net/api/modify_banner"+"/" +this.form.id,formData,config)
+          axios.post(UPDATAADVER_URL + "/" + this.form.id,formData,config)
           .then((response) => {
             if(response.data.code == 100001 && response.data.error){
               this.$Message.error(response.data.error);
@@ -191,7 +191,7 @@ export default {
               Authorization: "bearer " + storage.get()
             }
           };
-          axios.post("http://liveapi.canpoint.net/api/ad",formData,config)
+          axios.post(ADDADVER_URL,formData,config)
           .then((response) => {
             if(response.data.code == 100001 && response.data.error){
               this.$Message.error(response.data.error);

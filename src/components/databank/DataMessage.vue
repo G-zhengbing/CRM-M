@@ -98,6 +98,8 @@
 <script>
 import { mapActions } from 'vuex'
 import storage from '../../uilt/storage'
+import { UPDATADATA_URL,ADDDATA_URL } from "../../uilt/url/Murl";
+import { MATERIALUPLOAD } from "../../uilt/url/url";
 import axios from "axios"
 export default {
   props:["item"],
@@ -149,7 +151,7 @@ export default {
             Authorization: "bearer " + storage.get()
           }
         };
-        axios.post("http://liveapi.canpoint.net/api/material_upload",formData,config).then((response)=>{
+        axios.post(MATERIALUPLOAD,formData,config).then((response)=>{
           if(response.data.error){
             this.$Message.error(response.data.error);
             return
@@ -178,7 +180,7 @@ export default {
                 Authorization: "bearer " + storage.get()
               }
             };
-            axios.post("http://liveapi.canpoint.net/api/modify_material/" + this.form.id,formData,config)
+            axios.post(UPDATADATA_URL + "/" + this.form.id,formData,config)
               .then((response) => {
                 if(response.data.code == 100001 && response.data.error){
                   this.$Message.error(response.data.error);
@@ -201,7 +203,7 @@ export default {
                 Authorization: "bearer " + storage.get()
               }
             };
-            axios.post("http://liveapi.canpoint.net/api/store_material",formData,config)
+            axios.post(ADDDATA_URL,formData,config)
               .then((response) => {
                 if(response.data.code == 100001 && response.data.error){
                   this.$Message.error(response.data.error);

@@ -305,6 +305,7 @@
 <script>
 import { mapActions } from 'vuex'
 import storage from '../../uilt/storage'
+import { UPDATABOOK,CREATEBOOK } from "../../uilt/url/Murl";
 import axios from 'axios'
 export default {
   props:["item"],
@@ -406,7 +407,7 @@ export default {
       reader.onloadend = function (e) {
         file.url = reader.result
         formData.append('file',file)
-        axios.post("http://liveapi.canpoint.net/api/upload_image",formData,config).then((response)=>{
+        axios.post(UPLOADIMAGE,formData,config).then((response)=>{
         if(response.data.error){
           _this.$Message.error(response.data.error);
           return;
@@ -448,7 +449,7 @@ export default {
       reader.onloadend = function (e) {
         file.url = reader.result
         formData.append('file',file)
-        axios.post("http://liveapi.canpoint.net/api/upload_image",formData,config).then((response)=>{
+        axios.post(UPLOADIMAGE,formData,config).then((response)=>{
         if(response.data.error){
           _this.$Message.error(response.data.error);
           return;
@@ -566,7 +567,7 @@ export default {
       reader.onloadend = function (e) {
         file.url = reader.result
         formData.append('file',file)
-        axios.post("http://liveapi.canpoint.net/api/upload_image",formData,config).then((response)=>{
+        axios.post(UPLOADIMAGE,formData,config).then((response)=>{
         if(response.data.error){
           _this.$Message.error(response.data.error);
           return;
@@ -624,7 +625,7 @@ export default {
                 Authorization: "bearer " + storage.get()
               }
             };
-            axios.post("http://liveapi.canpoint.net/api/update_book",formData,config)
+            axios.post(UPDATABOOK,formData,config)
             .then((response) => {
               if(response.data.code == 100001 && response.data.error){
                 this.$Message.error(response.data.error);
@@ -673,7 +674,7 @@ export default {
                 Authorization: "bearer " + storage.get()
               }
             };
-            axios.post("http://liveapi.canpoint.net/api/create_book",formData,config)
+            axios.post(CREATEBOOK,formData,config)
             .then((response) => {
               if(response.data.code == 100001 && response.data.error){
                 this.$Message.error(response.data.error);

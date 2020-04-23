@@ -1,66 +1,73 @@
-const BASEURL = "http://liveapi.canpoint.net/api/" // 基础地址
+const BASEURL = "http://liveapi.canpoint.net/api/" // 线上地址
+// const BASEURL = "http://39.107.156.22/canpoint/api/" // 测试地址
 
-const LOGINURL = "http://liveapi.canpoint.net/api/login" //登陆
-const GETUSER = "http://liveapi.canpoint.net/api/me" //获取用户信息
-const LOGINOUT = "http://liveapi.canpoint.net/api/logout" //退出登录
-const KEHULIST = "http://liveapi.canpoint.net/api/clues" //待分配/已分配/公共客户
-const FENPEI = "http://liveapi.canpoint.net/api/sales" //分配人员
-const ANALLOT = "http://liveapi.canpoint.net/api/paid_allocated" //已下单待分配
-const FENPAIXS = "http://liveapi.canpoint.net/api/assign_clue" //分派线索
-const GENJIN = "http://liveapi.canpoint.net/api/clues" //线索跟进 
-const YIRUGONG = "http://liveapi.canpoint.net/api/clue_status" //移入/移除
-const MONEY = "http://liveapi.canpoint.net/api/order" //订单列表
-const YUQI = "http://liveapi.canpoint.net/api/overdue_clue" //逾期未回访
-const UPDATA = "http://liveapi.canpoint.net/api/reset" //修改密码
-const JINRI = "http://liveapi.canpoint.net/api/points_clue" //今日新分
-const RETURN = "http://liveapi.canpoint.net/api/return_list" //今日回访
-const ERWEIMA = "http://liveapi.canpoint.net/api/create_qrcode" //新生成二维码
-const DELEERWEIMA = "http://liveapi.canpoint.net/api/offline_qrcode" //删除二维码
-const HOMEDATA = "http://liveapi.canpoint.net/api/data_statistics" //首页数据
-const ERWEIMALIST = "http://liveapi.canpoint.net/api/channels_list" //二维码list
-const ERWEIMACITY = "http://liveapi.canpoint.net/api/city" //二维码城市
-const TYPESHOOL = "http://liveapi.canpoint.net/api/type_school" //类型/学校
-const QUDAO = "http://liveapi.canpoint.net/api/channel_account" //渠道转介绍
-const DINGDAN = "http://liveapi.canpoint.net/api/add_order" //创建订单
-const DAORU ="http://liveapi.canpoint.net/api/export" //导入
-const HUCHU = "http://liveapi.canpoint.net/api/callcellphone"//呼出
-const PAYSTUDENT = "http://liveapi.canpoint.net/api/paid_account" //我的付费学员
-const UPLIST = "http://liveapi.canpoint.net/api/attend_class" //上可列表
-const TECHSTU = "http://liveapi.canpoint.net/api/head_clue" // 教务/我的学员
-const TECPAY = "http://liveapi.canpoint.net/api/order_clue" //教务/付费学员
-const TEPAYSTU = "http://liveapi.canpoint.net/api/batch_assign"//教务/付费学员/分配
-const TEPAYLIST = "http://liveapi.canpoint.net/api/head_master" //教务/付费学员/班主任列表
-const TEPCHE = "http://liveapi.canpoint.net/api/order_update" //班主任跟进
-const TEPREPORT = "http://liveapi.canpoint.net/api/learn_report" //学情报告
-const TEPADDREPORT = "http://liveapi.canpoint.net/api/order_report" //新增学情报告
-const REFER = 'http://liveapi.canpoint.net/api/screen_list' //渠道来源列表
-const MINECLIENT = "http://liveapi.canpoint.net/api/mine_clues"//我的客户
-const NOTIFICATION = "http://liveapi.canpoint.net/api/action_list"//我的客户/消息提醒
 const PONESTATUS = "http://liveh5.canpoint.net/send_message" //跟进/发送短信验证码
-const CLIENTTYPE = "http://liveapi.canpoint.net/api/order_product" //创建订单/选择课程
-const RESERVED = "http://liveapi.canpoint.net/api/mine_appoint_list" //预约单/
-const RESERVEDAll = "http://liveapi.canpoint.net/api/system_appoint_list" //全部预约单/
-const USERRESERVED = "http://liveapi.canpoint.net/api/appoint_list" //用户预约单列表
-const CREATERESERVED = "http://liveapi.canpoint.net/api/appoint_store" //创建预约单
-const TEACHERLIST  = "http://liveapi.canpoint.net/api/coach_list" //教师管理
-const CREATEDTEACHERS = "http://liveapi.canpoint.net/api/coach_store" //新建教师
-const UPDATATEACHERS = "http://liveapi.canpoint.net/api/modify_coach" //修改教师
-const CLICKTEACHER = "http://liveapi.canpoint.net/api/available_coach_list" //预约选老师
-const QIANDAO = "http://liveapi.canpoint.net/api/batch_stage" //签到/缺席/预约批量
-const APPRAISAL  = "http://liveapi.canpoint.net/api/appiont_modify"//查看测评
-const GETTIMEBLOCK = "http://liveapi.canpoint.net/api/timeblock"//时间块转换时间段
-const STATISTICS = "http://liveapi.canpoint.net/api/call_phone" //统计分析
-const PROVINCE  = "http://liveapi.canpoint.net/api/province" //省
-const CITY = "http://liveapi.canpoint.net/api/p_city"//市
-const CREATEINTRODUCE = "http://liveapi.canpoint.net/api/clue_regist"//转介绍/创建转介绍
-const INTRODUCE = "http://liveapi.canpoint.net/api/get_mobile"//检测手机号
-const IMPORTDATA = "http://liveapi.canpoint.net/api/upload_csv"//线索导入
-const CREATEORDER = "http://liveapi.canpoint.net/api/create_order"//创建订单
-const HANDOVER  = "http://liveapi.canpoint.net/api/handover"//交接单
-const IMPORTANT = 'http://liveapi.canpoint.net/api/import_list'//导入订单列表
-const IMPORTLIST = "http://liveapi.canpoint.net/api/upload_csv"//导入线索
-const ACCOUNTORDER = "http://liveapi.canpoint.net/api/account_order"//升级订单列表
-const CREATEUPGRADE = "http://liveapi.canpoint.net/api/create_upgrade_order"//创建升级订单
+
+const LOGINURL = BASEURL + "login" //登陆
+const GETUSER = BASEURL + "me" //获取用户信息
+const LOGINOUT = BASEURL + "logout" //退出登录
+const KEHULIST = BASEURL + "clues" //待分配/已分配/公共客户
+const FENPEI = BASEURL + "sales" //分配人员
+const ANALLOT = BASEURL + "paid_allocated" //已下单待分配
+const FENPAIXS = BASEURL + "assign_clue" //分派线索
+const GENJIN = BASEURL + "clues" //线索跟进 
+const YIRUGONG = BASEURL + "clue_status" //移入/移除
+const MONEY = BASEURL + "order" //订单列表
+const YUQI = BASEURL + "overdue_clue" //逾期未回访
+const UPDATA = BASEURL + "reset" //修改密码
+const JINRI = BASEURL + "points_clue" //今日新分
+const RETURN = BASEURL + "return_list" //今日回访
+const ERWEIMA = BASEURL + "create_qrcode" //新生成二维码
+const DELEERWEIMA = BASEURL + "offline_qrcode" //删除二维码
+const HOMEDATA = BASEURL + "data_statistics" //首页数据
+const ERWEIMALIST = BASEURL + "channels_list" //二维码list
+const ERWEIMACITY = BASEURL + "city" //二维码城市
+const TYPESHOOL = BASEURL + "type_school" //类型/学校
+const QUDAO = BASEURL + "channel_account" //渠道转介绍
+const DINGDAN = BASEURL + "add_order" //创建订单
+const DAORU =BASEURL + "export" //导入
+const HUCHU = BASEURL + "callcellphone"//呼出
+const PAYSTUDENT = BASEURL + "paid_account" //我的付费学员
+const UPLIST = BASEURL + "attend_class" //上可列表
+const TECHSTU = BASEURL + "head_clue" // 教务/我的学员
+const TECPAY = BASEURL + "order_clue" //教务/付费学员
+const TEPAYSTU = BASEURL + "batch_assign"//教务/付费学员/分配
+const TEPAYLIST = BASEURL + "head_master" //教务/付费学员/班主任列表
+const TEPCHE = BASEURL + "order_update" //班主任跟进
+const TEPREPORT = BASEURL + "learn_report" //学情报告
+const TEPADDREPORT = BASEURL + "order_report" //新增学情报告
+const REFER = BASEURL + 'screen_list' //渠道来源列表
+const MINECLIENT = BASEURL + "mine_clues"//我的客户
+const NOTIFICATION = BASEURL + "action_list"//我的客户/消息提醒
+const CLIENTTYPE = BASEURL + "order_product" //创建订单/选择课程
+const RESERVED = BASEURL + "mine_appoint_list" //预约单/
+const RESERVEDAll = BASEURL + "system_appoint_list" //全部预约单/
+const USERRESERVED = BASEURL + "appoint_list" //用户预约单列表
+const CREATERESERVED = BASEURL + "appoint_store" //创建预约单
+const TEACHERLIST  = BASEURL + "coach_list" //教师管理
+const CREATEDTEACHERS = BASEURL + "coach_store" //新建教师
+const UPDATATEACHERS = BASEURL + "modify_coach" //修改教师
+const CLICKTEACHER = BASEURL + "available_coach_list" //预约选老师
+const QIANDAO = BASEURL + "batch_stage" //签到/缺席/预约批量
+const APPRAISAL  = BASEURL + "appiont_modify"//查看测评
+const GETTIMEBLOCK = BASEURL + "timeblock"//时间块转换时间段
+const STATISTICS = BASEURL + "call_phone" //统计分析
+const PROVINCE  = BASEURL + "province" //省
+const CITY = BASEURL + "p_city"//市
+const CREATEINTRODUCE = BASEURL + "clue_regist"//转介绍/创建转介绍
+const INTRODUCE = BASEURL + "get_mobile"//检测手机号
+const IMPORTDATA = BASEURL + "upload_csv"//线索导入
+const CREATEORDER = BASEURL + "create_order"//创建订单
+const HANDOVER  = BASEURL + "handover"//交接单
+const IMPORTANT = BASEURL + 'import_list'//导入订单列表
+const IMPORTLIST = BASEURL + "upload_csv"//导入线索
+const ACCOUNTORDER = BASEURL + "account_order"//升级订单列表
+const CREATEUPGRADE = BASEURL + "create_upgrade_order"//创建升级订单
+
+const MATERIALUPLOAD = BASEURL + "material_upload"//资料上传
+const PRODUCTINFOFILE = BASEURL + "product_info_file"//课程简介图片上传
+const UPDATEPRODUCTS = BASEURL + "update_products"//课程修改
+const CREATEPRODUCTS = BASEURL + "create_products"//新建课程
 
 const PAYINGSTUDENT = BASEURL + "paying_student" //教务/付费学员
 const CLASSTEACH = BASEURL + "teacher_list" //教务/select/班主任列表
@@ -87,10 +94,11 @@ const GETACCOUNTSFOLLOW = BASEURL + "get_accounts_follow" //教务/ 跟进，信
 
 const SCREENLIST = BASEURL + "screen_list" //教务/ 公共接口，select状态栏
 
-//liveapi.canpoint.net
-// 39.107.156.22/canpoint
-
 export {
+  UPDATEPRODUCTS,
+  CREATEPRODUCTS,
+  PRODUCTINFOFILE,
+  MATERIALUPLOAD,
   RESERVEDAll,
   CREATEUPGRADE,
   ACCOUNTORDER,

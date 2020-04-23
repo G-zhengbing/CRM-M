@@ -222,6 +222,7 @@ import TablePlus from "../table/TablePlus";
 import storage from "../storage";
 import axios from "axios";
 import QS from "qs"
+import { DAORU } from "../../uilt/url/url";
 import XLSX from "xlsx";
 export default {
   props: ["type"],
@@ -300,7 +301,7 @@ export default {
     saveDaoru() {
       axios({
         method: "post",
-        url: "http://liveapi.canpoint.net/api/export",
+        url: DAORU,
         headers: {
           "content-type": "application/json",
           Authorization: "bearer " + storage.get()

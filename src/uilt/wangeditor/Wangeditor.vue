@@ -7,6 +7,7 @@
 import E from "wangeditor";
 import axios from "axios";
 import storage from "../../uilt/storage";
+import { PRODUCTINFOFILE } from "../../uilt/url/url";
 export default {
   data() {
     return {
@@ -58,7 +59,7 @@ export default {
           }
         };
         axios
-          .post("http://liveapi.canpoint.net/api/product_info_file", fd, config)
+          .post(PRODUCTINFOFILE, fd, config)
           .then(res => {
             insert(http + res.data);
           });

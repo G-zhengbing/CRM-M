@@ -236,6 +236,8 @@
 import Wangeditor from '../../uilt/wangeditor/Wangeditor'
 import { mapActions } from 'vuex'
 import storage from '../../uilt/storage'
+import { UPLOADIMAGE } from '../../uilt/url/Murl'
+import { UPDATEPRODUCTS, CREATEPRODUCTS } from '../../uilt/url/url'
 import axios from 'axios'
 export default {
   props:["item"],
@@ -424,7 +426,7 @@ export default {
       reader.onloadend = (e) => {
         // 这是，图片地址，发送给后端
         formData.append('file',file);
-        axios.post("http://liveapi.canpoint.net/api/upload_image",formData,config).then((response)=>{
+        axios.post(UPLOADIMAGE,formData,config).then((response)=>{
         if(response.error){
           _this.$Message.error(response.data.error);
           return;
@@ -474,7 +476,7 @@ export default {
                 Authorization: "bearer " + storage.get()
               }
             };
-            axios.post("http://liveapi.canpoint.net/api/update_products" , formData,config)
+            axios.post(UPDATEPRODUCTS, formData,config)
             .then((response) => {
               if(response.data.code == 100001 && response.data.error){
                 this.$Message.error(response.data.error);
@@ -537,7 +539,7 @@ export default {
                 Authorization: "bearer " + storage.get()
               }
             };
-            axios.post("http://liveapi.canpoint.net/api/create_products",formData,config)
+            axios.post(CREATEPRODUCTS,formData,config)
             .then((response) => {
               if(response.data.code == 100001 && response.data.error){
                 this.$Message.error(response.data.error);
