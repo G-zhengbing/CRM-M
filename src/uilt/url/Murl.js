@@ -1,34 +1,44 @@
-const ADVER_URL = "http://liveapi.canpoint.net/api/banner" //广告列表
-const ADDADVER_URL = "http://liveapi.canpoint.net/api/ad" //新增广告
-const DELEADVER_URL = "http://liveapi.canpoint.net/api/delete_banner" //删除广告
-const ADVEUPDOWN_URL = "http://liveapi.canpoint.net/api/line" //广告上线/下线
-const UPDATAADVER_URL = "http://liveapi.canpoint.net/api/modify_banner" //广告修改
+const BASEURL = "http://liveapi.canpoint.net/api/" // 线上地址
+// const BASEURL = "http://39.107.156.22/canpoint/api/" // 测试地址
 
-const SPECIAL_URL = "http://liveapi.canpoint.net/api/event" //专题列表
-const DELESPECIAL_URL = "http://liveapi.canpoint.net/api/delete_event" //删除专题
-const SPECIALUPDOWN_URL = "http://liveapi.canpoint.net/api/line_event" //专题上线/下线
-const ADDSPECIAL_URL = "http://liveapi.canpoint.net/api/store_event" //新建专题
-const UPDATASPECIAL_URL = "http://liveapi.canpoint.net/api/modify_event" //修改专题
+const ADVER_URL = BASEURL + "banner" //广告列表
+const ADDADVER_URL = BASEURL + "ad" //新增广告
+const DELEADVER_URL = BASEURL + "delete_banner" //删除广告
+const ADVEUPDOWN_URL = BASEURL + "line" //广告上线/下线
+const UPDATAADVER_URL = BASEURL + "modify_banner" //广告修改
 
-const CURR_URL = "http://liveapi.canpoint.net/api/product_list" //课程列表
-const ADDCURR_URL = "http://liveapi.canpoint.net/api/create_products" //新增课程
-const CURRSHOW_URL = "http://liveapi.canpoint.net/api/update_show" //课程首页显示状态
-const CURRUPDOWN_URL = "http://liveapi.canpoint.net/api/update_status" //课程上架/下架
-const DELECURR_URL ="http://liveapi.canpoint.net/api/delete_products" //删除课程
+const SPECIAL_URL = BASEURL + "event" //专题列表
+const DELESPECIAL_URL = BASEURL + "delete_event" //删除专题
+const SPECIALUPDOWN_URL = BASEURL + "line_event" //专题上线/下线
+const ADDSPECIAL_URL = BASEURL + "store_event" //新建专题
+const UPDATASPECIAL_URL = BASEURL + "modify_event" //修改专题
 
-const DATA_URL ="http://liveapi.canpoint.net/api/materials" //资料列表
-const ADDDATA_URL = "http://liveapi.canpoint.net/api/store_material" //新建资料
-const DELEDATA_URL = "http://liveapi.canpoint.net/api/delete_material" //删除资料
-const DATASHOW = "http://liveapi.canpoint.net/api/line_material" //资料首页显示状态
-const UPDATADATA_URL = "http://liveapi.canpoint.net/api/modify_material" //修改资料
+const CURR_URL = BASEURL + "product_list" //课程列表
+const ADDCURR_URL = BASEURL + "create_products" //新增课程
+const CURRSHOW_URL = BASEURL + "update_show" //课程首页显示状态
+const CURRUPDOWN_URL = BASEURL + "update_status" //课程上架/下架
+const DELECURR_URL =BASEURL + "delete_products" //删除课程
 
-const BOOK_URL = "http://liveapi.canpoint.net/api/list_book"//一书一码列表
-const BOOK_REMOVE = "http://liveapi.canpoint.net/api/delete_book"//删除一书一码
-const CLASS_LIST = "http://liveapi.canpoint.net/api/course_list" //课列表
+const DATA_URL =BASEURL + "materials" //资料列表
+const ADDDATA_URL = BASEURL + "store_material" //新建资料
+const DELEDATA_URL = BASEURL + "delete_material" //删除资料
+const DATASHOW = BASEURL + "line_material" //资料首页显示状态
+const UPDATADATA_URL = BASEURL + "modify_material" //修改资料
 
-const UPEXTENSION  = "http://liveapi.canpoint.net/api/extension" //上报推广
+const BOOK_URL = BASEURL + "list_book"//一书一码列表
+const BOOK_REMOVE = BASEURL + "delete_book"//删除一书一码
+const CLASS_LIST = BASEURL + "course_list" //课列表
+
+const UPDATABOOK = BASEURL + "update_book" //修改书籍
+const CREATEBOOK = BASEURL + "create_book" //创建书籍
+
+const UPEXTENSION  = BASEURL + "extension" //上报推广
+const UPLOADIMAGE = BASEURL + 'upload_image' // 上传图片
 
 export {
+  CREATEBOOK,
+  UPDATABOOK,
+  UPLOADIMAGE,
   UPEXTENSION,
   CLASS_LIST,
   BOOK_REMOVE,

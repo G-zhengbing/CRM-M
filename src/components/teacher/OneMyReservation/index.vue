@@ -10,18 +10,6 @@
       <div style="text-align:center">
         <Tabs type="card" value="name1" @on-click="changeTab">
           <TabPane label="全部预约单" name="name1">
-            <!-- <SelectBox
-              @formData="formData"
-              :classType="true"
-              :chooseSubject="true"
-              :lecturer="true"
-              :classname="true"
-              :tradingHour="true"
-              :courseDates="true"
-              :submissionTime="true"
-              :auditionType="true"
-              :condition="true"
-            />-->
             <div class="title">
               <Form class="select" ref="formValidate" :model="formItem" inline>
                 <FormItem>
@@ -101,16 +89,6 @@
             />
           </TabPane>
           <TabPane label="今日上课提醒" name="name2">
-            <!-- <SelectBox
-              @formData="formData"
-              :auditionType="true"
-              :chooseSubject="true"
-              :classType="true"
-              :lecturer="true"
-              :classname="true"
-              :tradingHour="true"
-              :submissionTime="true"
-            />-->
             <div class="title">
               <Form class="select" ref="formValidate" :model="formItem" inline>
                 <FormItem>
@@ -171,17 +149,6 @@
             />
           </TabPane>
           <TabPane label="今日上课情况" name="name3">
-            <!-- <SelectBox
-              @formData="formData"
-              :auditionType="true"
-              :chooseSubject="true"
-              :condition="true"
-              :classType="true"
-              :lecturer="true"
-              :classname="true"
-              :tradingHour="true"
-              :submissionTime="true"
-            />-->
             <div class="title">
               <Form class="select" ref="formValidate" :model="formItem" inline>
                 <FormItem>
@@ -557,7 +524,7 @@ export default {
                 },
                 "查看测评"
               ),
-h(
+              h(
                 "Button",
                 {
                   props: {
@@ -650,6 +617,7 @@ h(
     // 设置当前页码
     changePages(val) {
       this.formItem.page = val;
+      this.getUserData()
     },
     // 设置mode搜索词汇
     formData(val) {
@@ -715,12 +683,11 @@ h(
       });
       this.setSelectState(res.data.data.screen_list);
     },
-    changePages() {}
   },
   created() {
     this.getSelectData();
     // this.getUserData();
-    this.columns = this.columns1
+    this.columns = this.columns1;
   }
 };
 </script>

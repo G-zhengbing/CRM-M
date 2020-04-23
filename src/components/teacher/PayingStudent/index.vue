@@ -23,14 +23,6 @@
                 :class="{'pitchon': pitchonStyle == '2' ? true : false}"
               >已分配</div>
             </div>
-            <!-- <SelectBox
-              @formData="formData"
-              :payingStudents="true"
-              :classname="true"
-              :placeholder="pitchonStyle=='2' ? true : false"
-              :firstState="pitchonStyle=='2' ? true : false"
-              :tradingHour="pitchonStyle=='2' ? true : false"
-            />-->
             <div class="title">
               <Form class="select" ref="formValidate" :model="formItem" inline>
                 <FormItem>
@@ -126,7 +118,7 @@
             <TableBox
               @refresh="refresh"
               :empty="num"
-              :page_num="mode.page_num"
+              :page_num="page_num"
               @pageNums="pageNums"
               :columns="columns"
               :dataList="dataList"
@@ -155,15 +147,6 @@
                 :class="{'pitchon': pitchonStyle == '4' ? true : false}"
               >已分配</div>
             </div>
-            <!-- <SelectBox
-              @formData="formData"
-              :payingStudents="true"
-              :lecturer="true"
-              :classname="true"
-              :placeholder="pitchonStyle=='4' ? true : false"
-              :firstState="pitchonStyle=='4' ? true : false"
-              :tradingHour="pitchonStyle=='2' ? true : false"
-            />-->
             <div class="title">
               <Form class="select" ref="formValidate" :model="formItem" inline>
                 <FormItem>
@@ -259,7 +242,8 @@
             <TableBox
               @refresh="refresh"
               :empty="num"
-              :page_num="mode.page_num"
+              :page_num="page_num"
+              @pageNums="pageNums"
               :columns="columns"
               :dataList="dataList"
               :selectData="true"
@@ -273,24 +257,6 @@
               @changePages="changePages"
             />
           </TabPane>
-          <!-- <SelectBox
-            @formData="formData"
-            :payingStudents="true"
-            :lecturer="true"
-            :classname="true"
-            :placeholder="pitchonStyle=='2' ? true : false"
-            :firstState="pitchonStyle=='2' ? true : false"
-          />-->
-          <!-- <TableBox
-            @refresh="refresh"
-            :empty="num"
-            :page_num="mode.page_num"
-            @pageNums="pageNums"
-            :columns="columns"
-            :dataList="dataList"
-            :selectData="true"
-            :allocationData="'分配'"
-          />-->
         </Tabs>
       </div>
     </Card>
@@ -306,7 +272,7 @@
       :row="row"
       :showMod="showMod"
       @changeShowMod="changeShowMod"
-    /> -->
+    />-->
     <LearningReport
       v-else-if="type == 'LearningReport'"
       :row="row"
@@ -340,6 +306,7 @@ export default {
       product_type: 1,
       is_distribution: 0,
       num: 0,
+      page_num: '10',
       formItem: {},
       type: "",
       row: "",
@@ -891,7 +858,7 @@ export default {
         }, 200);
       }
     },
-     refresh: {
+    refresh: {
       deep: true,
       handler(newName, oldName) {
         // 防止数据清空导致调用接口数据错误
@@ -950,10 +917,13 @@ export default {
     // 设置当前页码
     changePages(val) {
       this.formItem.page = val;
+      this.getPayingData();
     },
     // 设置每页显示数量
     pageNums(val) {
+      this.page_num = val;
       this.formItem.page_num = val;
+      this.getPayingData();
     },
     // 设置mode搜索词汇
     formData(val) {
@@ -963,11 +933,11 @@ export default {
       this.pitchonStyle = 1;
       if (value == "name1") {
         this.product_type = 1;
-        // this.formItem.product_type = this.product_type;
+        this.page_num = "10";
         this.pitchon(1);
       } else if (value == "name2") {
         this.product_type = 4;
-        // this.formItem.product_type = this.product_type;
+        this.page_num = "10";
         this.pitchon(3);
       }
     },
@@ -1009,8 +979,9 @@ export default {
     async getPayingData() {
       // 打开弹层
       this.isLoading = true;
+      this.formItem.page_num = this.page_num;
       this.num++;
-      console.log(this.formItem)
+      // console.log(this.formItem)
       let res = await this.$request({
         method: "post",
         url: PAYINGSTUDENT,
@@ -1028,7 +999,13 @@ export default {
         // TODO: 等待接口补充放开
         // dial_up_situation
       } = res.data.data.links;
-
+      // 设置搜索选项
+      this.setSelectState({
+        subject,
+        grade,
+        class_type
+        // dial_up_situation
+      });
       // 设置user信息
       this.dataList = res.data.data.data;
       this.dataList.map(item => {
@@ -1045,20 +1022,15 @@ export default {
         item.dial_up_situation = this.selectState.dial_up_situation[
           item.dial_up_situation
         ];
-        this.selectState.classTeacher.map(i => {
-          if (i.teacher_id == item.teacher_login_name) {
-            item.teacher_login_name = i.teacher_name;
-          }
-        });
+        if (this.is_distribution) {
+          this.selectState.classTeacher.map(i => {
+            if (i.teacher_id == item.teacher_login_name) {
+              item.teacher_login_name = i.teacher_name;
+            }
+          });
+        }
       });
       this.setCurrentPages(this.dataList);
-      // 设置搜索选项
-      this.setSelectState({
-        subject,
-        grade,
-        class_type
-        // dial_up_situation
-      });
       // 设置页码
       this.total = total;
       this.per_page = per_page;
@@ -1068,19 +1040,20 @@ export default {
       this.isLoading = false;
     },
     // 获取班主任列表
-    async getClassTeacher() {
-      let res = await this.$request({
+    getClassTeacher() {
+      this.$request({
         method: "get",
         url: CLASSTEACH
-      });
-      this.setSelectState({
-        classTeacher: res.data.data
+      }).then(res => {
+        this.setSelectState({
+          classTeacher: res.data.data
+        });
       });
     }
   },
   created() {
     this.getClassTeacher();
-    this.pitchon(1);
+    // this.pitchon(1);
     this.columns = this.columns1;
   }
 };

@@ -68,14 +68,15 @@ export default {
 		},
 		// 点击确认
 		async confirm() {
-			// if(this.userIndex == 0 || this.userIndex) {
+			this.mode.order_ids = ""
+			if(this.row) {
 				this.mode.order_ids = this.row.order_id
-			// } else {
-			// 	this.Items.map(item => {
-			// 		this.mode.order_ids += item.order_id + ','
-			// 	})
-			// 	this.mode.order_ids = this.mode.order_ids.substr(0,this.mode.order_ids.length - 1)
-			// }
+			} else {
+				this.Items.map(item => {
+					this.mode.order_ids += item.order_id + ','
+				})
+				this.mode.order_ids = this.mode.order_ids.substr(0,this.mode.order_ids.length - 1)
+			}
 			// 分配接口
 			let res = await this.$request({
         method: "post",

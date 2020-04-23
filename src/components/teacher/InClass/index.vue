@@ -91,7 +91,7 @@
                 </FormItem>
               </Form>
             </div>
-            <TableBox :columns="columns" :dataList="dataList" :selectData="true" />
+            <TableBox :columns="columns" :dataList="dataList" />
             <PagingBox
               @changePages="changePages"
               :total="total"
@@ -1456,6 +1456,7 @@ export default {
     // 设置当前页码
     changePages(val) {
       this.mode.page = val;
+      this.getUserData()
     },
     // 设置搜索葜
     formData(val) {

@@ -10,13 +10,6 @@
       <div style="text-align:center">
         <Tabs type="card" value="name1" @on-click="changeTab">
           <TabPane label="我的学员" name="name1">
-            <!-- <SelectBox
-              @formData="formData"
-              :firstState="true"
-              :lecturer="true"
-              :classType="true"
-              :chooseSubject="true"
-            />-->
             <div class="title">
               <Form class="select" ref="formValidate" :model="formItem" inline>
                 <FormItem>
@@ -92,13 +85,6 @@
             />
           </TabPane>
           <TabPane label="今日新分" name="name2">
-            <!-- <SelectBox
-              @formData="formData"
-              :firstState="true"
-              :lecturer="true"
-              :classType="true"
-              :chooseSubject="true"
-            />-->
             <div class="title">
               <Form class="select" ref="formValidate" :model="formItem" inline>
                 <FormItem>
@@ -174,12 +160,6 @@
             />
           </TabPane>
           <TabPane label="首电待完成" name="name3">
-            <!-- <SelectBox
-              @formData="formData"
-              :lecturer="true"
-              :classType="true"
-              :chooseSubject="true"
-            />-->
             <div class="title">
               <Form class="select" ref="formValidate" :model="formItem" inline>
                 <FormItem>
@@ -611,6 +591,7 @@ export default {
     // 改变页码
     changePages(val) {
       this.formItem.page = val;
+      this.getUserData()
     },
     // 设置mode搜索词汇
     formData(val) {
