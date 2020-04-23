@@ -68,6 +68,7 @@ export default {
 		},
 		// 点击确认
 		async confirm() {
+			this.mode.order_ids = ""
 			if(this.row) {
 				this.mode.order_ids = this.row.order_id
 			} else {

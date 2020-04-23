@@ -64,7 +64,7 @@ export default {
     empty: {
       type: Number,
       required: false
-    }
+    },
   },
   data() {
     return {
