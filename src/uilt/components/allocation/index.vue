@@ -63,8 +63,10 @@ export default {
 	methods: {
 		...mapMutations(["setRefresh"]),
 		clickOpen() {
-			this.modal10 = true
-			this.getClassTeacher()
+			if(this.Items.length) {
+				this.modal10 = true
+				this.getClassTeacher()
+			}
 		},
 		// 点击确认
 		async confirm() {
