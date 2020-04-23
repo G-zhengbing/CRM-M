@@ -70,7 +70,7 @@
                       @on-change="seekKuhu"
                       placeholder="意向科目"
                     >
-                      <Option :value="i" v-for="(list,i) in subjectList">{{list}}</Option>
+                      <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
@@ -255,6 +255,21 @@ export default {
                   }
                 },
                 "呼出"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.order(params.row);
+                    }
+                  }
+                },
+                "订单"
               )
             ]);
           }
@@ -263,6 +278,15 @@ export default {
     };
   },
   methods: {
+    //订单
+    order(item) {
+      this.setNotvisitTypes(item);
+      this.showMine = true;
+      this.type.classify = "order";
+      this.type.form = this.form;
+      this.type.page = this.currentPage;
+      this.type.data = { ...this.notvisitType };
+    },
     //设置返回的时间
     datePicker(time) {
       var d = new Date(time);

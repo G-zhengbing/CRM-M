@@ -13,7 +13,11 @@
         <div class="main-section-bottom">
           <div class="contaner">
             <div style="height:30px;"></div>
-            <Form :model="form" :label-width="80">
+            <!-- <Collapse v-model="value1">
+              <Panel name="1">
+                筛选条件
+                <p slot="content"> -->
+                  <Form :model="form" :label-width="80">
               <Row>
                 <Col span="4">
                   <FormItem style="width:230px;">
@@ -33,7 +37,7 @@
                       @on-change="seekClick"
                       placeholder="跟进状态"
                     >
-                      <Option :value="i" v-for="(list,i) in follow_status">{{list}}</Option>
+                      <Option :value="i" v-for="(list,i) in follow_status" :key="i">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
@@ -81,7 +85,11 @@
                       @on-change="seekClick"
                       placeholder="渠道类型"
                     >
-                      <Option :value="list.id" v-for="(list,i) in channel">{{list.channel_title}}</Option>
+                      <Option
+                        :value="list.id"
+                        v-for="(list,i) in channel"
+                        :key="i"
+                      >{{list.channel_title}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
@@ -191,6 +199,9 @@
                 </Col>
               </Row>
             </Form>
+            <!-- </p>
+              </Panel>
+            </Collapse> -->
             <Button type="primary" @click="createUsers">创建用户</Button>
             <Table
               border
@@ -212,6 +223,18 @@
         </div>
       </div>
     </section>
+    <Modal
+      width="800"
+      v-model="showVisit"
+      title="回访记录"
+      @on-cancel="showVisit = false"
+      :styles="{'margin-top' : '-70px'}"
+    >
+      <Table border :columns="visitColumns" :data="showVisitData" height="500"></Table>
+      <div slot="footer">
+        <Button type="text" size="large" @click="showVisit = false">取消</Button>
+      </div>
+    </Modal>
     <Loading v-show="isLoading" />
     <DaibanMessage :type="type" v-if="show" />
     <MineclientMessage :type="type" v-if="showMine" />
@@ -233,7 +256,6 @@ export default {
   mounted() {
     // this.showMine = true
     // this.type.classify = "introduce"
-    this.setRefer(storage.getDaiban().channel);
     this.follow_status = storage.getDaiban().screen_list.follow_status;
     this.subjectList = storage.getDaiban().screen_list.subject;
     this.intention = storage.getDaiban().screen_list.intention;
@@ -258,6 +280,14 @@ export default {
   },
   data() {
     return {
+      value1:"",
+      visitColumns: [
+        { title: "回访内容", key: "visit_content" },
+        { title: "跟进人", key: "sale_name", width: 100 },
+        { title: "回访时间", key: "time", width: 170 }
+      ],
+      showVisitData: [],
+      showVisit: false,
       sale_list: storage.getDaiban().sale_list,
       endTime2: "",
       startTime2: "",
@@ -279,8 +309,8 @@ export default {
       columns: [
         { type: "selection", width: 60, fixed: "left" },
         { title: "学员姓名", key: "student_name", width: 100, fixed: "left" },
-        { title: "注册手机", key: "mobile", width: 100, fixed: "left" },
-        { title: "地址", key: "area",width:100 },
+        { title: "注册手机", key: "mobile", width: 120, fixed: "left" },
+        { title: "地址", key: "area", width: 150 },
         { title: "微信昵称", key: "wechat_nick_name", width: 100 },
         {
           title: "回访次数",
@@ -288,34 +318,45 @@ export default {
           width: 100,
           render: (h, params) => {
             return h("div", [
-              h("span", {
-                on: {
-                  props: {
-                    type: "text",
-                    size: "small"
+              h(
+                "span",
+                {
+                  on: {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    click: () => {
+                      this.visit(params.row);
+                    }
                   },
-                  click: () => {
-                    this.visit(params.row);
+                  style: {
+                    width: "98px",
+                    height: "70px",
+                    display: "inline-block",
+                    marginLeft: "-17px",
+                    textAlign: "center",
+                    lineHeight: "70px",
+                    cursor: "pointer"
                   }
-                }
-              },
-              params.row.visit_num
+                },
+                params.row.visit_num
               )
             ]);
           }
         },
         { title: "年级", key: "grade", width: 80 },
         { title: "意向科目", key: "subject", width: 100 },
-        { title: "渠道来源", key: "refer", width: 100 },
+        { title: "渠道来源", key: "refer", width: 150 },
         { title: "跟进人", key: "follow_sale_name", width: 80 },
         { title: "跟进状态", key: "follow_status", width: 100 },
         { title: "学习阶段", key: "stage", width: 100 },
         { title: "意向度", key: "intention_option", width: 80 },
         { title: "上次呼出", key: "phone_status", width: 100 },
         { title: "下次跟进", key: "next_follow_time", width: 150 },
-        { title: "分配时间", key: "receive_time", width: 150 },
+        { title: "分配时间", key: "receive_time", width: 170 },
         { title: "流转类型", key: "transfer", width: 100 },
-        { title: "注册时间", key: "create_time", width: 150 },
+        { title: "注册时间", key: "create_time", width: 170 },
         {
           title: "操作",
           key: "action",
@@ -421,11 +462,12 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setClientTypes", "setCurrentPage", "setRefer"]),
+    ...mapMutations(["setClientTypes", "setCurrentPage"]),
     ...mapActions(["getClientList", "RingUp", "getReferList"]),
     //回访记录
-    visit(item){
-      console.log(item)
+    visit(item) {
+      this.showVisit = true;
+      this.showVisitData = item.visit_content ? item.visit_content : [];
     },
     //创建用户
     createUsers() {

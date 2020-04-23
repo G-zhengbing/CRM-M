@@ -26,7 +26,7 @@
                 <Col span="5">
                   <FormItem label="课程类型">
                     <Select v-model="form.type" style="width:200px">
-                      <Option :value="i" v-for="(list,i) in course">{{list}}</Option>
+                      <Option :value="i" v-for="(list,i) in course" :key="i">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>

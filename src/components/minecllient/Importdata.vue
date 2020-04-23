@@ -43,7 +43,7 @@
               <i>1</i>
               步骤 1:
               <span>
-                <a href="http://liveapi.canpoint.net/api/uoload_file">点击下载excel模板</a>
+                <a href="http://liveapi.canpoint.net/api/upload_file">点击下载excel模板</a>
               </span>
             </p>
             <div>导入前，请先下载文件模板，并按模板格式要求填写数据</div>
@@ -82,11 +82,11 @@
           </RadioGroup>
         </FormItem>
         <Select v-model="form.sale_id" style="width:100px" class="refer" v-if="form.option == 3">
-          <Option :value="list.id" v-for="(list,i) in sale_list">{{list.login_name}}</Option>
+          <Option :value="list.id" v-for="(list,i) in sale_list" :key="i">{{list.login_name}}</Option>
         </Select>
         <FormItem label="线索渠道来源">
           <Select v-model="form.channel_id" style="width:200px">
-            <Option :value="list.id" v-for="(list,i) in channel">{{list.channel_title}}</Option>
+            <Option :value="list.id" v-for="(list,i) in channel" :key="i">{{list.channel_title}}</Option>
           </Select>
         </FormItem>
       </Form>
@@ -102,9 +102,9 @@
       @on-cancel="showLook =false"
       :styles="{'margin-top' : '-70px'}"
     >
-		<!-- {{importList}} -->
+      <!-- {{importList}} -->
       <List header="Header" footer="Footer" border>
-        <ListItem v-for="(list,i) in item">{{list?list:'暂无'}}</ListItem>
+        <ListItem v-for="(list,i) in item" :key="i">{{list?list:'暂无'}}</ListItem>
       </List>
     </Modal>
     <Loading v-if="isLoading" />
@@ -134,7 +134,7 @@ export default {
   },
   data() {
     return {
-			item:[],
+      item: [],
       showLook: false,
       isLoading: false,
       uploadList: [],
@@ -232,7 +232,7 @@ export default {
     },
     //查看失败数据
     look(val) {
-			this.item = val.fail_list
+      this.item = val.fail_list;
       this.showLook = true;
     },
     //分页

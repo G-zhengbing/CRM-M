@@ -52,7 +52,7 @@
         <Form :form="appraisalForm" label-position="top" style="height:300px;overflow-y:auto;">
           <FormItem label="测评图片" prop="avatar" class="active_span">
             <template>
-              <div class="demo-upload-list" v-for="item in uploadList">
+              <div class="demo-upload-list" v-for="(item,i) in uploadList" :key="i">
                 <img :src="item.url" />
                 <div class="demo-upload-list-cover">
                   <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
@@ -142,9 +142,11 @@ export default {
                 this.isLoading = false;
               });
             } else {
-              this.getReservedAllList({ tab_type: this.$parent.num }).then(res => {
-                this.isLoading = false;
-              });
+              this.getReservedAllList({ tab_type: this.$parent.num }).then(
+                res => {
+                  this.isLoading = false;
+                }
+              );
             }
             this.$parent.showMoadl = false;
           }
@@ -200,14 +202,16 @@ export default {
           this.$Message.success("预约取消成功");
           this.isLoading = true;
           if (this.type.status == "reserved") {
-              this.getReservedList({ tab_type: this.$parent.num }).then(res => {
+            this.getReservedList({ tab_type: this.$parent.num }).then(res => {
+              this.isLoading = false;
+            });
+          } else {
+            this.getReservedAllList({ tab_type: this.$parent.num }).then(
+              res => {
                 this.isLoading = false;
-              });
-            } else {
-              this.getReservedAllList({ tab_type: this.$parent.num }).then(res => {
-                this.isLoading = false;
-              });
-            }
+              }
+            );
+          }
         } else {
           this.$Message.success(res.data.error);
         }
@@ -223,14 +227,18 @@ export default {
               this.$Message.success("批量签到成功");
               this.isLoading = true;
               if (this.type.status == "reserved") {
-              this.getReservedList({ tab_type: this.$parent.num }).then(res => {
-                this.isLoading = false;
-              });
-            } else {
-              this.getReservedAllList({ tab_type: this.$parent.num }).then(res => {
-                this.isLoading = false;
-              });
-            }
+                this.getReservedList({ tab_type: this.$parent.num }).then(
+                  res => {
+                    this.isLoading = false;
+                  }
+                );
+              } else {
+                this.getReservedAllList({ tab_type: this.$parent.num }).then(
+                  res => {
+                    this.isLoading = false;
+                  }
+                );
+              }
             } else {
               this.$Message.success(res.data.error);
             }
@@ -250,9 +258,11 @@ export default {
                 this.isLoading = false;
               });
             } else {
-              this.getReservedAllList({ tab_type: this.$parent.num }).then(res => {
-                this.isLoading = false;
-              });
+              this.getReservedAllList({ tab_type: this.$parent.num }).then(
+                res => {
+                  this.isLoading = false;
+                }
+              );
             }
           } else {
             this.$Message.success(res.data.error);

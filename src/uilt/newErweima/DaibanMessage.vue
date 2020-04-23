@@ -138,7 +138,7 @@
                   placeholder="教材版本"
                   disabled
                 >
-                  <Option v-for="(list,i) in vaersion" :value="i*1">{{list}}</Option>
+                  <Option v-for="(list,i) in vaersion" :value="i*1" :key="i">{{list}}</Option>
                 </Select>
               </FormItem>
             </Col>
@@ -205,7 +205,7 @@
                 <span>回访时间</span>
               </p>
               <ul class="record-footer">
-                <li v-for="(item,i) in type.data.visit_content">
+                <li v-for="(item,i) in type.data.visit_content" :key="i">
                   <i>{{item.visit_content}}</i>
                   <span>{{item.sale_name}}</span>
                   <p>{{item.time}}</p>
@@ -221,7 +221,7 @@
                 <span>购买时间</span>
               </p>
               <ul class="record-footer">
-                <li v-for="(item,i) in type.data.order">
+                <li v-for="(item,i) in type.data.order" :key="i">
                   <i>{{item.product_name}}</i>
                   <span>{{item.grade}}</span>
                   <span>{{item.subject}}</span>
@@ -317,21 +317,21 @@
             <Col span="4">
               <FormItem label="教材版本">
                 <Select v-model="type.data.textbook_version" style="width:150px" placeholder="教材版本">
-                  <Option v-for="(list,i) in vaersion" :value="i*1">{{list}}</Option>
+                  <Option v-for="(list,i) in vaersion" :value="i*1" :key="i">{{list}}</Option>
                 </Select>
               </FormItem>
             </Col>
             <Col span="4">
               <FormItem label="意向科目">
                 <Select v-model="type.data.subject" style="width:150px" placeholder="意向科目">
-                  <Option v-for="(list,i) in subject" :value="i*1">{{list}}</Option>
+                  <Option v-for="(list,i) in subject" :value="i*1" :key="i">{{list}}</Option>
                 </Select>
               </FormItem>
             </Col>
             <Col span="4">
               <FormItem label="意向度">
                 <Select v-model="type.data.intention_option" style="width:150px" placeholder="意向度">
-                  <Option v-for="(list,i) in intention" :value="i *1">{{list}}</Option>
+                  <Option v-for="(list,i) in intention" :value="i *1" :key="i">{{list}}</Option>
                 </Select>
               </FormItem>
             </Col>
@@ -348,7 +348,7 @@
             <Col span="24">
               <FormItem
                 label="发送短信"
-                v-if="this.type.data.many_calls == 2 && this.type.data.phone_status == 2"
+                v-if="type.data.many_calls == 2 && type.data.phone_status == 2"
               >
                 <Button type="text" size="large" @click="send">发送未接通短信提醒</Button>
               </FormItem>
@@ -381,7 +381,7 @@
                 <span>回访时间</span>
               </p>
               <ul class="record-footer">
-                <li v-for="(item,i) in type.data.visit_content">
+                <li v-for="(item,i) in type.data.visit_content" :key="i">
                   <i>{{item.visit_content}}</i>
                   <span>{{item.sale_name}}</span>
                   <span>{{item.time}}</span>
@@ -397,7 +397,7 @@
                 <span>购买时间</span>
               </p>
               <ul class="record-footer">
-                <li v-for="(item,i) in type.data.order">
+                <li v-for="(item,i) in type.data.order" :key="i">
                   <i>{{item.product_name}}</i>
                   <span>{{item.grade}}</span>
                   <span>{{item.subject}}</span>
@@ -409,6 +409,7 @@
         </Form>
         <div slot="footer">
           <Button class="followup" type="warning" size="large" @click="followUpRemove">移出</Button>
+          <Button class="order" type="warning" size="large" @click="createOrder">订单</Button>
           <Button type="text" size="large" @click="followUpColse">取消</Button>
           <Button :loading="disableBtn" type="primary" size="large" @click="genjin">确定</Button>
         </div>
@@ -607,7 +608,7 @@
             <span>提交人</span>
           </p>
           <ul>
-            <li v-for="(item,i) in report">
+            <li v-for="(item,i) in report" :key="i">
               <i>{{item.order_report}}</i>
               <span>{{item.create_time}}</span>
               <span>{{item.master_id}}</span>
@@ -682,6 +683,11 @@ export default {
     })
   },
   methods: {
+    //跟进/订单
+    createOrder() {
+      this.$parent.showMine = true;
+      this.$parent.type.classify = "order";
+    },
     //跟进/移出操作
     followUpRemove() {
       this.showRemove = true;
@@ -1124,6 +1130,10 @@ export default {
 </script>
 
 <style scoped>
+.order {
+  position: absolute;
+  left: 90px;
+}
 .followup {
   position: absolute;
   left: 20px;
