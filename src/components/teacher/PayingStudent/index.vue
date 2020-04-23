@@ -1010,7 +1010,7 @@ export default {
       // 打开弹层
       this.isLoading = true;
       this.num++;
-      console.log(this.formItem)
+      // console.log(this.formItem)
       let res = await this.$request({
         method: "post",
         url: PAYINGSTUDENT,
