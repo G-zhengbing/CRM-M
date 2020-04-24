@@ -333,48 +333,6 @@
               </Modal>
             </FormItem>
           </Col>
-          <!-- <Col span="12" style="display:flex">
-            <FormItem label="资格证" prop="nvq_pic" class="active_span">
-              <template>
-                <div class="demo-upload-list" v-for="item in uploadList6">
-                  <img :src="item.url" />
-                  <div class="demo-upload-list-cover">
-                    <Icon type="ios-trash-outline" @click.native="handleRemove6(item)"></Icon>
-                  </div>
-                </div>
-              </template>
-              <Upload
-                ref="upload"
-                :show-upload-list="false"
-                :format="['jpg','gif','png']"
-                :max-size="2048"
-                :before-upload="handleBeforeUpload6"
-                :on-format-error="handleFormatError6"
-                :on-exceeded-size="handleMaxSize6"
-                type="drag"
-                action="http://liveapi.canpoint.net/api/create_products"
-                style="display: inline-block;width:58px;"
-              >
-                <div style="width: 58px;height:58px;line-height: 58px;">
-                  <Icon type="ios-camera" size="20"></Icon>
-                </div>
-              </Upload>
-            </FormItem>
-            <FormItem label="资格证展示" v-if="form.nvq_pic">
-              <div class="demo-upload-list">
-                <img :src="'http://liveapi.canpoint.net/'+form.nvq_pic" />
-                <div class="demo-upload-list-cover">
-                  <Icon
-                    type="ios-eye-outline"
-                    @click.native="handleView6('http://liveapi.canpoint.net/'+form.nvq_pic)"
-                  ></Icon>
-                </div>
-              </div>
-              <Modal title="预览图" v-model="visible">
-                <img :src="imgName6" style="width: 100%" />
-              </Modal>
-            </FormItem>
-          </Col>-->
           <Col span="12" style="display:flex">
             <FormItem label="教师资格证" prop="teacher_nvq_pic" class="active_span">
               <template>
@@ -590,17 +548,6 @@ export default {
       provinceList: state => state.mineclient.provinceList,
       city: state => state.mineclient.city
     })
-    // timeBlock() {
-    //   return function(value) {
-    //     return function() {
-    //       if (this.setActive.indexOf(value) > -1) {
-    //         return true;
-    //       } else {
-    //         return false;
-    //       }
-    //     };
-    //   };
-    // }
   },
   data() {
     return {
@@ -1310,7 +1257,6 @@ export default {
 .content-right-header li,
 .content-right-footer li {
   width: 126px;
-  padding: 3px 0;
   box-sizing: content-box;
   border: 1px solid #989898;
   margin-left: -1px;
@@ -1318,7 +1264,7 @@ export default {
   text-align: center;
   cursor: pointer;
   box-sizing: border-box;
-  height: 28.79px;
+  height: 29px;
 }
 .content-right-header {
   height: 27px;
@@ -1340,7 +1286,7 @@ export default {
   color: #333;
   border: 1px solid #989898;
   margin-top: -1px;
-  padding: 3px;
+  height: 29px;
 }
 .content .content-left {
   width: 120px;

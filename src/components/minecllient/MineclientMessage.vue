@@ -525,7 +525,13 @@
       :styles="{'margin-top' : '-70px'}"
     >
       <div>
-        <Input readonly v-model="type.data.last_visit_content" type="textarea" :rows="8" placeholder="最后一次跟进内容" />
+        <Input
+          readonly
+          v-model="type.data.last_visit_content"
+          type="textarea"
+          :rows="8"
+          placeholder="最后一次跟进内容"
+        />
       </div>
       <div slot="footer">
         <Button type="text" size="large" @click="colseReserved">取消</Button>
@@ -567,6 +573,7 @@
           <Col span="8">
             <FormItem label="升级至">
               <Select
+                v-if="ordersnList.length != 0"
                 v-model="upgradeForm.product_id"
                 style="width:150px"
                 @on-change="getClassAll"
@@ -574,6 +581,7 @@
               >
                 <Option :value="i" v-for="(list,i) in ordersnList" :key="i">{{list.course_name}}</Option>
               </Select>
+              <Select style="width:150px" v-else placeholder="课时包"></Select>
             </FormItem>
           </Col>
           <Col span="24">
@@ -593,7 +601,10 @@
                 <li>一对一</li>
                 <li>按课时</li>
                 <li>{{classNum.product_level == 1? '中级':'中级' || classNum.product_level == 2? '高级':'高级' || classNum.product_level == 3? '特级':'特级'}}</li>
-                <li>{{classNum.total_class_hour + '+' + classNum.give_class_hour}}</li>
+                <li
+                  v-if="classNum.give_class_hour"
+                >{{classNum.total_class_hour + '+' + classNum.give_class_hour}}</li>
+                <li v-else>{{classNum.total_class_hour}}</li>
                 <li>{{classNum.pay_amount}}</li>
               </ul>
               <ul v-if="JSON.stringify(classAll) != '{}'">
@@ -602,7 +613,10 @@
                 <li>一对一</li>
                 <li>按课时</li>
                 <li>{{classAll.level}}</li>
-                <li>{{(classAll.class_hour + '+' + classAll.give_class_hour) }}</li>
+                <li
+                  v-if="classAll.give_class_hour"
+                >{{(classAll.class_hour + '+' + classAll.give_class_hour) }}</li>
+                <li v-else>{{classAll.class_hour}}</li>
                 <li>{{classAll.total_price}}</li>
               </ul>
               <div v-else>暂无数据</div>
@@ -963,8 +977,13 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setClientCurrentpage", "setNotifiCurrentPage"]),
+    ...mapMutations([
+      "setClientCurrentpage",
+      "setNotifiCurrentPage",
+      "setOrdersnList"
+    ]),
     ...mapActions([
+      "getOrdersnList",
       "createUpOrder",
       "getCity",
       "handover",
@@ -1006,6 +1025,51 @@ export default {
       }
     },
     getClass(num) {
+      this.classAll = [];
+      this.setOrdersnList([]);
+      this.upgradeForm.product_id = "";
+      var form = {};
+      if (this.accountList.length != 0) {
+        if (this.accountList[num].product_level == "中级") {
+          this.accountList[num].product_level = 1;
+        } else if (this.accountList[num].product_level == "高级") {
+          this.accountList[num].product_level = 2;
+        } else if (this.accountList[num].product_level == "特级") {
+          this.accountList[num].product_level = 3;
+        }
+        form.grade = this.accountList[num].product_grade;
+        form.level = this.accountList[num].product_level;
+        form.class_hour = this.accountList[num].total_class_hour;
+        form.class_type = 1;
+        this.getOrdersnList(form).then(res => {
+          if (res.data.data.resources) {
+            if (res.data.data.resources.length == 0) {
+              this.$Message.error("当前订单不可升级");
+            }
+          }
+        });
+      }
+      //  if (res.data.data.resources) {
+      //     if (res.data.data.resources.length == 0) return  this.$Message.error("当前订单不可升级");
+      //     if (res.data.data.resources[0].product_level == "中级") {
+      //       res.data.data.resources[0].product_level = 1;
+      //     } else if (res.data.data.resources[0].product_level == "高级") {
+      //       res.data.data.resources[0].product_level = 2;
+      //     } else if (res.data.data.resources[0].product_level == "特级") {
+      //       res.data.data.resources[0].product_level = 3;
+      //     }
+      //     form.grade = res.data.data.resources[0].product_grade;
+      //     form.level = res.data.data.resources[0].product_level;
+      //     form.class_hour = res.data.data.resources[0].total_class_hour;
+      //     form.class_type = 1;
+      //     this.getOrdersnList(form).then(res => {
+      //       if (res.data.data.resources) {
+      //         if (res.data.data.resources.length == 0) {
+      //           this.$Message.error("当前订单不可升级");
+      //         }
+      //       }
+      //     });
+      //   }
       this.classNum = this.accountList[num];
     },
     getClassAll(num) {
@@ -1032,6 +1096,8 @@ export default {
         if (res.data.ret) {
           this.$Message.success("订单升级成功");
           this.$parent.showMine = false;
+          this.classNum = {};
+          this.classAll = {};
           this.getStudentList({ form: this.type.form, page });
         }
       });
@@ -1040,7 +1106,7 @@ export default {
     remove() {
       this.isLoading = true;
       this.removeMineclient({
-        uid: this.type.data.id,
+        uid: this.type.data.id
       }).then(res => {
         if (res.data.ret) {
           this.$Message.success("移出成功");

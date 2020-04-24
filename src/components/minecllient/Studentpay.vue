@@ -80,7 +80,11 @@
                       @on-change="seekClick"
                       placeholder="跟进人"
                     >
-                      <Option v-for="(list,i) in sale_list" :key="i" :value="list.id">{{list.login_name}}</Option>
+                      <Option
+                        v-for="(list,i) in sale_list"
+                        :key="i"
+                        :value="list.id"
+                      >{{list.login_name}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
@@ -163,7 +167,7 @@ export default {
   mounted() {
     this.setCurrentPage(1);
     this.isLoading = true;
-    this.getStudentList({form:{},page:1}).then(res => {
+    this.getStudentList({ form: {}, page: 1 }).then(res => {
       this.isLoading = false;
     });
   },
@@ -179,7 +183,7 @@ export default {
   },
   data() {
     return {
-      sale_list:storage.getDaiban().sale_list,
+      sale_list: storage.getDaiban().sale_list,
       showMine: false,
       endTime: "",
       startTime: "",
@@ -196,23 +200,23 @@ export default {
       columns: [
         { type: "selection", width: 60, fixed: "left" },
         { title: "学员姓名", key: "student_name", width: 100, fixed: "left" },
-        { title: "注册手机", key: "mobile", width: 100, fixed: "left" },
+        { title: "注册手机", key: "mobile", width: 150, fixed: "left" },
         { title: "微信昵称", key: "wechat_nick_name", width: 100 },
         { title: "年级", key: "product_grade", width: 100 },
         { title: "科目", key: "product_subject", width: 100 },
         { title: "意向度", key: "intention_option", width: 100 },
         { title: "课程类型", key: "product_type", width: 100 },
         { title: "跟进人", key: "follow_sale_name", width: 100 },
-        { title: "上次跟进时间", key: "last_follow_time", width: 133 },
+        { title: "上次跟进时间", key: "last_follow_time", width: 170 },
         { title: "学习阶段", key: "stage", width: 100 },
         {
           title: "上次跟进内容",
           key: "last_visit_content",
-          width: 100,
+          width: 150,
           tooltip: true
         },
-        { title: "回访时间", key: "next_follow_time", width: 133 },
-        { title: "注册时间", key: "create_time", width: 133 },
+        { title: "回访时间", key: "next_follow_time", width: 170 },
+        { title: "注册时间", key: "create_time", width: 170 },
         {
           title: "操作",
           key: "action",
@@ -342,35 +346,17 @@ export default {
     ]),
     //补款升级
     upgrade(item) {
-      var form = {};
       this.getAccountList(item.id).then(res => {
         if (res.data.data.resources) {
-          if (res.data.data.resources.length == 0) return  this.$Message.error("当前订单不可升级");;
-          if (res.data.data.resources[0].product_level == "中级") {
-            res.data.data.resources[0].product_level = 1;
-          } else if (res.data.data.resources[0].product_level == "高级") {
-            res.data.data.resources[0].product_level = 2;
-          } else if (res.data.data.resources[0].product_level == "特级") {
-            res.data.data.resources[0].product_level = 3;
-          }
-          form.grade = res.data.data.resources[0].product_grade;
-          form.level = res.data.data.resources[0].product_level;
-          form.class_hour = res.data.data.resources[0].total_class_hour;
-          form.class_type = 1;
-          this.getOrdersnList(form).then(res => {
-            if (res.data.data.resources) {
-              if (res.data.data.resources.length == 0) {
-                this.$Message.error("当前订单不可升级");
-              }
-            }
-          });
+          if (res.data.data.resources.length == 0)
+            return this.$Message.error("当前订单不可升级");
         }
       });
       this.setStudentpayTypes(item);
       this.showMine = true;
       this.type.classify = "upgrade";
-      this.type.form = this.form
-      this.type.page = this.currentPage
+      this.type.form = this.form;
+      this.type.page = this.currentPage;
       this.type.data = { ...this.studentpayTypes };
     },
     //转介绍
@@ -378,8 +364,8 @@ export default {
       this.setStudentpayTypes(item);
       this.showMine = true;
       this.type.classify = "introduce";
-      this.type.form = this.form
-      this.type.page = this.currentPage
+      this.type.form = this.form;
+      this.type.page = this.currentPage;
       this.type.data = { ...this.studentpayTypes };
     },
     //订单
@@ -387,8 +373,8 @@ export default {
       this.setStudentpayTypes(item);
       this.showMine = true;
       this.type.classify = "order";
-      this.type.form = this.form
-      this.type.page = this.currentPage
+      this.type.form = this.form;
+      this.type.page = this.currentPage;
       this.type.data = { ...this.studentpayTypes };
     },
     //交接单
@@ -446,7 +432,7 @@ export default {
         this.setCurrentPage(page);
       }
       this.isLoading = true;
-      this.getStudentList({ form:this.form, page }).then(res => {
+      this.getStudentList({ form: this.form, page }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(page);
       });
@@ -458,7 +444,7 @@ export default {
       this.show = true;
       this.type.classify = "followUp";
       this.type.page = this.currentPage;
-      this.type.form = this.form ;
+      this.type.form = this.form;
       this.type.data = { ...this.studentpayTypes };
     },
     //呼出
@@ -467,7 +453,7 @@ export default {
       this.show = true;
       this.type.classify = "followUp";
       this.type.page = this.currentPage;
-      this.type.form = this.form ;
+      this.type.form = this.form;
       this.type.data = { ...this.studentpayTypes };
       if (
         typeof item.spare_phone == "undefined" ||
@@ -501,7 +487,7 @@ export default {
     pageChange(num) {
       this.isLoading = true;
       this.setCurrentPage(num);
-      this.getStudentList({ form:this.form }).then(res => {
+      this.getStudentList({ form: this.form }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(num);
       });

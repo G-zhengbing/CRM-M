@@ -287,6 +287,7 @@ export default {
     },
     clear() {
       this.form = {};
+      this.seekClick()
     },
     //查询
     seekClick() {

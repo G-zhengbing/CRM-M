@@ -3,7 +3,6 @@
     <header class="main-header">
       <ul>
         <li style="margin-left:30px">
-          <!-- <i></i> -->
           <span>我的客户</span>
         </li>
       </ul>
@@ -13,10 +12,6 @@
         <div class="main-section-bottom">
           <div class="contaner">
             <div style="height:30px;"></div>
-            <!-- <Collapse v-model="value1">
-              <Panel name="1">
-                筛选条件
-                <p slot="content"> -->
                   <Form :model="form" :label-width="80">
               <Row>
                 <Col span="4">
@@ -93,54 +88,6 @@
                     </Select>
                   </FormItem>
                 </Col>
-                <!-- <Col span="4">
-                  <FormItem>
-                    <Select
-                      v-model="form.subject"
-                      style="width:150px"
-                      @on-change="seekClick"
-                      placeholder="意向科目"
-                    >
-                      <Option :value="i" v-for="(list,i) in subjectList">{{list}}</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                 <Col span="4">
-                  <FormItem>
-                    <Select
-                      v-model="form.subject"
-                      style="width:150px"
-                      @on-change="seekClick"
-                      placeholder="意向度"
-                    >
-                      <Option :value="i" v-for="(list,i) in intention">{{list}}</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <FormItem>
-                    <Select
-                      v-model="form.subject"
-                      style="width:150px"
-                      @on-change="seekClick"
-                      placeholder="学习阶段"
-                    >
-                      <Option :value="i" v-for="(list,i) in stage">{{list}}</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                 <Col span="4">
-                  <FormItem>
-                    <Select
-                      v-model="form.transfer"
-                      style="width:150px"
-                      @on-change="seekClick"
-                      placeholder="流转类型"
-                    >
-                      <Option :value="i" v-for="(list,i) in transfer">{{list}}</Option>
-                    </Select>
-                  </FormItem>
-                </Col>-->
                 <Col span="6">
                   <FormItem>
                     <div class="dateplc">
@@ -181,27 +128,11 @@
                     </div>
                   </FormItem>
                 </Col>
-                <!-- <Col span="4">
-                  <FormItem>
-                    <Select
-                      v-model="form.intention_option"
-                      style="width:150px"
-                      @on-change="seekClick"
-                      placeholder="约课状态"
-                    >
-                      <Option :value="1">未约课</Option>
-                      <Option :value="2">已约课</Option>
-                    </Select>
-                  </FormItem>
-                </Col>-->
                 <Col span="4" style="text-indent: 60px">
                   <Button type="primary" @click="clear">清除</Button>
                 </Col>
               </Row>
             </Form>
-            <!-- </p>
-              </Panel>
-            </Collapse> -->
             <Button type="primary" @click="createUsers">创建用户</Button>
             <Table
               border
@@ -254,8 +185,6 @@ export default {
     MineclientMessage
   },
   mounted() {
-    // this.showMine = true
-    // this.type.classify = "introduce"
     this.follow_status = storage.getDaiban().screen_list.follow_status;
     this.subjectList = storage.getDaiban().screen_list.subject;
     this.intention = storage.getDaiban().screen_list.intention;

@@ -111,7 +111,7 @@ export default {
   mounted() {
     this.setCurrentPage(1);
     this.isLoading = true;
-    this.getNotificationList().then(res => {
+    this.getNotificationList({ form: {}, page: 1 }).then(res => {
       this.isLoading = false;
     });
   },
@@ -171,7 +171,7 @@ export default {
                 },
                 "试听"
               ),
-               h(
+              h(
                 "Button",
                 {
                   props: {
@@ -224,8 +224,13 @@ export default {
   },
   methods: {
     ...mapMutations(["setNotifiTypes", "setCurrentPage", "setRefer"]),
-    ...mapActions(["getNotificationList", "RingUp", "getReferList","getUserReservedList"]),
-     //订单
+    ...mapActions([
+      "getNotificationList",
+      "RingUp",
+      "getReferList",
+      "getUserReservedList"
+    ]),
+    //订单
     order(item) {
       this.setNotifiTypes(item);
       this.showMine = true;
@@ -240,6 +245,8 @@ export default {
       this.setNotifiTypes(item);
       this.showMine = true;
       this.type.classify = "audition";
+      this.type.page = this.currentPage;
+      this.type.form = this.form;
       this.type.data = { ...this.notifiTypes };
     },
     //设置返回的时间
@@ -257,8 +264,8 @@ export default {
     //操作日期
     getTimes2() {
       if (this.startAccount && this.endAccount) {
-        this.form. create_time_start = this.datePicker(this.startAccount);
-        this.form. create_time_end = this.datePicker(this.startAccount);
+        this.form.create_time_start = this.datePicker(this.startAccount);
+        this.form.create_time_end = this.datePicker(this.startAccount);
         this.seekClick();
       }
     },
@@ -286,7 +293,7 @@ export default {
         this.setCurrentPage(page);
       }
       this.isLoading = true;
-      this.getNotificationList({ ...this.form, page }).then(res => {
+      this.getNotificationList({ form: this.form, page }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(page);
       });
@@ -297,8 +304,8 @@ export default {
       this.setNotifiTypes(item);
       this.show = true;
       this.type.classify = "followUp";
-      this.type.page = this.currentPage
-      this.type.form = {...this.form}
+      this.type.page = this.currentPage;
+      this.type.form = this.form;
       this.type.data = { ...this.notifiTypes };
     },
     //呼出
@@ -306,28 +313,34 @@ export default {
       this.setNotifiTypes(item);
       this.show = true;
       this.type.classify = "followUp";
+      this.type.page = this.currentPage;
+      this.type.form = this.form;
       this.type.data = { ...this.notifiTypes };
-      if(typeof item.spare_phone == 'undefined' ||item.spare_phone == "" || item.spare_phone == null){
+      if (
+        typeof item.spare_phone == "undefined" ||
+        item.spare_phone == "" ||
+        item.spare_phone == null
+      ) {
         this.isLoading = true;
-        this.RingUp({form:item})
-        .then(res => {
-          if (res.data.code == 200) {
-            this.$Message.success("呼出成功");
-          }
-          if (res.data.code == 1000) {
-            this.$Message.error({
-              content: res.data.error,
-              duration: 4
-            });
-          }
-          this.isLoading = false;
-        })
-        .catch(e => {
-          if (e) {
+        this.RingUp({ form: item })
+          .then(res => {
+            if (res.data.code == 200) {
+              this.$Message.success("呼出成功");
+            }
+            if (res.data.code == 1000) {
+              this.$Message.error({
+                content: res.data.error,
+                duration: 4
+              });
+            }
             this.isLoading = false;
-          }
-        });
-      }else{
+          })
+          .catch(e => {
+            if (e) {
+              this.isLoading = false;
+            }
+          });
+      } else {
         this.type.classify = "ringupFollowUp";
       }
     },
@@ -335,7 +348,7 @@ export default {
     pageChange(num) {
       this.isLoading = true;
       this.setCurrentPage(num);
-      this.getNotificationList({ ...this.form }).then(res => {
+      this.getNotificationList({ form: this.form }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(num);
       });
