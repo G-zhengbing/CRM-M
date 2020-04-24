@@ -15,6 +15,7 @@ import Number from '../components/Number'
 import Uplist from '../components/Uplist'
 import Minestudent from '../components/teacher/Minestudent'
 import Payingstudent from '../components/teacher/Payingstudent'
+import StatisticAnalysis from '../components/teacher/StatisticAnalysis'
 import Paystudent from '../components/Paystudent'
 import NotCallBack from '../components/NotCallBack'
 import Advertising from '../components/Mzhan/Advertising'
@@ -137,6 +138,10 @@ const router = new Router({
         {
           path: '/main/payingstudent',
           component: Payingstudent
+        },
+        {
+          path: '/main/statisticanalysis',
+          component: StatisticAnalysis
         },
         {
           path: '/main/reservation',

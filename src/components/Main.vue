@@ -48,10 +48,7 @@
                 name="/main/reserved"
                 to="/main/reserved"
               >我的预约单</MenuItem>
-              <MenuItem
-                name="/main/allreserved"
-                to="/main/allreserved"
-              >全部预约单</MenuItem>
+              <MenuItem name="/main/allreserved" to="/main/allreserved">全部预约单</MenuItem>
               <MenuItem
                 name="/main/daiban"
                 to="/main/daiban"
@@ -88,7 +85,11 @@
                 v-if="$store.state.cId != 4"
               >付费学员</MenuItem>-->
               <!-- <MenuItem name="/main/uplist" to="/main/uplist" v-if="$store.state.cId != 4">上课提醒</MenuItem> -->
-              <MenuItem name="/main/money" to="/main/money" v-if="$store.state.cId.is_sales != 'N'">订单中心</MenuItem>
+              <MenuItem
+                name="/main/money"
+                to="/main/money"
+                v-if="$store.state.cId.is_sales != 'N'"
+              >订单中心</MenuItem>
               <!--  <MenuItem name="/main/reservation" to="/main/reservation">我的预约单</MenuItem>
               <MenuItem name="/main/thread" to="/main/thread">线索导入</MenuItem>-->
               <!-- <MenuItem name="/main/number" to="/main/number" v-if="$store.state.cId != 3">成单数</MenuItem> -->
@@ -103,6 +104,11 @@
                 <!-- 后台无数据，无法验证完善，待更改 -->
                 <!-- <MenuItem name="/main/oneinclass" to="/main/oneinclass">一对一开课中学员</MenuItem> -->
                 <MenuItem name="/main/onemyreservation" to="/main/onemyreservation">一对一我的预约单</MenuItem>
+                <MenuItem
+                  name="/main/statisticanalysis"
+                  to="/main/statisticanalysis"
+                  v-if="$store.state.cId.is_headmaster == 'H'"
+                >统计分析</MenuItem>
                 <!-- <MenuItem name="/main/course" to="/main/course">课程</MenuItem>
                 <MenuItem name="/main/teacher" to="/main/teacher">教师管理</MenuItem>-->
                 <!-- <MenuItem name="/main/minestudent" to="/main/minestudent">我的学员</MenuItem> -->
