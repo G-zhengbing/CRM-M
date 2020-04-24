@@ -432,8 +432,12 @@ export default {
           return;
         }
         if(response.status == 200 && response.data){
+<<<<<<< HEAD
           this.videoArr[this.imageIndex].video_image = `http://39.107.156.22/canpoint${response.data.data.value}`
           console.log(this.videoArr[this.imageIndex].video_image)
+=======
+          this.videoArr[this.imageIndex].video_image = `http://liveapi.canpoint.net${response.data.data.value}`
+>>>>>>> liuchang
         }
       })
       }
