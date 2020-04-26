@@ -142,6 +142,7 @@ export default {
       isLoading: false,
       columns: [
         { type: "订单编号", key: "order_sn" },
+        { type: "订单类型", key: "is_upgrade" },
         { type: "学员姓名", key: "student_name" },
         { type: "学员电话", key: "mobile" },
         { type: "购买科目", key: "product_subject" },

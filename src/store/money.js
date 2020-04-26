@@ -229,6 +229,12 @@ export default {
           }
         }
         element.mobile = str.join("")
+
+        if(element.is_upgrade == 2){
+          element.is_upgrade = '升级订单'
+        }else{
+          element.is_upgrade = '普通订单'
+        }
         // }
         element.status = monly.get(element.status);
         element.product_grade = maps.get(element.product_grade);

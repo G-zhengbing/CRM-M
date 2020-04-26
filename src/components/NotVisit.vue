@@ -173,6 +173,7 @@ export default {
   },
   data() {
     return {
+      refer:storage.getDaiban().channel,
       sale_list: storage.getDaiban().sale_list,
       showMine: false,
       subjectList: storage.getDaiban().screen_list.subject,
@@ -393,7 +394,6 @@ export default {
     ...mapGetters(["NotdataArr", "notvisitType"]),
     ...mapState({
       data: state => state.notvisit.xinfenList,
-      refer: state => state.notvisit.refer,
       currentPage: state => state.notvisit.currentPage,
       total: state => state.notvisit.total,
       pageSize: state => state.notvisit.pageSize

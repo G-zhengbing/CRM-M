@@ -629,21 +629,6 @@
         </div>
       </div>
     </div>
-    <!-- 移出 -->
-    <!-- <Modal
-      width="300"
-      v-model="showRemove"
-      title="确定要移出吗?"
-      @on-cancel="followUpColse"
-      :styles="{'margin-top' : '-70px'}"
-    >
-      <div>
-        <Input v-model="vist_content" type="textarea" :rows="4" placeholder="请备注移出说明" />
-      </div>
-      <div slot="footer">
-        <Button type="text" size="large" @click="followUpColse">取消</Button>
-        <Button type="primary" size="large" @click="followUpRemoveOk">确定</Button>
-      </div>
     </Modal>-->
     <Loading v-show="Loading" />
   </div>
@@ -681,13 +666,6 @@ export default {
     if (this.type.classify == "report") {
       this.getReport(this.type.data.id);
     }
-    // if (this.type.classify == "shade") {
-    //   if (this.type.status == "payingstudent") {
-    //     this.getPayList();
-    //   } else {
-    //     this.getReferList();
-    //   }
-    // }
     if (this.type.data) {
       if (this.type.data.class_date) {
         this.classTime = this.type.data.class_date;

@@ -138,7 +138,7 @@ export default {
   },
   data() {
     return {
-      intention: storage.getDaiban().screen_list.intention,
+      intention: storage.getDaiban().screen_list.inter_nation,
       subjectList: storage.getDaiban().screen_list.subject,
       startTime: "",
       endTime: "",
@@ -159,7 +159,7 @@ export default {
         { title: "意向度", key: "intention_option" },
         { title: "上次回访内容", key: "last_visit_content" ,tooltip:true},
         { title: "上次回访时间", key: "last_follow_time" },
-        { title: "说明", key: "assign_note" },
+        { title: "说明", key: "assign_note",tooltip:true },
         { title: "注册时间", key: "create_time" },
         {
           title: "操作",

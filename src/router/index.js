@@ -33,6 +33,7 @@ import Teacher from '../components/teachering/Teacher.vue'
 import Statistics from '../components/Statistics'
 import Importdata from '../components/minecllient/Importdata.vue'
 import Timeblock from '../uilt/timeblock/Timeblock.vue'
+import Maincopy from '../components/Maincopy.vue'
  
 import storage from '../uilt/storage'
 
@@ -58,6 +59,168 @@ const router = new Router({
       path: '/succeed',
       component: Succeed
     },
+    // {
+    //   path: '/maincopy',
+    //   component: Maincopy,
+    //   children: [
+    //     {
+    //       path: '/main/bookcode',
+    //       component: Bookcode
+    //     },
+    //     {
+    //       path: '/main/special',
+    //       component: Special
+    //     },
+    //     {
+    //       path: '/main/databank',
+    //       component: Databank
+    //     },
+    //     {
+    //       path: '/main/curriculum',
+    //       component: Curriculum
+    //     },
+    //     {
+    //       path: '/main/advertising',
+    //       component: Advertising
+    //     },
+    //     {
+    //       path: '/main',
+    //       redirect: '/main/home'
+    //     },
+    //     {
+    //       path: '/main/home',
+    //       component: Home,
+    //     },
+    //     {
+    //       path: '/main/erweima',
+    //       component: Erweima
+    //     },
+    //     {
+    //       path: '/main/daiban',
+    //       component: Daiban
+    //     },
+    //     {
+    //       path: '/main/notvisit',
+    //       component: NotVisit
+    //     },
+    //     {
+    //       path: '/main/public',
+    //       component: Public
+    //     },
+    //     {
+    //       path: '/main/followup',
+    //       component: FollowUp
+    //     },
+    //     {
+    //       path: '/main/number',
+    //       component: Number
+    //     },
+    //     {
+    //       path: '/main/money',
+    //       component: Money
+    //     },
+    //     {
+    //       path: '/main/notcallback',
+    //       component: NotCallBack
+    //     },
+    //     {
+    //       path: '/main/paystudent',
+    //       component: Paystudent
+    //     },
+    //     {
+    //       path: '/main/uplist',
+    //       component: Uplist
+    //     },
+    //     {
+    //       path: '/main/minestudent',
+    //       component: Minestudent
+    //     },
+    //     {
+    //       path: '/main/payingstudent',
+    //       component: Payingstudent
+    //     },
+    //     {
+    //       path: '/main/reservation',
+    //       component: Reservation
+    //     },
+    //     {
+    //       path: '/main/thread',
+    //       component: Thread
+    //     },
+    //     {
+    //       path: '/main/studentpay',
+    //       component: Studentpay
+    //     },
+    //     {
+    //       path: '/main/mineclient',
+    //       component: Mineclient
+    //     },
+    //     {
+    //       path: '/main/notification',
+    //       component: Notification
+    //     },
+    //     {
+    //       path: '/main/reserved',
+    //       component: Reserved
+    //     },
+    //     {
+    //       path: '/main/teacher',
+    //       component: Teacher
+    //     },
+    //     {
+    //       path: '/main/allreserved',
+    //       component: Allreserved
+    //     },
+    //     {
+    //       path: '/main/statistics',
+    //       component: Statistics
+    //     },
+    //     {
+    //       path: '/main/timeblock',
+    //       component: Timeblock
+    //     },
+    //     {
+    //       path: '/main/importdata',
+    //       component: Importdata
+    //     },
+    //     {
+    //       path: '/main/classstudents', // 班课学员
+    //       component: () => import('@/components/teacher/ClassStudents')
+    //     },
+    //     {
+    //       path: '/main/inclass', // 开课中学员
+    //       component: () => import('@/components/teacher/InClass')
+    //     },
+    //     {
+    //       path: '/main/myreservation', // 我的预约单
+    //       component: () => import('@/components/teacher/MyReservation')
+    //     },
+    //     {
+    //       path: '/main/payingstudents', // 付费学员
+    //       component: () => import('@/components/teacher/PayingStudent/index')
+    //     },
+    //     {
+    //       path: '/main/course', // 课程
+    //       component: () => import('@/components/teacher/course')
+    //     },
+    //     {
+    //       path: '/main/oneononestudent',  // 一对一学员
+    //       component: () => import('@/components/teacher/OneOnOneStudent')
+    //     },
+    //     // { <!-- 后台无数据，无法验证完善，待更改 -->
+    //     //   path: '/main/oneinclass', // 开课中学员
+    //     //   component: () => import('@/components/teacher/OneInClass')
+    //     // },
+    //     {
+    //       path: '/main/onemyreservation', // 我的预约单
+    //       component: () => import('@/components/teacher/OneMyReservation')
+    //     },
+    //     {
+    //       path: '/main/teacher', // 教师管理
+    //       component: () => import('@/components/teacher/teacher')
+    //     },
+    //   ]
+    // },
     {
       path: '/main',
       component: Main,

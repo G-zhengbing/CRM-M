@@ -1,25 +1,24 @@
 <template>
-  <div class="box dabox">
-    <header>
-      <div class="left">
-        <img src="../assets/img/logo/png24.png" alt />
-        <span style="font-weight: 700;">全品在线</span>
-        <i>|</i>
-        <span>CRM</span>
-      </div>
-      <div style="flex:1;"></div>
-      <div class="right">
-        <img src="../assets/img/xiaoxitongzhi/png24.png" alt class="lin" v-if="num >0" />
-        <img src="../assets/img/xiaoxitongzhi/not/png24.png" alt class="lin" v-if="num== 0" />
-        <img src="../assets/img/touxiang/png24.png" alt class="txiang" />
-        <span>{{uName}}</span>
-        <div>|</div>
-        <i @click="back">退出</i>
-      </div>
-    </header>
-    <section>
-      <div class="section-left">
-        <div class="menuitem">
+  <div class="layout">
+    <Layout>
+      <Header>
+        <div class="left">
+          <img src="../assets/img/logo/png24.png" alt />
+          <span style="font-weight: 700;">全品在线</span>
+          <i>|</i>
+          <span>CRM</span>
+        </div>
+        <div class="right">
+          <img src="../assets/img/xiaoxitongzhi/png24.png" alt class="lin" v-if="num >0" />
+          <img src="../assets/img/xiaoxitongzhi/not/png24.png" alt class="lin" v-if="num== 0" />
+          <img src="../assets/img/touxiang/png24.png" alt class="txiang" />
+          <div>{{uName}}</div>
+          <div>|</div>
+          <div @click="back">退出</div>
+        </div>
+      </Header>
+      <Layout>
+        <Sider hide-trigger :style="{background: '#fff'}">
           <Menu
             theme="light"
             :accordion="true"
@@ -48,10 +47,7 @@
                 name="/main/reserved"
                 to="/main/reserved"
               >我的预约单</MenuItem>
-              <MenuItem
-                name="/main/allreserved"
-                to="/main/allreserved"
-              >全部预约单</MenuItem>
+              <MenuItem name="/main/allreserved" to="/main/allreserved">全部预约单</MenuItem>
               <MenuItem
                 name="/main/daiban"
                 to="/main/daiban"
@@ -88,7 +84,11 @@
                 v-if="$store.state.cId != 4"
               >付费学员</MenuItem>-->
               <!-- <MenuItem name="/main/uplist" to="/main/uplist" v-if="$store.state.cId != 4">上课提醒</MenuItem> -->
-              <MenuItem name="/main/money" to="/main/money" v-if="$store.state.cId.is_sales != 'N'">订单中心</MenuItem>
+              <MenuItem
+                name="/main/money"
+                to="/main/money"
+                v-if="$store.state.cId.is_sales != 'N'"
+              >订单中心</MenuItem>
               <!--  <MenuItem name="/main/reservation" to="/main/reservation">我的预约单</MenuItem>
               <MenuItem name="/main/thread" to="/main/thread">线索导入</MenuItem>-->
               <!-- <MenuItem name="/main/number" to="/main/number" v-if="$store.state.cId != 3">成单数</MenuItem> -->
@@ -130,20 +130,21 @@
               <MenuItem name="/main/databank" to="/main/databank">资料管理</MenuItem>
             </Submenu>
           </Menu>
-        </div>
-      </div>
-      <div class="section-right">
-        <router-view />
-      </div>
-    </section>
+        </Sider>
+        <Layout>
+          <Content :style="{padding: '24px', background: '#fff'}">
+            <router-view />
+          </Content>
+        </Layout>
+      </Layout>
+    </Layout>
   </div>
 </template>
-
 <script>
 import storeage from "../uilt/storage";
-import { mapState, mapMutations, mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 export default {
-  mounted() {
+   mounted() {
     // var s = window.screen.width / 1920;
     // document.body.style.zoom = s;
     this.active = storeage.getMenuNum();
@@ -195,214 +196,96 @@ export default {
     }
   }
 };
+
 </script>
-
 <style scoped>
-.ivu-menu.ivu-menu-light.ivu-menu-vertical {
-  width: 170px !important;
-  height: 100%;
+.box {
+  margin-bottom: 60px;
 }
-.menuitem ul.menu > li.router-link-exact-active.router-link-active {
-  background: #1b73b0;
-  color: #fff;
-}
-.menuitem ul.menu > li:hover {
-  background: #c5e7ff;
-}
-.menuitem ul.menu > li span {
-  margin: 10px 0;
-  width: 100%;
-  display: inline-block;
-  height: 100%;
-  font-size: 16px;
-}
-.menuitem ul.menu {
-  margin-top: 30px;
-}
-.menuitem ul.menu > li {
-  padding-left: 60px;
-  cursor: pointer;
-}
-.section-left div.centers i {
-  color: #1b73b0;
-  font-size: 16px;
-  line-height: 26px;
-  font-weight: 600;
-  margin: 0 5px;
-}
-.section-left div.centers {
-  border-bottom: 1px solid;
-  margin: 26px 76px;
-  cursor: pointer;
-}
-
-.section-right-bottom span {
-  font-size: 40px;
-  color: #333;
-}
-.section-right-bottom img {
-  width: 388px;
-  height: 422px;
-  margin-right: 75px;
-}
-section .section-right .section-right-top ul li span {
-  color: #ff0000;
-}
-section .section-right .section-right-top ul li p {
-  border-bottom: 1px solid #aaa;
-  width: 100%;
-  color: #1b73b0;
-}
-section .section-right .section-right-top ul li {
-  width: 233px;
-  height: 100px;
-  border: 1px solid #aaa;
-  border-radius: 5px;
-  margin-left: 16px;
-  box-sizing: border-box;
+.ivu-layout-header{
   display: flex;
-  flex-direction: column;
-  cursor: pointer;
-  font-weight: 600;
 }
-section .section-right .section-right-top ul {
-  display: flex;
-  margin: 0 16px;
-  width: 100%;
-}
-section .section-right ul li.active {
-  background-color: #1b73b0;
-  color: #fff;
-}
-section .section-right ul li.active span {
-  color: #fff;
-}
-
-section .section-right .section-right-bottom {
-  flex: 1;
-  background-color: #fff;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  min-height: 422px;
-}
-
-section .section-right .section-right-top {
-  background-color: #fff;
-  width: 100%;
-  height: 140px;
-  margin: 10px 0;
-  border-radius: 5px;
-  min-height: 140px;
-  display: flex;
-  align-items: center;
-}
-section .section-right ul li span {
-  transform: scale(0.88);
-  color: #1b73b0;
-}
-section .section-right ul li {
-  font-size: 20px;
-  flex: 1;
-  text-align: center;
-  line-height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
-  cursor: pointer;
-}
-section .section-right > ul {
-  width: 240px;
-  height: 50px;
-  border: 2px solid #1b73b0;
-  box-sizing: border-box;
-  border-radius: 3px;
-  display: flex;
-  margin-bottom: 10px;
-}
-section .section-right {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-section .section-left p {
-  margin-top: 13px;
-  cursor: pointer;
-}
-section .section-left p:hover {
-  font-weight: 600;
-}
-section .section-left {
-  width: 185px;
-  background-color: #edf6fb;
-  color: #1b73b0;
-  font-size: 18px;
-}
-section .section-left,
-.section-right {
-  height: 100%;
-}
-section {
-  height: 100%;
-  background-color: #eae9ee;
-  display: flex;
-  min-height: 875px;
-}
-header .right div {
+.right div {
   margin: 0 10px;
   color: #fff;
   font-size: 12px;
   font-weight: 600;
 }
 
-header .right .txiang {
+.right .txiang {
   margin: 0 5px 0 29px;
   width: 15px;
   height: 19px;
 }
-header .right i {
+.right i {
   margin: 0 76px 0 0;
   cursor: pointer;
 }
-header .right span,
+.right span,
 i {
   font-size: 14px;
   font-weight: 500;
   color: #fff;
 }
-header .right .lin {
+.right .lin {
   width: 15px;
   height: 19px;
 }
-header .left i {
+.right{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.left i {
   font-size: 16px;
   color: #fff;
   margin: 0 5px;
 }
-header .left span {
+.left span {
   font-size: 20px;
   color: #fff;
 }
-header .left img {
+.left img {
   width: 36px;
   height: 44px;
   margin: 0 3px 0 9px;
 }
-header div {
+.left{
   height: 100%;
   display: flex;
   align-items: center;
-  cursor: pointer;
+  flex: 1;
 }
-header {
-  height: 60px;
-  min-height: 60px;
-  background-color: #1b73b0;
-  display: flex;
+.ivu-menu.ivu-menu-light.ivu-menu-vertical {
+  height: 100%;
+  width: 200px!important;
 }
-.box {
-  display: flex;
-  flex-direction: column;
+.ivu-layout{
+  height: 100%;
+}
+.layout{
+  height: 100%;
+}
+.layout {
+  border: 1px solid #d7dde4;
+  background: #f5f7f9;
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.layout-logo {
+  width: 100px;
+  height: 30px;
+  background: #5b6270;
+  border-radius: 3px;
+  float: left;
+  position: relative;
+  top: 15px;
+  left: 20px;
+}
+.layout-nav {
+  width: 420px;
+  margin: 0 auto;
+  margin-right: 20px;
 }
 </style>
