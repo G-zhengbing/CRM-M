@@ -107,7 +107,6 @@
                 <MenuItem
                   name="/main/statisticanalysis"
                   to="/main/statisticanalysis"
-                  v-if="$store.state.cId.is_headmaster == 'H'"
                 >统计分析</MenuItem>
                 <!-- <MenuItem name="/main/course" to="/main/course">课程</MenuItem>
                 <MenuItem name="/main/teacher" to="/main/teacher">教师管理</MenuItem>-->

@@ -9,331 +9,330 @@
         <Tabs type="card" value="name1" @on-click="changeTab">
           <TabPane label="今日" name="name1">
             <div class="title">
-              <!-- <Form class="select" ref="formValidate" :model="formItem" inline>
+              <Form class="select" ref="formValidate" :model="formItem" inline style="display: flex">
                 <FormItem>
                   <DatePicker
                     v-model="formItem.create_sts_time"
                     type="datetimerange"
-                    placement="bottom-end"
+                    placement="bottom-start"
                     placeholder="分配时间 - 分配时间"
                     style="width: 165px"
                     @on-change="changeCreateDate"
                   ></DatePicker>
                 </FormItem>
-              </Form>-->
+              </Form>
             </div>
             <TableBox :columns="columns" :dataList="dataList" />
           </TabPane>
           <TabPane label="本周" name="name2">
-            <div class="title">
-              <!-- <Form class="select" ref="formValidate" :model="formItem" inline>
-                <FormItem>
-                  <DatePicker
-                    v-model="formItem.create_sts_time"
-                    type="datetimerange"
-                    placement="bottom-end"
-                    placeholder="分配时间 - 分配时间"
-                    style="width: 165px"
-                    @on-change="changeCreateDate"
-                  ></DatePicker>
-                </FormItem>
-              </Form>-->
-            </div>
             <TableBox :columns="columns" :dataList="dataList" />
           </TabPane>
           <TabPane label="本月" name="name3">
-            <div class="title">
-              <!-- <Form class="select" ref="formValidate" :model="formItem" inline>
-                <FormItem>
-                  <DatePicker
-                    v-model="formItem.create_sts_time"
-                    type="datetimerange"
-                    placement="bottom-end"
-                    placeholder="分配时间 - 分配时间"
-                    style="width: 165px"
-                    @on-change="changeCreateDate"
-                  ></DatePicker>
-                </FormItem>
-              </Form>-->
-            </div>
             <TableBox :columns="columns" :dataList="dataList" />
           </TabPane>
         </Tabs>
       </div>
     </Card>
+    <Loading v-show="isLoading" />
   </div>
 </template>
 
 <script>
+import { CALLRECORDSTATISTICS } from "@/uilt/url/url";
 export default {
   data() {
     return {
+      type: 1,
       formItem: {},
       columns: [],
       dataList: [],
-      total: 100,
-      per_page: 10,
-      current_page: 1,
-      last_page: 1,
+      start_time: "",
+      end_time: "",
+      isLoading: false,
       columns1: [
         {
-          title: "销售",
-          key: "student_name",
+          title: "班主任",
+          key: "teacher_name",
           align: "center",
           width: 100
         },
         {
           title: "呼出总数",
-          key: "student_name",
+          key: "total_outgoing_calls",
           align: "center",
           width: 120
         },
         {
           title: "呼出电话总量",
-          key: "student_name",
+          key: "total_number_of_outgoing_users",
           align: "center",
           width: 140
         },
         {
           title: "有效呼出时长",
-          key: "student_name",
+          key: "effective_call_duration",
           align: "center",
           width: 140
         },
         {
           title: "接通电话数量",
-          key: "student_name",
+          key: "total_number_of_connected_users",
           align: "center",
           width: 140
         },
         {
           title: "平均通话时长",
-          key: "student_name",
+          key: "average_talk_time",
           align: "center",
           width: 140
         },
         {
           title: "接通率",
-          key: "student_name",
+          key: "connectivity",
           align: "center",
           width: 120
         },
         {
           title: "今日新分总量",
-          key: "student_name",
+          key: "total_new_points",
           align: "center",
           width: 140
         },
         {
           title: "今日新分呼出电话总量",
-          key: "student_name",
+          key: "total_number_of_outgoing_calls",
           align: "center",
           width: 140
         },
         {
           title: "今日新分接通电话总量",
-          key: "student_name",
+          key: "total_number_of_incoming_calls",
           align: "center",
           width: 140
         },
         {
           title: "今日新分接通率",
-          key: "student_name",
+          key: "new_points_pass_rate",
           align: "center",
           width: 140
         },
         {
           title: "新增一对一预约量",
-          key: "student_name",
+          key: "one_to_one_appointment",
           align: "center",
           width: 140
-        },
-			],
-			columns2: [
+        }
+      ],
+      columns2: [
         {
-          title: "销售",
-          key: "student_name",
+          title: "班主任",
+          key: "teacher_name",
           align: "center",
           width: 100
         },
         {
           title: "呼出总数",
-          key: "student_name",
+          key: "total_outgoing_calls",
           align: "center",
           width: 120
         },
         {
           title: "呼出电话总量",
-          key: "student_name",
+          key: "total_number_of_outgoing_users",
           align: "center",
           width: 140
         },
         {
           title: "有效呼出时长",
-          key: "student_name",
+          key: "effective_call_duration",
           align: "center",
           width: 140
         },
         {
           title: "接通电话数量",
-          key: "student_name",
+          key: "total_number_of_connected_users",
           align: "center",
           width: 140
         },
         {
           title: "平均通话时长",
-          key: "student_name",
+          key: "average_talk_time",
           align: "center",
           width: 140
         },
         {
           title: "接通率",
-          key: "student_name",
+          key: "connectivity",
           align: "center",
           width: 120
         },
         {
           title: "本周新分总量",
-          key: "student_name",
+          key: "total_new_points",
           align: "center",
           width: 140
         },
         {
           title: "本周新分呼出电话总量",
-          key: "student_name",
+          key: "total_number_of_outgoing_calls",
           align: "center",
           width: 140
         },
         {
           title: "本周新分接通电话总量",
-          key: "student_name",
+          key: "total_number_of_incoming_calls",
           align: "center",
           width: 140
         },
         {
           title: "本周新分接通率",
-          key: "student_name",
+          key: "new_points_pass_rate",
           align: "center",
           width: 140
         },
         {
           title: "新增一对一预约量",
-          key: "student_name",
+          key: "one_to_one_appointment",
           align: "center",
           width: 140
         },
         {
           title: "本周新增取消一对一预约量",
-          key: "student_name",
+          key: "one_to_one_cancellation_amount",
           align: "center",
           width: 140
-        },
-			],
-			columns3: [
+        }
+      ],
+      columns3: [
         {
-          title: "销售",
-          key: "student_name",
+          title: "班主任",
+          key: "teacher_name",
           align: "center",
           width: 100
         },
         {
           title: "呼出总数",
-          key: "student_name",
+          key: "total_outgoing_calls",
           align: "center",
           width: 120
         },
         {
           title: "呼出电话总量",
-          key: "student_name",
+          key: "total_number_of_outgoing_users",
           align: "center",
           width: 140
         },
         {
           title: "有效呼出时长",
-          key: "student_name",
+          key: "effective_call_duration",
           align: "center",
           width: 140
         },
         {
           title: "接通电话数量",
-          key: "student_name",
+          key: "total_number_of_connected_users",
           align: "center",
           width: 140
         },
         {
           title: "平均通话时长",
-          key: "student_name",
+          key: "average_talk_time",
           align: "center",
           width: 140
         },
         {
           title: "接通率",
-          key: "student_name",
+          key: "connectivity",
           align: "center",
           width: 120
         },
         {
           title: "本月新分总量",
-          key: "student_name",
+          key: "total_new_points",
           align: "center",
           width: 140
         },
         {
           title: "本月新分呼出电话总量",
-          key: "student_name",
+          key: "total_number_of_outgoing_calls",
           align: "center",
           width: 140
         },
         {
           title: "本月新分接通电话总量",
-          key: "student_name",
+          key: "total_number_of_incoming_calls",
           align: "center",
           width: 140
         },
         {
           title: "本月新分接通率",
-          key: "student_name",
+          key: "new_points_pass_rate",
           align: "center",
           width: 140
         },
         {
           title: "本月累计新增一对一预约量（取消的不计）",
-          key: "student_name",
+          key: "one_to_one_appointment",
           align: "center",
           width: 140
         },
         {
           title: "累计有效试听数量",
-          key: "student_name",
+          key: "number_of_effective_auditions",
           align: "center",
           width: 140
         },
         {
           title: "累计取消试听数量",
-          key: "student_name",
+          key: "one_to_one_cancellation_amount",
           align: "center",
           width: 140
-        },
+        }
       ]
     };
   },
   methods: {
     // 点击选项卡切换触发
     changeTab(value) {
-			if(value === "name1") {
+      if (value === "name1") {
         this.columns = this.columns1;
-			} else if (value == "name2") {
+        this.type = 1
+        this.getUserData();
+      } else if (value == "name2") {
         this.columns = this.columns2;
+        this.type = 2
+        this.getUserData();
       } else if (value == "name3") {
         this.columns = this.columns3;
-			}
-		},
-		// 改变页码
-    changePages(val) {
+        this.type = 3
+        this.getUserData();
+      }
     },
+    // 转换date
+    changeCreateDate(time) {
+      this.start_time = time[0];
+      this.end_time = time[1];
+      this.getUserData()
+    },
+    // 获取用户信息
+    async getUserData() {
+      this.isLoading = true
+      let res = await this.$request({
+        method: "get",
+        url: CALLRECORDSTATISTICS,
+        params: {
+          type: this.type,
+          start_time: this.start_time,
+          end_time: this.end_time,
+        }
+      });
+      this.dataList = res.data.data.data
+      this.isLoading = false
+    }
   },
   created() {
     this.columns = this.columns1;
+    this.getUserData()
   }
 };
 </script>
