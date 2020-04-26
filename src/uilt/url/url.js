@@ -91,10 +91,12 @@ const GETMOBILE = BASEURL + "get_mobile" //教务/ 转介绍
 const ORDERPRODUCT = BASEURL + "order_product" //教务/ 订单 选择课程
 const ADDORDER = BASEURL + "add_order" //教务/ 订单 创建订单
 const GETACCOUNTSFOLLOW = BASEURL + "get_accounts_follow" //教务/ 跟进，信息展示
+const CALLRECORDSTATISTICS = BASEURL + "call_record_statistics" //教务/ 拨号预约统计分析
 
 const SCREENLIST = BASEURL + "screen_list" //教务/ 公共接口，select状态栏
 
 export {
+  CALLRECORDSTATISTICS,
   UPDATEPRODUCTS,
   CREATEPRODUCTS,
   PRODUCTINFOFILE,

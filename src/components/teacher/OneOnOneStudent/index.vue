@@ -1,10 +1,9 @@
 <template>
   <div class="oneononestudent">
     <!-- 面包屑 -->
-    <Crumbs>
+    <bread-crumb>
       <template slot="title">一对一学员</template>
-    </Crumbs>
-
+    </bread-crumb>
     <!-- 卡片包裹 -->
     <Card class="card">
       <div style="text-align:center">
