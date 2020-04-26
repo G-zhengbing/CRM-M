@@ -24,11 +24,10 @@
         <Option :value="index" v-for="(item,index) in gradeList" :key="index">{{item}}</Option>
       </Select>
     </FormItem>
-    <FormItem v-if="payingStudents || chooseSubject" @click="getSubjectList">
+    <FormItem v-if="payingStudents || chooseSubject">
       <Select
         v-model="formItem.subject"
         placeholder="选择科目"
-        @on-open-change="getSubjectList"
         style="width: 100px;"
       >
         <Option :value="index" v-for="(item,index) in subjectList" :key="index">{{item}}</Option>
@@ -38,7 +37,6 @@
       <Select
         v-model="formItem.class_type"
         placeholder="选择班级类型"
-        @on-open-change="getClassTypeList"
         style="width: 120px;"
       >
         <Option :value="index" v-for="(item,index) in classTypeList" :key="index">{{item}}</Option>
@@ -56,7 +54,6 @@
       <Select
         v-model="formItem.teacher_id"
         placeholder="班主任"
-        @on-open-change="getClassTeacherList"
         style="width: 80px;"
       >
         <Option
@@ -106,7 +103,6 @@
         v-model="formItem.class_attendance"
         placeholder="本周到课情况"
         style="width: 120px;"
-        @on-open-change="getWeekClass"
       >
         <Option v-for="(item,index) in WeekClassList" :value="index" :key="index">{{item}}</Option>
       </Select>
@@ -116,7 +112,6 @@
         v-model="formItem.delivery_of_work"
         placeholder="上周交作业情况"
         style="width: 120px;"
-        @on-open-change="getHomeWork"
       >
         <Option v-for="(item,index) in HomeWorkList" :key="index" :value="index">{{item}}</Option>
       </Select>
@@ -333,15 +328,7 @@ export default {
   },
   data() {
     return {
-      formItem: {
-       
-      }
-      // subjectList: "", // 科目
-      // gradeList: "", // 年级
-      // classTypeList: "", // 班级类型
-      // classTeacherList: "", // 班级类型
-      // WeekClassList: "", // 本周到课情况
-      // HomeWorkList: "" // 上周交作业情况
+      formItem: {}
     };
   },
   watch: {
@@ -378,37 +365,9 @@ export default {
     },
     // 点击清除选项
     deleteFormData() {
-      this.formItem = {
-        page: 1, // 页码
-        page_num: "10" // 每页条数
-      };
+      this.formItem = {};
     },
-    // 点击获取学科
-    getSubjectList() {
-      // this.subjectList = this.selectState.subject;
-    },
-    // 点击获取年级
-    getGradeList() {
-      // this.gradeList = this.selectState.grade;
-    },
-    // 点击获取班级类型
-    getClassTypeList() {
-      // this.classTypeList = this.selectState.class_type;
-    },
-    // 点击获取班主任
-    getClassTeacherList() {
-      // this.classTeacherList = this.selectState.classTeacher;
-    },
-    // 获取本周到课情况
-    getWeekClass() {
-      // this.WeekClassList = this.selectState.class_attendance;
-    },
-    // 获取上财交作业情况
-    getHomeWork() {
-      // this.HomeWorkList = this.selectState.delivery_of_work;
-    }
   },
-  created() {}
 };
 </script>
 <style scoped>

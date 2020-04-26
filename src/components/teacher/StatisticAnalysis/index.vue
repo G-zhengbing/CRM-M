@@ -9,16 +9,22 @@
         <Tabs type="card" value="name1" @on-click="changeTab">
           <TabPane label="今日" name="name1">
             <div class="title">
-              <Form class="select" ref="formValidate" :model="formItem" inline style="display: flex">
+              <Form
+                class="select"
+                ref="formValidate"
+                :model="formItem"
+                inline
+                style="display: flex"
+              >
                 <FormItem>
-                  <DatePicker
-                    v-model="formItem.create_sts_time"
-                    type="datetimerange"
+                  <TimePicker
+                    format="HH:mm"
+                    type="timerange"
                     placement="bottom-start"
-                    placeholder="分配时间 - 分配时间"
-                    style="width: 165px"
+                    placeholder="分配时间"
+                    style="width: 168px"
                     @on-change="changeCreateDate"
-                  ></DatePicker>
+                  ></TimePicker>
                 </FormItem>
               </Form>
             </div>
@@ -296,15 +302,15 @@ export default {
     changeTab(value) {
       if (value === "name1") {
         this.columns = this.columns1;
-        this.type = 1
+        this.type = 1;
         this.getUserData();
       } else if (value == "name2") {
         this.columns = this.columns2;
-        this.type = 2
+        this.type = 2;
         this.getUserData();
       } else if (value == "name3") {
         this.columns = this.columns3;
-        this.type = 3
+        this.type = 3;
         this.getUserData();
       }
     },
@@ -312,27 +318,27 @@ export default {
     changeCreateDate(time) {
       this.start_time = time[0];
       this.end_time = time[1];
-      this.getUserData()
+      this.getUserData();
     },
     // 获取用户信息
     async getUserData() {
-      this.isLoading = true
+      this.isLoading = true;
       let res = await this.$request({
         method: "get",
         url: CALLRECORDSTATISTICS,
         params: {
           type: this.type,
           start_time: this.start_time,
-          end_time: this.end_time,
+          end_time: this.end_time
         }
       });
-      this.dataList = res.data.data.data
-      this.isLoading = false
+      this.dataList = res.data.data.data;
+      this.isLoading = false;
     }
   },
   created() {
     this.columns = this.columns1;
-    this.getUserData()
+    this.getUserData();
   }
 };
 </script>
