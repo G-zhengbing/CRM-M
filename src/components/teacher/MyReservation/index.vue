@@ -1,10 +1,9 @@
 <template>
   <div class="classstudents">
     <!-- 面包屑 -->
-    <Crumbs>
+    <bread-crumb>
       <template slot="title">我的预约单</template>
-    </Crumbs>
-
+    </bread-crumb>
     <!-- 卡片包裹 -->
     <Card class="card">
       <div style="text-align:center">
@@ -283,12 +282,7 @@
         </Tabs>
       </div>
     </Card>
-    <CallOut
-      v-if="type == 'CallOut'"
-      :row="row"
-      :showMod="showMod"
-      @changeShowMod="changeShowMod"
-    />
+    <CallOut v-if="type == 'CallOut'" :row="row" :showMod="showMod" @changeShowMod="changeShowMod" />
     <Appraisal
       v-else-if="type == 'Appraisal'"
       :row="row"

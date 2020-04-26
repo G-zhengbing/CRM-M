@@ -2,7 +2,6 @@
  * 全局注册组件
  */
 
-import crumbs from './crumbs'
 import select from './select'
 import table from './table'
 import paging from './paging'
@@ -22,12 +21,11 @@ import referral from './referral'
 import appraisal from './appraisal'
 import createdOrder from './createdOrder'
 import newReport from './learningReport/newReport'
-import modals from './Modals'
+import BreadCrumb from './bread-crumb'
 
 export default {
 	install(Vue) {
 		// 全局注册
-		Vue.component('Crumbs', crumbs); // 面包屑
 		Vue.component('SelectBox', select); // 搜索
 		Vue.component('TableBox', table); // 表格
 		Vue.component('PagingBox', paging); // 页码
@@ -47,6 +45,6 @@ export default {
 		Vue.component('Appraisal', appraisal); // 查看测评
 		Vue.component('CreatedOrder', createdOrder); // 订单
 		Vue.component('NewReport', newReport); // 订单
-		Vue.component('Modals', modals); // 总
+		Vue.component('bread-crumb', BreadCrumb); // 面包屑
 	}
 }

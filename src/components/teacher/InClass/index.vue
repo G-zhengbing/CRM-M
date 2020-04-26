@@ -1,10 +1,9 @@
 <template>
   <div class="classstudents">
     <!-- 面包屑 -->
-    <Crumbs>
+    <bread-crumb>
       <template slot="title">开课中学员</template>
-    </Crumbs>
-
+    </bread-crumb>
     <!-- 卡片包裹 -->
     <Card class="card">
       <div style="text-align:center">
@@ -625,8 +624,8 @@ export default {
               "Poptip",
               {
                 props: {
-                  trigger: 'hover',
-                  placement: "bottom",
+                  trigger: "hover",
+                  placement: "bottom"
                 }
               },
               [
@@ -676,7 +675,7 @@ export default {
               "Poptip",
               {
                 props: {
-                  trigger: 'hover',
+                  trigger: "hover",
                   placement: "bottom"
                 }
               },
@@ -850,7 +849,7 @@ export default {
               "Poptip",
               {
                 props: {
-                  trigger: 'hover',
+                  trigger: "hover",
                   placement: "bottom"
                 }
               },
@@ -901,7 +900,7 @@ export default {
               "Poptip",
               {
                 props: {
-                  trigger: 'hover',
+                  trigger: "hover",
                   placement: "bottom"
                 }
               },
@@ -1131,7 +1130,7 @@ export default {
               "Poptip",
               {
                 props: {
-                  trigger: 'hover',
+                  trigger: "hover",
                   placement: "bottom"
                 }
               },
@@ -1456,7 +1455,7 @@ export default {
     // 设置当前页码
     changePages(val) {
       this.mode.page = val;
-      this.getUserData()
+      this.getUserData();
     },
     // 设置搜索葜
     formData(val) {
