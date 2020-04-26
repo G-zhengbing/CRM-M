@@ -316,7 +316,11 @@
             </Col>
             <Col span="4">
               <FormItem label="教材版本">
-                <Select v-model="followForm.textbook_version" style="width:150px" placeholder="教材版本">
+                <Select
+                  v-model="followForm.textbook_version"
+                  style="width:150px"
+                  placeholder="教材版本"
+                >
                   <Option v-for="(list,i) in vaersion" :value="i*1" :key="i">{{list}}</Option>
                 </Select>
               </FormItem>
@@ -655,24 +659,24 @@ export default {
   },
   props: ["type"],
   mounted() {
-    if(this.type.classify == 'followUp'){
-      this.followForm.id = this.type.data.id
-      this.followForm.student_name = this.type.data.student_name
-      this.followForm.tel = this.type.data.tel
-      this.followForm.spare_phone = this.type.data.spare_phone
-      this.followForm.sex = this.type.data.sex
-      this.followForm.age = this.type.data.age
-      this.followForm.grade = this.type.data.grade
-      this.followForm.wechat_nick_name = this.type.data.wechat_nick_name
-      this.followForm.wechat_id = this.type.data.wechat_id
-      this.followForm.area = this.type.data.area
-      this.followForm.school = this.type.data.school
-      this.followForm.textbook_version = this.type.data.textbook_version
-      this.followForm.subject = this.type.data.subject
-      this.followForm.intention_option = this.type.data.intention_option
-      this.followForm.next_follow_time = this.type.data.next_follow_time
-      this.followForm.visit_content = this.type.data.visit_content
-      this.followForm.order = this.type.data.order
+    if (this.type.classify == "followUp") {
+      this.followForm.id = this.type.data.id;
+      this.followForm.student_name = this.type.data.student_name;
+      this.followForm.tel = this.type.data.tel;
+      this.followForm.spare_phone = this.type.data.spare_phone;
+      this.followForm.sex = this.type.data.sex;
+      this.followForm.age = this.type.data.age;
+      this.followForm.grade = this.type.data.grade;
+      this.followForm.wechat_nick_name = this.type.data.wechat_nick_name;
+      this.followForm.wechat_id = this.type.data.wechat_id;
+      this.followForm.area = this.type.data.area;
+      this.followForm.school = this.type.data.school;
+      this.followForm.textbook_version = this.type.data.textbook_version;
+      this.followForm.subject = this.type.data.subject;
+      this.followForm.intention_option = this.type.data.intention_option;
+      this.followForm.next_follow_time = this.type.data.next_follow_time;
+      this.followForm.visit_content = this.type.data.visit_content;
+      this.followForm.order = this.type.data.order;
     }
     if (this.type.classify == "report") {
       this.getReport(this.type.data.id);
@@ -825,7 +829,10 @@ export default {
         this.$parent.show = false;
         return;
       } else if (this.type.status == "notification") {
-        this.getNotificationList({ form:this.type.form, page: this.type.page });
+        this.getNotificationList({
+          form: this.type.form,
+          page: this.type.page
+        });
         this.$parent.show = false;
         return;
       } else if (this.type.status == "reserved") {
@@ -928,64 +935,79 @@ export default {
       this.Loading = true;
       this.disableBtn = true;
       if (this.type.status == "notvisit") {
-        this.Genjin({ type: this.followForm, status: storage.getTabStatus() }).then(
-          res => {
-             if(res.data.ret){
-              this.$Message.success('跟进成功')
-            }
-            this.$parent.show = false;
-            this.Loading = false;
-            this.getXinfenList({ form: this.type.form, page: this.type.page });
+        this.Genjin({
+          type: this.followForm,
+          status: storage.getTabStatus()
+        }).then(res => {
+          if (res.data.ret) {
+            this.$Message.success("跟进成功");
+          }else{
+            this.$Message.error(res.data.error);
           }
-        );
+          this.$parent.show = false;
+          this.Loading = false;
+          this.getXinfenList({ form: this.type.form, page: this.type.page });
+        });
         return;
       } else if (this.type.status == "followup") {
-        this.Genjin({ type: this.followForm, status: storage.getTabStatus() }).then(
-          res => {
-             if(res.data.ret){
-              this.$Message.success('跟进成功')
-            }
-            this.$parent.show = false;
-            this.Loading = false;
-            this.getFollowUpList({ status: storage.getTabStatus() });
+        this.Genjin({
+          type: this.followForm,
+          status: storage.getTabStatus()
+        }).then(res => {
+          if (res.data.ret) {
+            this.$Message.success("跟进成功");
+          }else{
+            this.$Message.error(res.data.error);
           }
-        );
+          this.$parent.show = false;
+          this.Loading = false;
+          this.getFollowUpList({ status: storage.getTabStatus() });
+        });
         return;
       } else if (this.type.status == "notcallback") {
-        this.Genjin({ type: this.followForm, status: storage.getTabStatus() }).then(
-          res => {
-             if(res.data.ret){
-              this.$Message.success('跟进成功')
-            }
-            this.$parent.show = false;
-            this.Loading = false;
-            this.getYuQiList({ form: this.type.form, page: this.type.page });
+        this.Genjin({
+          type: this.followForm,
+          status: storage.getTabStatus()
+        }).then(res => {
+          if (res.data.ret) {
+            this.$Message.success("跟进成功");
+          }else{
+            this.$Message.error(res.data.error);
           }
-        );
+          this.$parent.show = false;
+          this.Loading = false;
+          this.getYuQiList({ form: this.type.form, page: this.type.page });
+        });
         return;
       } else if (this.type.status == "paystudent") {
-        this.Genjin({ type: this.followForm, status: storage.getTabStatus() }).then(
-          res => {
-             if(res.data.ret){
-              this.$Message.success('跟进成功')
-            }
-            this.$parent.show = false;
-            this.Loading = false;
-            this.getPaystudent({ page: "", form: {} });
+        this.Genjin({
+          type: this.followForm,
+          status: storage.getTabStatus()
+        }).then(res => {
+          if (res.data.ret) {
+            this.$Message.success("跟进成功");
+          }else{
+            this.$Message.error(res.data.error);
           }
-        );
+          this.$parent.show = false;
+          this.Loading = false;
+          this.getPaystudent({ page: "", form: {} });
+        });
         return;
       } else if (this.type.status == "uplist") {
-        this.Genjin({ type: this.followForm, status: storage.getTabStatus() }).then(
-          res => {
-             if(res.data.ret){
-              this.$Message.success('跟进成功')
-            }
-            this.$parent.show = false;
-            this.Loading = false;
-            this.getUplist({ page: "", form: {} });
+        this.Genjin({
+          type: this.followForm,
+          status: storage.getTabStatus()
+        }).then(res => {
+          if (res.data.ret) {
+            this.$Message.success("跟进成功");
+          }else{
+            this.$Message.error(res.data.error);
           }
-        );
+          this.$parent.show = false;
+          this.Loading = false;
+          this.getUplist({ page: "", form: {} });
+        });
         return;
       } else if (this.type.status == "minestudent") {
         let cid = this.type.data.id;
@@ -997,52 +1019,67 @@ export default {
         });
         return;
       } else if (this.type.status == "mineclient") {
-        this.Genjin({ type: this.followForm, status: storage.getTabStatus() }).then(
-          res => {
-             if(res.data.ret){
-              this.$Message.success('跟进成功')
-            }
-            this.$parent.show = false;
-            this.Loading = false;
-            this.getClientList({ form: this.type.form, page: this.type.page });
+        this.Genjin({
+          type: this.followForm,
+          status: storage.getTabStatus()
+        }).then(res => {
+          if (res.data.ret) {
+            this.$Message.success("跟进成功");
+          }else{
+            this.$Message.error(res.data.error);
           }
-        );
+          this.$parent.show = false;
+          this.Loading = false;
+          this.getClientList({ form: this.type.form, page: this.type.page });
+        });
         return;
       } else if (this.type.status == "studentpay") {
-        this.Genjin({ type: this.followForm, status: storage.getTabStatus() }).then(
-          res => {
-             if(res.data.ret){
-              this.$Message.success('跟进成功')
-            }
-            this.$parent.show = false;
-            this.Loading = false;
-            this.getStudentList({ form: this.type.form, page: this.type.page });
+        this.Genjin({
+          type: this.followForm,
+          status: storage.getTabStatus()
+        }).then(res => {
+          if (res.data.ret) {
+            this.$Message.success("跟进成功");
+          }else{
+            this.$Message.error(res.data.error);
           }
-        );
+          this.$parent.show = false;
+          this.Loading = false;
+          this.getStudentList({ form: this.type.form, page: this.type.page });
+        });
         return;
       } else if (this.type.status == "notification") {
-        this.Genjin({ type: this.followForm, status: storage.getTabStatus() }).then(
-          res => {
-            if(res.data.ret){
-              this.$Message.success('跟进成功')
-            }
-            this.$parent.show = false;
-            this.Loading = false;
-            this.getNotificationList({ form: this.type.form, page: this.type.page });
+        this.Genjin({
+          type: this.followForm,
+          status: storage.getTabStatus()
+        }).then(res => {
+          if (res.data.ret) {
+            this.$Message.success("跟进成功");
+          }else{
+            this.$Message.error(res.data.error);
           }
-        );
+          this.$parent.show = false;
+          this.Loading = false;
+          this.getNotificationList({
+            form: this.type.form,
+            page: this.type.page
+          });
+        });
         return;
       } else {
-        this.Genjin({ type: this.followForm, status: storage.getTabStatus() }).then(
-          res => {
-             if(res.data.ret){
-              this.$Message.success('跟进成功')
-            }
-            this.$parent.show = false;
-            this.Loading = false;
-            this.getKehuList({ status: storage.getTabStatus() });
+        this.Genjin({
+          type: this.followForm,
+          status: storage.getTabStatus()
+        }).then(res => {
+          if (res.data.ret) {
+            this.$Message.success("跟进成功");
+          }else{
+            this.$Message.error(res.data.error);
           }
-        );
+          this.$parent.show = false;
+          this.Loading = false;
+          this.getKehuList({ status: storage.getTabStatus() });
+        });
       }
       this.disableBtn = false;
     },
@@ -1130,7 +1167,7 @@ export default {
   },
   data() {
     return {
-      followForm:{},
+      followForm: {},
       showRemove: false,
       removeNote: "",
       disableBtn: false,
