@@ -1,12 +1,12 @@
 <template>
   <div class="teacher">
     <!-- 面包屑 -->
-    <Crumbs>
+    <bread-crumb>
       <template slot="title">教师管理</template>
-    </Crumbs>
+    </bread-crumb>
     <!-- 卡片包裹 -->
     <Card class="card">
-      <NewLecturer style="margin-bottom: 10px;"/>
+      <NewLecturer style="margin-bottom: 10px;" />
       <div style="text-align:center">
         <Tabs type="card" value="name1" @on-click="changeTab">
           <TabPane label="教师" name="name1">
@@ -48,8 +48,8 @@ export default {
       isLoading: false, // loading开关
       columns: Teacher.state.columns1,
       dataList: Teacher.state.data1,
-			value: "name1", // 判断卡片选择状态
-			total: 100,
+      value: "name1", // 判断卡片选择状态
+      total: 100,
       per_page: 10,
       current_page: 1,
       last_page: 1
@@ -64,11 +64,11 @@ export default {
       } else if (this.value == "name2") {
         this.columns = Teacher.state.columns2;
       }
-		},
-		// 改变页码
-    changePages(val) {
-      this.mode.page = val
     },
+    // 改变页码
+    changePages(val) {
+      this.mode.page = val;
+    }
   }
 };
 </script>

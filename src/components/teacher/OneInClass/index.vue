@@ -1,10 +1,9 @@
 <template>
   <div class="OneInClass">
     <!-- 面包屑 -->
-    <Crumbs>
+    <bread-crumb>
       <template slot="title">一对一开课中学员</template>
-    </Crumbs>
-
+    </bread-crumb>
     <!-- 卡片包裹 -->
     <Card class="card">
       <div style="text-align:center">
@@ -201,7 +200,7 @@ export default {
     },
     async getUserData() {
       this.isLoading = true;
-      this.mode.product_type = 4 // 设置一对一搜索项
+      this.mode.product_type = 4; // 设置一对一搜索项
       let res = await this.$request({
         method: "post",
         url: INCLASS,
@@ -215,10 +214,13 @@ export default {
       this.dataList.map(item => {
         if (!item.give_class_hour) {
           item.totalClassTime = item.class_hour;
-          item.restOfClass = item.class_hour - item.course_rate_of_progress
+          item.restOfClass = item.class_hour - item.course_rate_of_progress;
         } else {
           item.totalClassTime = item.class_hour + "+" + item.give_class_hour;
-          item.restOfClass = item.class_hour + item.give_class_hour - item.course_rate_of_progress
+          item.restOfClass =
+            item.class_hour +
+            item.give_class_hour -
+            item.course_rate_of_progress;
         }
         item.subject = this.selectState.subject[item.subject];
         item.grade = this.selectState.grade[item.grade];

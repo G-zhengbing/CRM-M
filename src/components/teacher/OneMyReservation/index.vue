@@ -1,10 +1,9 @@
 <template>
   <div class="OneMyReservation">
     <!-- 面包屑 -->
-    <Crumbs>
+    <bread-crumb>
       <template slot="title">一对一我的预约单</template>
-    </Crumbs>
-
+    </bread-crumb>
     <!-- 卡片包裹 -->
     <Card class="card">
       <div style="text-align:center">

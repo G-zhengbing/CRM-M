@@ -1,9 +1,9 @@
 <template>
   <div class="statisticAnalysis">
     <!-- 面包屑 -->
-    <Crumbs>
+    <bread-crumb>
       <template slot="title">统计分析</template>
-    </Crumbs>
+    </bread-crumb>
     <Card class="card">
       <div style="text-align:center">
         <Tabs type="card" value="name1" @on-click="changeTab">
