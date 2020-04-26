@@ -76,32 +76,34 @@ export default {
         ["女", 2]
       ])
 
+      var level = new Map([
+        ['中级',1],
+        ['高级',2],
+        ['特级',3]
+      ])
+
       type.subject = subjects.get(type.subject)
+      type.level = level.get(type.level);
       type.sex = gender.get(type.sex)
       return type
     },
     teacherData(state) {
 			let data = state.teacherList
-
-			// var subjects = new Map([
-      //   ["数学", 1],
-      //   ["英语", 2],
-      //   ["语文", 3],
-      //   ["物理", 4],
-      //   ["化学", 5],
-      //   ["政治", 6],
-      //   ["生物", 7],
-      //   ["地理", 8],
-      //   ["历史", 9]
-			// ])
 			
       var gender = new Map([
         [1, "男"],
         [2, "女"]
       ])
+
+      var level = new Map([
+        [1,'中级'],
+        [2,'高级'],
+        [3,'特级']
+      ])
+
       return data.map(element => {
         element.sex = gender.get(element.sex);
-        // element.subject = subjects.get(element.subject);
+        element.level = level.get(element.level);
         return element;
       });
     }

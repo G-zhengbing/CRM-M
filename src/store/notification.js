@@ -31,7 +31,7 @@ export default {
     getNotificationList({
       state,
       commit
-    }, form, page) {
+    }, {form, page}) {
       return new Promise((resolve, reject) => {
         axios({
           method: "get",

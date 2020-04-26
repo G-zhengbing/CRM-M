@@ -246,26 +246,26 @@
         title="线索跟进"
         @on-cancel="followUpColse"
       >
-        <Form :model="form" label-position="top" style="height:500px;overflow-y:auto;">
+        <Form :model="followForm" label-position="top" style="height:500px;overflow-y:auto;">
           <Row>
             <Col span="4">
               <FormItem style="width:150px;" label="学员姓名">
-                <Input v-model="type.data.student_name" placeholder="姓名"></Input>
+                <Input v-model="followForm.student_name" placeholder="姓名"></Input>
               </FormItem>
             </Col>
             <Col span="4">
               <FormItem style="width:150px;" label="注册手机">
-                <Input :title="type.data.tel" readonly v-model="type.data.tel" placeholder="手机号"></Input>
+                <Input :title="followForm.tel" readonly v-model="followForm.tel" placeholder="手机号"></Input>
               </FormItem>
             </Col>
             <Col span="4">
               <FormItem style="width:150px;" label="备用电话">
-                <Input v-model="type.data.spare_phone" placeholder="电话"></Input>
+                <Input v-model="followForm.spare_phone" placeholder="电话"></Input>
               </FormItem>
             </Col>
             <Col span="4">
               <FormItem label="性别">
-                <Select v-model="type.data.sex" style="width:150px" placeholder="性别">
+                <Select v-model="followForm.sex" style="width:150px" placeholder="性别">
                   <Option :value="1">男</Option>
                   <Option :value="2">女</Option>
                 </Select>
@@ -273,12 +273,12 @@
             </Col>
             <Col span="4">
               <FormItem style="width:150px;" label="年龄">
-                <Input v-model="type.data.age" placeholder="年龄"></Input>
+                <Input v-model="followForm.age" placeholder="年龄"></Input>
               </FormItem>
             </Col>
             <Col span="4">
               <FormItem label="年级">
-                <Select v-model="type.data.grade" style="width:150px" placeholder="年级">
+                <Select v-model="followForm.grade" style="width:150px" placeholder="年级">
                   <Option :value="1">一年级</Option>
                   <Option :value="2">二年级</Option>
                   <Option :value="3">三年级</Option>
@@ -296,48 +296,52 @@
             </Col>
             <Col span="4">
               <FormItem style="width:150px;" label="微信昵称">
-                <Input v-model="type.data.wechat_nick_name" placeholder="学员微信昵称"></Input>
+                <Input v-model="followForm.wechat_nick_name" placeholder="学员微信昵称"></Input>
               </FormItem>
             </Col>
             <Col span="4">
               <FormItem style="width:150px;" label="微信号">
-                <Input v-model="type.data.wechat_id" placeholder="请输入微信号"></Input>
+                <Input v-model="followForm.wechat_id" placeholder="请输入微信号"></Input>
               </FormItem>
             </Col>
             <Col span="4">
               <FormItem style="width:150px;" label="学员地区">
-                <Input v-model="type.data.area" placeholder="请输入学员地区"></Input>
+                <Input v-model="followForm.area" placeholder="请输入学员地区"></Input>
               </FormItem>
             </Col>
             <Col span="4">
               <FormItem style="width:150px;" label="学校">
-                <Input v-model="type.data.school" placeholder="就读学校"></Input>
+                <Input v-model="followForm.school" placeholder="就读学校"></Input>
               </FormItem>
             </Col>
             <Col span="4">
               <FormItem label="教材版本">
-                <Select v-model="type.data.textbook_version" style="width:150px" placeholder="教材版本">
+                <Select
+                  v-model="followForm.textbook_version"
+                  style="width:150px"
+                  placeholder="教材版本"
+                >
                   <Option v-for="(list,i) in vaersion" :value="i*1" :key="i">{{list}}</Option>
                 </Select>
               </FormItem>
             </Col>
             <Col span="4">
               <FormItem label="意向科目">
-                <Select v-model="type.data.subject" style="width:150px" placeholder="意向科目">
+                <Select v-model="followForm.subject" style="width:150px" placeholder="意向科目">
                   <Option v-for="(list,i) in subject" :value="i*1" :key="i">{{list}}</Option>
                 </Select>
               </FormItem>
             </Col>
             <Col span="4">
               <FormItem label="意向度">
-                <Select v-model="type.data.intention_option" style="width:150px" placeholder="意向度">
+                <Select v-model="followForm.intention_option" style="width:150px" placeholder="意向度">
                   <Option v-for="(list,i) in intention" :value="i *1" :key="i">{{list}}</Option>
                 </Select>
               </FormItem>
             </Col>
             <Col span="24">
               <FormItem label="呼出请况">
-                <RadioGroup class="radios" v-model="phone_status" @on-change="getPonestatus">
+                <RadioGroup class="radios" v-model="phone_status">
                   <Radio :label="1">正常接听</Radio>
                   <Radio :label="2">无人接听</Radio>
                   <Radio :label="3">空号</Radio>
@@ -362,7 +366,7 @@
               <FormItem label="下次回访">
                 <DatePicker
                   style="margin:0"
-                  v-model="type.data.next_follow_time"
+                  v-model="followForm.next_follow_time"
                   format="yyyy-MM-dd HH:mm"
                   type="datetime"
                   class="datepicker"
@@ -381,7 +385,7 @@
                 <span>回访时间</span>
               </p>
               <ul class="record-footer">
-                <li v-for="(item,i) in type.data.visit_content" :key="i">
+                <li v-for="(item,i) in followForm.visit_content" :key="i">
                   <i>{{item.visit_content}}</i>
                   <span>{{item.sale_name}}</span>
                   <span>{{item.time}}</span>
@@ -397,7 +401,7 @@
                 <span>购买时间</span>
               </p>
               <ul class="record-footer">
-                <li v-for="(item,i) in type.data.order" :key="i">
+                <li v-for="(item,i) in followForm.order" :key="i">
                   <i>{{item.product_name}}</i>
                   <span>{{item.grade}}</span>
                   <span>{{item.subject}}</span>
@@ -655,6 +659,25 @@ export default {
   },
   props: ["type"],
   mounted() {
+    if (this.type.classify == "followUp") {
+      this.followForm.id = this.type.data.id;
+      this.followForm.student_name = this.type.data.student_name;
+      this.followForm.tel = this.type.data.tel;
+      this.followForm.spare_phone = this.type.data.spare_phone;
+      this.followForm.sex = this.type.data.sex;
+      this.followForm.age = this.type.data.age;
+      this.followForm.grade = this.type.data.grade;
+      this.followForm.wechat_nick_name = this.type.data.wechat_nick_name;
+      this.followForm.wechat_id = this.type.data.wechat_id;
+      this.followForm.area = this.type.data.area;
+      this.followForm.school = this.type.data.school;
+      this.followForm.textbook_version = this.type.data.textbook_version;
+      this.followForm.subject = this.type.data.subject;
+      this.followForm.intention_option = this.type.data.intention_option;
+      this.followForm.next_follow_time = this.type.data.next_follow_time;
+      this.followForm.visit_content = this.type.data.visit_content;
+      this.followForm.order = this.type.data.order;
+    }
     if (this.type.classify == "report") {
       this.getReport(this.type.data.id);
     }
@@ -731,12 +754,6 @@ export default {
           }
         });
     },
-    //得到呼出情况
-    getPonestatus() {
-      if (this.type.data.many_calls == 2 && this.phone_status == 2) {
-        this.pone = true;
-      }
-    },
     //发送短信
     send() {
       this.sendPone(this.type.data.tel).then(() => {
@@ -812,7 +829,10 @@ export default {
         this.$parent.show = false;
         return;
       } else if (this.type.status == "notification") {
-        this.getNotificationList({ ...this.type.form, page: this.type.page });
+        this.getNotificationList({
+          form: this.type.form,
+          page: this.type.page
+        });
         this.$parent.show = false;
         return;
       } else if (this.type.status == "reserved") {
@@ -904,60 +924,90 @@ export default {
         this.$Message.error("呼出情况是必选的");
         return;
       }
-      this.type.data.phone_status = this.phone_status;
-      this.type.data.note = this.note_content;
-      this.type.data.order = [];
+      this.followForm.phone_status = this.phone_status;
+      this.followForm.note = this.note_content;
+      this.followForm.order = [];
       if (this.vist_content) {
-        this.type.data.visit_content = this.vist_content;
+        this.followForm.visit_content = this.vist_content;
       } else {
-        this.type.data.visit_content = "";
+        this.followForm.visit_content = "";
       }
       this.Loading = true;
       this.disableBtn = true;
       if (this.type.status == "notvisit") {
-        this.Genjin({ type: this.type, status: storage.getTabStatus() }).then(
-          res => {
-            this.$parent.show = false;
-            this.Loading = false;
-            this.getXinfenList({ form: this.type.form, page: this.type.page });
+        this.Genjin({
+          type: this.followForm,
+          status: storage.getTabStatus()
+        }).then(res => {
+          if (res.data.ret) {
+            this.$Message.success("跟进成功");
+          }else{
+            this.$Message.error(res.data.error);
           }
-        );
+          this.$parent.show = false;
+          this.Loading = false;
+          this.getXinfenList({ form: this.type.form, page: this.type.page });
+        });
         return;
       } else if (this.type.status == "followup") {
-        this.Genjin({ type: this.type, status: storage.getTabStatus() }).then(
-          res => {
-            this.$parent.show = false;
-            this.Loading = false;
-            this.getFollowUpList({ status: storage.getTabStatus() });
+        this.Genjin({
+          type: this.followForm,
+          status: storage.getTabStatus()
+        }).then(res => {
+          if (res.data.ret) {
+            this.$Message.success("跟进成功");
+          }else{
+            this.$Message.error(res.data.error);
           }
-        );
+          this.$parent.show = false;
+          this.Loading = false;
+          this.getFollowUpList({ status: storage.getTabStatus() });
+        });
         return;
       } else if (this.type.status == "notcallback") {
-        this.Genjin({ type: this.type, status: storage.getTabStatus() }).then(
-          res => {
-            this.$parent.show = false;
-            this.Loading = false;
-            this.getYuQiList({ form: this.type.form, page: this.type.page });
+        this.Genjin({
+          type: this.followForm,
+          status: storage.getTabStatus()
+        }).then(res => {
+          if (res.data.ret) {
+            this.$Message.success("跟进成功");
+          }else{
+            this.$Message.error(res.data.error);
           }
-        );
+          this.$parent.show = false;
+          this.Loading = false;
+          this.getYuQiList({ form: this.type.form, page: this.type.page });
+        });
         return;
       } else if (this.type.status == "paystudent") {
-        this.Genjin({ type: this.type, status: storage.getTabStatus() }).then(
-          res => {
-            this.$parent.show = false;
-            this.Loading = false;
-            this.getPaystudent({ page: "", form: {} });
+        this.Genjin({
+          type: this.followForm,
+          status: storage.getTabStatus()
+        }).then(res => {
+          if (res.data.ret) {
+            this.$Message.success("跟进成功");
+          }else{
+            this.$Message.error(res.data.error);
           }
-        );
+          this.$parent.show = false;
+          this.Loading = false;
+          this.getPaystudent({ page: "", form: {} });
+        });
         return;
       } else if (this.type.status == "uplist") {
-        this.Genjin({ type: this.type, status: storage.getTabStatus() }).then(
-          res => {
-            this.$parent.show = false;
-            this.Loading = false;
-            this.getUplist({ page: "", form: {} });
+        this.Genjin({
+          type: this.followForm,
+          status: storage.getTabStatus()
+        }).then(res => {
+          if (res.data.ret) {
+            this.$Message.success("跟进成功");
+          }else{
+            this.$Message.error(res.data.error);
           }
-        );
+          this.$parent.show = false;
+          this.Loading = false;
+          this.getUplist({ page: "", form: {} });
+        });
         return;
       } else if (this.type.status == "minestudent") {
         let cid = this.type.data.id;
@@ -969,40 +1019,67 @@ export default {
         });
         return;
       } else if (this.type.status == "mineclient") {
-        this.Genjin({ type: this.type, status: storage.getTabStatus() }).then(
-          res => {
-            this.$parent.show = false;
-            this.Loading = false;
-            this.getClientList({ form: this.type.form, page: this.type.page });
+        this.Genjin({
+          type: this.followForm,
+          status: storage.getTabStatus()
+        }).then(res => {
+          if (res.data.ret) {
+            this.$Message.success("跟进成功");
+          }else{
+            this.$Message.error(res.data.error);
           }
-        );
+          this.$parent.show = false;
+          this.Loading = false;
+          this.getClientList({ form: this.type.form, page: this.type.page });
+        });
         return;
       } else if (this.type.status == "studentpay") {
-        this.Genjin({ type: this.type, status: storage.getTabStatus() }).then(
-          res => {
-            this.$parent.show = false;
-            this.Loading = false;
-            this.getStudentList({ form: this.type.form, page: this.type.page });
+        this.Genjin({
+          type: this.followForm,
+          status: storage.getTabStatus()
+        }).then(res => {
+          if (res.data.ret) {
+            this.$Message.success("跟进成功");
+          }else{
+            this.$Message.error(res.data.error);
           }
-        );
+          this.$parent.show = false;
+          this.Loading = false;
+          this.getStudentList({ form: this.type.form, page: this.type.page });
+        });
         return;
       } else if (this.type.status == "notification") {
-        this.Genjin({ type: this.type, status: storage.getTabStatus() }).then(
-          res => {
-            this.$parent.show = false;
-            this.Loading = false;
-            this.getNotificationList({ page: "", form: {} });
+        this.Genjin({
+          type: this.followForm,
+          status: storage.getTabStatus()
+        }).then(res => {
+          if (res.data.ret) {
+            this.$Message.success("跟进成功");
+          }else{
+            this.$Message.error(res.data.error);
           }
-        );
+          this.$parent.show = false;
+          this.Loading = false;
+          this.getNotificationList({
+            form: this.type.form,
+            page: this.type.page
+          });
+        });
         return;
       } else {
-        this.Genjin({ type: this.type, status: storage.getTabStatus() }).then(
-          res => {
-            this.$parent.show = false;
-            this.Loading = false;
-            this.getKehuList({ status: storage.getTabStatus() });
+        this.Genjin({
+          type: this.followForm,
+          status: storage.getTabStatus()
+        }).then(res => {
+          if (res.data.ret) {
+            this.$Message.success("跟进成功");
+          }else{
+            this.$Message.error(res.data.error);
           }
-        );
+          this.$parent.show = false;
+          this.Loading = false;
+          this.getKehuList({ status: storage.getTabStatus() });
+        });
       }
       this.disableBtn = false;
     },
@@ -1090,6 +1167,7 @@ export default {
   },
   data() {
     return {
+      followForm: {},
       showRemove: false,
       removeNote: "",
       disableBtn: false,
@@ -1103,7 +1181,6 @@ export default {
         }
       },
       phone_status: "",
-      pone: false,
       intention: storage.getDaiban().screen_list.inter_nation,
       subject: storage.getDaiban().screen_list.subject,
       vaersion: storage.getDaiban().screen_list.book_version,

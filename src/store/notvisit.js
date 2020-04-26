@@ -7,7 +7,6 @@ import storage from '../uilt/storage'
 export default {
   state: {
     xinfenList: [],
-    refer: storage.getDaiban().channel,
     currentPage: 1,
     total: 0,
     pageSize: 10,
@@ -192,9 +191,11 @@ export default {
         }
         if(element.many_calls != 0){
           element.many_calls = `失败(${element.many_calls}次)`
+        }else{
+          element.many_calls = '-'
         }
 
-        state.refer.map((i => {
+        storage.getDaiban().channel.map((i => {
           if (i.id == element.refer) {
             return element.refer = i.channel_title
           }

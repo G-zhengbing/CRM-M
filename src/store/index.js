@@ -91,15 +91,15 @@ export default new Vuex.Store({
       type,
       status
     }) {
-      if (!type.data.note) {
-        type.data.note = ""
+      if (!type.note) {
+        type.note = ""
       }
       return new Promise((resolve, reject) => {
         axios({
           method: "put",
-          url: GENJIN + "/" + type.data.id,
+          url: GENJIN + "/" + type.id,
           params: {
-            ...type.data,
+            ...type,
             page: status
           },
           headers: {
@@ -107,7 +107,7 @@ export default new Vuex.Store({
             Authorization: "bearer " + storage.get()
           }
         }).then(res => {
-          resolve()
+          resolve(res)
         }).catch(e => {
           reject(e)
         })
