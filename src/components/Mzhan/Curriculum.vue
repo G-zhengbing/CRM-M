@@ -33,15 +33,7 @@
                 <Col span="5">
                   <FormItem label="科目">
                     <Select v-model="form.subject" style="width:200px">
-                      <Option :value="1">数学</Option>
-                      <Option :value="2">英语</Option>
-                      <Option :value="3">语文</Option>
-                      <Option :value="4">物理</Option>
-                      <Option :value="5">化学</Option>
-                      <Option :value="6">政治</Option>
-                      <Option :value="7">生物</Option>
-                      <Option :value="8">地理</Option>
-                      <Option :value="9">历史</Option>
+                      <Option v-for="(list,i) in subject" :value="i" :key="i">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
@@ -93,7 +85,7 @@
                 </Dropdown>
               </div>
             </div>
-            <Table border :columns="columns2" :data="data" @on-selection-change="selectionChange"></Table>
+            <Table height="500" border :columns="columns2" :data="data" @on-selection-change="selectionChange"></Table>
             <Page
               @on-change="pageChange"
               :total="total"
@@ -128,6 +120,7 @@ export default {
   },
   data() {
     return {
+      subject:storage.getDaiban().screen_list.subject,
       course: storage.getDaiban().screen_list.course_type,
       disabled: true,
       item: {},

@@ -221,6 +221,8 @@ export default {
         element.mobile = str.join("")
 
         if(element.is_upgrade == 2){
+          element.is_upgrade = '已升级订单'
+        }else if (element.is_upgrade == 3){
           element.is_upgrade = '升级订单'
         }else{
           element.is_upgrade = '普通订单'

@@ -51,6 +51,7 @@
               :currentPage="currentPage"
               :total="total"
               :pageSize="pageSize"
+              @page-change="pageChange"
             />
           </div>
         </div>
