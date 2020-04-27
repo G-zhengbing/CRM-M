@@ -186,7 +186,9 @@
                           <Input placeholder="请输入视频地址ID" style="width:400px;" v-model="item.value2" type="text"/>
                           <div class="upImg" >
                             <Upload action="//jsonplaceholder.typicode.com/posts/" :before-upload="handleBeforeUpload1" :show-upload-list="false">
-                              <Button icon="ios-cloud-upload-outline" @click="upImages(i)">上传图片</Button>
+                              <Tooltip :content="item.video_image ? '已上传' : '未上传'" placement="top">
+                                <Button icon="ios-cloud-upload-outline" @click="upImages(i)">上传图片</Button>
+                              </Tooltip>
                             </Upload>
                           </div>
                       </div>
@@ -305,7 +307,7 @@ export default {
     },
     addLessons(){
       this.videoIndex++
-      this.videoArr.push({value:"",value2:"",index:this.videoIndex})
+      this.videoArr.push({value:"",value2:"",index:this.videoIndex,video_image:""})
     },
     deleTime(num){
       this.timeArr.splice(num,1)
@@ -422,6 +424,7 @@ export default {
         }
         if(response.status == 200 && response.data){
           this.videoArr[this.imageIndex].video_image = `http://liveapi.canpoint.net${response.data.data.value}`
+          console.log(this.videoArr)
         }
       })
       }
