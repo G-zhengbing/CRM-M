@@ -13,36 +13,6 @@
                     <Input v-model="form.book_name" placeholder="请输入副标题"></Input>
                 </FormItem>
             </Col>
-            <!-- <Col span="5" offset="2">
-              <FormItem label="年级" prop="grade">
-                <Select v-model="form.grade" placeholder="请选择">
-                  <Option :value="1">一年级</Option> 
-                  <Option :value="2">二年级</Option> 
-                  <Option :value="3">三年级</Option> 
-                  <Option :value="4">四年级</Option> 
-                  <Option :value="5">五年级</Option> 
-                  <Option :value="6">六年级</Option> 
-                  <Option :value="7">七年级</Option> 
-                  <Option :value="8">八年级</Option> 
-                  <Option :value="9">九年级</Option> 
-                </Select>
-              </FormItem>
-            </Col>
-            <Col span="5">
-              <FormItem label="科目" prop="subject">
-                <Select v-model="form.subject" placeholder="请选择">
-                  <Option :value="1">数学</Option> 
-                  <Option :value="2">英语</Option> 
-                  <Option :value="3">语文</Option> 
-                  <Option :value="4">物理</Option> 
-                  <Option :value="5">化学</Option> 
-                  <Option :value="6">政治</Option> 
-                  <Option :value="7">生物</Option> 
-                  <Option :value="8">地理</Option> 
-                  <Option :value="9">历史</Option> 
-                </Select>
-              </FormItem>
-            </Col> -->
             <template>
             <Col span="24">
               <FormItem label="介绍展示" v-if="form.Introduction_diagram">
@@ -580,24 +550,11 @@ export default {
       })
       }
       return false
-      // const check = this.uploadList.length;
-      // if (check >=3) {
-      //   this.$Message.error('最多只能上传3张图片');
-      //   return;
-      // }
-      // let reader = new FileReader()
-      // reader.readAsDataURL(file)
-      // const _this = this
-      // reader.onloadend = function (e) {
-      //   file.url = reader.result
-      //   _this.uploadList.push(file)
-      // }
     },
     close() {
       this.$parent.isBookMessage = false;
     },
     handleSubmit (name) {
-      console.log(this.form.Introduction_diagram_value)
       this.$refs[name].validate((valid) => {
         if (valid) {
           if(this.$parent.isUpdata){

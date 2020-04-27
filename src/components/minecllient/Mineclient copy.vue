@@ -1,17 +1,5 @@
 <template>
   <div class="box">
-    <!-- <header class="main-header">
-      <ul>
-        <li style="margin-left:30px">
-          <span>我的客户</span>
-        </li>
-      </ul>
-    </header>-->
-    <!-- <section class="main-section">
-      <div class="surplus">
-        <div class="main-section-bottom">
-          <div class="contaner">
-    <div style="height:30px;"></div>-->
     <Collapse v-model="value1">
       <Panel name="1">
         筛选条件

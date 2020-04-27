@@ -7,21 +7,13 @@ import storage from '../uilt/storage'
 export default {
   state: {
     moneyList: [],
-    refer: [],
     currentPage: 1,
     total: 0,
-    pageSize: 10,
-    genjinType:null
+    pageSize: 10
   },
   mutations: {
-    setGenjinTypemoney(state,payload){
-      state.genjinType = payload
-    },
     setMoneyList(state, payload) {
       state.moneyList = payload
-    },
-    setRefer(state, payload) {
-      state.refer = payload
     },
     setCurrentPage(state, payload) {
       state.currentPage = payload
@@ -50,7 +42,6 @@ export default {
         }).then(res => {
           commit("setMoneyList", res.data.data.resources)
           commit("setCurrentPage", res.data.data.links.current_page)
-          commit("setRefer", res.data.data.refer)
           commit("setTotal", res.data.data.links.total)
           resolve()
         }).catch(e => {
@@ -220,7 +211,6 @@ export default {
       ])
 
       return data.map(element => {
-        // if (state.status == 1) {
         var phone = element.mobile.toString()
         var str = phone.split('')
         for (let i = 0; i < str.length; i++) {
@@ -235,7 +225,6 @@ export default {
         }else{
           element.is_upgrade = '普通订单'
         }
-        // }
         element.status = monly.get(element.status);
         element.product_grade = maps.get(element.product_grade);
         element.account_status = account.get(element.account_status);

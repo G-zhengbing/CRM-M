@@ -3,7 +3,6 @@
     <header class="main-header">
       <ul>
         <li style="margin-left:30px">
-          <!-- <i></i> -->
           <span>教师管理</span>
         </li>
       </ul>

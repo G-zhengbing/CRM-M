@@ -99,6 +99,11 @@
                 v-if="$store.state.cId.is_sales == 'H'"
               >线索导入</MenuItem>
               <MenuItem
+                name="/main/importorder"
+                to="/main/importorder"
+                v-if="$store.state.cId.is_sales == 'H'"
+              >订单导入</MenuItem>
+              <MenuItem
                 name="/main/statistics"
                 to="/main/statistics"
                 v-if="$store.state.cId.is_sales != 'N'"

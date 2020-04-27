@@ -33,6 +33,7 @@ import Allreserved from '../components/reserved/Allreserved.vue'
 import Teacher from '../components/teachering/Teacher.vue'
 import Statistics from '../components/Statistics'
 import Importdata from '../components/minecllient/Importdata.vue'
+import Importorder from '../components/minecllient/Importorder.vue'
 import Timeblock from '../uilt/timeblock/Timeblock.vue'
 import Maincopy from '../components/Maincopy.vue'
  
@@ -349,6 +350,10 @@ const router = new Router({
         {
           path: '/main/importdata',
           component: Importdata
+        },
+        {
+          path: '/main/importorder',
+          component: Importorder
         },
         {
           path: '/main/classstudents', // 班课学员

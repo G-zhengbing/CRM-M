@@ -4,7 +4,6 @@
     <header class="main-header">
       <ul>
         <li style="margin-left:30px">
-          <!-- <i></i> -->
           <span>资源池</span>
         </li>
       </ul>
@@ -380,7 +379,6 @@ export default {
       this.setGenjinType(item);
       this.show = true;
       this.type.classify = "followUp";
-      // this.type.data = { ...this.Types };
     },
     //呼出
     getBtnClick4(item) {

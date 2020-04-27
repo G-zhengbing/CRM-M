@@ -107,7 +107,6 @@
     <Loading v-if="isLoading" />
   </div>
 </template>
-
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
 import storage from "../../uilt/storage";

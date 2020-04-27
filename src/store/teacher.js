@@ -27,7 +27,7 @@ export default {
     }
   },
   actions: {
-    //消息提醒列表
+    //教师管理列表
     getTeacherList({
       state,
       commit

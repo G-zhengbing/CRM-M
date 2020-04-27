@@ -65,18 +65,6 @@
               </RadioGroup>
             </FormItem>
             </Col>
-            <!-- <Col span="12" offset="2">
-              <FormItem label="展示类型" prop="show_type"  style="margin-left:75px">
-                <RadioGroup v-model="form.show_type">
-                  <Radio :label="1">
-                    M站展示
-                  </Radio>
-                  <Radio :label="2">
-                    一书一码展示
-                  </Radio>
-                </RadioGroup>
-              </FormItem>
-            </Col> -->
             <template  v-if="form.type == 1">
             <Col span="24">
               <FormItem label="班级分类" prop="class_type">
@@ -87,6 +75,7 @@
                   <Radio :label="4">暑假班</Radio>
                   <Radio :label="5">冲刺班</Radio>
                   <Radio :label="6">专项班</Radio>
+                  <Radio :label="7">会员班</Radio>
                 </RadioGroup>
               </FormItem>
             </Col>
