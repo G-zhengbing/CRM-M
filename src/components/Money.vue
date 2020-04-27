@@ -154,7 +154,7 @@ export default {
         { type: "实付金额", key: "pay_amount" },
         { type: "支付方式", key: "pay_type" },
         { type: "支付时间", key: "pay_time" },
-        { type: "签约人", key: "market_sale_name" },
+        { type: "签约人", key: "sale_name" },
         // { type: "用户来源", key: "refer" },
         { type: "创建时间", key: "order_create_time" },
         // {

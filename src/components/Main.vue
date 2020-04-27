@@ -43,6 +43,30 @@
                 <MenuItem name="/main/notcallback" to="/main/notcallback">逾期未回访</MenuItem>
                 <MenuItem name="/main/notification" to="/main/notification">消息提醒</MenuItem>
               </Submenu>
+              <Submenu name="1-3" v-if="$store.state.cId.is_headmaster != 'N'">
+                <template slot="title">
+                  <Icon type="ios-stats" />教务
+                </template>
+                <MenuItem name="/main/classstudents" to="/main/classstudents">班课学员</MenuItem>
+                <MenuItem name="/main/inclass" to="/main/inclass">开课中学员</MenuItem>
+                <MenuItem name="/main/myreservation" to="/main/myreservation">我的预约单</MenuItem>
+                <MenuItem name="/main/oneononestudent" to="/main/oneononestudent">一对一学员</MenuItem>
+                <!-- 后台无数据，无法验证完善，待更改 -->
+                <!-- <MenuItem name="/main/oneinclass" to="/main/oneinclass">一对一开课中学员</MenuItem> -->
+                <MenuItem name="/main/onemyreservation" to="/main/onemyreservation">一对一我的预约单</MenuItem>
+                <MenuItem
+                  name="/main/statisticanalysis"
+                  to="/main/statisticanalysis"
+                >统计分析</MenuItem>
+                <!-- <MenuItem name="/main/course" to="/main/course">课程</MenuItem>
+                <MenuItem name="/main/teacher" to="/main/teacher">教师管理</MenuItem>-->
+                <!-- <MenuItem name="/main/minestudent" to="/main/minestudent">我的学员</MenuItem> -->
+                <MenuItem
+                  name="/main/payingstudents"
+                  to="/main/payingstudents"
+                  v-if="$store.state.cId.is_headmaster == 'H'"
+                >付费学员</MenuItem>
+              </Submenu>
               <MenuItem
                 v-if="$store.state.cId.is_sales != 'N'"
                 name="/main/reserved"
@@ -93,30 +117,6 @@
               <!--  <MenuItem name="/main/reservation" to="/main/reservation">我的预约单</MenuItem>
               <MenuItem name="/main/thread" to="/main/thread">线索导入</MenuItem>-->
               <!-- <MenuItem name="/main/number" to="/main/number" v-if="$store.state.cId != 3">成单数</MenuItem> -->
-              <Submenu name="1-3" v-if="$store.state.cId.is_headmaster != 'N'">
-                <template slot="title">
-                  <Icon type="ios-stats" />教务
-                </template>
-                <MenuItem name="/main/classstudents" to="/main/classstudents">班课学员</MenuItem>
-                <MenuItem name="/main/inclass" to="/main/inclass">开课中学员</MenuItem>
-                <MenuItem name="/main/myreservation" to="/main/myreservation">我的预约单</MenuItem>
-                <MenuItem name="/main/oneononestudent" to="/main/oneononestudent">一对一学员</MenuItem>
-                <!-- 后台无数据，无法验证完善，待更改 -->
-                <!-- <MenuItem name="/main/oneinclass" to="/main/oneinclass">一对一开课中学员</MenuItem> -->
-                <MenuItem name="/main/onemyreservation" to="/main/onemyreservation">一对一我的预约单</MenuItem>
-                <MenuItem
-                  name="/main/statisticanalysis"
-                  to="/main/statisticanalysis"
-                >统计分析</MenuItem>
-                <!-- <MenuItem name="/main/course" to="/main/course">课程</MenuItem>
-                <MenuItem name="/main/teacher" to="/main/teacher">教师管理</MenuItem>-->
-                <!-- <MenuItem name="/main/minestudent" to="/main/minestudent">我的学员</MenuItem> -->
-                <MenuItem
-                  name="/main/payingstudents"
-                  to="/main/payingstudents"
-                  v-if="$store.state.cId.is_headmaster == 'H'"
-                >付费学员</MenuItem>
-              </Submenu>
             </Submenu>
             <Submenu name="2" v-if="$store.state.cId.is_market != 'N'">
               <template slot="title">
