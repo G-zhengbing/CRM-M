@@ -113,7 +113,7 @@ export default {
         { type: "支付方式", key: "pay_type" },
         { type: "支付时间", key: "pay_time" },
         { type: "签约人", key: "sale_name" },
-        { type: "创建时间", key: "order_create_time" },
+        { type: "创建时间", key: "order_create_time" }
       ]
     };
   },

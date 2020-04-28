@@ -130,7 +130,9 @@
               <Select v-model="form.level" style="width:300px">
                 <Option :value="1">中级</Option>
                 <Option :value="2">高级</Option>
-                <Option :value="3">特级</Option>
+                <Option :value="3">特一级</Option>
+                <Option :value="4">特二级</Option>
+                <Option :value="5">特三级</Option>
               </Select>
             </FormItem>
           </Col>

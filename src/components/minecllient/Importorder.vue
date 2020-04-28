@@ -3,7 +3,7 @@
     <header class="main-header">
       <ul>
         <li style="margin-left:30px">
-          <span>线索导入</span>
+          <span>订单导入</span>
         </li>
       </ul>
     </header>
@@ -12,9 +12,8 @@
         <div class="main-section-bottom">
           <div class="contaner">
             <div style="height:10px;"></div>
-            <Button style="margin-bottom:30px" type="primary" @click="batch">批量导入线索</Button>
-
-            <Table border :columns="columns" :data="importList" height="500"></Table>
+            <Button style="margin-bottom:30px" type="primary" @click="batch">导入订单</Button>
+            <Table border :columns="columns" :data="importorderList" height="500"></Table>
             <Page
               @on-change="pageChange"
               :total="total"
@@ -31,7 +30,7 @@
     <Modal
       width="600"
       v-model="showMessage"
-      title="批量导入线索"
+      title="导入订单"
       @on-cancel="showMessage =false"
       :styles="{'margin-top' : '-70px'}"
     >
@@ -42,17 +41,18 @@
               <i>1</i>
               步骤 1:
               <span>
-                <a href="http://liveapi.canpoint.net/api/upload_file">点击下载excel模板</a>
+                <a href="http://liveapi.canpoint.net/api/upload_product">点击下载课程目录</a>
               </span>
             </p>
-            <div>导入前，请先下载文件模板，并按模板格式要求填写数据</div>
+            <div>导入前，请先下载课程目录，并按目录格式要求填写数据</div>
           </li>
           <li>
             <p>
               <i>2</i>
               步骤 2:
-              <span>点击上传excel文件</span>
-              <input type="file" @change="getFile($event)" />
+              <span>
+                <a href="http://liveapi.canpoint.net/api/upload_order">点击下载订单模板</a>
+              </span>
             </p>
             <div>格式错误将出现异常报错，请仔细检查后上传</div>
           </li>
@@ -60,34 +60,12 @@
             <p>
               <i>3</i>
               步骤 3:
-              <span style="color:#333">线索处理</span>
+              <span>点击上传excel文件</span>
+              <input type="file" @change="getFile($event)" />
             </p>
           </li>
         </ul>
       </div>
-      <Form :model="form" label-position="left" style="margin-left:30px">
-        <FormItem label="选择处理方式">
-          <RadioGroup v-model="form.option" vertical @on-change="getOption">
-            <Radio :label="1">
-              <span>放入公共资源池 （质量很差）</span>
-            </Radio>
-            <Radio :label="2">
-              <span>入资源池待分配</span>
-            </Radio>
-            <Radio :label="3">
-              <span>分配给cc</span>
-            </Radio>
-          </RadioGroup>
-        </FormItem>
-        <Select v-model="form.sale_id" style="width:100px" class="refer" v-if="form.option == 3">
-          <Option :value="list.id" v-for="(list,i) in sale_list" :key="i">{{list.login_name}}</Option>
-        </Select>
-        <FormItem label="线索渠道来源">
-          <Select v-model="form.channel_id" style="width:200px">
-            <Option :value="list.id" v-for="(list,i) in channel" :key="i">{{list.channel_title}}</Option>
-          </Select>
-        </FormItem>
-      </Form>
       <div slot="footer">
         <Button type="text" size="large" @click="showMessage = false">取消</Button>
         <Button type="primary" size="large" @click="importOk">确定</Button>
@@ -107,25 +85,26 @@
     <Loading v-if="isLoading" />
   </div>
 </template>
+
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
 import storage from "../../uilt/storage";
 import axios from "axios";
-import { IMPORTLIST } from "../../uilt/url/url";
+import { UPLOADCSVORDER } from "../../uilt/url/url";
 import Loading from "../../uilt/loading/loading";
 export default {
   components: {
     Loading
   },
   mounted() {
-    this.getImportList(1);
+    this.getImportOrderList(1);
   },
   computed: {
     ...mapState({
-      importList: state => state.importdata.importList,
-      currentPage: state => state.importdata.currentPage,
-      total: state => state.importdata.total,
-      pageSize: state => state.importdata.pageSize
+      importorderList: state => state.importorder.importorderList,
+      currentPage: state => state.importorder.currentPage,
+      total: state => state.importorder.total,
+      pageSize: state => state.importorder.pageSize
     })
   },
   data() {
@@ -136,7 +115,6 @@ export default {
       uploadList: [],
       channel: storage.getDaiban().channel,
       sale_list: storage.getDaiban().sale_list,
-      form: {},
       showMessage: false,
       columns: [
         { title: "导入时间", key: "create_time" },
@@ -173,12 +151,7 @@ export default {
   },
   methods: {
     ...mapMutations(["setCurrentPage"]),
-    ...mapActions(["getImportList"]),
-    getOption(val) {
-      if (val != 3) {
-        this.form.sale_id = "";
-      }
-    },
+    ...mapActions(["getImportOrderList"]),
     //上传文件
     getFile(e) {
       this.uploadList[0] = e.target.files[0];
@@ -188,36 +161,25 @@ export default {
       if (this.uploadList.length == 0) {
         this.$Message.error("请选择正确文件上传");
         return;
-      } else if (!this.form.option) {
-        this.$Message.error("请选择一种处理方式");
-        return;
-      } else if (!this.form.channel_id) {
-        this.$Message.error("请选择一种线索渠道来源");
-        return;
       }
       this.isLoading = true;
       var formData = new FormData();
       formData.append("file", this.uploadList[0]);
-      formData.append("option", this.form.option);
-      if (this.form.option == 3) {
-        formData.append("sale_id", this.form.sale_id);
-      }
-      formData.append("channel_id", this.form.channel_id);
       let config = {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: "bearer " + storage.get()
         }
       };
-      axios.post(IMPORTLIST, formData, config).then(response => {
+      axios.post(UPLOADCSVORDER, formData, config).then(response => {
         if (response.data.code == 100001 && response.data.error) {
           this.$Message.error(response.data.error);
         }
         if (response.data.code == 200 && response.data.ret == true) {
           this.$Message.success("导入成功");
-          this.getImportList(1).then(res => {});
+          this.getImportOrderList(1).then(res => {});
           this.showMessage = false;
-          this.form = {};
+          this.uploadList.length = 0;
         }
         this.isLoading = false;
       });
@@ -231,7 +193,7 @@ export default {
     pageChange(num) {
       this.isLoading = true;
       this.setCurrentPage(num);
-      this.getImportList(num).then(() => {
+      this.getImportOrderList(num).then(() => {
         this.isLoading = false;
       });
     },

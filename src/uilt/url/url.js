@@ -63,6 +63,9 @@ const IMPORTANT = BASEURL + 'import_list'//导入订单列表
 const IMPORTLIST = BASEURL + "upload_csv"//导入线索
 const ACCOUNTORDER = BASEURL + "account_order"//升级订单列表
 const CREATEUPGRADE = BASEURL + "create_upgrade_order"//创建升级订单
+const UPLOADORDER = BASEURL + "upload_order"//导入订单1
+const UPLOADPRODUCTR = BASEURL + "upload_product"//导入订单2
+const UPLOADCSVORDER = BASEURL + "upload_csv_order"//导入订单3
 
 const MATERIALUPLOAD = BASEURL + "material_upload"//资料上传
 const PRODUCTINFOFILE = BASEURL + "product_info_file"//课程简介图片上传
@@ -96,6 +99,9 @@ const CALLRECORDSTATISTICS = BASEURL + "call_record_statistics" //教务/ 拨号
 const SCREENLIST = BASEURL + "screen_list" //教务/ 公共接口，select状态栏
 
 export {
+  UPLOADCSVORDER,
+  UPLOADPRODUCTR,
+  UPLOADORDER,
   CALLRECORDSTATISTICS,
   UPDATEPRODUCTS,
   CREATEPRODUCTS,

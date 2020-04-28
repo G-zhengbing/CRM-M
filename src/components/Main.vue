@@ -101,7 +101,7 @@
               <MenuItem
                 name="/main/importorder"
                 to="/main/importorder"
-                v-if="$store.state.cId.is_sales == 'H'"
+                v-if="$store.state.cId.is_headmaster == 'H'"
               >订单导入</MenuItem>
               <MenuItem
                 name="/main/statistics"

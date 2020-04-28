@@ -27,6 +27,7 @@ import allreserved from './allreserved'
 import teacher from './teacher'
 import statistics from './statistics'
 import importdata from './importdata'
+import importorder from './importorder'
 import axios from "axios";
 
 import Payingstudent from './payingstudent/index'
@@ -137,6 +138,7 @@ export default new Vuex.Store({
   },
   getters: {},
   modules: {
+    importorder,//导入订单
     allreserved,//全部预约单
     learningReport, // 学情报告
     classStudents, // 班课学员
