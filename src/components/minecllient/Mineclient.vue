@@ -25,6 +25,11 @@
                   </FormItem>
                 </Col>
                 <Col span="4">
+                  <FormItem style="width:230px;">
+                    <InputNumber style="width:150px;" :min="1" v-model="form.visit_num" placeholder="回访次数" @on-change="seekClick"></InputNumber>
+                  </FormItem>
+                </Col>
+                <Col span="4">
                   <FormItem>
                     <Select
                       v-model="form.follow_status"
@@ -234,7 +239,9 @@ export default {
         status: "mineclient"
       },
       isLoading: false,
-      form: {},
+      form: {
+        visit_num:0
+      },
       columns: [
         { type: "selection", width: 60, fixed: "left" },
         { title: "学员姓名", key: "student_name", width: 100, fixed: "left" },
@@ -471,6 +478,7 @@ export default {
     },
     clear() {
       this.form = {};
+      this.form.visit_num = 0
       this.startTime = "";
       this.endTime = "";
       this.startTime2 = "";
