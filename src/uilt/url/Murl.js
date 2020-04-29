@@ -1,5 +1,4 @@
-const BASEURL = "http://liveapi.canpoint.net/api/" // 线上地址
-// const BASEURL = "http://39.107.156.22/canpoint/api/" // 测试地址
+import { BASEURL } from '../env'
 
 const ADVER_URL = BASEURL + "banner" //广告列表
 const ADDADVER_URL = BASEURL + "ad" //新增广告

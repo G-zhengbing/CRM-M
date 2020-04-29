@@ -1,5 +1,4 @@
-const BASEURL = "http://liveapi.canpoint.net/api/" // 线上地址
-// const BASEURL = "http://39.107.156.22/canpoint/api/" // 测试地址
+import { BASEURL } from '../env'
 
 const PONESTATUS = "http://liveh5.canpoint.net/send_message" //跟进/发送短信验证码
 
