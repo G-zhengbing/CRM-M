@@ -470,7 +470,7 @@ export default {
             };
             axios.post(UPDATEPRODUCTS, formData,config)
             .then((response) => {
-              if(response.data.code == 100001 && response.data.error){
+              if(response.data.ret == false && response.data.error){
                 this.$Message.error(response.data.error);
               }
               if(response.data.code==200 && response.data.ret == true){

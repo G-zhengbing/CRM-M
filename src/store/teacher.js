@@ -98,7 +98,9 @@ export default {
       var level = new Map([
         [1,'中级'],
         [2,'高级'],
-        [3,'特级']
+        [3,'特一级'],
+        [4,'特二级'],
+        [5,'特三级']
       ])
 
       return data.map(element => {
