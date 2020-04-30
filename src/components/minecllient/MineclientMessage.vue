@@ -288,7 +288,7 @@
       :styles="{'margin-top' : '-70px'}"
     >
       <Form :form="appraisalForm" label-position="top" style="height:300px;overflow-y:auto;">
-        <FormItem label="测评图片展示" v-if="isUpdata">
+        <FormItem label="测评图片展示" v-if="this.appraisalForm.assess_image">
           <div class="demo-upload-list">
             <img :src="'http://liveapi.canpoint.net/'+ appraisalForm.assess_image" />
             <div class="demo-upload-list-cover">
@@ -1358,7 +1358,7 @@ export default {
         });
     },
     //预览图片
-    handleView() {
+    handleView(item) {
       if (this.isUpdata) {
         this.imgName = item;
       } else {
