@@ -519,7 +519,6 @@ import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import { INCLASS, UPDATELEARNINGSTATE } from "@/uilt/url/url";
 import qs from "qs";
 
-// import Inclass from "@/store/inclass";
 export default {
   computed: {
     ...mapState({
@@ -549,17 +548,20 @@ export default {
       columns1: [
         {
           type: "selection",
+          fixed: "left",
           width: 60,
           align: "center"
         },
         {
           title: "学员姓名",
+          fixed: "left",
           key: "student_name",
           align: "center",
           width: 100
         },
         {
           title: "注册手机",
+          fixed: "left",
           key: "mobile",
           align: "center",
           width: 140
@@ -776,17 +778,20 @@ export default {
       columns2: [
         {
           type: "selection",
+          fixed: "left",
           width: 60,
           align: "center"
         },
         {
           title: "学员姓名",
+          fixed: "left",
           key: "student_name",
           align: "center",
           width: 100
         },
         {
           title: "注册手机",
+          fixed: "left",
           key: "mobile",
           align: "center",
           width: 140
@@ -1001,17 +1006,20 @@ export default {
       columns3: [
         {
           type: "selection",
+          fixed: "left",
           width: 60,
           align: "center"
         },
         {
           title: "学员姓名",
+          fixed: "left",
           key: "student_name",
           align: "center",
           width: 100
         },
         {
           title: "注册手机",
+          fixed: "left",
           key: "mobile",
           align: "center",
           width: 140
@@ -1231,17 +1239,20 @@ export default {
       columns4: [
         {
           type: "selection",
+          fixed: "left",
           width: 60,
           align: "center"
         },
         {
           title: "学员姓名",
+          fixed: "left",
           key: "student_name",
           align: "center",
           width: 100
         },
         {
           title: "注册手机",
+          fixed: "left",
           key: "mobile",
           align: "center",
           width: 140

@@ -1,5 +1,5 @@
 <template>
-<!-- amend: 2020.04.21 LC -->
+<!-- amend: 2020.04.30 LC 限制课程简介长度 -->
   <div class="shade">
     <Card>
       <p slot="title" v-if="$parent.isUpdata">编辑课程</p>
@@ -193,7 +193,7 @@
                           </div>
                       </div>
                       <div class="twoLine">
-                        <Input style="width:300px;flex:1;margin-right:10px" v-model="item.video_desc" placeholder="课程简介"></Input>
+                        <Input style="width:300px;flex:1;margin-right:10px" v-model="item.video_desc" placeholder="课程简介" maxlength="35" show-word-limit></Input>
                         <i style="position: static;display: block;padding-right:10px;" class="video-icon" @click="removeVideo(i)"><Icon type="ios-trash-outline" /></i>
                       </div>
                     </li>

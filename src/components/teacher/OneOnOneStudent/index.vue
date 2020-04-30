@@ -279,17 +279,20 @@ export default {
       columns1: [
         {
           type: "selection",
+          fixed: "left",
           width: 60,
           align: "center"
         },
         {
           title: "学员姓名",
+          fixed: "left",
           key: "student_name",
           align: "center",
           width: 100
         },
         {
           title: "注册手机",
+          fixed: "left",
           key: "mobile",
           align: "center",
           width: 140
@@ -339,6 +342,18 @@ export default {
         {
           title: "实收",
           key: "pay_amount",
+          align: "center",
+          width: 100
+        },
+        {
+          title: "上次跟进时间",
+          key: "operation_time",
+          align: "center",
+          width: 100
+        },
+        {
+          title: "上次跟进内容",
+          key: "visit_content",
           align: "center",
           width: 100
         },
@@ -408,17 +423,20 @@ export default {
       columns2: [
         {
           type: "selection",
+          fixed: "left",
           width: 60,
           align: "center"
         },
         {
           title: "学员姓名",
+          fixed: "left",
           key: "student_name",
           align: "center",
           width: 100
         },
         {
           title: "注册手机",
+          fixed: "left",
           key: "mobile",
           align: "center",
           width: 140
