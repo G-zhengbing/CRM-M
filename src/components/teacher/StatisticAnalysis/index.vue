@@ -58,6 +58,7 @@ export default {
       columns1: [
         {
           title: "班主任",
+          fixed: "left",
           key: "teacher_name",
           align: "center",
           width: 100
@@ -132,6 +133,7 @@ export default {
       columns2: [
         {
           title: "班主任",
+          fixed: "left",
           key: "teacher_name",
           align: "center",
           width: 100
@@ -212,6 +214,7 @@ export default {
       columns3: [
         {
           title: "班主任",
+          fixed: "left",
           key: "teacher_name",
           align: "center",
           width: 100
