@@ -238,7 +238,7 @@
           <Col span="24">
             <FormItem label="老师">
               <Select v-model="createAuditionForm.coach_id" @on-open-change="getTeachers">
-                <Option :value="list.id" v-for="(list,i) in teachersV" :key="i">{{list.name}}</Option>
+                <Option :value="i" v-for="(list,i) in teachersV" :key="i">{{list}}</Option>
               </Select>
             </FormItem>
           </Col>

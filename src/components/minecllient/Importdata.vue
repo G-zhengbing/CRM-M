@@ -13,7 +13,6 @@
           <div class="contaner">
             <div style="height:10px;"></div>
             <Button style="margin-bottom:30px" type="primary" @click="batch">批量导入线索</Button>
-
             <Table border :columns="columns" :data="importList" height="500"></Table>
             <Page
               @on-change="pageChange"
