@@ -1,4 +1,5 @@
 'use strict'
 module.exports = {
-  NODE_ENV: '"production"'
+  prod: {NODE_ENV: '"production"'},
+  test: {NODE_ENV: '"testing"'},
 }
