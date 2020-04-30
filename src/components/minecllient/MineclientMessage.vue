@@ -1358,7 +1358,7 @@ export default {
         });
     },
     //预览图片
-    handleView() {
+    handleView(item) {
       if (this.isUpdata) {
         this.imgName = item;
       } else {
