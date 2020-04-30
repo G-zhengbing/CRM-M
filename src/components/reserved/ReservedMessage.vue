@@ -50,6 +50,20 @@
         :styles="{'margin-top' : '-70px'}"
       >
         <Form :form="appraisalForm" label-position="top" style="height:300px;overflow-y:auto;">
+          <FormItem label="测评图片展示" v-if="isUpdata">
+            <div class="demo-upload-list">
+              <img :src="'http://liveapi.canpoint.net/'+ appraisalForm.assess_image" />
+              <div class="demo-upload-list-cover">
+                <Icon
+                  type="ios-eye-outline"
+                  @click.native="handleView('http://liveapi.canpoint.net/'+appraisalForm.assess_image)"
+                ></Icon>
+              </div>
+            </div>
+            <Modal title="预览图" v-model="visible">
+              <img :src="imgName" style="width: 100%" />
+            </Modal>
+          </FormItem>
           <FormItem label="测评图片" prop="avatar" class="active_span">
             <template>
               <div class="demo-upload-list" v-for="(item,i) in uploadList" :key="i">
@@ -101,8 +115,16 @@ import axios from "axios";
 import storage from "../../uilt/storage";
 export default {
   props: ["type"],
+  mounted() {
+    if (this.type.classify == "appraisal") {
+      this.isUpdata = true;
+      this.appraisalForm.assess_image = this.type.data.assess_image;
+      this.appraisalForm.visit_content = this.type.data.visit_content;
+    }
+  },
   data() {
     return {
+      isUpdata: false,
       appraisalForm: {},
       form: {},
       uploadList: [],
@@ -121,7 +143,7 @@ export default {
     appraisal() {
       this.isLoading = true;
       var formData = new FormData();
-      formData.append("assess_image", this.uploadList[0]);
+      formData.append("assess_image", this.uploadList[0]?this.uploadList[0]:'');
       formData.append("visit_content", this.appraisalForm.visit_content);
       let config = {
         headers: {
@@ -154,7 +176,7 @@ export default {
         });
     },
     //预览图片
-    handleView() {
+    handleView(item) {
       if (this.isUpdata) {
         this.imgName = item;
       } else {

@@ -288,6 +288,20 @@
       :styles="{'margin-top' : '-70px'}"
     >
       <Form :form="appraisalForm" label-position="top" style="height:300px;overflow-y:auto;">
+        <FormItem label="测评图片展示" v-if="isUpdata">
+          <div class="demo-upload-list">
+            <img :src="'http://liveapi.canpoint.net/'+ appraisalForm.assess_image" />
+            <div class="demo-upload-list-cover">
+              <Icon
+                type="ios-eye-outline"
+                @click.native="handleView('http://liveapi.canpoint.net/'+appraisalForm.assess_image)"
+              ></Icon>
+            </div>
+          </div>
+          <Modal title="预览图" v-model="visible">
+            <img :src="imgName" style="width: 100%" />
+          </Modal>
+        </FormItem>
         <FormItem label="测评上传" prop="avatar" class="active_span">
           <template>
             <div class="demo-upload-list" v-for="(item,i) in uploadList" :key="i">
@@ -710,6 +724,7 @@ export default {
   },
   data() {
     return {
+      isUpdata: false,
       timeNum: [],
       vaersion: storage.getDaiban().screen_list.book_version,
       upgradeColumns: [
@@ -886,7 +901,13 @@ export default {
                 {
                   props: {
                     type: "text",
-                    size: "small"
+                    size: "small",
+                    disabled:
+                      params.row.appoint_status == "已取消" ||
+                      params.row.appoint_status == "已上课" ||
+                      params.row.appoint_status == "缺席"
+                        ? true
+                        : false
                   },
                   on: {
                     click: () => {
@@ -916,7 +937,13 @@ export default {
                 {
                   props: {
                     type: "text",
-                    size: "small"
+                    size: "small",
+                    disabled:
+                      params.row.appoint_status == "已取消" ||
+                      params.row.appoint_status == "已上课" ||
+                      params.row.appoint_status == "缺席"
+                        ? true
+                        : false
                   },
                   on: {
                     click: () => {
@@ -1297,10 +1324,13 @@ export default {
       });
     },
     //查看测评
-    appraisalOk() {
+    appraisalOk(item) {
       this.isLoading = true;
       var formData = new FormData();
-      formData.append("assess_image", this.uploadList[0]);
+      formData.append(
+        "assess_image",
+        this.uploadList[0] ? this.uploadList[0] : ""
+      );
       formData.append("visit_content", this.appraisalForm.visit_content);
       let config = {
         headers: {
@@ -1322,6 +1352,7 @@ export default {
             }).then(res => {});
             this.showAppraisal = false;
           }
+          this.uploadList.length = 0;
           this.appraisalForm = {};
           this.isLoading = false;
         });
@@ -1441,8 +1472,13 @@ export default {
     },
     //查看测评
     appraisal(item) {
+      this.isUpdata = true;
       this.showAppraisal = true;
       this.appraisalItem = item;
+      if (this.isUpdata) {
+        this.appraisalForm.assess_image = item.assess_image;
+        this.appraisalForm.visit_content = item.visit_content;
+      }
     },
     //新建预约/签到
     signin(item) {

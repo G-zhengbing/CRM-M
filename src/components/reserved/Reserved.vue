@@ -92,7 +92,7 @@
                     </Select>
                   </FormItem>
                 </Col>
-                 <Col span="4" v-if="num == 3">
+                <Col span="4" v-if="num == 3">
                   <FormItem>
                     <Select
                       v-model="form.create_user"
@@ -310,7 +310,7 @@ export default {
             }
           }
         ];
-      }else if(this.num == "1"){
+      } else if (this.num == "1") {
         this.columns = [
           { type: "selection", width: 60 },
           { title: "学员姓名", key: "student_name" },
@@ -422,7 +422,13 @@ export default {
                   {
                     props: {
                       type: "text",
-                      size: "small"
+                      size: "small",
+                      disabled:
+                        params.row.appoint_status == "已取消" ||
+                        params.row.appoint_status == "已上课" ||
+                        params.row.appoint_status == "缺席"
+                          ? true
+                          : false
                     },
                     on: {
                       click: () => {
@@ -452,7 +458,13 @@ export default {
                   {
                     props: {
                       type: "text",
-                      size: "small"
+                      size: "small",
+                      disabled:
+                        params.row.appoint_status == "已取消" ||
+                        params.row.appoint_status == "已上课" ||
+                        params.row.appoint_status == "缺席"
+                          ? true
+                          : false
                     },
                     on: {
                       click: () => {
@@ -582,27 +594,27 @@ export default {
       this.type.data = { ...this.reservedTypes };
       this.type.page = this.currentPage;
       this.type.form = this.form;
-      if(typeof item.spare_phone == 'undefined'){
+      if (typeof item.spare_phone == "undefined") {
         this.isLoading = true;
-        this.RingUp({form:item})
-        .then(res => {
-          if (res.data.code == 200) {
-            this.$Message.success("呼出成功");
-          }
-          if (res.data.code == 1000) {
-            this.$Message.error({
-              content: res.data.error,
-              duration: 4
-            });
-          }
-          this.isLoading = false;
-        })
-        .catch(e => {
-          if (e) {
+        this.RingUp({ form: item })
+          .then(res => {
+            if (res.data.code == 200) {
+              this.$Message.success("呼出成功");
+            }
+            if (res.data.code == 1000) {
+              this.$Message.error({
+                content: res.data.error,
+                duration: 4
+              });
+            }
             this.isLoading = false;
-          }
-        });
-      }else{
+          })
+          .catch(e => {
+            if (e) {
+              this.isLoading = false;
+            }
+          });
+      } else {
         this.type.classify = "ringupFollowUp";
       }
     },

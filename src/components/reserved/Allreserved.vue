@@ -336,7 +336,13 @@ export default {
                   {
                     props: {
                       type: "text",
-                      size: "small"
+                      size: "small",
+                      disabled:
+                        params.row.appoint_status == "已取消" ||
+                        params.row.appoint_status == "已上课" ||
+                        params.row.appoint_status == "缺席"
+                          ? true
+                          : false
                     },
                     on: {
                       click: () => {
@@ -366,7 +372,13 @@ export default {
                   {
                     props: {
                       type: "text",
-                      size: "small"
+                      size: "small",
+                      disabled:
+                        params.row.appoint_status == "已取消" ||
+                        params.row.appoint_status == "已上课" ||
+                        params.row.appoint_status == "缺席"
+                          ? true
+                          : false
                     },
                     on: {
                       click: () => {
@@ -422,7 +434,13 @@ export default {
                   {
                     props: {
                       type: "text",
-                      size: "small"
+                      size: "small",
+                      disabled:
+                        params.row.appoint_status == "已取消" ||
+                        params.row.appoint_status == "已上课" ||
+                        params.row.appoint_status == "缺席"
+                          ? true
+                          : false
                     },
                     on: {
                       click: () => {
@@ -452,7 +470,13 @@ export default {
                   {
                     props: {
                       type: "text",
-                      size: "small"
+                      size: "small",
+                      disabled:
+                        params.row.appoint_status == "已取消" ||
+                        params.row.appoint_status == "已上课" ||
+                        params.row.appoint_status == "缺席"
+                          ? true
+                          : false
                     },
                     on: {
                       click: () => {
