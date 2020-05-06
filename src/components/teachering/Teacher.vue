@@ -1241,13 +1241,6 @@ export default {
   flex-wrap: wrap;
   margin-bottom: 30px;
 }
-/* 时间块 */
-/* .content-right-footer li:nth-of-type(n + 49) {
-  display: none;
-}
-.content-right-header li:nth-of-type(n + 49) {
-  display: none;
-} */
 .content-right-footer li.active {
   background-color: #2d8cf0;
 }

@@ -538,7 +538,7 @@
       @on-cancel="colseReserved"
       :styles="{'margin-top' : '-70px'}"
     >
-      <div>
+      <div v-if="type.classify == 'remove'">
         <Input
           readonly
           v-model="type.data.last_visit_content"
