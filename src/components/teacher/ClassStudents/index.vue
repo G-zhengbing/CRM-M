@@ -300,6 +300,18 @@ export default {
           width: 140
         },
         {
+          title: "上次跟进时间",
+          key: "operation_time",
+          align: "center",
+          width: 170
+        },
+        {
+          title: "上次跟进内容",
+          key: "visit_content",
+          align: "center",
+          width: 200
+        },
+        {
           title: "年级",
           key: "grade",
           align: "center",
@@ -344,18 +356,6 @@ export default {
         {
           title: "实收",
           key: "pay_amount",
-          align: "center",
-          width: 100
-        },
-        {
-          title: "上次跟进时间",
-          key: "operation_time",
-          align: "center",
-          width: 100
-        },
-        {
-          title: "上次跟进内容",
-          key: "visit_content",
           align: "center",
           width: 100
         },
