@@ -67,6 +67,13 @@
                   v-if="$store.state.cId.is_headmaster == 'H'"
                 >付费学员</MenuItem>
               </Submenu>
+              <Submenu name="1-4" v-if="$store.state.cId.is_headmaster != 'N'">
+                <template slot="title">
+                  <Icon type="ios-stats" />设置
+                </template>
+                <MenuItem name="/main/departments" to="/main/departments">部门和用户</MenuItem>
+                <MenuItem name="/main/jurisdiction" to="/main/jurisdiction">角色和权限</MenuItem>
+              </Submenu>
               <MenuItem
                 v-if="$store.state.cId.is_sales != 'N'"
                 name="/main/reserved"

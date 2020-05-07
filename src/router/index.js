@@ -391,6 +391,14 @@ const router = new Router({
           path: '/main/teacher', // 教师管理
           component: () => import('@/components/teacher/teacher')
         },
+        {
+          path: '/main/departments', // 部门和用户
+          component: () => import('@/components/setup/Departments')
+        },
+        {
+          path: '/main/jurisdiction', // 角色和权限
+          component: () => import('@/components/setup/Jurisdiction')
+        },
       ]
     }
   ]
