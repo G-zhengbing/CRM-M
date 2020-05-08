@@ -269,36 +269,7 @@ export default {
               [h("span", data.title)]
             );
           },
-          children: [
-            {
-              title: "child 1-1",
-              expand: true,
-              children: [
-                {
-                  title: "leaf 1-1-1",
-                  expand: true
-                },
-                {
-                  title: "leaf 1-1-2",
-                  expand: true
-                }
-              ]
-            },
-            {
-              title: "child 1-2",
-              expand: true,
-              children: [
-                {
-                  title: "leaf 1-2-1",
-                  expand: true
-                },
-                {
-                  title: "leaf 1-2-1",
-                  expand: true
-                }
-              ]
-            }
-          ]
+          children: []
         }
       ],
       data5: [
@@ -356,36 +327,7 @@ export default {
               ]
             );
           },
-          children: [
-            {
-              title: "child 1-1",
-              expand: true,
-              children: [
-                {
-                  title: "leaf 1-1-1",
-                  expand: true
-                },
-                {
-                  title: "leaf 1-1-2",
-                  expand: true
-                }
-              ]
-            },
-            {
-              title: "child 1-2",
-              expand: true,
-              children: [
-                {
-                  title: "leaf 1-2-1",
-                  expand: true
-                },
-                {
-                  title: "leaf 1-2-1",
-                  expand: true
-                }
-              ]
-            }
-          ]
+          children: []
         }
       ],
       buttonProps: {
