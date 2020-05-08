@@ -1,4 +1,5 @@
 <template>
+<!-- AMEND: 2020.05.08 刘畅 回访次数改为下拉式 -->
   <div class="box" ref="box">
     <header class="main-header">
       <ul>
@@ -25,9 +26,25 @@
                   </FormItem>
                 </Col>
                 <Col span="4">
-                  <FormItem style="width:230px;">
-                    <InputNumber style="width:150px;" :min="1" v-model="form.visit_num" placeholder="回访次数" @on-change="seekClick"></InputNumber>
+                <FormItem>
+                    <Select
+                      v-model="form.visit_num"
+                      style="width:150px"
+                      @on-change="seekClick"
+                      placeholder="回访次数"
+                    >
+                      <Option :value="1">1次</Option>
+                      <Option :value="2">2次</Option>
+                      <Option :value="3">3次</Option>
+                      <Option :value="4">4次</Option>
+                      <Option :value="5">5次</Option>
+                      <Option :value="6">6次</Option>
+                      <Option :value="7">6次以上</Option>
+                    </Select>
                   </FormItem>
+                  <!-- <FormItem style="width:230px;">
+                    <InputNumber style="width:150px;" :min="1" v-model="form.visit_num" placeholder="回访次数" @on-change="seekClick"></InputNumber>
+                  </FormItem> -->
                 </Col>
                 <Col span="4">
                   <FormItem>
