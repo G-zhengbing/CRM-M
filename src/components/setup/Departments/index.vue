@@ -28,7 +28,7 @@
             </div>
             <div class="right" style="padding-right: 10px;">
               <Input v-model="value" placeholder="请输入用户名或手机号" style="width: 300px" />
-              <Button type="primary">查询</Button>
+              <Button type="primary" @click="staffQuery">查询</Button>
             </div>
           </div>
           <Table
@@ -75,10 +75,12 @@
             <Input v-model="formValidate.className" placeholder="请输入" style="width: 300px"></Input>
           </FormItem>
           <FormItem label="部门" prop="branch">
-            <Select v-model="formValidate.branch" placeholder="部门" style="width: 300px">
-              <Option value="beijing">语文</Option>
-              <Option value="shanghai">数学</Option>
-            </Select>
+            <Input
+              v-model="formValidate.branch"
+              placeholder="部门"
+              style="width: 300px"
+              @on-focus="branchSwitch = true"
+            ></Input>
           </FormItem>
           <FormItem label="角色" prop="role">
             <Select v-model="formValidate.role" placeholder="角色" style="width: 300px">
@@ -89,21 +91,33 @@
         </Form>
       </div>
     </Modal>
+    <!-- 新建用户，选择部门控件 -->
+    <Modal
+      title="选择部门"
+      v-model="branchSwitch"
+      class-name="vertical-center-modal-1"
+      @on-ok="branchConfirm"
+      @on-cancel="branchCancel"
+    >
+      <div class="tree-content">
+        <Tree :data="data4" @on-select-change="clickTree"></Tree>
+      </div>
+    </Modal>
     <!-- 添加部门 -->
     <Modal
       title="添加部门"
       v-model="addSwitch"
-      class-name="vertical-center-modal-1"
+      :styles="{top: '20%'}"
       @on-ok="addConfirm"
       @on-cancel="addCancel"
     >
       <div class="content">
         <Form :model="addFormItem" :label-width="80">
           <FormItem label="上级部门" style="width: 400px;margin: 0 auto;">
-            <Input v-model="addFormItem.input" placeholder="请输入部门名称" disabled></Input>
+            <Input v-model="addFormItem.title" placeholder="全品直播中心" disabled></Input>
           </FormItem>
           <FormItem label="部门名称" style="width: 400px;margin: 0 auto;">
-            <Input v-model="addFormItem.input" placeholder="请输入部门名称"></Input>
+            <Input v-model="addFormItem.department_name" placeholder="请输入部门名称"></Input>
           </FormItem>
         </Form>
       </div>
@@ -112,14 +126,14 @@
     <Modal
       title="编辑部门"
       v-model="editNameSwitch"
-      class-name="vertical-center-modal-1"
+      :styles="{top: '20%'}"
       @on-ok="editNameConfirm"
       @on-cancel="editNameCancel"
     >
       <div class="content">
         <Form :model="editNameFormItem" :label-width="80">
           <FormItem label="部门名称" style="width: 400px;margin: 0 auto;">
-            <Input v-model="addFormItem.input" placeholder="请输入部门名称"></Input>
+            <Input v-model="editNameFormItem.department_name" placeholder="请输入部门名称"></Input>
           </FormItem>
         </Form>
       </div>
@@ -128,6 +142,14 @@
 </template>
 
 <script>
+import qs from "qs";
+import {
+  ADMINMERBERUSERLIST,
+  CREATEDEPARTMENTNAME,
+  UPDATEDEPARTMENTNAME,
+  DELETEDEPARTMENTNAME,
+  ADMINMERBERDEPARTMENTNAMELIST
+} from "@/uilt/url/url";
 export default {
   name: "Departments",
   data() {
@@ -201,7 +223,7 @@ export default {
                   }
                 },
                 "禁用"
-              ),
+              )
               // 暂不更新，待需求
               // h(
               //   "Button",
@@ -231,9 +253,57 @@ export default {
 
       // 树形控件数据
       treeData: {},
+      data4: [
+        {
+          title: "全品直播中心",
+          expand: true,
+          render: (h, { root, node, data }) => {
+            return h(
+              "span",
+              {
+                style: {
+                  display: "inline-block",
+                  width: "100%"
+                }
+              },
+              [h("span", data.title)]
+            );
+          },
+          children: [
+            {
+              title: "child 1-1",
+              expand: true,
+              children: [
+                {
+                  title: "leaf 1-1-1",
+                  expand: true
+                },
+                {
+                  title: "leaf 1-1-2",
+                  expand: true
+                }
+              ]
+            },
+            {
+              title: "child 1-2",
+              expand: true,
+              children: [
+                {
+                  title: "leaf 1-2-1",
+                  expand: true
+                },
+                {
+                  title: "leaf 1-2-1",
+                  expand: true
+                }
+              ]
+            }
+          ]
+        }
+      ],
       data5: [
         {
-          title: "部门1",
+          title: "全品直播中心",
           expand: true,
           render: (h, { root, node, data }) => {
             return h(
@@ -276,8 +346,8 @@ export default {
                       },
                       on: {
                         click: () => {
-                          this.addSwitch = true
-                          this.treeData = data
+                          this.addSwitch = true;
+                          this.treeData = data;
                         }
                       }
                     })
@@ -340,13 +410,6 @@ export default {
         mobile: [
           { required: true, message: "请输入手机号", trigger: "change" }
         ],
-        branch: [
-          {
-            required: true,
-            message: "请选择部门",
-            trigger: "change"
-          }
-        ],
         role: [
           {
             required: true,
@@ -367,6 +430,7 @@ export default {
       editSwitch: false, // 编辑开关
       addSwitch: false, // 添加部门开关
       editNameSwitch: false, // 修改部门开关
+      branchSwitch: false, // 新建用户内部门选择开关
 
       // 下列为分页数据
       total: 100,
@@ -376,6 +440,21 @@ export default {
     };
   },
   methods: {
+    // 点击树节点时触发
+    clickTree(data) {
+      console.log(data);
+      this.treeData = data;
+    },
+    // 人员查询条件
+    async staffQuery() {
+      let res = await this.$request({
+        url: ADMINMERBERUSERLIST,
+        params: {
+          name_or_mobile: this.value
+        }
+      });
+      console.log(res);
+    },
     // 选择整行信息
     selectItem(selection) {
       this.Items = selection;
@@ -412,6 +491,8 @@ export default {
                 on: {
                   click: () => {
                     // 修改
+                    this.editNameFormItem.department_id = data.id;
+                    console.log(data);
                     this.editNameSwitch = true;
                   }
                 }
@@ -426,9 +507,10 @@ export default {
                 on: {
                   click: () => {
                     // 添加
+                    this.addFormItem.title = data.title;
+                    this.addFormItem.superior = data.id;
                     this.addSwitch = true;
-                    this.treeData = data
-                    // this.append(data);
+                    this.treeData = data;
                   }
                 }
               }),
@@ -439,7 +521,17 @@ export default {
                 on: {
                   click: () => {
                     // 删除
-                    this.remove(root, node, data);
+                    this.$request({
+                      method: "post",
+                      url: DELETEDEPARTMENTNAME,
+                      data: qs.stringify({
+                        department_id: data.id,
+                        is_delete: 2
+                      })
+                    }).then(res => {
+                      this.PermissionsTree();
+                    });
+                    // this.remove(root, node, data);
                   }
                 }
               })
@@ -448,20 +540,20 @@ export default {
         ]
       );
     },
-    append(data) {
-      const children = data.children || [];
-      children.push({
-        title: "appended node",
-        expand: true
-      });
-      this.$set(data, "children", children);
-    },
-    remove(root, node, data) {
-      const parentKey = root.find(el => el === node).parent;
-      const parent = root.find(el => el.nodeKey === parentKey).node;
-      const index = parent.children.indexOf(data);
-      parent.children.splice(index, 1);
-    },
+    // append(data) {
+    //   const children = data.children || [];
+    //   children.push({
+    //     title: this.addFormItem.department_name,
+    //     expand: true
+    //   });
+    //   this.$set(data, "children", children);
+    // },
+    // remove(root, node, data) {
+    //   const parentKey = root.find(el => el === node).parent;
+    //   const parent = root.find(el => el.nodeKey === parentKey).node;
+    //   const index = parent.children.indexOf(data);
+    //   parent.children.splice(index, 1);
+    // },
     // 改变页码
     changePages(val) {
       // this.formItem.page = val;
@@ -472,18 +564,28 @@ export default {
       this.$refs["formValidate"]
         .validate(valid => {
           if (valid) {
-            this.$Message.success("成功!");
+            if (!this.formValidate.branch) {
+              this.$Message.error("部门为必选项!");
+            } else {
+              this.$Message.success("成功!");
+            }
           } else {
             this.$Message.error("请填写必选项!");
           }
         })
         .then(val => {
+          // 表单验证有 bug 直接点击部门获取不到信息，所以换个显示方法
+          if (!this.formValidate.branch) {
+            return (this.editSwitch = true);
+          }
+          // 验证不通过，不关闭弹窗
           if (!val) {
             return (this.editSwitch = true);
           }
           // 这里写编辑成功发送请求
 
-          this.formValidate = {};
+          // 完成清空
+          this.editCancel();
         });
     },
     // 点击取消回调，重置表单
@@ -492,18 +594,56 @@ export default {
       this.formValidate = {};
     },
     // 添加按钮回调
-    addConfirm() {
-      console.log(this.treeData)
-      this.append(this.treeData)
+    async addConfirm() {
+      let res = await this.$request({
+        method: "post",
+        url: CREATEDEPARTMENTNAME,
+        data: qs.stringify(this.addFormItem)
+      });
+      this.PermissionsTree();
+      // this.append(this.treeData);
+      this.addCancel();
     },
     addCancel() {
       this.addFormItem = {};
     },
     // 修改部门按钮回调
-    editNameConfirm() {},
+    async editNameConfirm() {
+      let res = await this.$request({
+        method: "post",
+        url: UPDATEDEPARTMENTNAME,
+        data: qs.stringify(this.editNameFormItem)
+      });
+      this.PermissionsTree();
+      this.editNameCancel();
+    },
     editNameCancel() {
       this.editNameFormItem = {};
+    },
+    // 新建用户内部门选择按钮回调
+    branchConfirm() {
+      console.log(this.formValidate);
+      if (this.treeData.length !== 0 && this.treeData.length !== undefined) {
+        this.formValidate.branch = this.treeData[0].title;
+      } else {
+        this.formValidate.branch = "";
+      }
+    },
+    branchCancel() {
+      console.log(this.formValidate);
+    },
+    // 权限树数据渲染
+    async PermissionsTree() {
+      let res = await this.$request({
+        url: ADMINMERBERDEPARTMENTNAMELIST
+      });
+      console.log(res);
+      this.data5[0].children = res.data.data;
+      this.data4[0].children = res.data.data;
     }
+  },
+  created() {
+    this.PermissionsTree();
   }
 };
 </script>
@@ -532,6 +672,11 @@ export default {
   justify-content: space-between;
   margin: 10px;
   box-sizing: border-box;
+}
+.tree-content {
+  height: 300px;
+  overflow: hidden;
+  overflow-y: auto;
 }
 </style>
 <style>
