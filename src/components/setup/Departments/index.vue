@@ -83,9 +83,12 @@
             ></Input>
           </FormItem>
           <FormItem label="角色" prop="role">
-            <Select v-model="formValidate.role" placeholder="角色" style="width: 300px">
-              <Option value="beijing">语文</Option>
-              <Option value="shanghai">数学</Option>
+            <Select v-model="formValidate.role" multiple style="width: 300px" placeholder="角色">
+              <Option
+                v-for="item in cityList"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option>
             </Select>
           </FormItem>
         </Form>
@@ -154,6 +157,32 @@ export default {
   name: "Departments",
   data() {
     return {
+      cityList: [
+        {
+          value: "New York",
+          label: "New York"
+        },
+        {
+          value: "London",
+          label: "London"
+        },
+        {
+          value: "Sydney",
+          label: "Sydney"
+        },
+        {
+          value: "Ottawa",
+          label: "Ottawa"
+        },
+        {
+          value: "Paris",
+          label: "Paris"
+        },
+        {
+          value: "Canberra",
+          label: "Canberra"
+        }
+      ],
       // table 表格数据
       columns: [
         {
@@ -352,13 +381,6 @@ export default {
         mobile: [
           { required: true, message: "请输入手机号", trigger: "change" }
         ],
-        role: [
-          {
-            required: true,
-            message: "请选择角色",
-            trigger: "change"
-          }
-        ]
       },
       addFormItem: {},
       editNameFormItem: {},
@@ -509,7 +531,11 @@ export default {
             if (!this.formValidate.branch) {
               this.$Message.error("部门为必选项!");
             } else {
-              this.$Message.success("成功!");
+              if(!this.formValidate.role) {
+                this.$Message.error("角色为必选项!");
+              } else {
+                this.$Message.success("成功!");
+              }
             }
           } else {
             this.$Message.error("请填写必选项!");
@@ -518,6 +544,9 @@ export default {
         .then(val => {
           // 表单验证有 bug 直接点击部门获取不到信息，所以换个显示方法
           if (!this.formValidate.branch) {
+            return (this.editSwitch = true);
+          }
+          if (!this.formValidate.role) {
             return (this.editSwitch = true);
           }
           // 验证不通过，不关闭弹窗

@@ -88,7 +88,7 @@
               <MenuItem
                 name="/main/public"
                 to="/main/public"
-                v-if="$store.state.cId.is_sales == 'Y'"
+                v-if="$store.state.cId.is_sales != 'N'"
               >公共资源池</MenuItem>
               <MenuItem
                 name="/main/erweima"
