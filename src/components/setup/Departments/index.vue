@@ -60,35 +60,35 @@
       <div class="content">
         <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
           <FormItem label="姓名" prop="UserName">
-            <Input v-model="formValidate.UserName" placeholder="请输入" style="width: 300px"></Input>
+            <Input v-model="formValidate.login_name" placeholder="请输入" style="width: 300px"></Input>
           </FormItem>
           <FormItem label="性别" prop="sex">
             <Select v-model="formValidate.sex" placeholder="性别" style="width: 300px">
-              <Option value="beijing">班课</Option>
-              <Option value="shanghai">一对一</Option>
+              <Option :value="1">男</Option>
+              <Option :value="0">女</Option>
             </Select>
           </FormItem>
           <FormItem label="手机号" prop="mobile">
             <Input v-model="formValidate.mobile" placeholder="请输入" style="width: 300px"></Input>
           </FormItem>
           <FormItem label="邮箱">
-            <Input v-model="formValidate.className" placeholder="请输入" style="width: 300px"></Input>
+            <Input v-model="formValidate.email" placeholder="请输入" style="width: 300px"></Input>
           </FormItem>
           <FormItem label="部门" prop="branch">
             <Input
-              v-model="formValidate.branch"
+              v-model="formValidate.department_name"
               placeholder="部门"
               style="width: 300px"
               @on-focus="branchSwitch = true"
             ></Input>
           </FormItem>
           <FormItem label="角色" prop="role">
-            <Select v-model="formValidate.role" multiple style="width: 300px" placeholder="角色">
+            <Select v-model="formValidate.roles" multiple style="width: 300px" placeholder="角色">
               <Option
                 v-for="item in cityList"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}</Option>
+                :value="item.id"
+                :key="item.name"
+              >{{ item.name }}</Option>
             </Select>
           </FormItem>
         </Form>
@@ -100,7 +100,7 @@
       v-model="branchSwitch"
       class-name="vertical-center-modal-1"
       @on-ok="branchConfirm"
-      @on-cancel="branchCancel"
+      @on-cancel="branchCancel(1)"
     >
       <div class="tree-content">
         <Tree :data="data4" @on-select-change="clickTree"></Tree>
@@ -151,38 +151,14 @@ import {
   CREATEDEPARTMENTNAME,
   UPDATEDEPARTMENTNAME,
   DELETEDEPARTMENTNAME,
-  ADMINMERBERDEPARTMENTNAMELIST
+  ADMINMERBERDEPARTMENTNAMELIST,
+  ADMINMERBERROLELIST
 } from "@/uilt/url/url";
 export default {
   name: "Departments",
   data() {
     return {
-      cityList: [
-        {
-          value: "New York",
-          label: "New York"
-        },
-        {
-          value: "London",
-          label: "London"
-        },
-        {
-          value: "Sydney",
-          label: "Sydney"
-        },
-        {
-          value: "Ottawa",
-          label: "Ottawa"
-        },
-        {
-          value: "Paris",
-          label: "Paris"
-        },
-        {
-          value: "Canberra",
-          label: "Canberra"
-        }
-      ],
+      cityList: [],
       // table 表格数据
       columns: [
         {
@@ -192,27 +168,27 @@ export default {
         },
         {
           title: "姓名",
-          key: "UserName",
+          key: "login_name",
           align: "center"
         },
         {
           title: "手机号",
-          key: "student_name",
+          key: "mobile",
           align: "center"
         },
         {
           title: "角色",
-          key: "student_name",
+          key: "name",
           align: "center"
         },
         {
           title: "部门",
-          key: "student_name",
+          key: "department_name",
           align: "center"
         },
         {
           title: "最近登录时间",
-          key: "student_name",
+          key: "last_login_time",
           align: "center"
         },
         {
@@ -231,7 +207,8 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.row = params.row;
+                      this.formValidate = params.row;
+                      this.getUserDataList()
                       this.editSwitch = true;
                     }
                   }
@@ -273,12 +250,7 @@ export default {
           }
         }
       ],
-      dataList: [
-        {
-          student_name: "test",
-          UserName: "123"
-        }
-      ],
+      dataList: [],
 
       // 树形控件数据
       treeData: {},
@@ -369,17 +341,17 @@ export default {
       // 验证
       ruleValidate: {
         UserName: [
-          { required: true, message: "请输入姓名", trigger: "change" }
+          { required: false, message: "请输入姓名", trigger: "change" }
         ],
         sex: [
           {
-            required: true,
+            required: false,
             message: "请选择性别",
             trigger: "change"
           }
         ],
         mobile: [
-          { required: true, message: "请输入手机号", trigger: "change" }
+          { required: false, message: "请输入手机号", trigger: "change" }
         ],
       },
       addFormItem: {},
@@ -406,18 +378,35 @@ export default {
   methods: {
     // 点击树节点时触发
     clickTree(data) {
-      console.log(data);
       this.treeData = data;
     },
     // 人员查询条件
     async staffQuery() {
+      this.getUserList()
+    },
+    // 获取用户信息列表
+    async getUserList() {
       let res = await this.$request({
         url: ADMINMERBERUSERLIST,
         params: {
-          name_or_mobile: this.value
+          name_or_mobile: this.value,
+          page: this.current_page
         }
       });
-      console.log(res);
+      this.dataList = res.data.data.resources
+      // 分页配置
+      this.total = res.data.data.links.total
+      this.per_page = res.data.data.links.per_page
+      this.current_page = res.data.data.links.current_page
+      this.last_page = res.data.data.links.last_page
+
+    },
+    // 获取用户列表
+    async getUserDataList() {
+       let res = await this.$request({
+        url: ADMINMERBERROLELIST,
+      });
+      this.cityList = res.data.data
     },
     // 选择整行信息
     selectItem(selection) {
@@ -520,10 +509,10 @@ export default {
     // },
     // 改变页码
     changePages(val) {
-      // this.formItem.page = val;
-      // this.getUserData();
+      this.current_page = val
+      this.getUserList()
     },
-    // 点击确认回调，验证表单,不填写不让关
+    // 编辑页面，点击确认回调，验证表单,不填写不让关
     editConfirm() {
       this.$refs["formValidate"]
         .validate(valid => {
@@ -559,7 +548,7 @@ export default {
           this.editCancel();
         });
     },
-    // 点击取消回调，重置表单
+    // 编辑页面，点击取消回调，重置表单
     editCancel() {
       this.$refs["formValidate"].resetFields();
       this.formValidate = {};
@@ -600,7 +589,10 @@ export default {
         this.formValidate.branch = "";
       }
     },
-    branchCancel() {
+    branchCancel(val) {
+      if(val) {
+        console.log(1)
+      }
       console.log(this.formValidate);
     },
     // 权限树数据渲染
@@ -608,13 +600,13 @@ export default {
       let res = await this.$request({
         url: ADMINMERBERDEPARTMENTNAMELIST
       });
-      console.log(res);
       this.data5[0].children = res.data.data;
       this.data4[0].children = res.data.data;
     }
   },
   created() {
     this.PermissionsTree();
+    this.getUserList()
   }
 };
 </script>
