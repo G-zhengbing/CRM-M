@@ -52,7 +52,7 @@
             <router-link to="/main/schedulessons" tag="li">课节统计</router-link>
             <router-link to="/main/scheduteachers" tag="li">教师管理</router-link>
             <router-link to="/main/schedustudent" tag="li">学员管理</router-link>
-          </ul> -->
+          </ul>-->
           <template v-if="$store.state.cId.is_sales != 'N'">
             <ul v-if="tabNum == 2" class="crm">
               <router-link to="/main/mineclient" tag="li">我的客户</router-link>

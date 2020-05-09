@@ -121,6 +121,7 @@ export default {
       if (this.num == "day") {
         this.columns = [
           { title: "销售", key: "call_name" },
+          { title: "库存", key: "clue_num" },
           { title: "呼出总数", key: "call_second" },
           { title: "呼出电话总量", key: "call_num" },
           { title: "有效呼出时长", key: "call_time" },
@@ -136,6 +137,7 @@ export default {
       } else if (this.num == "week") {
         this.columns = [
           { title: "销售", key: "call_name" },
+          { title: "库存", key: "clue_num" },
           { title: "呼出总数", key: "call_second" },
           { title: "呼出电话总量", key: "call_num" },
           { title: "有效呼出时长", key: "call_time" },
@@ -152,6 +154,7 @@ export default {
       } else {
         this.columns = [
           { title: "销售", key: "call_name" },
+          { title: "库存", key: "clue_num" },
           { title: "呼出总数", key: "call_second" },
           { title: "呼出电话总量", key: "call_num" },
           { title: "有效呼出时长", key: "call_time" },

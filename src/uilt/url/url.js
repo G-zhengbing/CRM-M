@@ -24,7 +24,7 @@ const ERWEIMACITY = BASEURL + "city" //二维码城市
 const TYPESHOOL = BASEURL + "type_school" //类型/学校
 const QUDAO = BASEURL + "channel_account" //渠道转介绍
 const DINGDAN = BASEURL + "add_order" //创建订单
-const DAORU =BASEURL + "export" //导入
+const DAORU = BASEURL + "export" //导入
 const HUCHU = BASEURL + "callcellphone"//呼出
 const PAYSTUDENT = BASEURL + "paid_account" //我的付费学员
 const UPLIST = BASEURL + "attend_class" //上可列表
@@ -43,21 +43,21 @@ const RESERVED = BASEURL + "mine_appoint_list" //预约单/
 const RESERVEDAll = BASEURL + "system_appoint_list" //全部预约单/
 const USERRESERVED = BASEURL + "appoint_list" //用户预约单列表
 const CREATERESERVED = BASEURL + "appoint_store" //创建预约单
-const TEACHERLIST  = BASEURL + "coach_list" //教师管理
+const TEACHERLIST = BASEURL + "coach_list" //教师管理
 const CREATEDTEACHERS = BASEURL + "coach_store" //新建教师
 const UPDATATEACHERS = BASEURL + "modify_coach" //修改教师
 const CLICKTEACHER = BASEURL + "available_coach_list" //预约选老师
 const QIANDAO = BASEURL + "batch_stage" //签到/缺席/预约批量
-const APPRAISAL  = BASEURL + "appiont_modify"//查看测评
+const APPRAISAL = BASEURL + "appiont_modify"//查看测评
 const GETTIMEBLOCK = BASEURL + "timeblock"//时间块转换时间段
 const STATISTICS = BASEURL + "call_phone" //统计分析
-const PROVINCE  = BASEURL + "province" //省
+const PROVINCE = BASEURL + "province" //省
 const CITY = BASEURL + "p_city"//市
 const CREATEINTRODUCE = BASEURL + "clue_regist"//转介绍/创建转介绍
 const INTRODUCE = BASEURL + "get_mobile"//检测手机号
 const IMPORTDATA = BASEURL + "upload_csv"//线索导入
 const CREATEORDER = BASEURL + "create_order"//创建订单
-const HANDOVER  = BASEURL + "handover"//交接单
+const HANDOVER = BASEURL + "handover"//交接单
 const IMPORTANT = BASEURL + 'import_list'//导入订单列表
 const IMPORTLIST = BASEURL + "upload_csv"//导入线索
 const ACCOUNTORDER = BASEURL + "account_order"//升级订单列表
@@ -95,9 +95,20 @@ const ADDORDER = BASEURL + "add_order" //教务/ 订单 创建订单
 const GETACCOUNTSFOLLOW = BASEURL + "get_accounts_follow" //教务/ 跟进，信息展示
 const CALLRECORDSTATISTICS = BASEURL + "call_record_statistics" //教务/ 拨号预约统计分析
 
+const ADMINMERBERUSERLIST = BASEURL + "admin_merber_user_list" //设置，人员列表查询
+const CREATEDEPARTMENTNAME = BASEURL + "create_department_name" //设置，创建部门
+const UPDATEDEPARTMENTNAME = BASEURL + "update_department_name" //设置，修改部门名称
+const DELETEDEPARTMENTNAME = BASEURL + "delete_department_name" //设置，删除部门
+const ADMINMERBERDEPARTMENTNAMELIST = BASEURL + "admin_merber_department_name_list" //设置，删除部门
+
 const SCREENLIST = BASEURL + "screen_list" //教务/ 公共接口，select状态栏
 
 export {
+  ADMINMERBERDEPARTMENTNAMELIST,
+  UPDATEDEPARTMENTNAME,
+  DELETEDEPARTMENTNAME,
+  CREATEDEPARTMENTNAME,
+  ADMINMERBERUSERLIST,
   UPLOADCSVORDER,
   UPLOADPRODUCTR,
   UPLOADORDER,
