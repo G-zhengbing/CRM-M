@@ -187,8 +187,9 @@ export default {
           }
           // 这里写编辑成功发送请求
           // 新增用户
-          this.formValidate1.roles = this.formValidate1.roles.join(",");
-          this.formValidate1.department_id = this.formValidate1.roles
+					this.formValidate1.roles = this.formValidate1.roles.join(",");
+					console.log(this.formValidate1.department_id,this.formValidate1)
+          // this.formValidate1.department_id = this.formValidate1.id
           let res = await this.$request({
             method: "post",
             url: CREATEADMINUSER,
@@ -201,7 +202,6 @@ export default {
             this.$Message.success("成功!");
             // 完成清空
             this.editCancel();
-            this.$emit("closeEdit", false);
           }
         });
     },
