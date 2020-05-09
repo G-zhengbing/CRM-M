@@ -1,4 +1,5 @@
 <template>
+<!-- AMEND: 2020.05.09 刘畅 删除微信昵称字段，添加意向度筛选条件 -->
   <div class="box" ref="box">
     <section class="main-section">
       <div class="surplus">
@@ -71,6 +72,18 @@
                         v-for="(list,i) in channel"
                         :key="i"
                       >{{list.channel_title}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select
+                      v-model="form.intention_option"
+                      style="width:150px"
+                      @on-change="seekClick"
+                      placeholder="意向度"
+                    >
+                      <Option :value="i" v-for="(list,i) in intention" :key="i">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
@@ -169,7 +182,7 @@ export default {
   mounted() {
     this.follow_status = storage.getDaiban().screen_list.follow_status;
     this.subjectList = storage.getDaiban().screen_list.subject;
-    this.intention = storage.getDaiban().screen_list.intention;
+    this.intention = storage.getDaiban().screen_list.inter_nation;
     this.stage = storage.getDaiban().screen_list.stage;
     this.transfer = storage.getDaiban().screen_list.transfer;
     this.channel = storage.getDaiban().channel;
@@ -224,7 +237,6 @@ export default {
         { title: "学员姓名", key: "student_name", width: 100, fixed: "left" },
         { title: "注册手机", key: "mobile", width: 120, fixed: "left" },
         { title: "地址", key: "area", width: 150 },
-        { title: "微信昵称", key: "wechat_nick_name", width: 100 },
         {
           title: "回访次数",
           key: "visit_num",
@@ -532,7 +544,7 @@ export default {
         this.setCurrentPage(num);
       });
     }
-  }
+  },
 };
 </script>
 <style scoped>

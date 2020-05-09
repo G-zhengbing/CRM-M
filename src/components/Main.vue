@@ -18,6 +18,11 @@
                 :class="{active:tabNum == 3}"
               >教务</li>
               <!-- <li @click="setActive(4)" :class="{active:tabNum == 4}">排课</li> -->
+              <li
+                v-if="$store.state.cId.is_headmaster != 'N'"
+                @click="setActive(5)"
+                :class="{active:tabNum == 5 }"
+              >设置</li>
             </ul>
           </div>
           <div class="right">
@@ -86,6 +91,12 @@
                 tag="li"
               >统计分析</router-link>
               <router-link v-if="$store.state.cId.is_sales != 'N'" to="/main/money" tag="li">订单中心</router-link>
+            </ul>
+          </template>
+          <template v-if="$store.state.cId.is_sales != 'N'">
+            <ul v-if="tabNum == 5" class="crm">
+              <router-link to="/main/departments" tag="li">部门和用户</router-link>
+              <router-link to="/main/jurisdiction" tag="li">角色和权限</router-link>
             </ul>
           </template>
           <template v-if="$store.state.cId.is_market != 'N'">
