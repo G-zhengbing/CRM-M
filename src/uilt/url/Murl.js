@@ -1,4 +1,4 @@
-import { BASEURL } from '../env'
+import { BASEURL } from './env'
 
 const ADVER_URL = BASEURL + "banner" //广告列表
 const ADDADVER_URL = BASEURL + "ad" //新增广告

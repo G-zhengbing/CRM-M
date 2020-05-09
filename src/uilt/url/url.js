@@ -1,4 +1,4 @@
-import { BASEURL } from '../env'
+import { BASEURL } from './env'
 
 const PONESTATUS = "http://liveh5.canpoint.net/send_message" //跟进/发送短信验证码
 
