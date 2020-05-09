@@ -278,7 +278,9 @@ i {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 370px;
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
 }
 .layout-logo[data-v-bb0b6c44] {
   color: #fff;
@@ -322,16 +324,14 @@ i {
   height: 100%;
 }
 .layout {
-  border: 1px solid #d7dde4;
   background: #f5f7f9;
   position: relative;
-  border-radius: 4px;
   overflow: hidden;
   height: 100%;
 }
 .layout-logo {
   margin-top: -5px;
-  width: 110px;
+  width: 150px;
   height: 30px;
   background: #5b6270;
   border-radius: 3px;
