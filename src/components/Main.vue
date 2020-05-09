@@ -1,157 +1,120 @@
 <template>
-  <div class="box dabox">
-    <header>
-      <div class="left">
-        <img src="../assets/img/logo/png24.png" alt />
-        <span style="font-weight: 700;">全品在线</span>
-        <i>|</i>
-        <span>CRM</span>
-      </div>
-      <div style="flex:1;"></div>
-      <div class="right">
-        <img src="../assets/img/xiaoxitongzhi/png24.png" alt class="lin" v-if="num >0" />
-        <img src="../assets/img/xiaoxitongzhi/not/png24.png" alt class="lin" v-if="num== 0" />
-        <img src="../assets/img/touxiang/png24.png" alt class="txiang" />
-        <span>{{uName}}</span>
-        <div>|</div>
-        <i @click="back">退出</i>
-      </div>
-    </header>
-    <section>
-      <div class="section-left">
-        <div class="menuitem">
-          <Menu
-            theme="light"
-            :accordion="true"
-            :active-name="$route.path"
-            :open-names="active"
-            @on-open-change="namePath"
-          >
-            <Submenu name="1">
-              <template slot="title">
-                <Icon type="ios-paper" />CRM系统
-              </template>
-              <!-- <MenuItem name="/main/home" to="/main/home" v-if="$store.state.cId != 4">首页</MenuItem> -->
-              <Submenu name="1-2" v-if="$store.state.cId.is_sales != 'N'">
-                <template slot="title">
-                  <Icon type="ios-stats" />我的客户
-                </template>
-                <MenuItem name="/main/mineclient" to="/main/mineclient">我的客户</MenuItem>
-                <MenuItem name="/main/studentpay" to="/main/studentpay">付费学员</MenuItem>
-                <MenuItem name="/main/notvisit" to="/main/notvisit">今日新分</MenuItem>
-                <MenuItem name="/main/followup" to="/main/followup">今日回访</MenuItem>
-                <MenuItem name="/main/notcallback" to="/main/notcallback">逾期未回访</MenuItem>
-                <MenuItem name="/main/notification" to="/main/notification">消息提醒</MenuItem>
-              </Submenu>
-              <Submenu name="1-3" v-if="$store.state.cId.is_headmaster != 'N'">
-                <template slot="title">
-                  <Icon type="ios-stats" />教务
-                </template>
-                <MenuItem name="/main/classstudents" to="/main/classstudents">班课学员</MenuItem>
-                <MenuItem name="/main/inclass" to="/main/inclass">开课中学员</MenuItem>
-                <MenuItem name="/main/myreservation" to="/main/myreservation">我的预约单</MenuItem>
-                <MenuItem name="/main/oneononestudent" to="/main/oneononestudent">一对一学员</MenuItem>
-                <!-- 后台无数据，无法验证完善，待更改 -->
-                <!-- <MenuItem name="/main/oneinclass" to="/main/oneinclass">一对一开课中学员</MenuItem> -->
-                <MenuItem name="/main/onemyreservation" to="/main/onemyreservation">一对一我的预约单</MenuItem>
-                <MenuItem
-                  name="/main/statisticanalysis"
-                  to="/main/statisticanalysis"
-                >统计分析</MenuItem>
-                <!-- <MenuItem name="/main/course" to="/main/course">课程</MenuItem>
-                <MenuItem name="/main/teacher" to="/main/teacher">教师管理</MenuItem>-->
-                <!-- <MenuItem name="/main/minestudent" to="/main/minestudent">我的学员</MenuItem> -->
-                <MenuItem
-                  name="/main/payingstudents"
-                  to="/main/payingstudents"
-                  v-if="$store.state.cId.is_headmaster == 'H'"
-                >付费学员</MenuItem>
-              </Submenu>
-              <MenuItem
-                v-if="$store.state.cId.is_sales != 'N'"
-                name="/main/reserved"
-                to="/main/reserved"
-              >我的预约单</MenuItem>
-              <MenuItem name="/main/allreserved" to="/main/allreserved">全部预约单</MenuItem>
-              <MenuItem
-                name="/main/daiban"
-                to="/main/daiban"
-                v-if="$store.state.cId.is_sales == 'H'"
-              >资源池</MenuItem>
-              <MenuItem
-                name="/main/public"
-                to="/main/public"
-                v-if="$store.state.cId.is_sales == 'Y'"
-              >公共资源池</MenuItem>
-              <MenuItem
-                name="/main/erweima"
-                to="/main/erweima"
+  <div class="layout">
+    <Layout>
+      <Header>
+        <Menu mode="horizontal" :theme="theme1" active-name="1">
+          <div class="layout-logo">全品在线</div>
+          <div class="layout-nav">
+            <ul class="tabars">
+              <li
                 v-if="$store.state.cId.is_market != 'N'"
-              >渠道管理</MenuItem>
-              <MenuItem
-                name="/main/teacher"
-                to="/main/teacher"
-                v-if="$store.state.cId.is_teacher != 'N'"
-              >教师管理</MenuItem>
-              <MenuItem
-                name="/main/importdata"
-                to="/main/importdata"
-                v-if="$store.state.cId.is_sales == 'H'"
-              >线索导入</MenuItem>
-              <MenuItem
-                name="/main/importorder"
-                to="/main/importorder"
+                @click="setActive(1)"
+                :class="{active:tabNum == 1}"
+              >CMS管理</li>
+              <li @click="setActive(2)" :class="{active:tabNum == 2}">CRM管理</li>
+              <li
+                v-if="$store.state.cId.is_headmaster != 'N'"
+                @click="setActive(3)"
+                :class="{active:tabNum == 3}"
+              >教务</li>
+              <!-- <li @click="setActive(4)" :class="{active:tabNum == 4}">排课</li> -->
+            </ul>
+          </div>
+          <div class="right">
+            <img src="../assets/img/xiaoxitongzhi/png24.png" alt class="lin" v-if="num >0" />
+            <img src="../assets/img/xiaoxitongzhi/not/png24.png" alt class="lin" v-if="num== 0" />
+            <img src="../assets/img/touxiang/png24.png" alt class="txiang" />
+            <span>{{uName}}</span>
+            <div>|</div>
+            <i @click="back">退出</i>
+          </div>
+        </Menu>
+      </Header>
+      <Layout>
+        <Sider hide-trigger :style="{background: '#fff'}">
+          <template v-if="tabNum == 3">
+            <ul v-if="$store.state.cId.is_headmaster != 'N'" class="teacheing">
+              <router-link to="/main/classstudents" tag="li">班课学员</router-link>
+              <router-link to="/main/inclass" tag="li">开课中学员</router-link>
+              <router-link to="/main/myreservation" tag="li">我的预约单</router-link>
+              <router-link to="/main/oneononestudent" tag="li">一对一学员</router-link>
+              <router-link to="/main/onemyreservation" tag="li">一对一我的预约单</router-link>
+              <router-link to="/main/statisticanalysis" tag="li">统计分析</router-link>
+              <router-link
+                to="/main/payingstudents"
+                tag="li"
                 v-if="$store.state.cId.is_headmaster == 'H'"
-              >订单导入</MenuItem>
-              <MenuItem
-                name="/main/statistics"
+              >付费学员</router-link>
+            </ul>
+          </template>
+          <!-- <ul v-if="tabNum == 4" class="schedu">
+            <router-link to="/main/scheducourse" tag="li">课程管理</router-link>
+            <router-link to="/main/schedulessons" tag="li">课节统计</router-link>
+            <router-link to="/main/scheduteachers" tag="li">教师管理</router-link>
+            <router-link to="/main/schedustudent" tag="li">学员管理</router-link>
+          </ul> -->
+          <template v-if="$store.state.cId.is_sales != 'N'">
+            <ul v-if="tabNum == 2" class="crm">
+              <router-link to="/main/mineclient" tag="li">我的客户</router-link>
+              <router-link
+                v-if="$store.state.cId.is_sales != 'N'"
+                to="/main/reserved"
+                tag="li"
+              >我的预约单</router-link>
+              <router-link to="/main/allreserved" tag="li">全部预约单</router-link>
+              <router-link v-if="$store.state.cId.is_sales == 'H'" to="/main/daiban" tag="li">资源池</router-link>
+              <router-link v-if="$store.state.cId.is_sales == 'Y'" to="/main/public" tag="li">公共资源池</router-link>
+              <router-link v-if="$store.state.cId.is_market != 'N'" to="/main/erweima" tag="li">渠道管理</router-link>
+              <router-link
+                v-if="$store.state.cId.is_teacher != 'N'"
+                to="/main/teacher"
+                tag="li"
+              >教师管理</router-link>
+              <router-link
+                v-if="$store.state.cId.is_sales == 'H'"
+                to="/main/importdata"
+                tag="li"
+              >线索导入</router-link>
+              <router-link
+                v-if="$store.state.cId.is_headmaster == 'H'"
+                to="/main/importorder"
+                tag="li"
+              >订单导入</router-link>
+              <router-link
+                v-if="$store.state.cId.is_sales != 'N'"
                 to="/main/statistics"
-                v-if="$store.state.cId.is_sales != 'N'"
-              >统计分析</MenuItem>
-              <!-- <MenuItem
-                name="/main/paystudent"
-                to="/main/paystudent"
-                v-if="$store.state.cId != 4"
-              >付费学员</MenuItem>-->
-              <!-- <MenuItem name="/main/uplist" to="/main/uplist" v-if="$store.state.cId != 4">上课提醒</MenuItem> -->
-              <MenuItem
-                name="/main/money"
-                to="/main/money"
-                v-if="$store.state.cId.is_sales != 'N'"
-              >订单中心</MenuItem>
-              <!--  <MenuItem name="/main/reservation" to="/main/reservation">我的预约单</MenuItem>
-              <MenuItem name="/main/thread" to="/main/thread">线索导入</MenuItem>-->
-              <!-- <MenuItem name="/main/number" to="/main/number" v-if="$store.state.cId != 3">成单数</MenuItem> -->
-            </Submenu>
-            <Submenu name="2" v-if="$store.state.cId.is_market != 'N'">
-              <template slot="title">
-                <Icon type="ios-stats" />M站后台
-              </template>
-              <MenuItem name="/main/advertising" to="/main/advertising">广告管理</MenuItem>
-              <!-- <MenuItem name="/main/special" to="/main/special">专题管理</MenuItem> -->
-              <Submenu name="2-1">
-                <template slot="title">
-                  <Icon type="ios-stats" />专题管理
-                </template>
-                <MenuItem name="/main/special" to="/main/special">首页专题</MenuItem>
-                <MenuItem name="/main/bookcode" to="/main/bookcode">一书一码</MenuItem>
-              </Submenu>
-              <MenuItem name="/main/curriculum" to="/main/curriculum">课程管理</MenuItem>
-              <MenuItem name="/main/databank" to="/main/databank">资料管理</MenuItem>
-            </Submenu>
-          </Menu>
-        </div>
-      </div>
-      <div class="section-right">
-        <router-view />
-      </div>
-    </section>
+                tag="li"
+              >统计分析</router-link>
+              <router-link v-if="$store.state.cId.is_sales != 'N'" to="/main/money" tag="li">订单中心</router-link>
+            </ul>
+          </template>
+          <template v-if="$store.state.cId.is_market != 'N'">
+            <ul v-if="tabNum == 1" class="cms">
+              <router-link to="/main/advertising" tag="li">广告管理</router-link>
+              <li class="cms_special">
+                <div>
+                  <span>专题管理</span>
+                </div>
+                <router-link to="/main/special" tag="li">首页专题</router-link>
+                <router-link to="/main/bookcode" tag="li">一书一码</router-link>
+              </li>
+              <router-link to="/main/curriculum" tag="li">课程管理</router-link>
+              <router-link to="/main/databank" tag="li">资料管理</router-link>
+            </ul>
+          </template>
+        </Sider>
+        <Layout :style="{padding: '0 10px 10px'}">
+          <Content :style="{ minHeight: '280px', background: '#fff'}">
+            <router-view />
+          </Content>
+        </Layout>
+      </Layout>
+    </Layout>
   </div>
 </template>
-
 <script>
 import storeage from "../uilt/storage";
-import { mapState, mapMutations, mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 export default {
   mounted() {
     // var s = window.screen.width / 1920;
@@ -159,9 +122,15 @@ export default {
     this.active = storeage.getMenuNum();
     this.getReferList();
     this.getUser().then();
+    if (JSON.stringify(this.tabActive) == "{}") {
+      this.tabActive = this.$route.path;
+    }
   },
   data() {
     return {
+      tabActive: storeage.getMainrouter(),
+      tabNum: storeage.getMaintabnum(),
+      theme1: "light",
       isSection: true,
       isActive: false,
       active: storeage.getMenuNum()
@@ -169,11 +138,17 @@ export default {
   },
   methods: {
     ...mapActions(["getUser", "loginOut", "getReferList"]),
+    //tabar
+    setActive(num) {
+      this.tabNum = num;
+      storeage.savaMaintabnum(num);
+      storeage.savaMainrouter(this.$route.path);
+    },
+    setMenustatus(active) {
+      storeage.savaMainrouter(active);
+    },
     namePath(s) {
       storeage.setMenuNum(s);
-    },
-    doActive() {
-      this.isActive = !this.isActive;
     },
     back() {
       if (!confirm("确定要退出吗?")) return;
@@ -206,10 +181,179 @@ export default {
   }
 };
 </script>
-
 <style scoped>
+.cms_special li {
+  margin-left: 40px;
+}
+.cms_special {
+  height: 130px !important;
+}
+.teacheing li :hover {
+  color: #2d8cf0;
+}
+li.router-link-exact-active.router-link-active {
+  background-color: #f0faff;
+  color: #2d8cf0;
+  border-right: 1.5px solid #2d8cf0;
+}
+/* .ivu-layout-sider[data-v-54d3a52e]{
+  background-color: #ccc!important;
+} */
+.teacheing li,
+.schedu li,
+.crm li,
+.cms li {
+  height: 45px;
+  line-height: 45px;
+  text-align: center;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.teacheing,
+.schedu,
+.crm,
+.cms {
+  display: flex;
+  flex-direction: column;
+}
+.ivu-layout-sider {
+  width: 140px !important;
+  min-width: 140px !important;
+  max-width: 140px !important;
+}
+.ivu-layout-header {
+  height: 50px !important;
+  line-height: 50px !important;
+  padding: 0 !important;
+}
+.tabars li.active {
+  opacity: 0.8;
+  background-color: #909498;
+}
+.tabars li:hover {
+  opacity: 0.8;
+}
+.tabars li {
+  width: 80px;
+  color: #fff;
+  text-align: center;
+  cursor: pointer;
+  line-height: 50px;
+}
+.tabars {
+  height: 100%;
+  display: flex;
+  margin-left: 68px;
+}
+.ivu-layout-content {
+  min-height: 660px !important;
+}
+.right div {
+  margin: 0 10px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.right .txiang {
+  margin: 0 5px 0 29px;
+  width: 15px;
+  height: 19px;
+}
+.right i {
+  margin: 0 76px 0 0;
+  cursor: pointer;
+}
+.right span,
+i {
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+}
+.right .lin {
+  width: 15px;
+  height: 19px;
+}
+.right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 370px;
+}
+.layout-logo[data-v-bb0b6c44] {
+  color: #fff;
+  font-size: 20px;
+  text-align: center;
+  line-height: 30px;
+  font-weight: 700;
+  margin-top: -5px;
+}
 .ivu-menu.ivu-menu-light.ivu-menu-vertical {
-  width: 170px !important;
+  height: 100%;
+  width: 140px !important;
+}
+.layout-nav[data-v-bb0b6c44] ul li {
+  color: #fff;
+  width: 80px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 50px;
+}
+.layout-nav[data-v-bb0b6c44] ul {
+  height: 100%;
+  display: flex;
+  margin-left: 40px;
+}
+.layout-nav[data-v-bb0b6c44] {
+  height: 100%;
+  flex: 1;
+}
+.layout-logo[data-v-bb0b6c44] {
+  width: 120px;
+}
+.ivu-menu.ivu-menu-light.ivu-menu-horizontal {
+  width: 100%;
+  height: 100%;
+  background: #515a6e;
+  display: flex;
+}
+.ivu-layout {
+  height: 100%;
+}
+.layout {
+  border: 1px solid #d7dde4;
+  background: #f5f7f9;
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 100%;
+}
+.layout-logo {
+  margin-top: -5px;
+  width: 110px;
+  height: 30px;
+  background: #5b6270;
+  border-radius: 3px;
+  float: left;
+  position: relative;
+  top: 15px;
+  left: 20px;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  line-height: 30px;
+  color: #fff;
+}
+.layout-nav {
+  width: 420px;
+  margin: 0 auto;
+  margin-right: 20px;
+  display: flex;
+  width: 100%;
+}
+.ivu-menu.ivu-menu-light.ivu-menu-vertical {
+  width: 140px !important;
   height: 100%;
 }
 .menuitem ul.menu > li.router-link-exact-active.router-link-active {
@@ -232,187 +376,5 @@ export default {
 .menuitem ul.menu > li {
   padding-left: 60px;
   cursor: pointer;
-}
-.section-left div.centers i {
-  color: #1b73b0;
-  font-size: 16px;
-  line-height: 26px;
-  font-weight: 600;
-  margin: 0 5px;
-}
-.section-left div.centers {
-  border-bottom: 1px solid;
-  margin: 26px 76px;
-  cursor: pointer;
-}
-
-.section-right-bottom span {
-  font-size: 40px;
-  color: #333;
-}
-.section-right-bottom img {
-  width: 388px;
-  height: 422px;
-  margin-right: 75px;
-}
-section .section-right .section-right-top ul li span {
-  color: #ff0000;
-}
-section .section-right .section-right-top ul li p {
-  border-bottom: 1px solid #aaa;
-  width: 100%;
-  color: #1b73b0;
-}
-section .section-right .section-right-top ul li {
-  width: 233px;
-  height: 100px;
-  border: 1px solid #aaa;
-  border-radius: 5px;
-  margin-left: 16px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-  font-weight: 600;
-}
-section .section-right .section-right-top ul {
-  display: flex;
-  margin: 0 16px;
-  width: 100%;
-}
-section .section-right ul li.active {
-  background-color: #1b73b0;
-  color: #fff;
-}
-section .section-right ul li.active span {
-  color: #fff;
-}
-
-section .section-right .section-right-bottom {
-  flex: 1;
-  background-color: #fff;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  min-height: 422px;
-}
-
-section .section-right .section-right-top {
-  background-color: #fff;
-  width: 100%;
-  height: 140px;
-  margin: 10px 0;
-  border-radius: 5px;
-  min-height: 140px;
-  display: flex;
-  align-items: center;
-}
-section .section-right ul li span {
-  transform: scale(0.88);
-  color: #1b73b0;
-}
-section .section-right ul li {
-  font-size: 20px;
-  flex: 1;
-  text-align: center;
-  line-height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
-  cursor: pointer;
-}
-section .section-right > ul {
-  width: 240px;
-  height: 50px;
-  border: 2px solid #1b73b0;
-  box-sizing: border-box;
-  border-radius: 3px;
-  display: flex;
-  margin-bottom: 10px;
-}
-section .section-right {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-section .section-left p {
-  margin-top: 13px;
-  cursor: pointer;
-}
-section .section-left p:hover {
-  font-weight: 600;
-}
-section .section-left {
-  width: 185px;
-  background-color: #edf6fb;
-  color: #1b73b0;
-  font-size: 18px;
-}
-section .section-left,
-.section-right {
-  height: 100%;
-}
-section {
-  height: 100%;
-  background-color: #eae9ee;
-  display: flex;
-  min-height: 875px;
-}
-header .right div {
-  margin: 0 10px;
-  color: #fff;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-header .right .txiang {
-  margin: 0 5px 0 29px;
-  width: 15px;
-  height: 19px;
-}
-header .right i {
-  margin: 0 76px 0 0;
-  cursor: pointer;
-}
-header .right span,
-i {
-  font-size: 14px;
-  font-weight: 500;
-  color: #fff;
-}
-header .right .lin {
-  width: 15px;
-  height: 19px;
-}
-header .left i {
-  font-size: 16px;
-  color: #fff;
-  margin: 0 5px;
-}
-header .left span {
-  font-size: 20px;
-  color: #fff;
-}
-header .left img {
-  width: 36px;
-  height: 44px;
-  margin: 0 3px 0 9px;
-}
-header div {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-header {
-  height: 60px;
-  min-height: 60px;
-  background-color: #1b73b0;
-  display: flex;
-}
-.box {
-  display: flex;
-  flex-direction: column;
 }
 </style>

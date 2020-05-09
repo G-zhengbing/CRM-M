@@ -1,14 +1,6 @@
 <template>
   <div class="box">
     <NewErweima v-if="show" :type="type" />
-    <header>
-      <ul>
-        <li style="margin-left:30px">
-          <!-- <i></i> -->
-          <span>渠道管理</span>
-        </li>
-      </ul>
-    </header>
     <section class="main-section">
       <div class="surplus">
         <div class="main-section-top">
@@ -33,26 +25,28 @@
               </Col>
               <Col span="6">
                 <FormItem>
-                   <DatePicker
-                        type="datetime"
-                        placeholder="开始时间"
-                        style="width: 200px"
-                        v-model="nextTime"
-                        @on-ok="setNextTime"
-                      ></DatePicker>
-                      <DatePicker
-                        type="datetime"
-                        placeholder="结束时间"
-                        style="width: 200px"
-                        v-model="classTime"
-                        @on-ok="setClassTime"
-                      ></DatePicker>
+                  <div style="display:flex">
+                    <DatePicker
+                      type="datetime"
+                      placeholder="开始时间"
+                      style="width: 200px"
+                      v-model="nextTime"
+                      @on-ok="setNextTime"
+                    ></DatePicker>
+                    <DatePicker
+                      type="datetime"
+                      placeholder="结束时间"
+                      style="width: 200px"
+                      v-model="classTime"
+                      @on-ok="setClassTime"
+                    ></DatePicker>
+                  </div>
                 </FormItem>
               </Col>
               <Col span="4" style="margin-left:30px">
-                  <Button type="primary"  @click="seek">查询</Button>
-                  <Button  @click="clear">清空</Button>
-                </Col>
+                <Button type="primary" @click="seek">查询</Button>
+                <Button @click="clear">清空</Button>
+              </Col>
             </Row>
           </Form>
         </div>
@@ -151,14 +145,14 @@ export default {
     ...mapActions(["getErweimaList", "setDaoru"]),
     clear() {
       this.form = {};
-      this.classTime = ""
-      this.nextTime = ""
+      this.classTime = "";
+      this.nextTime = "";
     },
     //分页
     pageChange(num) {
       this.isLoading = true;
       this.setCurrentPage(num);
-      this.getErweimaList({ ...this.form,page:num }).then(res => {
+      this.getErweimaList({ ...this.form, page: num }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(num);
       });
@@ -233,10 +227,7 @@ export default {
 </script>
 
 <style scoped>
-.main-section-top{
-  margin-bottom: 10px;
-}
-.mx-datepicker.datepicker[data-v-765fd6a2]{
+.mx-datepicker.datepicker[data-v-765fd6a2] {
   margin-top: 0;
 }
 .remove.file {
@@ -354,7 +345,6 @@ export default {
   align-items: center;
 }
 .box section > div {
-  margin: 6px;
   display: flex;
   flex-direction: column;
 }

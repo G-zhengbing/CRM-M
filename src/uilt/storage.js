@@ -10,8 +10,29 @@ const DAIBAN = "DAIBAN"
 const RESERVEDTAB = "RESERVEDTAB"
 const RESERVEDALLTAB = "RESERVEDALLTAB"
 const STATISTICS = "STATISTICS"
+const MAINTABNUM = "MAINTABNUM"
+const MAINROUTER = "MAINROUTER"
+const MINECLIENTTAB = "MINECLIENTTAB"
 
 export default {
+  getMineclientTab(){
+    return JSON.parse(SESSION.getItem(MINECLIENTTAB) || 1)
+  },
+  savaMineclientTab(todo){
+    SESSION.setItem(MINECLIENTTAB, JSON.stringify(todo))
+  },
+  getMainrouter(){
+    return JSON.parse(SESSION.getItem(MAINROUTER) || '{}')
+  },
+  savaMainrouter(todo){
+    SESSION.setItem(MAINROUTER, JSON.stringify(todo))
+  },
+  getMaintabnum(){
+    return JSON.parse(SESSION.getItem(MAINTABNUM) || 1)
+  },
+  savaMaintabnum(todo){
+    SESSION.setItem(MAINTABNUM, JSON.stringify(todo))
+  },
   getStatistics(){
     return JSON.parse(SESSION.getItem(STATISTICS) || '{}')
   },
@@ -46,7 +67,7 @@ export default {
     LOCAL.setItem(MENUNUM, JSON.stringify(todo))
   },
   getMenuNum(){
-    return JSON.parse(LOCAL.getItem(MENUNUM) || '{}')
+    return JSON.parse(LOCAL.getItem(MENUNUM) || '[]')
   },
   get() {
     return JSON.parse(SESSION.getItem(USERS) || '{}')

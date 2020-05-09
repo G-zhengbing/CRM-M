@@ -1,4 +1,5 @@
 <template>
+<!-- AMEND: 2020.05.08 刘畅 添加字段，增加回访次数弹窗 -->
   <div class="box">
     <DaibanMessage v-if="show" :type="type" />
     <header class="main-header">
@@ -90,6 +91,24 @@
                     </div>
                   </FormItem>
                 </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select
+                      v-model="form.visit_num"
+                      style="width:150px"
+                      @on-change="seekKuhu"
+                      placeholder="回访次数"
+                    >
+                      <Option :value="1">1次</Option>
+                      <Option :value="2">2次</Option>
+                      <Option :value="3">3次</Option>
+                      <Option :value="4">4次</Option>
+                      <Option :value="5">5次</Option>
+                      <Option :value="6">6次</Option>
+                      <Option :value="7">6次以上</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
                 <Col span="4" style="text-indent: 60px">
                   <Button type="primary" @click="clear">清除</Button>
                 </Col>
@@ -114,6 +133,18 @@
           </div>
         </div>
       </div>
+      <Modal
+        width="800"
+        v-model="showVisit"
+        title="回访记录"
+        @on-cancel="showVisit = false"
+        :styles="{'margin-top' : '-70px'}"
+      >
+        <Table border :columns="visitColumns" :data="showVisitData" height="500"></Table>
+        <div slot="footer">
+          <Button type="text" size="large" @click="showVisit = false">取消</Button>
+        </div>
+      </Modal>
     </section>
     <Loading v-show="isLoading" />
   </div>
@@ -138,6 +169,15 @@ export default {
   },
   data() {
     return {
+      // 回访次数弹窗数据
+      showVisit: false,
+      visitColumns: [
+        { title: "回访内容", key: "visit_content" },
+        { title: "跟进人", key: "sale_name", width: 100 },
+        { title: "回访时间", key: "time", width: 170 }
+      ],
+      showVisitData: [],
+
       intention: storage.getDaiban().screen_list.inter_nation,
       subjectList: storage.getDaiban().screen_list.subject,
       startTime: "",
@@ -152,14 +192,48 @@ export default {
         { type: "selection", width: 60 },
         { title: "学员姓名", key: "student_name" },
         { title: "注册手机", key: "mobile" },
+        { title: "地区", key: "area" },
         { title: "微信昵称", key: "wechat_nick_name" },
         { title: "年级", key: "grade" },
         { title: "科目", key: "subject" },
         { title: "上个跟进人", key: "last_sale_name" },
         { title: "意向度", key: "intention_option" },
-        { title: "上次回访内容", key: "last_visit_content" ,tooltip:true},
+        // { title: "上次回访内容", key: "last_visit_content" ,tooltip:true},
+        {
+          title: "回访次数",
+          key: "visit_num",
+          width: 100,
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "span",
+                {
+                  on: {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    click: () => {
+                      this.visit(params.row);
+                    }
+                  },
+                  style: {
+                    width: "98px",
+                    height: "70px",
+                    display: "inline-block",
+                    marginLeft: "-17px",
+                    textAlign: "center",
+                    lineHeight: "70px",
+                    cursor: "pointer"
+                  }
+                },
+                params.row.visit_num
+              )
+            ]);
+          }
+        },
         { title: "上次回访时间", key: "last_follow_time" },
-        { title: "说明", key: "assign_note",tooltip:true },
+        { title: "说明", key: "assign_note", tooltip: true },
         { title: "注册时间", key: "create_time" },
         {
           title: "操作",
@@ -189,6 +263,11 @@ export default {
     };
   },
   methods: {
+    //回访记录
+    visit(item) {
+      this.showVisit = true;
+      this.showVisitData = item.visit_content ? item.visit_content : [];
+    },
     //日期
     getTimes() {
       if (this.startTime && this.endTime) {

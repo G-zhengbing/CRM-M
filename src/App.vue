@@ -38,12 +38,6 @@ export default {
   padding: 0;
   /* box-sizing:unset; */
 }
-html,
-body,
-.box,
-#app {
-  height: 100%;
-}
 i {
   font-style: normal;
   display: inline-block;
@@ -72,14 +66,12 @@ ul {
 }
 /*  */
 .contaner {
-  margin: 0 44px;
+  margin: 0 20px;
 }
 .main-section .main-section-bottom {
   width: 100%;
   flex: 1;
   background: #fff;
-  border-radius: 10px;
-  margin-top: 10px;
   min-height: 690px;
 }
 .daiban-button {
@@ -117,26 +109,13 @@ ul {
   margin-right: 55px;
   text-indent: 5px;
 }
-/*  */
-.main-section .main-section-top {
-  width: 100%;
-  height: 111px;
-  background: #fff;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  min-width: 1300px;
-}
 .main-section {
   display: flex;
   flex-direction: column;
 }
-.surplus {
-  margin: 5px;
-}
 .main-header ul li span {
   font-size: 12px;
-  color: #1b73b0;
+  color: #2d8cf0;
 }
 .main-header ul li i {
   border-left: 2px solid #ee5c5c;
@@ -158,5 +137,6 @@ ul {
   display: flex;
   align-items: center;
   min-height: 25px;
+  border-bottom: 1px solid #ccc;
 }
 </style>

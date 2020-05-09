@@ -1,137 +1,141 @@
 <template>
-  <div class="box">
-    <Collapse v-model="value1">
-      <Panel name="1">
-        筛选条件
-        <p slot="content">
-          <Form :model="form" :label-width="80">
-            <Row>
-              <Col span="4">
-                <FormItem>
-                  <Input v-model="form.name" placeholder="学员姓名" @on-change="seekClick"></Input>
-                </FormItem>
-              </Col>
-              <Col span="4">
-                <FormItem>
-                  <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekClick"></Input>
-                </FormItem>
-              </Col>
-              <Col span="4">
-                <FormItem>
-                  <Select
-                    v-model="form.follow_status"
-                    @on-change="seekClick"
-                    placeholder="跟进状态"
-                  >
-                    <Option :value="i" v-for="(list,i) in follow_status" :key="i">{{list}}</Option>
-                  </Select>
-                </FormItem>
-              </Col>
-              <Col span="4">
-                <FormItem>
-                  <Select
-                    v-model="form.sale_id"
-                    @on-change="seekClick"
-                    placeholder="跟进人"
-                  >
-                    <Option v-for="(list,i) in sale_list" :key="i" :value="list.id">{{list.login_name}}</Option>
-                  </Select>
-                </FormItem>
-              </Col>
-              <Col span="4">
-                <FormItem>
-                  <Select
-                    v-model="form.grade"
-                    @on-change="seekClick"
-                    placeholder="年级"
-                  >
-                    <Option :value="1">一年级</Option>
-                    <Option :value="2">二年级</Option>
-                    <Option :value="3">三年级</Option>
-                    <Option :value="4">四年级</Option>
-                    <Option :value="5">五年级</Option>
-                    <Option :value="6">六年级</Option>
-                    <Option :value="7">七年级</Option>
-                    <Option :value="8">八年级</Option>
-                    <Option :value="9">九年级</Option>
-                  </Select>
-                </FormItem>
-              </Col>
-              <Col span="4">
-                <FormItem>
-                  <Select
-                    v-model="form.refer"
-                    @on-change="seekClick"
-                    placeholder="渠道类型"
-                  >
-                    <Option :value="list.id" v-for="(list,i) in channel" :key="i">{{list.channel_title}}</Option>
-                  </Select>
-                </FormItem>
-              </Col>
-              <Col span="6">
-                <FormItem>
-                  <div class="dateplc">
-                    <DatePicker
-                      v-model="startTime2"
-                      type="date"
-                      placeholder="分配时间"
-                      @on-change="getTimes2"
-                    ></DatePicker>
-                    <DatePicker
-                      v-model="endTime2"
-                      type="date"
-                      placeholder="分配时间"
-                      @on-change="getTimes2"
-                    ></DatePicker>
-                  </div>
-                </FormItem>
-              </Col>
-              <Col span="6">
-                <FormItem>
-                  <div class="dateplc">
-                    <DatePicker
-                      v-model="startTime"
-                      type="date"
-                      placeholder="注册时间"
-                      @on-change="getTimes"
-                    ></DatePicker>
-                    <DatePicker
-                      v-model="endTime"
-                      type="date"
-                      placeholder="注册时间"
-                      @on-change="getTimes"
-                    ></DatePicker>
-                  </div>
-                </FormItem>
-              </Col>
-              <Col span="4" style="text-indent: 60px">
-                <Button type="primary" @click="clear">清除</Button>
-              </Col>
-            </Row>
-        </Form>
-        <Button type="primary" @click="createUsers">创建用户</Button>
-        </p>
-      </Panel>
-    </Collapse>
-    <Table
-      border
-      :columns="columns"
-      :data="clientkData"
-      @on-selection-change="selectionChange"
-    ></Table>
-    <Page
-      @on-change="pageChange"
-      :total="total"
-      :current="currentPage"
-      :page-size="pageSize"
-      show-total
-      show-elevator
-      class="ive-page"
-    />
-    <!-- </div>
+  <div class="box" ref="box">
+    <section class="main-section">
+      <div class="surplus">
+        <div class="main-section-bottom">
+          <div class="contaner">
+            <div style="height:10px"></div>
+            <Form :model="form" :label-width="80">
+              <Row>
+                <Col span="4">
+                  <FormItem>
+                    <Input v-model="form.name" placeholder="学员姓名" @on-change="seekClick"></Input>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekClick"></Input>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select v-model="form.visit_num" @on-change="seekClick" placeholder="回访次数">
+                      <Option :value="1">1</Option>
+                      <Option :value="2">2</Option>
+                      <Option :value="3">3</Option>
+                      <Option :value="4">4</Option>
+                      <Option :value="5">5</Option>
+                      <Option :value="6">6</Option>
+                      <Option :value="7">6以上</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select v-model="form.follow_status" @on-change="seekClick" placeholder="跟进状态">
+                      <Option :value="i" v-for="(list,i) in follow_status" :key="i">{{list}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select v-model="form.sale_id" @on-change="seekClick" placeholder="跟进人">
+                      <Option
+                        v-for="(list,i) in sale_list"
+                        :key="i"
+                        :value="list.id"
+                      >{{list.login_name}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select v-model="form.grade" @on-change="seekClick" placeholder="年级">
+                      <Option :value="1">一年级</Option>
+                      <Option :value="2">二年级</Option>
+                      <Option :value="3">三年级</Option>
+                      <Option :value="4">四年级</Option>
+                      <Option :value="5">五年级</Option>
+                      <Option :value="6">六年级</Option>
+                      <Option :value="7">七年级</Option>
+                      <Option :value="8">八年级</Option>
+                      <Option :value="9">九年级</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select v-model="form.refer" @on-change="seekClick" placeholder="渠道类型">
+                      <Option
+                        :value="list.id"
+                        v-for="(list,i) in channel"
+                        :key="i"
+                      >{{list.channel_title}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="6">
+                  <FormItem>
+                    <div class="dateplc">
+                      <DatePicker
+                        v-model="startTime2"
+                        type="date"
+                        placeholder="分配时间"
+                        @on-change="getTimes2"
+                      ></DatePicker>
+                      <DatePicker
+                        v-model="endTime2"
+                        type="date"
+                        placeholder="分配时间"
+                        @on-change="getTimes2"
+                      ></DatePicker>
+                    </div>
+                  </FormItem>
+                </Col>
+                <Col span="6">
+                  <FormItem>
+                    <div class="dateplc">
+                      <DatePicker
+                        v-model="startTime"
+                        type="date"
+                        placeholder="注册时间"
+                        @on-change="getTimes"
+                      ></DatePicker>
+                      <DatePicker
+                        v-model="endTime"
+                        type="date"
+                        placeholder="注册时间"
+                        @on-change="getTimes"
+                      ></DatePicker>
+                    </div>
+                  </FormItem>
+                </Col>
+                <Col span="4" style="text-indent: 60px">
+                  <Button type="primary" @click="clear">清除</Button>
+                </Col>
+              </Row>
+            </Form>
+            <Button type="primary" @click="createUsers">创建用户</Button>
+            <Table
+              border
+              :columns="columns"
+              :data="clientkData"
+              @on-selection-change="selectionChange"
+              height="500"
+            ></Table>
+            <Page
+              @on-change="pageChange"
+              :total="total"
+              :current="currentPage"
+              :page-size="pageSize"
+              show-total
+              show-elevator
+              class="ive-page"
+            />
+          </div>
         </div>
       </div>
-    </section>-->
+    </section>
     <Modal
       width="800"
       v-model="showVisit"
@@ -187,7 +191,7 @@ export default {
   },
   data() {
     return {
-      value1: "1",
+      value1: "",
       visitColumns: [
         { title: "回访内容", key: "visit_content" },
         { title: "跟进人", key: "sale_name", width: 100 },
@@ -212,7 +216,9 @@ export default {
         status: "mineclient"
       },
       isLoading: false,
-      form: {},
+      form: {
+        visit_num: 0
+      },
       columns: [
         { type: "selection", width: 60, fixed: "left" },
         { title: "学员姓名", key: "student_name", width: 100, fixed: "left" },
@@ -380,6 +386,7 @@ export default {
     createUsers() {
       this.showMine = true;
       this.type.classify = "introduce";
+      this.type.types = "createduser";
     },
     //移出
     remove(item) {
@@ -395,6 +402,7 @@ export default {
       this.setClientTypes(item);
       this.showMine = true;
       this.type.classify = "introduce";
+      this.type.types = "introduce";
       this.type.form = this.form;
       this.type.page = this.currentPage;
       this.type.data = { ...this.clientTypes };
@@ -449,6 +457,7 @@ export default {
     },
     clear() {
       this.form = {};
+      this.form.visit_num = 0;
       this.startTime = "";
       this.endTime = "";
       this.startTime2 = "";

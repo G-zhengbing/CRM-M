@@ -1,21 +1,10 @@
 <template>
   <div class="box">
-    <header class="main-header">
-      <ul>
-        <li>
-          <i></i>
-          <span>M站后台</span>
-        </li>
-        <li class="active">
-          <i></i>
-          <span>资料管理</span>
-        </li>
-      </ul>
-    </header>
     <section class="main-section">
       <div class="surplus">
         <div class="main-section-top">
           <div class="main-section-top-top">
+            <div style="height:10px"></div>
             <Form :model="form" :label-width="80">
               <Row>
                 <Col span="12">

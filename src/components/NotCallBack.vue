@@ -1,18 +1,10 @@
 <template>
   <div class="box">
-    <header class="main-header">
-      <ul>
-        <li style="margin-left:30px">
-          <!-- <i></i> -->
-          <span>逾期未回访</span>
-        </li>
-      </ul>
-    </header>
     <section class="main-section">
       <div class="surplus">
         <div class="main-section-bottom">
           <div class="contaner">
-            <div style="height:30px;"></div>
+            <div style="height:10px"></div>
             <Form :model="form" :label-width="80">
               <Row>
                 <Col span="4">
