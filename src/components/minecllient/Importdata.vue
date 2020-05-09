@@ -1,12 +1,5 @@
 <template>
   <div class="box">
-    <header class="main-header">
-      <ul>
-        <li style="margin-left:30px">
-          <span>线索导入</span>
-        </li>
-      </ul>
-    </header>
     <section class="main-section">
       <div class="surplus">
         <div class="main-section-bottom">

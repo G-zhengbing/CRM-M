@@ -127,7 +127,7 @@ export default {
 <style scoped>
 .pagination ul li.is-current,
 .pagination ul li.is-current a {
-  background: #1b73b0;
+  background: #2d8cf0;
   color: #fff;
 }
 .pagination ul li.pagination-ellipsis {
@@ -147,7 +147,7 @@ export default {
   width: 34px;
   height: 34px;
   border: 1px solid #a0a0a0;
-  color: #1b73b0;
+  color: #2d8cf0;
   text-align: center;
   line-height: 34px;
   margin-left: 5px;
@@ -157,7 +157,7 @@ export default {
 .pagination button {
   width: 101px;
   height: 35px;
-  background-color: #1b73b0;
+  background-color: #2d8cf0;
   outline: none;
   border: none;
   border-radius: 3px;

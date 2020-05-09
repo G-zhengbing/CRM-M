@@ -1,17 +1,10 @@
 <template>
   <div class="box" ref="box">
-    <header class="main-header">
-      <ul>
-        <li style="margin-left:30px">
-          <span>教师管理</span>
-        </li>
-      </ul>
-    </header>
     <section class="main-section">
       <div class="surplus">
         <div class="main-section-bottom">
           <div class="contaner">
-            <div style="height:30px;"></div>
+            <div style="height:10px"></div>
             <Form :model="seekForm" :label-width="80">
               <Row>
                 <Col span="4">
@@ -163,6 +156,14 @@
           <Col span="12">
             <FormItem label="招商银行开户行" prop="bank_card_open">
               <Input v-model="form.bank_card_open" placeholder="请输入招商银行开户行" style="width:300px"></Input>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="教授类型">
+              <RadioGroup v-model="form.type">
+                <Radio :label="1">班课</Radio>
+                <Radio :label="4">一对一</Radio>
+              </RadioGroup>
             </FormItem>
           </Col>
           <Col span="12" style="display:flex" class="actives">

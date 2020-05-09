@@ -27,6 +27,7 @@ import Reservation from '../components/Reservation'
 import Thread from '../components/Thread'
 import Studentpay from '../components/minecllient/Studentpay.vue'
 import Mineclient from '../components/minecllient/Mineclient.vue'
+import Mineclientcopy from '../components/minecllient/Mineclientcopy.vue'
 import Notification from '../components/minecllient/Notification.vue'
 import Reserved from '../components/reserved/Reserved.vue'
 import Allreserved from '../components/reserved/Allreserved.vue'
@@ -35,8 +36,10 @@ import Statistics from '../components/Statistics'
 import Importdata from '../components/minecllient/Importdata.vue'
 import Importorder from '../components/minecllient/Importorder.vue'
 import Timeblock from '../uilt/timeblock/Timeblock.vue'
-import Maincopy from '../components/Maincopy.vue'
- 
+import Scheducourse from '../components/scheduling/Scheducourse.vue'
+import Schedulessons from '../components/scheduling/Schedulessons.vue'
+import Schedustudent from '../components/scheduling/Schedustudent.vue'
+import Scheduteachers from '../components/scheduling/Scheduteachers.vue'
 import storage from '../uilt/storage'
 
 Vue.use(Router)
@@ -47,8 +50,7 @@ Router.prototype.push = function push(location) {
 }
 
 const router = new Router({
-  routes: [
-    {
+  routes: [{
       path: '/',
       name: 'Login',
       component: Login
@@ -61,173 +63,10 @@ const router = new Router({
       path: '/succeed',
       component: Succeed
     },
-    // {
-    //   path: '/maincopy',
-    //   component: Maincopy,
-    //   children: [
-    //     {
-    //       path: '/main/bookcode',
-    //       component: Bookcode
-    //     },
-    //     {
-    //       path: '/main/special',
-    //       component: Special
-    //     },
-    //     {
-    //       path: '/main/databank',
-    //       component: Databank
-    //     },
-    //     {
-    //       path: '/main/curriculum',
-    //       component: Curriculum
-    //     },
-    //     {
-    //       path: '/main/advertising',
-    //       component: Advertising
-    //     },
-    //     {
-    //       path: '/main',
-    //       redirect: '/main/home'
-    //     },
-    //     {
-    //       path: '/main/home',
-    //       component: Home,
-    //     },
-    //     {
-    //       path: '/main/erweima',
-    //       component: Erweima
-    //     },
-    //     {
-    //       path: '/main/daiban',
-    //       component: Daiban
-    //     },
-    //     {
-    //       path: '/main/notvisit',
-    //       component: NotVisit
-    //     },
-    //     {
-    //       path: '/main/public',
-    //       component: Public
-    //     },
-    //     {
-    //       path: '/main/followup',
-    //       component: FollowUp
-    //     },
-    //     {
-    //       path: '/main/number',
-    //       component: Number
-    //     },
-    //     {
-    //       path: '/main/money',
-    //       component: Money
-    //     },
-    //     {
-    //       path: '/main/notcallback',
-    //       component: NotCallBack
-    //     },
-    //     {
-    //       path: '/main/paystudent',
-    //       component: Paystudent
-    //     },
-    //     {
-    //       path: '/main/uplist',
-    //       component: Uplist
-    //     },
-    //     {
-    //       path: '/main/minestudent',
-    //       component: Minestudent
-    //     },
-    //     {
-    //       path: '/main/payingstudent',
-    //       component: Payingstudent
-    //     },
-    //     {
-    //       path: '/main/reservation',
-    //       component: Reservation
-    //     },
-    //     {
-    //       path: '/main/thread',
-    //       component: Thread
-    //     },
-    //     {
-    //       path: '/main/studentpay',
-    //       component: Studentpay
-    //     },
-    //     {
-    //       path: '/main/mineclient',
-    //       component: Mineclient
-    //     },
-    //     {
-    //       path: '/main/notification',
-    //       component: Notification
-    //     },
-    //     {
-    //       path: '/main/reserved',
-    //       component: Reserved
-    //     },
-    //     {
-    //       path: '/main/teacher',
-    //       component: Teacher
-    //     },
-    //     {
-    //       path: '/main/allreserved',
-    //       component: Allreserved
-    //     },
-    //     {
-    //       path: '/main/statistics',
-    //       component: Statistics
-    //     },
-    //     {
-    //       path: '/main/timeblock',
-    //       component: Timeblock
-    //     },
-    //     {
-    //       path: '/main/importdata',
-    //       component: Importdata
-    //     },
-    //     {
-    //       path: '/main/classstudents', // 班课学员
-    //       component: () => import('@/components/teacher/ClassStudents')
-    //     },
-    //     {
-    //       path: '/main/inclass', // 开课中学员
-    //       component: () => import('@/components/teacher/InClass')
-    //     },
-    //     {
-    //       path: '/main/myreservation', // 我的预约单
-    //       component: () => import('@/components/teacher/MyReservation')
-    //     },
-    //     {
-    //       path: '/main/payingstudents', // 付费学员
-    //       component: () => import('@/components/teacher/PayingStudent/index')
-    //     },
-    //     {
-    //       path: '/main/course', // 课程
-    //       component: () => import('@/components/teacher/course')
-    //     },
-    //     {
-    //       path: '/main/oneononestudent',  // 一对一学员
-    //       component: () => import('@/components/teacher/OneOnOneStudent')
-    //     },
-    //     // { <!-- 后台无数据，无法验证完善，待更改 -->
-    //     //   path: '/main/oneinclass', // 开课中学员
-    //     //   component: () => import('@/components/teacher/OneInClass')
-    //     // },
-    //     {
-    //       path: '/main/onemyreservation', // 我的预约单
-    //       component: () => import('@/components/teacher/OneMyReservation')
-    //     },
-    //     {
-    //       path: '/main/teacher', // 教师管理
-    //       component: () => import('@/components/teacher/teacher')
-    //     },
-    //   ]
-    // },
     {
       path: '/main',
       component: Main,
-      children: [
-        {
+      children: [{
           path: '/main/bookcode',
           component: Bookcode
         },
@@ -324,6 +163,10 @@ const router = new Router({
           component: Mineclient
         },
         {
+          path: '/main/mineclientcopy',
+          component: Mineclientcopy
+        },
+        {
           path: '/main/notification',
           component: Notification
         },
@@ -356,6 +199,22 @@ const router = new Router({
           component: Importorder
         },
         {
+          path: '/main/scheducourse',
+          component: Scheducourse
+        },
+        {
+          path: '/main/schedulessons',
+          component: Schedulessons
+        },
+        {
+          path: '/main/schedustudent',
+          component: Schedustudent
+        },
+        {
+          path: '/main/scheduteachers',
+          component: Scheduteachers
+        },
+        {
           path: '/main/classstudents', // 班课学员
           component: () => import('@/components/teacher/ClassStudents')
         },
@@ -376,7 +235,7 @@ const router = new Router({
           component: () => import('@/components/teacher/course')
         },
         {
-          path: '/main/oneononestudent',  // 一对一学员
+          path: '/main/oneononestudent', // 一对一学员
           component: () => import('@/components/teacher/OneOnOneStudent')
         },
         // { <!-- 后台无数据，无法验证完善，待更改 -->

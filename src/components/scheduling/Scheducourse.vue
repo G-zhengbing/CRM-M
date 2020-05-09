@@ -1,10 +1,17 @@
 <template>
   <div class="box" ref="box">
+    <header class="main-header">
+      <ul>
+        <li style="margin-left:30px">
+          <span>消息提醒</span>
+        </li>
+      </ul>
+    </header>
     <section class="main-section">
       <div class="surplus">
         <div class="main-section-bottom">
           <div class="contaner">
-            <div style="height:10px"></div>
+            <div style="height:30px;"></div>
             <Form :model="form" :label-width="80">
               <Row>
                 <Col span="4">
@@ -33,26 +40,6 @@
                         placeholder="操作时间"
                         style="width: 200px"
                         @on-change="getTimes2"
-                      ></DatePicker>
-                    </div>
-                  </FormItem>
-                </Col>
-                <Col span="6">
-                  <FormItem>
-                    <div class="dateplc">
-                      <DatePicker
-                        v-model="startTime"
-                        type="date"
-                        placeholder="注册时间"
-                        style="width: 200px"
-                        @on-change="getTimes"
-                      ></DatePicker>
-                      <DatePicker
-                        v-model="endTime"
-                        type="date"
-                        placeholder="注册时间"
-                        style="width: 200px"
-                        @on-change="getTimes"
                       ></DatePicker>
                     </div>
                   </FormItem>
@@ -93,7 +80,7 @@ import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
 import Loading from "../../uilt/loading/loading";
 import storage from "../../uilt/storage";
 import DaibanMessage from "../../uilt/newErweima/DaibanMessage";
-import MineclientMessage from "./MineclientMessage";
+import MineclientMessage from "../minecllient/MineclientMessage";
 export default {
   components: {
     Loading,

@@ -28,6 +28,10 @@ import teacher from './teacher'
 import statistics from './statistics'
 import importdata from './importdata'
 import importorder from './importorder'
+import scheducourse from './scheducourse'
+import schedulessons from './schedulessons'
+import schedustudent from './schedustudent'
+import scheduteachers from './scheduteachers'
 import axios from "axios";
 
 import Payingstudent from './payingstudent/index'
@@ -138,6 +142,10 @@ export default new Vuex.Store({
   },
   getters: {},
   modules: {
+    scheducourse,//课程管理
+    schedulessons,//课节统计
+    schedustudent,//教师管理
+    scheduteachers,//学员管理
     importorder,//导入订单
     allreserved,//全部预约单
     learningReport, // 学情报告

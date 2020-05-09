@@ -104,6 +104,11 @@ export default {
 </script>
 
 <style scoped>
+html,
+body,
+#app {
+  height: 100%;
+}
 .header img {
   width: 27px;
   height: 33px;

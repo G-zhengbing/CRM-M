@@ -1,18 +1,10 @@
 <template>
   <div class="box">
     <DaibanMessage v-if="show" :type="type" ref="message" />
-    <header class="main-header">
-      <ul>
-        <li style="margin-left:30px">
-          <span>资源池</span>
-        </li>
-      </ul>
-    </header>
     <section class="main-section">
       <div class="surplus">
         <div class="main-section-bottom">
           <div class="contaner">
-            <div style="height:1px;"></div>
             <ul class="tabs">
               <li @click="tab(1)" :class="[num == 1? 'active' : '']" v-if="$store.state.cId.is_sales == 'H'">
                 <span>未下单待分配</span>

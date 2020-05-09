@@ -1,18 +1,9 @@
 <template>
   <div class="box" ref="box">
-    <header class="main-header">
-      <ul>
-        <li style="margin-left:30px">
-          <!-- <i></i> -->
-          <span>我的预约单</span>
-        </li>
-      </ul>
-    </header>
     <section class="main-section">
       <div class="surplus">
         <div class="main-section-bottom">
           <div class="contaner">
-            <div style="height:30px;"></div>
             <ul class="tabs">
               <li @click="tab(3)" :class="[num == 3? 'active' : '']">
                 <span>全部预约单</span>
