@@ -12,8 +12,10 @@ export default {
   }
 };
 </script>
-
 <style>
+html,body{
+  height: 100%;
+}
 .ive-page {
   margin-top: 20px;
   text-align: right;

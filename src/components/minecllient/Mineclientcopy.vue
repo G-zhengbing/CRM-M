@@ -20,13 +20,13 @@
                 <Col span="4">
                   <FormItem>
                     <Select v-model="form.visit_num" @on-change="seekClick" placeholder="回访次数">
-                      <Option :value="1">1</Option>
-                      <Option :value="2">2</Option>
-                      <Option :value="3">3</Option>
-                      <Option :value="4">4</Option>
-                      <Option :value="5">5</Option>
-                      <Option :value="6">6</Option>
-                      <Option :value="7">6以上</Option>
+                      <Option :value="1">1次</Option>
+                      <Option :value="2">2次</Option>
+                      <Option :value="3">3次</Option>
+                      <Option :value="4">4次</Option>
+                      <Option :value="5">5次</Option>
+                      <Option :value="6">6次</Option>
+                      <Option :value="7">6次以上</Option>
                     </Select>
                   </FormItem>
                 </Col>

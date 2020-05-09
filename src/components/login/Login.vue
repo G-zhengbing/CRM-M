@@ -1,5 +1,5 @@
 <template>
-  <div class="box centers">
+  <div class="box centers" ref="headerconters">
     <div class="content">
       <div class="header centers">
         <img src="../../assets/img/logo/png8.png" alt />
@@ -36,12 +36,29 @@ import { LOGINURL } from "../../uilt/url/url";
 import qs from "qs";
 export default {
   watch: {},
-  mounted() {},
+  mounted() {
+    // this.$refs.headerconters.style.height = window.innerHeight + 'px'
+    this.clientHeight = `${document.documentElement.clientHeight}`; //获取浏览器可视区域高度
+    let that = this;
+    window.onresize = function() {
+      this.clientHeight = `${document.documentElement.clientHeight}`;
+      if (that.$refs.headerconters) {
+        that.$refs.headerconters.style.minHeight = clientHeight + "px";
+      }
+    };
+  },
   components: {
     Message
   },
+  watch: {
+    clientHeight() {
+      //如果clientHeight 发生改变，这个函数就会运行
+      this.changeFixed(this.clientHeight);
+    }
+  },
   data() {
     return {
+      clientHeight: "",
       isShow: false,
       message: {
         type: "warning",
@@ -54,6 +71,11 @@ export default {
     };
   },
   methods: {
+    changeFixed(clientHeight) {
+      if (this.$refs.headerconters) {
+        this.$refs.headerconters.style.minHeight = clientHeight - 100 + "px";
+      }
+    },
     doLogin() {
       if (!this.form.user_name) {
         this.message.text = "用户名不能为空!";
@@ -104,10 +126,8 @@ export default {
 </script>
 
 <style scoped>
-html,
-body,
-#app {
-  height: 100%;
+body::-webkit-scrollbar {
+  display: none;
 }
 .header img {
   width: 27px;
@@ -183,7 +203,6 @@ body,
 
 .box {
   width: 100%;
-  height: 100%;
   background-image: url(../../assets/img/beijing/png8.png);
 }
 .content {
