@@ -1,4 +1,4 @@
-import { BASEURL } from '../env'
+import { BASEURL } from './env'
 
 const PONESTATUS = "http://liveh5.canpoint.net/send_message" //跟进/发送短信验证码
 
@@ -100,10 +100,14 @@ const CREATEDEPARTMENTNAME = BASEURL + "create_department_name" //设置，创�
 const UPDATEDEPARTMENTNAME = BASEURL + "update_department_name" //设置，修改部门名称
 const DELETEDEPARTMENTNAME = BASEURL + "delete_department_name" //设置，删除部门
 const ADMINMERBERDEPARTMENTNAMELIST = BASEURL + "admin_merber_department_name_list" //设置，删除部门
+const ADMINMERBERROLELIST = BASEURL + "admin_merber_role_list" //设置，获取角色列表
+const CREATEADMINUSER = BASEURL + "create_admin_user" //设置，新增用户列表
 
 const SCREENLIST = BASEURL + "screen_list" //教务/ 公共接口，select状态栏
 
 export {
+  CREATEADMINUSER,
+  ADMINMERBERROLELIST,
   ADMINMERBERDEPARTMENTNAMELIST,
   UPDATEDEPARTMENTNAME,
   DELETEDEPARTMENTNAME,

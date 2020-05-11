@@ -19,7 +19,7 @@
         <Col span="18">
           <div class="one-title">
             <span>用户列表</span>
-            <Button type="primary" @click="editSwitch = true">新增用户</Button>
+            <Button type="primary" @click="editSwitch = true;add=1;formValidate = {};">新增用户</Button>
           </div>
           <div class="title">
             <div class="left">
@@ -28,7 +28,7 @@
             </div>
             <div class="right" style="padding-right: 10px;">
               <Input v-model="value" placeholder="请输入用户名或手机号" style="width: 300px" />
-              <Button type="primary" @click="staffQuery">查询</Button>
+              <Button type="primary" @click="getUserList">查询</Button>
             </div>
           </div>
           <Table
@@ -49,63 +49,6 @@
         @changePages="changePages"
       />
     </Card>
-    <!-- 新增/编辑用户 -->
-    <Modal
-      title="新增/编辑用户"
-      v-model="editSwitch"
-      class-name="vertical-center-modal-1"
-      @on-ok="editConfirm"
-      @on-cancel="editCancel"
-    >
-      <div class="content">
-        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
-          <FormItem label="姓名" prop="UserName">
-            <Input v-model="formValidate.UserName" placeholder="请输入" style="width: 300px"></Input>
-          </FormItem>
-          <FormItem label="性别" prop="sex">
-            <Select v-model="formValidate.sex" placeholder="性别" style="width: 300px">
-              <Option value="beijing">班课</Option>
-              <Option value="shanghai">一对一</Option>
-            </Select>
-          </FormItem>
-          <FormItem label="手机号" prop="mobile">
-            <Input v-model="formValidate.mobile" placeholder="请输入" style="width: 300px"></Input>
-          </FormItem>
-          <FormItem label="邮箱">
-            <Input v-model="formValidate.className" placeholder="请输入" style="width: 300px"></Input>
-          </FormItem>
-          <FormItem label="部门" prop="branch">
-            <Input
-              v-model="formValidate.branch"
-              placeholder="部门"
-              style="width: 300px"
-              @on-focus="branchSwitch = true"
-            ></Input>
-          </FormItem>
-          <FormItem label="角色" prop="role">
-            <Select v-model="formValidate.role" multiple style="width: 300px" placeholder="角色">
-              <Option
-                v-for="item in cityList"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}</Option>
-            </Select>
-          </FormItem>
-        </Form>
-      </div>
-    </Modal>
-    <!-- 新建用户，选择部门控件 -->
-    <Modal
-      title="选择部门"
-      v-model="branchSwitch"
-      class-name="vertical-center-modal-1"
-      @on-ok="branchConfirm"
-      @on-cancel="branchCancel"
-    >
-      <div class="tree-content">
-        <Tree :data="data4" @on-select-change="clickTree"></Tree>
-      </div>
-    </Modal>
     <!-- 添加部门 -->
     <Modal
       title="添加部门"
@@ -141,6 +84,7 @@
         </Form>
       </div>
     </Modal>
+    <Edit :formValidate="formValidate" v-if="editSwitch" :data4="data4" :editSwitch="editSwitch" :cityList="cityList" :add="add" @closeEdit="closeEdit" />
   </div>
 </template>
 
@@ -151,38 +95,19 @@ import {
   CREATEDEPARTMENTNAME,
   UPDATEDEPARTMENTNAME,
   DELETEDEPARTMENTNAME,
-  ADMINMERBERDEPARTMENTNAMELIST
+  ADMINMERBERDEPARTMENTNAMELIST,
+  ADMINMERBERROLELIST,
 } from "@/uilt/url/url";
+import Edit from './edit'
 export default {
   name: "Departments",
+  components: {
+    Edit
+  },
   data() {
     return {
-      cityList: [
-        {
-          value: "New York",
-          label: "New York"
-        },
-        {
-          value: "London",
-          label: "London"
-        },
-        {
-          value: "Sydney",
-          label: "Sydney"
-        },
-        {
-          value: "Ottawa",
-          label: "Ottawa"
-        },
-        {
-          value: "Paris",
-          label: "Paris"
-        },
-        {
-          value: "Canberra",
-          label: "Canberra"
-        }
-      ],
+      // 编辑，用户，下拉列表，存数据
+      cityList: [],
       // table 表格数据
       columns: [
         {
@@ -192,27 +117,27 @@ export default {
         },
         {
           title: "姓名",
-          key: "UserName",
+          key: "login_name",
           align: "center"
         },
         {
           title: "手机号",
-          key: "student_name",
+          key: "mobile",
           align: "center"
         },
         {
           title: "角色",
-          key: "student_name",
+          key: "name",
           align: "center"
         },
         {
           title: "部门",
-          key: "student_name",
+          key: "department_name",
           align: "center"
         },
         {
           title: "最近登录时间",
-          key: "student_name",
+          key: "last_login_time",
           align: "center"
         },
         {
@@ -231,7 +156,8 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.row = params.row;
+                      this.formValidate = params.row;
+                      this.add = 0;
                       this.editSwitch = true;
                     }
                   }
@@ -273,12 +199,7 @@ export default {
           }
         }
       ],
-      dataList: [
-        {
-          student_name: "test",
-          UserName: "123"
-        }
-      ],
+      dataList: [],
 
       // 树形控件数据
       treeData: {},
@@ -366,22 +287,7 @@ export default {
 
       // 下面是form表单获取数据
       formValidate: {},
-      // 验证
-      ruleValidate: {
-        UserName: [
-          { required: true, message: "请输入姓名", trigger: "change" }
-        ],
-        sex: [
-          {
-            required: true,
-            message: "请选择性别",
-            trigger: "change"
-          }
-        ],
-        mobile: [
-          { required: true, message: "请输入手机号", trigger: "change" }
-        ],
-      },
+
       addFormItem: {},
       editNameFormItem: {},
 
@@ -394,7 +300,7 @@ export default {
       editSwitch: false, // 编辑开关
       addSwitch: false, // 添加部门开关
       editNameSwitch: false, // 修改部门开关
-      branchSwitch: false, // 新建用户内部门选择开关
+      add: 0,
 
       // 下列为分页数据
       total: 100,
@@ -406,22 +312,39 @@ export default {
   methods: {
     // 点击树节点时触发
     clickTree(data) {
-      console.log(data);
       this.treeData = data;
     },
-    // 人员查询条件
-    async staffQuery() {
+    // 获取用户信息列表
+    async getUserList() {
       let res = await this.$request({
         url: ADMINMERBERUSERLIST,
         params: {
-          name_or_mobile: this.value
+          name_or_mobile: this.value,
+          page: this.current_page
         }
       });
-      console.log(res);
+      this.dataList = res.data.data.resources;
+      this.dataList.map(item => {
+        item.name = item.role_names.join(",");
+        item.sex = item.sex + "";
+        item.mobile = item.mobile + "";
+      });
+      // 分页配置
+      this.total = res.data.data.links.total;
+      this.per_page = res.data.data.links.per_page;
+      this.current_page = res.data.data.links.current_page;
+      this.last_page = res.data.data.links.last_page;
+    },
+    // 获取用户角色下拉列表
+    async getUserDataList() {
+      let res = await this.$request({
+        url: ADMINMERBERROLELIST
+      });
+      this.cityList = res.data.data;
     },
     // 选择整行信息
     selectItem(selection) {
-      this.Items = selection;
+      this.num = selection.length;
     },
     // 树状图的核心数据渲染
     renderContent(h, { root, node, data }) {
@@ -456,7 +379,6 @@ export default {
                   click: () => {
                     // 修改
                     this.editNameFormItem.department_id = data.id;
-                    console.log(data);
                     this.editNameSwitch = true;
                   }
                 }
@@ -520,49 +442,12 @@ export default {
     // },
     // 改变页码
     changePages(val) {
-      // this.formItem.page = val;
-      // this.getUserData();
+      this.current_page = val;
+      this.getUserList();
     },
-    // 点击确认回调，验证表单,不填写不让关
-    editConfirm() {
-      this.$refs["formValidate"]
-        .validate(valid => {
-          if (valid) {
-            if (!this.formValidate.branch) {
-              this.$Message.error("部门为必选项!");
-            } else {
-              if(!this.formValidate.role) {
-                this.$Message.error("角色为必选项!");
-              } else {
-                this.$Message.success("成功!");
-              }
-            }
-          } else {
-            this.$Message.error("请填写必选项!");
-          }
-        })
-        .then(val => {
-          // 表单验证有 bug 直接点击部门获取不到信息，所以换个显示方法
-          if (!this.formValidate.branch) {
-            return (this.editSwitch = true);
-          }
-          if (!this.formValidate.role) {
-            return (this.editSwitch = true);
-          }
-          // 验证不通过，不关闭弹窗
-          if (!val) {
-            return (this.editSwitch = true);
-          }
-          // 这里写编辑成功发送请求
-
-          // 完成清空
-          this.editCancel();
-        });
-    },
-    // 点击取消回调，重置表单
-    editCancel() {
-      this.$refs["formValidate"].resetFields();
-      this.formValidate = {};
+    closeEdit(Switch) {
+      this.editSwitch = Switch
+      this.getUserList()
     },
     // 添加按钮回调
     async addConfirm() {
@@ -591,30 +476,19 @@ export default {
     editNameCancel() {
       this.editNameFormItem = {};
     },
-    // 新建用户内部门选择按钮回调
-    branchConfirm() {
-      console.log(this.formValidate);
-      if (this.treeData.length !== 0 && this.treeData.length !== undefined) {
-        this.formValidate.branch = this.treeData[0].title;
-      } else {
-        this.formValidate.branch = "";
-      }
-    },
-    branchCancel() {
-      console.log(this.formValidate);
-    },
     // 权限树数据渲染
     async PermissionsTree() {
       let res = await this.$request({
         url: ADMINMERBERDEPARTMENTNAMELIST
       });
-      console.log(res);
       this.data5[0].children = res.data.data;
       this.data4[0].children = res.data.data;
     }
   },
   created() {
     this.PermissionsTree();
+    this.getUserList();
+    this.getUserDataList();
   }
 };
 </script>
