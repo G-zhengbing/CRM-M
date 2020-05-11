@@ -6,14 +6,15 @@
 
 <script>
 export default {
-  mounted(){
-    this.$refs.app.style.width = "100%"
-    this.$refs.app.style.transformOrigin = "50% 0"
+  mounted() {
+    this.$refs.app.style.width = "100%";
+    this.$refs.app.style.transformOrigin = "50% 0";
   }
 };
 </script>
 <style>
-html,body{
+html,
+body {
   height: 100%;
 }
 .ive-page {

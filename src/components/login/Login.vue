@@ -73,7 +73,7 @@ export default {
   methods: {
     changeFixed(clientHeight) {
       if (this.$refs.headerconters) {
-        this.$refs.headerconters.style.minHeight = clientHeight - 100 + "px";
+        this.$refs.headerconters.style.minHeight = clientHeight + "px";
       }
     },
     doLogin() {

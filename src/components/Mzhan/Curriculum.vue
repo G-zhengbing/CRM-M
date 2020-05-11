@@ -7,28 +7,28 @@
             <div style="height:10px"></div>
             <Form :model="form" :label-width="80">
               <Row>
-                <Col span="5">
-                  <FormItem label="课程名称">
-                    <Input v-model="form.course_name"></Input>
+                <Col span="4">
+                  <FormItem>
+                    <Input @on-change="seek" v-model="form.course_name" placeholder="课程名称"></Input>
                   </FormItem>
                 </Col>
-                <Col span="5">
-                  <FormItem label="课程类型">
-                    <Select v-model="form.type" style="width:200px">
+                <Col span="4">
+                  <FormItem>
+                    <Select @on-change="seek" v-model="form.type" style="width:200px" placeholder="课程类型">
                       <Option :value="i" v-for="(list,i) in course" :key="i">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
-                <Col span="5">
-                  <FormItem label="科目">
-                    <Select v-model="form.subject" style="width:200px">
+                <Col span="4">
+                  <FormItem>
+                    <Select @on-change="seek" v-model="form.subject" style="width:200px" placeholder="科目">
                       <Option v-for="(list,i) in subject" :value="i" :key="i">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
-                <Col span="5">
-                  <FormItem label="年级">
-                    <Select v-model="form.grade" style="width:200px">
+                <Col span="4">
+                  <FormItem>
+                    <Select @on-change="seek" v-model="form.grade" style="width:200px" placeholder="年级">
                       <Option :value="1">一年级</Option>
                       <Option :value="2">二年级</Option>
                       <Option :value="3">三年级</Option>
@@ -38,13 +38,15 @@
                       <Option :value="7">七年级</Option>
                       <Option :value="8">八年级</Option>
                       <Option :value="9">九年级</Option>
+                      <Option :value="10">高一</Option>
+                      <Option :value="11">高二</Option>
+                      <Option :value="12">高三</Option>
                     </Select>
                   </FormItem>
                 </Col>
                 <Col span="4">
                   <FormItem>
-                    <Button type="primary" @click="seekKuhu">查询</Button>
-                    <Button style="margin-left: 8px" @click="clear">清空</Button>
+                    <Button type="primary" style="margin-left: 8px" @click="clear">清空</Button>
                   </FormItem>
                 </Col>
               </Row>
@@ -128,6 +130,7 @@ export default {
         },
         {
           title: "课程名称",
+          width:230,
           key: "course_name",
           align: "center"
         },
@@ -421,7 +424,7 @@ export default {
     clear() {
       this.form = {};
     },
-    seekKuhu() {
+    seek() {
       this.loading(true);
       this.getCurrList({form:this.form,page:1}).then(res => {
         this.loading(false);
@@ -466,7 +469,7 @@ form label {
   height: 30px;
   color: #fff;
   font-size: 14px;
-  background: #1b73b0;
+  background: #2d8cf0;
   outline: none;
   border: none;
   border-radius: 5px;

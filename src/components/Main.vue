@@ -61,7 +61,7 @@
                 to="/main/reserved"
                 tag="li"
               >我的预约单</router-link>
-              <router-link to="/main/allreserved" tag="li">全部预约单</router-link>
+              <router-link v-if="$store.state.cId.is_headmaster != 'N'" to="/main/allreserved" tag="li">全部预约单</router-link>
               <router-link v-if="$store.state.cId.is_sales == 'H'" to="/main/daiban" tag="li">资源池</router-link>
               <router-link v-if="$store.state.cId.is_sales == 'Y'" to="/main/public" tag="li">公共资源池</router-link>
               <router-link v-if="$store.state.cId.is_market != 'N'" to="/main/erweima" tag="li">渠道管理</router-link>
