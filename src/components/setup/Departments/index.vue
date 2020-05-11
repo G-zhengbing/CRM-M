@@ -23,8 +23,8 @@
           </div>
           <div class="title">
             <div class="left">
-              <span style="padding-left: 10px;padding-right:5px;">已选{{num}}条</span>
-              <Button type="primary">禁用</Button>
+              <span style="padding-left: 10px;padding-right:5px;">已选{{Items.length}}条</span>
+              <Button type="primary" @click="forbiddenUser(Items)">禁用</Button>
             </div>
             <div class="right" style="padding-right: 10px;">
               <Input v-model="value" placeholder="请输入用户名或手机号" style="width: 300px" />
@@ -84,7 +84,15 @@
         </Form>
       </div>
     </Modal>
-    <Edit :formValidate="formValidate" v-if="editSwitch" :data4="data4" :editSwitch="editSwitch" :cityList="cityList" :add="add" @closeEdit="closeEdit" />
+    <Edit
+      :formValidate="formValidate"
+      v-if="editSwitch"
+      :data4="data4"
+      :editSwitch="editSwitch"
+      :cityList="cityList"
+      :add="add"
+      @closeEdit="closeEdit"
+    />
   </div>
 </template>
 
@@ -97,8 +105,9 @@ import {
   DELETEDEPARTMENTNAME,
   ADMINMERBERDEPARTMENTNAMELIST,
   ADMINMERBERROLELIST,
+  PROHIBITADMINUSER
 } from "@/uilt/url/url";
-import Edit from './edit'
+import Edit from "./edit";
 export default {
   name: "Departments",
   components: {
@@ -173,7 +182,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      // this.createdOrder(params.row);
+                      this.forbiddenUser(params.row.id);
                     }
                   }
                 },
@@ -292,9 +301,8 @@ export default {
       editNameFormItem: {},
 
       // 这是页面内展示数据
-      num: 0, // 选择条数
       value: "", // 手机号查询条件
-      row: "", // 当前选择的用户信息
+      Items: "", // 当前选择的用户信息
 
       // 下面是开关数据
       editSwitch: false, // 编辑开关
@@ -310,6 +318,28 @@ export default {
     };
   },
   methods: {
+    // 禁用用户
+    async forbiddenUser(id) {
+      if (typeof id === "object") {
+        let arrId = [];
+        id.map(item => {
+          arrId.push(item.id);
+        });
+        id = arrId.join(",");
+      }
+      let res = await this.$request({
+        method: "POST",
+        url: PROHIBITADMINUSER,
+        params: {
+          admin_member_ids: id
+        }
+      });
+      if (!res.data.error) {
+        this.$Message.success("禁用成功!");
+      } else {
+        this.$Message.error("禁用失败!");
+      }
+    },
     // 点击树节点时触发
     clickTree(data) {
       this.treeData = data;
@@ -344,7 +374,7 @@ export default {
     },
     // 选择整行信息
     selectItem(selection) {
-      this.num = selection.length;
+      this.Items = selection;
     },
     // 树状图的核心数据渲染
     renderContent(h, { root, node, data }) {
@@ -446,8 +476,8 @@ export default {
       this.getUserList();
     },
     closeEdit(Switch) {
-      this.editSwitch = Switch
-      this.getUserList()
+      this.editSwitch = Switch;
+      this.getUserList();
     },
     // 添加按钮回调
     async addConfirm() {

@@ -102,10 +102,12 @@ const DELETEDEPARTMENTNAME = BASEURL + "delete_department_name" //设置，删�
 const ADMINMERBERDEPARTMENTNAMELIST = BASEURL + "admin_merber_department_name_list" //设置，删除部门
 const ADMINMERBERROLELIST = BASEURL + "admin_merber_role_list" //设置，获取角色列表
 const CREATEADMINUSER = BASEURL + "create_admin_user" //设置，新增用户列表
+const PROHIBITADMINUSER = BASEURL + "prohibit_admin_user" //设置，新增用户列表
 
 const SCREENLIST = BASEURL + "screen_list" //教务/ 公共接口，select状态栏
 
 export {
+  PROHIBITADMINUSER,
   CREATEADMINUSER,
   ADMINMERBERROLELIST,
   ADMINMERBERDEPARTMENTNAMELIST,
