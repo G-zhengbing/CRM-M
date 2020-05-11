@@ -9,9 +9,9 @@
         <Col span="6">
           <p>公司组织架构</p>
           <div style="padding-left: 20px;">
-            <p style="padding: 20px 0">
-              全品直播中心
-              <Icon type="ios-create-outline" :size="20" style="padding-left: 10px;" />
+            <p style="padding: 15px 0">
+              <!-- 全品直播中心
+              <Icon type="ios-create-outline" :size="20" style="padding-left: 10px;" />-->
             </p>
             <Tree :data="data5" :render="renderContent" class="demo-tree-render"></Tree>
           </div>
@@ -182,11 +182,16 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.forbiddenUser(params.row.id);
+                      if (params.row.roles.length) {
+                        this.forbiddenUser(params.row.id);
+                        this.getUserList();
+                      } else {
+                        this.$Message.error("该帐号已禁用!");
+                      }
                     }
                   }
                 },
-                "禁用"
+                params.row.roles.length ? "禁用" : "已禁用"
               )
               // 暂不更新，待需求
               // h(
@@ -336,13 +341,10 @@ export default {
       });
       if (!res.data.error) {
         this.$Message.success("禁用成功!");
+        this.getUserList();
       } else {
         this.$Message.error("禁用失败!");
       }
-    },
-    // 点击树节点时触发
-    clickTree(data) {
-      this.treeData = data;
     },
     // 获取用户信息列表
     async getUserList() {
@@ -409,6 +411,7 @@ export default {
                   click: () => {
                     // 修改
                     this.editNameFormItem.department_id = data.id;
+                    this.editNameFormItem.department_name = data.title;
                     this.editNameSwitch = true;
                   }
                 }
@@ -436,6 +439,9 @@ export default {
                 }),
                 on: {
                   click: () => {
+                    if (data.children) {
+                      return this.$Message.error("请优先删除下级分类!");
+                    }
                     // 删除
                     this.$request({
                       method: "post",
@@ -445,9 +451,12 @@ export default {
                         is_delete: 2
                       })
                     }).then(res => {
-                      this.PermissionsTree();
+                      if (res.data.code === 100001) {
+                        this.$Message.error(res.data.error);
+                      } else if (res.data.code === 200) {
+                        this.remove(root, node, data);
+                      }
                     });
-                    // this.remove(root, node, data);
                   }
                 }
               })
@@ -456,20 +465,21 @@ export default {
         ]
       );
     },
-    // append(data) {
-    //   const children = data.children || [];
-    //   children.push({
-    //     title: this.addFormItem.department_name,
-    //     expand: true
-    //   });
-    //   this.$set(data, "children", children);
-    // },
-    // remove(root, node, data) {
-    //   const parentKey = root.find(el => el === node).parent;
-    //   const parent = root.find(el => el.nodeKey === parentKey).node;
-    //   const index = parent.children.indexOf(data);
-    //   parent.children.splice(index, 1);
-    // },
+    append(data, id) {
+      const children = data.children || [];
+      children.push({
+        id,
+        title: this.addFormItem.department_name,
+        expand: true
+      });
+      this.$set(data, "children", children);
+    },
+    remove(root, node, data) {
+      const parentKey = root.find(el => el === node).parent;
+      const parent = root.find(el => el.nodeKey === parentKey).node;
+      const index = parent.children.indexOf(data);
+      parent.children.splice(index, 1);
+    },
     // 改变页码
     changePages(val) {
       this.current_page = val;
@@ -486,8 +496,8 @@ export default {
         url: CREATEDEPARTMENTNAME,
         data: qs.stringify(this.addFormItem)
       });
-      this.PermissionsTree();
-      // this.append(this.treeData);
+      // this.PermissionsTree();
+      this.append(this.treeData, res.data.data[0]);
       this.addCancel();
     },
     addCancel() {
