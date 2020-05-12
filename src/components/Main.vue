@@ -7,22 +7,11 @@
           <div class="layout-nav">
             <ul class="tabars">
               <li
-                v-if="$store.state.cId.is_market != 'N'"
-                @click="setActive(1)"
-                :class="{active:tabNum == 1}"
-              >CMS管理</li>
-              <li @click="setActive(2)" :class="{active:tabNum == 2}">CRM管理</li>
-              <li
-                v-if="$store.state.cId.is_headmaster != 'N'"
-                @click="setActive(3)"
-                :class="{active:tabNum == 3}"
-              >教务</li>
-              <!-- <li @click="setActive(4)" :class="{active:tabNum == 4}">排课</li> -->
-              <li
-                v-if="$store.state.cId.is_headmaster != 'N'"
-                @click="setActive(5)"
-                :class="{active:tabNum == 5 }"
-              >设置</li>
+                @click="setActive(index)"
+                :class="{active:tabNum == index}"
+                v-for="(item,index) in jurisdictionList"
+                :key="index"
+              >{{item.key}}</li>
             </ul>
           </div>
           <div class="right">
@@ -37,80 +26,20 @@
       </Header>
       <Layout>
         <Sider hide-trigger :style="{background: '#fff'}">
-          <template v-if="tabNum == 3">
-            <ul v-if="$store.state.cId.is_headmaster != 'N'" class="teacheing">
-              <router-link to="/main/classstudents" tag="li">班课学员</router-link>
-              <router-link to="/main/inclass" tag="li">开课中学员</router-link>
-              <router-link to="/main/myreservation" tag="li">我的预约单</router-link>
-              <router-link to="/main/oneononestudent" tag="li">一对一学员</router-link>
-              <router-link to="/main/onemyreservation" tag="li">一对一我的预约单</router-link>
-              <router-link to="/main/statisticanalysis" tag="li">统计分析</router-link>
-              <router-link
-                to="/main/payingstudents"
-                tag="li"
-                v-if="$store.state.cId.is_headmaster == 'H'"
-              >付费学员</router-link>
-            </ul>
-          </template>
-          <!-- <ul v-if="tabNum == 4" class="schedu">
-            <router-link to="/main/scheducourse" tag="li">课程管理</router-link>
-            <router-link to="/main/schedulessons" tag="li">课节统计</router-link>
-            <router-link to="/main/scheduteachers" tag="li">教师管理</router-link>
-            <router-link to="/main/schedustudent" tag="li">学员管理</router-link>
-          </ul>-->
-          <template v-if="$store.state.cId.is_sales != 'N'">
-            <ul v-if="tabNum == 2" class="crm">
-              <router-link to="/main/mineclient" tag="li">我的客户</router-link>
-              <router-link
-                v-if="$store.state.cId.is_sales != 'N'"
-                to="/main/reserved"
-                tag="li"
-              >我的预约单</router-link>
-              <router-link to="/main/allreserved" tag="li">全部预约单</router-link>
-              <router-link v-if="$store.state.cId.is_sales == 'H'" to="/main/daiban" tag="li">资源池</router-link>
-              <router-link v-if="$store.state.cId.is_sales == 'Y'" to="/main/public" tag="li">公共资源池</router-link>
-              <router-link v-if="$store.state.cId.is_market != 'N'" to="/main/erweima" tag="li">渠道管理</router-link>
-              <router-link
-                v-if="$store.state.cId.is_teacher != 'N'"
-                to="/main/teacher"
-                tag="li"
-              >教师管理</router-link>
-              <router-link
-                v-if="$store.state.cId.is_sales == 'H'"
-                to="/main/importdata"
-                tag="li"
-              >线索导入</router-link>
-              <router-link
-                v-if="$store.state.cId.is_headmaster == 'H'"
-                to="/main/importorder"
-                tag="li"
-              >订单导入</router-link>
-              <router-link
-                v-if="$store.state.cId.is_sales != 'N'"
-                to="/main/statistics"
-                tag="li"
-              >统计分析</router-link>
-              <router-link v-if="$store.state.cId.is_sales != 'N'" to="/main/money" tag="li">订单中心</router-link>
-            </ul>
-          </template>
-          <template v-if="$store.state.cId.is_sales != 'N'">
-            <ul v-if="tabNum == 5" class="crm">
-              <router-link to="/main/departments" tag="li">部门和用户</router-link>
-              <router-link to="/main/jurisdiction" tag="li">角色和权限</router-link>
-            </ul>
-          </template>
-          <template v-if="$store.state.cId.is_market != 'N'">
-            <ul v-if="tabNum == 1" class="cms">
-              <router-link to="/main/advertising" tag="li">广告管理</router-link>
-              <li class="cms_special">
+          <template v-for="(item,index) in jurisdictionList[tabNum].childrens">
+            <ul class="teacheing">
+              <li v-if="item.childrens" class="cms_special">
                 <div>
-                  <span>专题管理</span>
+                  <span>{{item.key}}</span>
                 </div>
-                <router-link to="/main/special" tag="li">首页专题</router-link>
-                <router-link to="/main/bookcode" tag="li">一书一码</router-link>
+                <router-link
+                  v-for="(i,index) in item.childrens"
+                  :key="index"
+                  :to="i.path"
+                  tag="li"
+                >{{i.key}}</router-link>
               </li>
-              <router-link to="/main/curriculum" tag="li">课程管理</router-link>
-              <router-link to="/main/databank" tag="li">资料管理</router-link>
+              <router-link v-else :to="item.path" tag="li">{{item.key}}</router-link>
             </ul>
           </template>
         </Sider>
@@ -144,7 +73,130 @@ export default {
       theme1: "light",
       isSection: true,
       isActive: false,
-      active: storeage.getMenuNum()
+      active: storeage.getMenuNum(),
+      jurisdictionList: [
+        {
+          key: "CMS管理",
+          childrens: [
+            {
+              key: "广告管理",
+              path: "/main/advertising"
+            },
+            {
+              key: "专题管理",
+              childrens: [
+                {
+                  key: "首页专题",
+                  path: "/main/special"
+                },
+                {
+                  key: "一书一码",
+                  path: "/main/bookcode"
+                }
+              ]
+            },
+            {
+              key: "课程管理",
+              path: "/main/curriculum"
+            },
+            {
+              key: "资料管理",
+              path: "/main/databank"
+            }
+          ]
+        },
+        {
+          key: "CRM管理",
+          childrens: [
+            {
+              key: "我的客户",
+              path: "/main/mineclient"
+            },
+            {
+              key: "我的预约单",
+              path: "/main/reserved"
+            },
+            {
+              key: "全部预约单",
+              path: "/main/allreserved"
+            },
+            {
+              key: "资源池",
+              path: "/main/daiban"
+            },
+            {
+              key: "渠道管理",
+              path: "/main/erweima"
+            },
+            {
+              key: "教师管理",
+              path: "/main/teacher"
+            },
+            {
+              key: "线索导入",
+              path: "/main/importdata"
+            },
+            {
+              key: "订单导入",
+              path: "/main/importorder"
+            },
+            {
+              key: "统计分析",
+              path: "/main/statistics"
+            },
+            {
+              key: "订单中心",
+              path: "/main/money"
+            }
+          ]
+        },
+        {
+          key: "教务",
+          childrens: [
+            {
+              key: "班课学员",
+              path: "/main/classstudents"
+            },
+            {
+              key: "开课中学员",
+              path: "/main/inclass"
+            },
+            {
+              key: "我的预约单",
+              path: "/main/myreservation"
+            },
+            {
+              key: "一对一学员",
+              path: "/main/oneononestudent"
+            },
+            {
+              key: "一对一我的预约单",
+              path: "/main/onemyreservation"
+            },
+            {
+              key: "统计分析",
+              path: "/main/statisticanalysis"
+            },
+            {
+              key: "付费学员",
+              path: "/main/payingstudents"
+            }
+          ]
+        },
+        {
+          key: "设置",
+          childrens: [
+            {
+              key: "部门和用户",
+              path: "/main/departments"
+            },
+            {
+              key: "角色和权限",
+              path: "/main/jurisdiction"
+            }
+          ]
+        }
+      ]
     };
   },
   methods: {
@@ -152,6 +204,7 @@ export default {
     //tabar
     setActive(num) {
       this.tabNum = num;
+      this.$router.push({ path: this.jurisdictionList[num].childrens[0].path });
       storeage.savaMaintabnum(num);
       storeage.savaMainrouter(this.$route.path);
     },
@@ -189,6 +242,9 @@ export default {
         storeage.clear();
       }
     }
+  },
+  created() {
+    console.log(this.jurisdictionList);
   }
 };
 </script>

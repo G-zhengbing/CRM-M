@@ -28,7 +28,7 @@ export default {
     SESSION.setItem(MAINROUTER, JSON.stringify(todo))
   },
   getMaintabnum(){
-    return JSON.parse(SESSION.getItem(MAINTABNUM) || 1)
+    return JSON.parse(SESSION.getItem(MAINTABNUM) || 0)
   },
   savaMaintabnum(todo){
     SESSION.setItem(MAINTABNUM, JSON.stringify(todo))
