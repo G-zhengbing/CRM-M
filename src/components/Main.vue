@@ -11,7 +11,7 @@
                 @click="setActive(1)"
                 :class="{active:tabNum == 1}"
               >CMS管理</li>
-              <li v-if="$store.state.cId.is_market != 'N'" @click="setActive(2)" :class="{active:tabNum == 2}">CRM管理</li>
+              <li v-if="$store.state.cId.is_sales != 'N'" @click="setActive(2)" :class="{active:tabNum == 2}">CRM管理</li>
               <li
                 v-if="$store.state.cId.is_headmaster != 'N'"
                 @click="setActive(3)"
@@ -66,11 +66,7 @@
                 to="/main/reserved"
                 tag="li"
               >我的预约单</router-link>
-              <router-link
-                v-if="$store.state.cId.is_headmaster != 'N'"
-                to="/main/allreserved"
-                tag="li"
-              >全部预约单</router-link>
+              <router-link v-if="$store.state.cId.is_headmaster != 'N'" to="/main/allreserved" tag="li">全部预约单</router-link>
               <router-link v-if="$store.state.cId.is_sales == 'H'" to="/main/daiban" tag="li">资源池</router-link>
               <router-link v-if="$store.state.cId.is_sales == 'Y'" to="/main/public" tag="li">公共资源池</router-link>
               <router-link v-if="$store.state.cId.is_market != 'N'" to="/main/erweima" tag="li">渠道管理</router-link>
