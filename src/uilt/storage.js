@@ -21,7 +21,7 @@ export default {
     SESSION.setItem(MINECLIENTTAB, JSON.stringify(todo))
   },
   getMaintabnum(){
-    return JSON.parse(SESSION.getItem(MAINTABNUM) || 0)
+    return JSON.parse(SESSION.getItem(MAINTABNUM) || 1)
   },
   savaMaintabnum(todo){
     SESSION.setItem(MAINTABNUM, JSON.stringify(todo))
