@@ -181,7 +181,6 @@ export default {
   },
   mounted() {
     this.follow_status = storage.getDaiban().screen_list.follow_status;
-    this.subjectList = storage.getDaiban().screen_list.subject;
     this.intention = storage.getDaiban().screen_list.inter_nation;
     this.stage = storage.getDaiban().screen_list.stage;
     this.transfer = storage.getDaiban().screen_list.transfer;
@@ -204,7 +203,6 @@ export default {
   },
   data() {
     return {
-      value1: "",
       visitColumns: [
         { title: "回访内容", key: "visit_content" },
         { title: "跟进人", key: "sale_name", width: 100 },
@@ -220,7 +218,6 @@ export default {
       startTime: "",
       channel: "",
       follow_status: "",
-      subjectList: "",
       intention: "",
       stage: "",
       transfer: "",
@@ -463,9 +460,6 @@ export default {
         this.form.create_time_end = this.datePicker(this.endTime);
         this.seekClick();
       }
-    },
-    goHome() {
-      // this.$router.push("/main/home");
     },
     clear() {
       this.form = {};

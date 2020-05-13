@@ -7,19 +7,19 @@
             <div style="height:10px"></div>
             <Form :model="form" :label-width="80">
               <Row>
-                <Col span="12">
-                  <FormItem label="资料合集名称"  prop="materials_name">
+                <Col span="4">
+                  <FormItem prop="materials_name">
                     <Input
+                      @on-change="seekKuhu"
                       v-model="form.materials_name"
                       placeholder="请输入资料名称"
                       style="width: 300px"
                     />
                   </FormItem>
                 </Col>
-                <Col span="12">
+                <Col span="4">
                   <FormItem>
-                    <Button type="primary" @click="seekKuhu">查询</Button>
-                    <Button style="margin-left: 8px" @click="clear">清空</Button>
+                    <Button type="primary" style="margin-left: 8px" @click="clear">清空</Button>
                   </FormItem>
                 </Col>
               </Row>
@@ -278,7 +278,11 @@ export default {
       this.isDataMessage = true;
     },
     clear() {
+      this.loading(true);
       this.form = {};
+      this.getDatabankList(this.form).then(()=>{
+        this.loading(false);
+      })
     },
     seekKuhu() {
       this.loading(true);
@@ -331,7 +335,7 @@ form label {
   height: 30px;
   color: #fff;
   font-size: 14px;
-  background: #1b73b0;
+  background: #2d8cf0;
   outline: none;
   border: none;
   border-radius: 5px;

@@ -5,14 +5,24 @@
         <div class="main-section-top">
           <div class="main-section-top-top">
             <div style="height:10px"></div>
-            <form>
-              <label>
-                专题标题:
-                <input type="text" v-model="form.title" />
-              </label>
-              <button type="button" class="daiban-button" @click="seekKuhu">查询</button>
-              <button type="button" class="daiban-button" @click="clear">清空</button>
-            </form>
+            <Form :model="form" :label-width="80">
+              <Row>
+                <Col span="4">
+                  <FormItem prop="materials_name">
+                    <Input
+                      @on-change="seekKuhu"
+                      v-model="form.title"
+                      placeholder="请输入专题标题"
+                    />
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Button type="primary" style="margin-left: 8px" @click="clear">清空</Button>
+                  </FormItem>
+                </Col>
+              </Row>
+            </Form>
           </div>
         </div>
         <div class="main-section-bottom">
@@ -309,6 +319,10 @@ export default {
     },
     clear() {
       this.form = {};
+      this.loading(true);
+      this.getSpecialList(this.form).then(()=>{
+        this.loading(false);
+      })
     },
     seekKuhu() {
       this.loading(true);
@@ -346,7 +360,7 @@ export default {
   height: 30px;
   color: #fff;
   font-size: 14px;
-  background: #1b73b0;
+  background: #2d8cf0;
   outline: none;
   border: none;
   border-radius: 5px;

@@ -18,11 +18,11 @@
                 :class="{active:tabNum == 3}"
               >教务</li>
               <!-- <li @click="setActive(4)" :class="{active:tabNum == 4}">排课</li> -->
-              <li
+              <!-- <li
                 v-if="$store.state.cId.is_headmaster != 'N'"
                 @click="setActive(5)"
                 :class="{active:tabNum == 5 }"
-              >设置</li>
+              >设置</li>-->
             </ul>
           </div>
           <div class="right">
@@ -66,7 +66,11 @@
                 to="/main/reserved"
                 tag="li"
               >我的预约单</router-link>
-              <router-link v-if="$store.state.cId.is_headmaster != 'N'" to="/main/allreserved" tag="li">全部预约单</router-link>
+              <router-link
+                v-if="$store.state.cId.is_headmaster != 'N'"
+                to="/main/allreserved"
+                tag="li"
+              >全部预约单</router-link>
               <router-link v-if="$store.state.cId.is_sales == 'H'" to="/main/daiban" tag="li">资源池</router-link>
               <router-link v-if="$store.state.cId.is_sales == 'Y'" to="/main/public" tag="li">公共资源池</router-link>
               <router-link v-if="$store.state.cId.is_market != 'N'" to="/main/erweima" tag="li">渠道管理</router-link>
@@ -130,21 +134,13 @@ export default {
   mounted() {
     // var s = window.screen.width / 1920;
     // document.body.style.zoom = s;
-    this.active = storeage.getMenuNum();
     this.getReferList();
     this.getUser().then();
-    if (JSON.stringify(this.tabActive) == "{}") {
-      this.tabActive = this.$route.path;
-    }
   },
   data() {
     return {
-      tabActive: storeage.getMainrouter(),
       tabNum: storeage.getMaintabnum(),
-      theme1: "light",
-      isSection: true,
-      isActive: false,
-      active: storeage.getMenuNum()
+      theme1: "light"
     };
   },
   methods: {
@@ -153,10 +149,6 @@ export default {
     setActive(num) {
       this.tabNum = num;
       storeage.savaMaintabnum(num);
-      storeage.savaMainrouter(this.$route.path);
-    },
-    setMenustatus(active) {
-      storeage.savaMainrouter(active);
     },
     namePath(s) {
       storeage.setMenuNum(s);
@@ -171,9 +163,6 @@ export default {
           }
         })
         .catch(e => {});
-    },
-    goErweima() {
-      this.$router.push("/main/erweima");
     }
   },
   computed: {

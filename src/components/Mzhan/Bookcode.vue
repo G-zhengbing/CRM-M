@@ -9,12 +9,17 @@
               <Row>
                 <Col span="5">
                   <FormItem>
-                    <Input v-model="form.book_name" placeholder="请输入书籍名称"></Input>
+                    <Input @on-change="seekKuhu" v-model="form.book_name" placeholder="请输入书籍名称"></Input>
                   </FormItem>
                 </Col>
                 <Col span="4">
                   <FormItem>
-                    <Select v-model="form.subject" style="width:200px" placeholder="请选择科目">
+                    <Select
+                      @on-change="seekKuhu"
+                      v-model="form.subject"
+                      style="width:200px"
+                      placeholder="请选择科目"
+                    >
                       <Option :value="1">数学</Option>
                       <Option :value="2">英语</Option>
                       <Option :value="3">语文</Option>
@@ -29,7 +34,12 @@
                 </Col>
                 <Col span="6">
                   <FormItem>
-                    <Select v-model="form.grade" style="width:200px" placeholder="请选择年级">
+                    <Select
+                      @on-change="seekKuhu"
+                      v-model="form.grade"
+                      style="width:200px"
+                      placeholder="请选择年级"
+                    >
                       <Option :value="1">一年级</Option>
                       <Option :value="2">二年级</Option>
                       <Option :value="3">三年级</Option>
@@ -56,8 +66,7 @@
                 </Col>
                 <Col span="5">
                   <FormItem>
-                    <Button type="primary" @click="seekKuhu">查询</Button>
-                    <Button style="margin-left: 8px" @click="clear">清空</Button>
+                    <Button type="primary" style="margin-left: 8px" @click="clear">清空</Button>
                   </FormItem>
                 </Col>
               </Row>
@@ -275,7 +284,7 @@ export default {
                       size: "small"
                     },
                     style: {
-                      color: '#ccc'
+                      color: "#ccc"
                     }
                   },
                   "已发布"
@@ -293,6 +302,7 @@ export default {
     getTime() {
       this.form.create_start_time = this.time[0];
       this.form.create_end_time = this.time[1];
+      this.seekKuhu();
     },
     //loading
     loading(status) {
@@ -379,6 +389,10 @@ export default {
     clear() {
       this.form = {};
       this.time = "";
+      this.loading(true);
+      this.getBookList(this.form).then(() => {
+        this.loading(false);
+      });
     },
     seekKuhu() {
       let page = 1;
@@ -418,7 +432,7 @@ export default {
   height: 30px;
   color: #fff;
   font-size: 14px;
-  background: #1b73b0;
+  background: #2d8cf0;
   outline: none;
   border: none;
   border-radius: 5px;

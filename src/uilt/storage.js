@@ -11,7 +11,6 @@ const RESERVEDTAB = "RESERVEDTAB"
 const RESERVEDALLTAB = "RESERVEDALLTAB"
 const STATISTICS = "STATISTICS"
 const MAINTABNUM = "MAINTABNUM"
-const MAINROUTER = "MAINROUTER"
 const MINECLIENTTAB = "MINECLIENTTAB"
 
 export default {
@@ -20,12 +19,6 @@ export default {
   },
   savaMineclientTab(todo){
     SESSION.setItem(MINECLIENTTAB, JSON.stringify(todo))
-  },
-  getMainrouter(){
-    return JSON.parse(SESSION.getItem(MAINROUTER) || '{}')
-  },
-  savaMainrouter(todo){
-    SESSION.setItem(MAINROUTER, JSON.stringify(todo))
   },
   getMaintabnum(){
     return JSON.parse(SESSION.getItem(MAINTABNUM) || 1)

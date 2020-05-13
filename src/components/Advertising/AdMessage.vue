@@ -26,7 +26,6 @@
               <div class="demo-upload-list" v-for="(item,i) in uploadList"  :key="i">
                 <img :src="item.url">
                 <div class="demo-upload-list-cover">
-                  <!-- <Icon type="ios-eye-outline" @click.native="handleView(item)"></Icon> -->
                   <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
                 </div>
               </div>
@@ -45,9 +44,6 @@
               </div>
           </Upload>
           <p>只能上传jpg/png格式文件，文件不能超过2M，图片尺寸：180px * 180px</p>
-          <!-- <Modal title="View Image" v-model="visible">
-            <img :src="updateFile" v-if="visible" style="width: 100%">
-          </Modal> -->
           </FormItem>
           <FormItem label="跳转链接" prop="link_url">
             <Input v-model="form.link_url" placeholder="跳转链接必须以http://(https://)开头;为空，则表示不跳转。"></Input>
@@ -299,5 +295,6 @@ export default {
 .ivu-card.ivu-card-bordered {
   width: 1200px;
   height: 540px;
+  overflow-y: auto;
 }
 </style>

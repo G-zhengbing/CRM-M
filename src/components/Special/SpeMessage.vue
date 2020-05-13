@@ -29,7 +29,6 @@
               <div class="demo-upload-list" v-for="(item,i) in uploadList"  :key="i">
                 <img :src="item.url">
                 <div class="demo-upload-list-cover">
-                  <!-- <Icon type="ios-eye-outline" @click.native="handleView(item)"></Icon> -->
                   <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
                 </div>
               </div>
@@ -48,9 +47,6 @@
               </div>
           </Upload>
           <p>只能上传jpg/png格式文件，文件不能超过2M，图片尺寸：180px * 180px</p>
-          <!-- <Modal title="View Image" v-model="visible">
-            <img :src="imgName" v-if="visible" style="width: 100%">
-          </Modal> -->
           </FormItem>
           <FormItem label="专题内容" prop="content" class="active_span">
             <span class="active_red">*</span>
@@ -189,16 +185,6 @@ export default {
               this.$Message.warning('请选择要上传的图片')
               return
             }
-            // if(this.imgWidth > 750){
-            //   this.$Message.warning('图片宽度超出比例')
-            //   this.uploadList = []
-            //   return
-            // }
-            // if(this.imgHeight > 250){
-            //   this.$Message.warning('图片高度超出比例')
-            //   this.uploadList = []
-            //   return
-            // }
             if(!this.form.content){
               this.$Message.warning('请填写专题内容')
               return
@@ -326,6 +312,7 @@ export default {
 }
 .ivu-card.ivu-card-bordered {
   width: 1200px;
-  height: 910px;
+  height: 600px;
+  overflow-y: auto;
 }
 </style>
