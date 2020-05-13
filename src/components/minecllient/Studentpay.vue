@@ -122,7 +122,7 @@
               :columns="columns"
               :data="studentpaykData"
               @on-selection-change="selectionChange"
-              height="500"
+              height="550"
             ></Table>
             <Page
               @on-change="pageChange"

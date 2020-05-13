@@ -223,9 +223,9 @@ export default {
             ]);
           }
         },
-        { title: "上次回访时间",width: 120,align: 'center', key: "last_follow_time" },
+        { title: "上次回访时间",width: 170,align: 'center', key: "last_follow_time" },
         { title: "说明", key: "assign_note", tooltip: true },
-        { title: "注册时间",width: 120,align: 'center', key: "create_time" },
+        { title: "注册时间",width: 170,align: 'center', key: "create_time" },
         {
           title: "操作",
           key: "action",

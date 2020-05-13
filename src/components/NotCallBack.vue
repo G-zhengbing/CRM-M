@@ -99,7 +99,7 @@
               :columns="columns"
               :data="notCallBackData"
               @on-selection-change="selectionChange"
-              height="500"
+              height="560"
             ></Table>
             <Page
               @on-change="pageChange"

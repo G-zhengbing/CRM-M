@@ -123,7 +123,6 @@
               :columns="columns"
               :data="NotdataArr"
               @on-selection-change="selectionChange"
-              height="500"
             ></Table>
             <Page
               @on-change="pageChange"

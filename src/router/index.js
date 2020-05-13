@@ -12,7 +12,6 @@ import Public from '../components/Public'
 import FollowUp from '../components/FollowUp'
 import Money from '../components/Money'
 import Number from '../components/Number'
-import Uplist from '../components/Uplist'
 // import Minestudent from '../components/teacher/Minestudent'
 // import Payingstudent from '../components/teacher/Payingstudent'
 // import StatisticAnalysis from '../components/teacher/StatisticAnalysis'
@@ -23,8 +22,6 @@ import Curriculum from '../components/Mzhan/Curriculum'
 import Databank from '../components/Mzhan/Databank'
 import Special from '../components/Mzhan/Special'
 import Bookcode from '../components/Mzhan/Bookcode'
-import Reservation from '../components/Reservation'
-import Thread from '../components/Thread'
 import Studentpay from '../components/minecllient/Studentpay.vue'
 import Mineclient from '../components/minecllient/Mineclient.vue'
 import Mineclientcopy from '../components/minecllient/Mineclientcopy.vue'
@@ -129,18 +126,6 @@ const router = new Router({
         {
           path: '/main/paystudent',
           component: Paystudent
-        },
-        {
-          path: '/main/uplist',
-          component: Uplist
-        },
-        {
-          path: '/main/reservation',
-          component: Reservation
-        },
-        {
-          path: '/main/thread',
-          component: Thread
         },
         {
           path: '/main/studentpay',
