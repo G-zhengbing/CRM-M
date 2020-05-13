@@ -2,14 +2,6 @@
 <!-- AMEND: 2020.05.08 刘畅 添加字段，增加回访次数弹窗 -->
   <div class="box">
     <DaibanMessage v-if="show" :type="type" />
-    <header class="main-header">
-      <ul>
-        <li style="margin-left:30px">
-          <!-- <i></i> -->
-          <span>公共资源池</span>
-        </li>
-      </ul>
-    </header>
     <section class="main-section">
       <div class="surplus">
         <div class="main-section-bottom">
@@ -192,12 +184,11 @@ export default {
         { type: "selection", width: 60 },
         { title: "学员姓名", key: "student_name" },
         { title: "注册手机", key: "mobile" },
-        { title: "地区", key: "area" },
-        { title: "微信昵称", key: "wechat_nick_name" },
-        { title: "年级", key: "grade" },
-        { title: "科目", key: "subject" },
-        { title: "上个跟进人", key: "last_sale_name" },
-        { title: "意向度", key: "intention_option" },
+        { title: "地区",width:100, key: "area" },
+        { title: "年级",width:100, key: "grade" },
+        { title: "科目",width:100, key: "subject" },
+        { title: "上个跟进人",width:110, key: "last_sale_name" },
+        { title: "意向度",width:100, key: "intention_option" },
         // { title: "上次回访内容", key: "last_visit_content" ,tooltip:true},
         {
           title: "回访次数",
@@ -232,13 +223,14 @@ export default {
             ]);
           }
         },
-        { title: "上次回访时间", key: "last_follow_time" },
+        { title: "上次回访时间",width: 120,align: 'center', key: "last_follow_time" },
         { title: "说明", key: "assign_note", tooltip: true },
-        { title: "注册时间", key: "create_time" },
+        { title: "注册时间",width: 120,align: 'center', key: "create_time" },
         {
           title: "操作",
           key: "action",
           align: "center",
+          width: 100,
           render: (h, params) => {
             return h("div", [
               h(

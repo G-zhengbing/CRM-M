@@ -9,6 +9,7 @@ export default {
   mounted(){
     this.$refs.app.style.width = "100%"
     this.$refs.app.style.transformOrigin = "50% 0"
+    this.$refs.app.style.height = "100%"
   }
 };
 </script>

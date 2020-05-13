@@ -1,13 +1,8 @@
 <template>
   <div class="classstudents">
-    <!-- 面包屑 -->
-    <bread-crumb>
-      <template slot="title">付费学员</template>
-    </bread-crumb>
-    <!-- 卡片包裹 -->
-    <Card class="card">
+    <div class="contaner">
       <div style="text-align:center">
-        <Tabs type="card" v-model="value" @on-click="clickTabs">
+        <Tabs type="card" v-model="value" @on-click="clickTabs" :animated="false">
           <TabPane label="班课" name="name1">
             <!-- 分配状态按钮 -->
             <div class="distribution">
@@ -258,7 +253,7 @@
           </TabPane>
         </Tabs>
       </div>
-    </Card>
+    </div>
     <CallOut v-if="type == 'CallOut'" :row="row" :showMod="showMod" @changeShowMod="changeShowMod" />
     <Allocation
       v-else-if="type == 'Allocation'"
@@ -305,7 +300,7 @@ export default {
       product_type: 1,
       is_distribution: 0,
       num: 0,
-      page_num: '10',
+      page_num: "10",
       formItem: {},
       type: "",
       row: "",
@@ -403,7 +398,7 @@ export default {
           key: "operation",
           align: "center",
           fixed: "right",
-          width: 180,
+          width: 120,
           render: (h, params) => {
             let _this = this;
             return h("div", [
@@ -672,7 +667,7 @@ export default {
           key: "operation",
           align: "center",
           fixed: "right",
-          width: 180,
+          width: 120,
           render: (h, params) => {
             let _this = this;
             return h("div", [

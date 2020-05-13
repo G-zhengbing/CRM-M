@@ -34,7 +34,7 @@
               ></DatePicker>
               <Button style="margin-left:20px" type="primary" @click="clear">清除</Button>
             </div>
-            <Table border :columns="columns" :data="data" height="500"></Table>
+            <Table border :columns="columns" :data="data" height="550"></Table>
           </div>
         </div>
       </div>
@@ -202,7 +202,7 @@ export default {
 }
 .tabs li {
   height: 100%;
-  line-height: 50px;
+  line-height: 35px;
   margin-right: 30px;
   width: 100px;
   text-align: center;
@@ -212,14 +212,15 @@ export default {
 }
 .tabs {
   width: 100%;
-  height: 50px;
+  height: 35px;
   display: flex;
   border-bottom: 1px solid #ccc;
   margin-bottom: 20px;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 /* tabs */
 .dateplc {
   display: flex;
+  margin: 10px 0;
 }
 </style>

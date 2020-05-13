@@ -1,13 +1,8 @@
 <template>
   <div class="OneInClass">
-    <!-- 面包屑 -->
-    <bread-crumb>
-      <template slot="title">一对一开课中学员</template>
-    </bread-crumb>
-    <!-- 卡片包裹 -->
-    <Card class="card">
+    <div class="contaner">
       <div style="text-align:center">
-        <Tabs type="card" value="name1" @on-click="changeTab">
+        <Tabs type="card" value="name1" @on-click="changeTab" :animated="false">
           <TabPane label="全部开课中学员" name="name1">
             <SelectBox
               @formData="formData"
@@ -107,7 +102,7 @@
           </TabPane>
         </Tabs>
       </div>
-    </Card>
+    </div>
     <Loading v-show="isLoading" />
   </div>
 </template>

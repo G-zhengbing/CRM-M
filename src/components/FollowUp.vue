@@ -3,8 +3,7 @@
     <section class="main-section">
       <div class="surplus">
         <div class="main-section-bottom">
-          <div class="contaner">
-            <div style="height:10px"></div>
+          <div>
             <Form :model="form" :label-width="80">
               <Row>
                 <Col span="4">
@@ -61,7 +60,7 @@
                     </Select>
                   </FormItem>
                 </Col>
-                 <Col span="4">
+                <Col span="4">
                   <FormItem>
                     <Select
                       v-model="form.sale_id"
@@ -69,7 +68,11 @@
                       @on-change="seekKuhu"
                       placeholder="跟进人"
                     >
-                      <Option v-for="(list,i) in sale_list" :key="i" :value="list.id">{{list.login_name}}</Option>
+                      <Option
+                        v-for="(list,i) in sale_list"
+                        :key="i"
+                        :value="list.id"
+                      >{{list.login_name}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
@@ -119,13 +122,13 @@ export default {
   mounted() {
     this.setCurrentPage(1);
     this.isLoading = true;
-    this.getFollowUpList({form:{},page:1}).then(res => {
+    this.getFollowUpList({ form: {}, page: 1 }).then(res => {
       this.isLoading = false;
     });
   },
   data() {
     return {
-      sale_list:storage.getDaiban().sale_list,
+      sale_list: storage.getDaiban().sale_list,
       showMine: false,
       intention: storage.getDaiban().screen_list.inter_nation,
       subjectList: storage.getDaiban().screen_list.subject,
@@ -140,26 +143,32 @@ export default {
       form: {},
       columns: [
         { type: "selection", width: 60 },
-        { title: "学员姓名", key: "student_name" },
-        { title: "注册手机", key: "mobile" },
-        { title: "微信昵称", key: "wechat_nick_name" },
-        { title: "年级", key: "grade" },
-        { title: "意向科目", key: "subject" },
-        { title: "意向度", key: "intention_option" },
-        { title: "学习阶段", key: "stage" },
-        { title: "跟进人", key: "follow_sale_name" },
-        { title: "上次跟进内容", key: "last_visit_content" , tooltip: true},
-        { title: "上次跟进时间", key: "last_follow_time" },
-        { title: "回访时间", key: "next_follow_time" },
-        { title: "注册时间", key: "create_time" },
+        { title: "学员姓名", key: "student_name", align: "center",width: 100 },
+        { title: "注册手机", key: "mobile", align: "center",width: 120 },
+        { title: "年级", key: "grade", align: "center" },
+        { title: "意向科目", key: "subject", align: "center",width: 100 },
+        { title: "意向度", key: "intention_option", align: "center" },
+        { title: "学习阶段", key: "stage", align: "center" },
+        { title: "跟进人", key: "follow_sale_name", align: "center" },
+        {
+          title: "上次跟进内容",
+          key: "last_visit_content",
+          align: "center",
+          tooltip: true,
+          width: 140
+        },
+        { title: "上次跟进时间", key: "last_follow_time", align: "center",width: 120 },
+        { title: "回访时间", key: "next_follow_time", align: "center",width: 120 },
+        { title: "注册时间", key: "create_time", align: "center",width: 120 },
         {
           title: "操作",
           key: "action",
           align: "center",
-          width:140,
+          align: "center",
+          width: 140,
           render: (h, params) => {
             return h("div", [
-               h(
+              h(
                 "Button",
                 {
                   props: {
@@ -252,7 +261,7 @@ export default {
     },
     clear() {
       this.form = {};
-      this.seekKuhu()
+      this.seekKuhu();
     },
     seekKuhu() {
       let page = 1;
@@ -261,7 +270,7 @@ export default {
         this.setCurrentPage(page);
       }
       this.isLoading = true;
-      this.getFollowUpList({ form:this.form, page }).then(res => {
+      this.getFollowUpList({ form: this.form, page }).then(res => {
         this.setCurrentPage(page);
         this.isLoading = false;
       });
@@ -270,21 +279,21 @@ export default {
     ...mapMutations(["setCurrentPage", "setGenjintypefoll"]),
     selectionChange() {},
     //转介绍
-    introduce(item){
+    introduce(item) {
       this.setGenjintypefoll(item);
       this.showMine = true;
       this.type.classify = "introduce";
       this.type.page = this.currentPage;
-      this.type.form = this.form ;
+      this.type.form = this.form;
       this.type.data = { ...this.Typesntfoll };
     },
     //订单
-    order(item){
+    order(item) {
       this.setGenjintypefoll(item);
       this.showMine = true;
       this.type.classify = "order";
       this.type.page = this.currentPage;
-      this.type.form = this.form ;
+      this.type.form = this.form;
       this.type.data = { ...this.Typesntfoll };
     },
     //跟进
@@ -293,7 +302,7 @@ export default {
       this.show = true;
       this.type.classify = "followUp";
       this.type.page = this.currentPage;
-      this.type.form = this.form ;
+      this.type.form = this.form;
       this.type.data = { ...this.Typesntfoll };
     },
     //呼出
@@ -302,29 +311,33 @@ export default {
       this.show = true;
       this.type.classify = "followUp";
       this.type.page = this.currentPage;
-      this.type.form = this.form ;
+      this.type.form = this.form;
       this.type.data = { ...this.Typesntfoll };
-      if(typeof item.spare_phone == 'undefined' ||item.spare_phone == "" || item.spare_phone == null){
+      if (
+        typeof item.spare_phone == "undefined" ||
+        item.spare_phone == "" ||
+        item.spare_phone == null
+      ) {
         this.isLoading = true;
-        this.RingUp({form:item})
-        .then(res => {
-          if (res.data.code == 200) {
-            this.$Message.success("呼出成功");
-          }
-          if (res.data.code == 1000) {
-            this.$Message.error({
-              content: res.data.error,
-              duration: 4
-            });
-          }
-          this.isLoading = false;
-        })
-        .catch(e => {
-          if (e) {
+        this.RingUp({ form: item })
+          .then(res => {
+            if (res.data.code == 200) {
+              this.$Message.success("呼出成功");
+            }
+            if (res.data.code == 1000) {
+              this.$Message.error({
+                content: res.data.error,
+                duration: 4
+              });
+            }
             this.isLoading = false;
-          }
-        });
-      }else{
+          })
+          .catch(e => {
+            if (e) {
+              this.isLoading = false;
+            }
+          });
+      } else {
         this.type.classify = "ringupFollowUp";
       }
     },
@@ -332,7 +345,7 @@ export default {
     pageChange(num) {
       this.isLoading = true;
       this.setCurrentPage(num);
-      this.getFollowUpList({ form:this.form }).then(res => {
+      this.getFollowUpList({ form: this.form }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(num);
       });

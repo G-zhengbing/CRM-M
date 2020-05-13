@@ -4,8 +4,7 @@
     <section class="main-section">
       <div class="surplus">
         <div class="main-section-bottom">
-          <div class="contaner">
-            <div style="height:10px"></div>
+          <div>
             <Form :model="form" :label-width="80">
               <Row>
                 <Col span="4">
@@ -236,11 +235,11 @@ export default {
         { type: "selection", width: 60, fixed: "left" },
         { title: "学员姓名", key: "student_name", width: 100, fixed: "left" },
         { title: "注册手机", key: "mobile", width: 120, fixed: "left" },
-        { title: "地址", key: "area", width: 150 },
+        { title: "地址", key: "area", width: 100 },
         {
           title: "回访次数",
           key: "visit_num",
-          width: 100,
+          width: 95,
           render: (h, params) => {
             return h("div", [
               h(
@@ -274,7 +273,7 @@ export default {
         { title: "意向科目", key: "subject", width: 100 },
         { title: "渠道来源", key: "refer", width: 150 },
         { title: "跟进人", key: "follow_sale_name", width: 80 },
-        { title: "跟进状态", key: "follow_status", width: 100 },
+        { title: "跟进状态", key: "follow_status", width: 95 },
         { title: "学习阶段", key: "stage", width: 100 },
         { title: "意向度", key: "intention_option", width: 80 },
         { title: "上次呼出", key: "phone_status", width: 100 },
@@ -286,7 +285,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-          width: 150,
+          width: 200,
           fixed: "right",
           render: (h, params) => {
             return h("div", [
