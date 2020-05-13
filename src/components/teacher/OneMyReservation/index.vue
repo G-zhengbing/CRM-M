@@ -1,13 +1,8 @@
 <template>
   <div class="OneMyReservation">
-    <!-- 面包屑 -->
-    <bread-crumb>
-      <template slot="title">一对一我的预约单</template>
-    </bread-crumb>
-    <!-- 卡片包裹 -->
-    <Card class="card">
+    <div class="contaner">
       <div style="text-align:center">
-        <Tabs type="card" value="name1" @on-click="changeTab">
+        <Tabs type="card" value="name1" @on-click="changeTab" :animated="false">
           <TabPane label="全部预约单" name="name1">
             <div class="title">
               <Form class="select" ref="formValidate" :model="formItem" inline>
@@ -218,7 +213,7 @@
           </TabPane>
         </Tabs>
       </div>
-    </Card>
+    </div>
     <CallOut v-if="type == 'CallOut'" :row="row" :showMod="showMod" @changeShowMod="changeShowMod" />
     <Appraisal
       v-else-if="type == 'Appraisal'"
@@ -622,7 +617,7 @@ export default {
     // 设置当前页码
     changePages(val) {
       this.formItem.page = val;
-      this.getUserData()
+      this.getUserData();
     },
     // 设置mode搜索词汇
     formData(val) {
@@ -687,7 +682,7 @@ export default {
         url: SCREENLIST
       });
       this.setSelectState(res.data.data.screen_list);
-    },
+    }
   },
   created() {
     this.getSelectData();

@@ -1,11 +1,6 @@
 <template>
   <div class="course">
-    <!-- 面包屑 -->
-    <bread-crumb>
-      <template slot="title">课程</template>
-    </bread-crumb>
-    <!-- 卡片包裹 -->
-    <Card class="card">
+    <div class="contaner">
       <div style="text-align:center">
         <SelectBox
           :studentName="true"
@@ -28,7 +23,7 @@
         />
         <PagingBox />
       </div>
-    </Card>
+    </div>
   </div>
 </template>
 

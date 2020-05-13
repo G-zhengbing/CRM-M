@@ -3,8 +3,7 @@
     <section class="main-section">
       <div class="surplus">
         <div class="main-section-bottom">
-          <div class="contaner">
-            <div style="height:10px"></div>
+          <div>
             <Form :model="form" :label-width="80">
               <Row>
                 <Col span="4">
@@ -165,21 +164,20 @@ export default {
       form: {},
       columns: [
         { type: "selection", width: 60 },
-        { title: "学员姓名", key: "student_name" },
-        { title: "注册手机", key: "mobile" },
-        { title: "微信昵称", key: "wechat_nick_name" },
-        { title: "年级", key: "grade" },
-        { title: "意向科目", key: "subject" },
-        { title: "意向度", key: "intention_option" },
-        { title: "学习阶段", key: "stage" },
-        { title: "跟进人", key: "follow_sale_name" },
-        { title: "上次跟进内容", key: "last_visit_content", tooltip: true },
-        { title: "上次跟进时间", key: "last_follow_time" },
-        { title: "回访时间", key: "next_follow_time" },
-        { title: "注册时间", key: "create_time" },
+        { title: "学员姓名", key: "student_name", align: "center", },
+        { title: "注册手机", key: "mobile", align: "center", width: 120},
+        { title: "年级", key: "grade", align: "center", },
+        { title: "意向科目", key: "subject", align: "center", },
+        { title: "意向度", key: "intention_option", align: "center", },
+        { title: "学习阶段", key: "stage", align: "center", },
+        { title: "跟进人", key: "follow_sale_name", align: "center", },
+        { title: "上次跟进内容", key: "last_visit_content", align: "center", tooltip: true ,width: 140},
+        { title: "上次跟进时间", key: "last_follow_time", align: "center",width: 140 },
+        { title: "回访时间", key: "next_follow_time", align: "center", },
+        { title: "注册时间", key: "create_time", align: "center", },
         {
           title: "操作",
-          key: "action",
+          key: "action", align: "center",
           align: "center",
           width: 140,
           render: (h, params) => {

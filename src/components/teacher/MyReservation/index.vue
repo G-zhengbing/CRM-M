@@ -1,13 +1,8 @@
 <template>
   <div class="classstudents">
-    <!-- 面包屑 -->
-    <bread-crumb>
-      <template slot="title">我的预约单</template>
-    </bread-crumb>
-    <!-- 卡片包裹 -->
-    <Card class="card">
+    <div class="contaner">
       <div style="text-align:center">
-        <Tabs type="card" value="name1" @on-click="changeTab">
+        <Tabs type="card" value="name1" @on-click="changeTab" :animated="false">
           <TabPane label="全部预约单" name="name1">
             <!-- <SelectBox
               @formData="formData"
@@ -281,7 +276,7 @@
           </TabPane>
         </Tabs>
       </div>
-    </Card>
+    </div>
     <CallOut v-if="type == 'CallOut'" :row="row" :showMod="showMod" @changeShowMod="changeShowMod" />
     <Appraisal
       v-else-if="type == 'Appraisal'"

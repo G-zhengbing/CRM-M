@@ -1,13 +1,8 @@
 <template>
   <div class="oneononestudent">
-    <!-- 面包屑 -->
-    <bread-crumb>
-      <template slot="title">一对一学员</template>
-    </bread-crumb>
-    <!-- 卡片包裹 -->
-    <Card class="card">
+    <div class="contaner">
       <div style="text-align:center">
-        <Tabs type="card" value="name1" @on-click="changeTab">
+        <Tabs type="card" value="name1" @on-click="changeTab" :animated="false">
           <TabPane label="我的学员" name="name1">
             <div class="title">
               <Form class="select" ref="formValidate" :model="formItem" inline>
@@ -224,7 +219,7 @@
           </TabPane>
         </Tabs>
       </div>
-    </Card>
+    </div>
     <CallOut v-if="type == 'CallOut'" :row="row" :showMod="showMod" @changeShowMod="changeShowMod" />
     <Appraisal
       v-else-if="type == 'Appraisal'"
@@ -325,7 +320,7 @@ export default {
           title: "购买课程",
           key: "course_name",
           align: "center",
-          width: 180
+          width: 220
         },
         {
           title: "总课时",
@@ -337,13 +332,13 @@ export default {
           title: "已消耗课时",
           key: "course_rate_of_progress",
           align: "center",
-          width: 120
+          width: 110
         },
         {
           title: "剩余课时",
           key: "restOfClass",
           align: "center",
-          width: 100
+          width: 95
         },
         {
           title: "开课日期",
@@ -608,7 +603,7 @@ export default {
     // 改变页码
     changePages(val) {
       this.formItem.page = val;
-      this.getUserData()
+      this.getUserData();
     },
     // 设置mode搜索词汇
     formData(val) {

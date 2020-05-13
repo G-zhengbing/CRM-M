@@ -45,35 +45,35 @@ export default {
           title: "试听类型",
           key: "type",
           align: "center",
-          width: 100,
+          // width: 100,
           className: "useBgc"
         },
         {
           title: "试听课程",
           key: "course_name",
           align: "center",
-          width: 140,
+          // width: 140,
           className: "useBgc"
         },
         {
           title: "教师",
           key: "coach_id",
           align: "center",
-          width: 80,
+          // width: 80,
           className: "useBgc"
         },
         {
           title: "试听课日期",
           key: "date_time",
           align: "center",
-          width: 120,
+          // width: 120,
           className: "useBgc"
         },
         {
           title: "试听课时段",
           key: "time_block",
           align: "center",
-          width: 120,
+          // width: 120,
           className: "useBgc"
         },
         {
@@ -81,28 +81,28 @@ export default {
           title: "状态",
           key: "appoint_status",
           align: "center",
-          width: 100,
+          // width: 100,
           className: "useBgc"
         },
         {
           title: "创建人",
           key: "create_user",
           align: "center",
-          width: 100,
+          // width: 100,
           className: "useBgc"
         },
         {
           title: "创建时间",
           key: "create_time",
           align: "center",
-          width: 180,
+          // width: 180,
           className: "useBgc"
         },
         {
           title: "备注",
           key: "note",
           align: "center",
-          width: 160,
+          // width: 160,
           className: "useBgc"
         }
       ],

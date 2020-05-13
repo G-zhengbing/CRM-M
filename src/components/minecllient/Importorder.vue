@@ -4,9 +4,8 @@
       <div class="surplus">
         <div class="main-section-bottom">
           <div class="contaner">
-            <div style="height:10px;"></div>
             <Button style="margin-bottom:30px" type="primary" @click="batch">导入订单</Button>
-            <Table border :columns="columns" :data="importorderList" height="500"></Table>
+            <Table border :columns="columns" :data="importorderList" height="550"></Table>
             <Page
               @on-change="pageChange"
               :total="total"

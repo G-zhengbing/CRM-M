@@ -4,8 +4,7 @@
     <section class="main-section">
       <div class="surplus">
         <div class="main-section-bottom">
-          <div class="contaner">
-            <div style="height:10px"></div>
+          <div>
             <Form :model="form" :label-width="80">
               <Row>
                 <Col span="4">
@@ -159,13 +158,13 @@ export default {
   mounted() {
     this.setCurrentPage(1);
     this.isLoading = true;
-    this.getXinfenList({form:{},page:1}).then(res => {
+    this.getXinfenList({ form: {}, page: 1 }).then(res => {
       this.isLoading = false;
     });
   },
   data() {
     return {
-      refer:storage.getDaiban().channel,
+      refer: storage.getDaiban().channel,
       sale_list: storage.getDaiban().sale_list,
       showMine: false,
       subjectList: storage.getDaiban().screen_list.subject,
@@ -183,25 +182,26 @@ export default {
       form: {},
       columns: [
         { type: "selection", width: 60 },
-        { title: "学员姓名", key: "student_name" },
-        { title: "注册手机", key: "mobile" },
-        { title: "购买课程", key: "product_subject" },
-        { title: "年级", key: "grade" },
-        { title: "意向科目", key: "subject" },
-        // { title: "渠道优先级", key: "subject" },
-        // { title: "渠道类型", key: "refer" },
-        { title: "渠道来源", key: "refer" },
-        { title: "跟进人", key: "follow_sale_name" },
-        { title: "跟进状态", key: "follow_status" },
-        // { title: "学习阶段", key: "follow_status" },
-        { title: "呼出情况", key: "many_calls" },
-        { title: "流转类型", key: "transfer" },
-        { title: "分配时间", key: "receive_time" },
-        { title: "注册时间", key: "create_time" },
+        { title: "学员姓名", key: "student_name", align: "center",width: 100 },
+        { title: "注册手机", key: "mobile", align: "center", width: 120 },
+        { title: "购买课程", key: "product_subject", align: "center" },
+        { title: "年级", key: "grade", align: "center" },
+        { title: "意向科目", key: "subject", align: "center" },
+        // { title: "渠道优先级", key: "subject",align: "center", },
+        // { title: "渠道类型", key: "refer",align: "center", },
+        { title: "渠道来源", key: "refer", align: "center" },
+        { title: "跟进人", key: "follow_sale_name", align: "center" },
+        { title: "跟进状态", key: "follow_status", align: "center" },
+        // { title: "学习阶段", key: "follow_status",align: "center", },
+        { title: "呼出情况", key: "many_calls", align: "center" },
+        { title: "流转类型", key: "transfer", align: "center" },
+        { title: "分配时间", key: "receive_time", align: "center",width: 120, },
+        { title: "注册时间", key: "create_time", align: "center",width: 120, },
         {
           title: "操作",
           key: "action",
           align: "center",
+          width: 180,
           render: (h, params) => {
             return h("div", [
               // h(
@@ -324,7 +324,7 @@ export default {
         this.setCurrentPage(page);
       }
       this.isLoading = true;
-      this.getXinfenList({ form:this.form, page }).then(res => {
+      this.getXinfenList({ form: this.form, page }).then(res => {
         this.setCurrentPage(page);
         this.isLoading = false;
       });
@@ -348,27 +348,31 @@ export default {
       this.show = true;
       this.type.classify = "followUp";
       this.type.data = { ...this.notvisitType };
-      if(typeof item.spare_phone == 'undefined' ||item.spare_phone == "" || item.spare_phone == null){
+      if (
+        typeof item.spare_phone == "undefined" ||
+        item.spare_phone == "" ||
+        item.spare_phone == null
+      ) {
         this.isLoading = true;
-        this.RingUp({form:item})
-        .then(res => {
-          if (res.data.code == 200) {
-            this.$Message.success("呼出成功");
-          }
-          if (res.data.code == 1000) {
-            this.$Message.error({
-              content: res.data.error,
-              duration: 4
-            });
-          }
-          this.isLoading = false;
-        })
-        .catch(e => {
-          if (e) {
+        this.RingUp({ form: item })
+          .then(res => {
+            if (res.data.code == 200) {
+              this.$Message.success("呼出成功");
+            }
+            if (res.data.code == 1000) {
+              this.$Message.error({
+                content: res.data.error,
+                duration: 4
+              });
+            }
             this.isLoading = false;
-          }
-        });
-      }else{
+          })
+          .catch(e => {
+            if (e) {
+              this.isLoading = false;
+            }
+          });
+      } else {
         this.type.classify = "ringupFollowUp";
       }
     },
@@ -376,7 +380,7 @@ export default {
     pageChange(num) {
       this.setCurrentPage(num);
       this.isLoading = true;
-      this.getXinfenList({ form:this.form }).then(res => {
+      this.getXinfenList({ form: this.form }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(num);
       });

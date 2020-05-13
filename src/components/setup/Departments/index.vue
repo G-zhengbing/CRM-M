@@ -1,10 +1,6 @@
 <template>
   <div class="Departments">
-    <!-- 面包屑 -->
-    <bread-crumb>
-      <template slot="title">部门和用户</template>
-    </bread-crumb>
-    <Card class="card">
+    <div class="contaner">
       <Row>
         <Col span="6">
           <p>公司组织架构</p>
@@ -48,7 +44,7 @@
         :last_page="last_page"
         @changePages="changePages"
       />
-    </Card>
+      </div>
     <!-- 添加部门 -->
     <Modal
       title="添加部门"

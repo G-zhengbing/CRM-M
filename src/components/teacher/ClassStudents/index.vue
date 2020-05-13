@@ -1,13 +1,8 @@
 <template>
   <div class="classstudents">
-    <!-- 面包屑 -->
-    <bread-crumb>
-      <template slot="title">班课学员</template>
-    </bread-crumb>
-    <!-- 卡片包裹 -->
-    <Card class="card">
+    <div class="contaner">
       <div style="text-align:center">
-        <Tabs type="card" value="name1" @on-click="changeTab">
+        <Tabs type="card" value="name1" @on-click="changeTab" :animated="false">
           <TabPane label="我的学员" name="name1">
             <!-- <SelectBox @formData="formData" :firstState="false" /> -->
             <div class="title">
@@ -216,7 +211,7 @@
           </TabPane>
         </Tabs>
       </div>
-    </Card>
+    </div>
     <CreatedOrder
       v-if="type == 'createdOrder'"
       :row="row"
@@ -664,7 +659,7 @@ export default {
       this.formItem.create_st_time = time[0];
       this.formItem.create_en_time = time[1];
     },
-    ...mapMutations(["setCurrentPages", "setSelectState","setRefresh"]),
+    ...mapMutations(["setCurrentPages", "setSelectState", "setRefresh"]),
     // 改变页码
     changePages(val) {
       // this.mode.page = val;

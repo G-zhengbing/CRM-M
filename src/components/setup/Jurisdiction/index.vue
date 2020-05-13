@@ -1,10 +1,6 @@
 <template>
   <div class="Jurisdiction">
-    <!-- 面包屑 -->
-    <bread-crumb>
-      <template slot="title">角色和权限</template>
-    </bread-crumb>
-    <Card class="card">
+    <div class="contaner">
       <Row>
         <Col span="5">
           <div class="left-title">
@@ -45,7 +41,7 @@
           </ul>
         </Col>
       </Row>
-    </Card>
+    </div>
     <!-- 新建角色 -->
     <Modal
       title="新建角色"
@@ -72,7 +68,7 @@ export default {
       Switch: false, // 新建角色开关
       CRMselect: [], // crm 权限选择
       SetUpSelect: [], // 设置 权限选择
-      formItem: {},
+      formItem: {}
     };
   },
   methods: {
