@@ -228,14 +228,14 @@ export default {
       ])
       return data.map(element => {
         var phone = element.mobile.toString()
-        var str = phone.split('')
-        for (let i = 0; i < str.length; i++) {
-          if (i === 3 | i === 4 | i === 5 | i === 6) {
-            str[i] = '*'
-          }
-        }
+        // var str = phone.split('')
+        // for (let i = 0; i < str.length; i++) {
+        //   if (i === 3 | i === 4 | i === 5 | i === 6) {
+        //     str[i] = '*'
+        //   }
+        // }
 
-        element.mobile = str.join("")
+        // element.mobile = str.join("")
         element.type = pone.get(element.type);
         element.grade = maps.get(element.grade);
         element.sex = gender.get(element.sex);

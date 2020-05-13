@@ -7,6 +7,8 @@ import ViewUI from 'view-design';
 import 'view-design/dist/styles/iview.css';
 import './uilt/http/index'
 
+import './style/main.css'
+
 // 全局注册component
 import Component from '@/uilt/components'
 Vue.use(Component)

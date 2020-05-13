@@ -44,7 +44,7 @@ export default {
 		Vue.component('Referral', referral); // 转介绍
 		Vue.component('Appraisal', appraisal); // 查看测评
 		Vue.component('CreatedOrder', createdOrder); // 订单
-		Vue.component('NewReport', newReport); // 订单
+		Vue.component('NewReport', newReport); // 学情报告
 		Vue.component('bread-crumb', BreadCrumb); // 面包屑
 	}
 }

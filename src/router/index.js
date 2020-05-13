@@ -13,9 +13,9 @@ import FollowUp from '../components/FollowUp'
 import Money from '../components/Money'
 import Number from '../components/Number'
 import Uplist from '../components/Uplist'
-import Minestudent from '../components/teacher/Minestudent'
-import Payingstudent from '../components/teacher/Payingstudent'
-import StatisticAnalysis from '../components/teacher/StatisticAnalysis'
+// import Minestudent from '../components/teacher/Minestudent'
+// import Payingstudent from '../components/teacher/Payingstudent'
+// import StatisticAnalysis from '../components/teacher/StatisticAnalysis'
 import Paystudent from '../components/Paystudent'
 import NotCallBack from '../components/NotCallBack'
 import Advertising from '../components/Mzhan/Advertising'
@@ -135,18 +135,6 @@ const router = new Router({
           component: Uplist
         },
         {
-          path: '/main/minestudent',
-          component: Minestudent
-        },
-        {
-          path: '/main/payingstudent',
-          component: Payingstudent
-        },
-        {
-          path: '/main/statisticanalysis',
-          component: StatisticAnalysis
-        },
-        {
           path: '/main/reservation',
           component: Reservation
         },
@@ -238,6 +226,10 @@ const router = new Router({
           path: '/main/oneononestudent', // 一对一学员
           component: () => import('@/components/teacher/OneOnOneStudent')
         },
+        {
+          path: '/main/statisticAnalysis', // 统计分析
+          component: () => import('@/components/teacher/StatisticAnalysis')
+        },
         // { <!-- 后台无数据，无法验证完善，待更改 -->
         //   path: '/main/oneinclass', // 开课中学员
         //   component: () => import('@/components/teacher/OneInClass')
@@ -245,10 +237,6 @@ const router = new Router({
         {
           path: '/main/onemyreservation', // 我的预约单
           component: () => import('@/components/teacher/OneMyReservation')
-        },
-        {
-          path: '/main/teacher', // 教师管理
-          component: () => import('@/components/teacher/teacher')
         },
         {
           path: '/main/departments', // 部门和用户

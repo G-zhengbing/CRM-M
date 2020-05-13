@@ -3,8 +3,7 @@
     <section class="main-section">
       <div class="surplus">
         <div class="main-section-bottom">
-          <div class="contaner">
-            <div style="height:10px"></div>
+          <div>
             <Form :model="form" :label-width="80">
               <Row>
                 <Col span="4">
@@ -191,27 +190,60 @@ export default {
       form: {},
       columns: [
         { type: "selection", width: 60, fixed: "left" },
-        { title: "学员姓名", key: "student_name", width: 100, fixed: "left" },
-        { title: "注册手机", key: "mobile", width: 150, fixed: "left" },
-        { title: "微信昵称", key: "wechat_nick_name", width: 100 },
-        { title: "年级", key: "product_grade", width: 100 },
-        { title: "科目", key: "product_subject", width: 100 },
-        { title: "意向度", key: "intention_option", width: 100 },
-        { title: "课程类型", key: "product_type", width: 100 },
-        { title: "跟进人", key: "follow_sale_name", width: 100 },
-        { title: "上次跟进时间", key: "last_follow_time", width: 170 },
-        { title: "学习阶段", key: "stage", width: 100 },
+        {
+          title: "学员姓名",
+          key: "student_name",
+          align: "center",
+          width: 100,
+          fixed: "left"
+        },
+        {
+          title: "注册手机",
+          key: "mobile",
+          align: "center",
+          width: 120,
+          fixed: "left"
+        },
+        { title: "年级", key: "product_grade", align: "center", width: 80 },
+        { title: "科目", key: "product_subject", align: "center", width: 80 },
+        {
+          title: "意向度",
+          key: "intention_option",
+          align: "center",
+          width: 100
+        },
+        { title: "课程类型", key: "product_type", align: "center", width: 100 },
+        {
+          title: "跟进人",
+          key: "follow_sale_name",
+          align: "center",
+          width: 90
+        },
+        {
+          title: "上次跟进时间",
+          key: "last_follow_time",
+          align: "center",
+          width: 170
+        },
+        { title: "学习阶段", key: "stage", align: "center", width: 100 },
         {
           title: "上次跟进内容",
           key: "last_visit_content",
+          align: "center",
           width: 150,
           tooltip: true
         },
-        { title: "回访时间", key: "next_follow_time", width: 170 },
-        { title: "注册时间", key: "create_time", width: 170 },
+        {
+          title: "回访时间",
+          key: "next_follow_time",
+          align: "center",
+          width: 170
+        },
+        { title: "注册时间", key: "create_time", align: "center", width: 170 },
         {
           title: "操作",
           key: "action",
+          align: "center",
           align: "center",
           width: 200,
           fixed: "right",

@@ -89,6 +89,15 @@ export default {
     }
   },
   data() {
+    const validatePhone = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("手机号不能为空"));
+      } else if (!/^1[34578]\d{9}$/.test(value)) {
+        callback("手机号格式不正确");
+      } else {
+        callback();
+      }
+    };
     return {
       editSwitch1: this.editSwitch, // 开关
       formValidate1: this.formValidate,
@@ -128,15 +137,12 @@ export default {
           {
             required: true,
             message: "请填写邮箱",
-            trigger: "change"
-          }
+            trigger: "blur"
+          },
+          { type: "email", message: "请填写正确格式邮箱", trigger: "blur" }
         ],
         mobile: [
-          {
-            required: true,
-            message: "请输入手机号",
-            trigger: "change"
-          }
+          { required: true, validator: validatePhone, trigger: "blur" }
         ],
         department_name: [
           {
@@ -159,7 +165,9 @@ export default {
         this.formValidate1.department_name = this.treeData[0].title;
         this.formValidate1.department_id = this.treeData[0].id;
       } else {
-        this.formValidate1.department_name = "";
+        if (!this.formValidate1.department_name) {
+          this.formValidate1.department_name = "";
+        }
       }
     },
     branchCancel(val) {},
@@ -187,9 +195,7 @@ export default {
           }
           // 这里写编辑成功发送请求
           // 新增用户
-					this.formValidate1.roles = this.formValidate1.roles.join(",");
-					console.log(this.formValidate1.department_id,this.formValidate1)
-          // this.formValidate1.department_id = this.formValidate1.id
+          this.formValidate1.roles = this.formValidate1.roles.join(",");
           let res = await this.$request({
             method: "post",
             url: CREATEADMINUSER,
@@ -211,10 +217,10 @@ export default {
       this.formValidate1 = {};
       this.$emit("closeEdit", false);
     }
-	},
-	created() {
-		this.formValidate1.admin_member_id = this.formValidate.id
-	}
+  },
+  created() {
+    this.formValidate1.admin_member_id = this.formValidate.id;
+  }
 };
 </script>
 

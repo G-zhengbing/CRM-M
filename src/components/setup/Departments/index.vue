@@ -1,17 +1,13 @@
 <template>
   <div class="Departments">
-    <!-- 面包屑 -->
-    <bread-crumb>
-      <template slot="title">部门和用户</template>
-    </bread-crumb>
-    <Card class="card">
+    <div class="contaner">
       <Row>
         <Col span="6">
           <p>公司组织架构</p>
           <div style="padding-left: 20px;">
-            <p style="padding: 20px 0">
-              全品直播中心
-              <Icon type="ios-create-outline" :size="20" style="padding-left: 10px;" />
+            <p style="padding: 15px 0">
+              <!-- 全品直播中心
+              <Icon type="ios-create-outline" :size="20" style="padding-left: 10px;" />-->
             </p>
             <Tree :data="data5" :render="renderContent" class="demo-tree-render"></Tree>
           </div>
@@ -23,8 +19,8 @@
           </div>
           <div class="title">
             <div class="left">
-              <span style="padding-left: 10px;padding-right:5px;">已选{{num}}条</span>
-              <Button type="primary">禁用</Button>
+              <span style="padding-left: 10px;padding-right:5px;">已选{{Items.length}}条</span>
+              <Button type="primary" @click="forbiddenUser(Items)">禁用</Button>
             </div>
             <div class="right" style="padding-right: 10px;">
               <Input v-model="value" placeholder="请输入用户名或手机号" style="width: 300px" />
@@ -48,7 +44,7 @@
         :last_page="last_page"
         @changePages="changePages"
       />
-    </Card>
+      </div>
     <!-- 添加部门 -->
     <Modal
       title="添加部门"
@@ -84,7 +80,15 @@
         </Form>
       </div>
     </Modal>
-    <Edit :formValidate="formValidate" v-if="editSwitch" :data4="data4" :editSwitch="editSwitch" :cityList="cityList" :add="add" @closeEdit="closeEdit" />
+    <Edit
+      :formValidate="formValidate"
+      v-if="editSwitch"
+      :data4="data4"
+      :editSwitch="editSwitch"
+      :cityList="cityList"
+      :add="add"
+      @closeEdit="closeEdit"
+    />
   </div>
 </template>
 
@@ -97,8 +101,9 @@ import {
   DELETEDEPARTMENTNAME,
   ADMINMERBERDEPARTMENTNAMELIST,
   ADMINMERBERROLELIST,
+  PROHIBITADMINUSER
 } from "@/uilt/url/url";
-import Edit from './edit'
+import Edit from "./edit";
 export default {
   name: "Departments",
   components: {
@@ -173,11 +178,16 @@ export default {
                   },
                   on: {
                     click: () => {
-                      // this.createdOrder(params.row);
+                      if (params.row.roles.length) {
+                        this.forbiddenUser(params.row.id);
+                        this.getUserList();
+                      } else {
+                        this.$Message.error("该帐号已禁用!");
+                      }
                     }
                   }
                 },
-                "禁用"
+                params.row.roles.length ? "禁用" : "已禁用"
               )
               // 暂不更新，待需求
               // h(
@@ -292,9 +302,8 @@ export default {
       editNameFormItem: {},
 
       // 这是页面内展示数据
-      num: 0, // 选择条数
       value: "", // 手机号查询条件
-      row: "", // 当前选择的用户信息
+      Items: "", // 当前选择的用户信息
 
       // 下面是开关数据
       editSwitch: false, // 编辑开关
@@ -310,9 +319,28 @@ export default {
     };
   },
   methods: {
-    // 点击树节点时触发
-    clickTree(data) {
-      this.treeData = data;
+    // 禁用用户
+    async forbiddenUser(id) {
+      if (typeof id === "object") {
+        let arrId = [];
+        id.map(item => {
+          arrId.push(item.id);
+        });
+        id = arrId.join(",");
+      }
+      let res = await this.$request({
+        method: "POST",
+        url: PROHIBITADMINUSER,
+        params: {
+          admin_member_ids: id
+        }
+      });
+      if (!res.data.error) {
+        this.$Message.success("禁用成功!");
+        this.getUserList();
+      } else {
+        this.$Message.error("禁用失败!");
+      }
     },
     // 获取用户信息列表
     async getUserList() {
@@ -344,7 +372,7 @@ export default {
     },
     // 选择整行信息
     selectItem(selection) {
-      this.num = selection.length;
+      this.Items = selection;
     },
     // 树状图的核心数据渲染
     renderContent(h, { root, node, data }) {
@@ -379,6 +407,7 @@ export default {
                   click: () => {
                     // 修改
                     this.editNameFormItem.department_id = data.id;
+                    this.editNameFormItem.department_name = data.title;
                     this.editNameSwitch = true;
                   }
                 }
@@ -406,6 +435,9 @@ export default {
                 }),
                 on: {
                   click: () => {
+                    if (data.children) {
+                      return this.$Message.error("请优先删除下级分类!");
+                    }
                     // 删除
                     this.$request({
                       method: "post",
@@ -415,9 +447,12 @@ export default {
                         is_delete: 2
                       })
                     }).then(res => {
-                      this.PermissionsTree();
+                      if (res.data.code === 100001) {
+                        this.$Message.error(res.data.error);
+                      } else if (res.data.code === 200) {
+                        this.remove(root, node, data);
+                      }
                     });
-                    // this.remove(root, node, data);
                   }
                 }
               })
@@ -426,28 +461,29 @@ export default {
         ]
       );
     },
-    // append(data) {
-    //   const children = data.children || [];
-    //   children.push({
-    //     title: this.addFormItem.department_name,
-    //     expand: true
-    //   });
-    //   this.$set(data, "children", children);
-    // },
-    // remove(root, node, data) {
-    //   const parentKey = root.find(el => el === node).parent;
-    //   const parent = root.find(el => el.nodeKey === parentKey).node;
-    //   const index = parent.children.indexOf(data);
-    //   parent.children.splice(index, 1);
-    // },
+    append(data, id) {
+      const children = data.children || [];
+      children.push({
+        id,
+        title: this.addFormItem.department_name,
+        expand: true
+      });
+      this.$set(data, "children", children);
+    },
+    remove(root, node, data) {
+      const parentKey = root.find(el => el === node).parent;
+      const parent = root.find(el => el.nodeKey === parentKey).node;
+      const index = parent.children.indexOf(data);
+      parent.children.splice(index, 1);
+    },
     // 改变页码
     changePages(val) {
       this.current_page = val;
       this.getUserList();
     },
     closeEdit(Switch) {
-      this.editSwitch = Switch
-      this.getUserList()
+      this.editSwitch = Switch;
+      this.getUserList();
     },
     // 添加按钮回调
     async addConfirm() {
@@ -456,8 +492,8 @@ export default {
         url: CREATEDEPARTMENTNAME,
         data: qs.stringify(this.addFormItem)
       });
-      this.PermissionsTree();
-      // this.append(this.treeData);
+      // this.PermissionsTree();
+      this.append(this.treeData, res.data.data[0]);
       this.addCancel();
     },
     addCancel() {

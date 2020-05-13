@@ -141,7 +141,7 @@
                   </FormItem>
                 </Col>
                 <Col span="12">
-                  <FormItem>
+                  <FormItem v-if="num == 2">
                     <div class="dateplc">
                       <DatePicker v-model="startTime2" type="date" placeholder="分配时间" style="width: 200px" @on-change="getTimes2"></DatePicker>
                       <DatePicker v-model="endTime2" type="date" placeholder="分配时间" style="width: 200px" @on-change="getTimes2"></DatePicker>
@@ -435,19 +435,19 @@ export default {
       if (this.num == 1) {
         this.columns2 = [
           { type: "selection" ,width:60},
-          { title: "学员姓名", key: "student_name" },
-          { title: "注册手机", key: "mobile" },
-          { title: "地址", key: "area" },
-          { title: "在读学校", key: "school" },
-          { title: "年级", key: "grade" },
-          { title: "意向科目", key: "subject" },
-          { title: "跟进状态", key: "follow_status" },
-          { title: "渠道来源", key: "refer" },
-          { title: "数据来源", key: "data_source" },
-          { title: "数据类型", key: "data_type" },
-          { title: "注册时间", key: "create_time" },
+          { title: "学员姓名",align: "center", key: "student_name" },
+          { title: "注册手机",width:120,align: "center", key: "mobile" },
+          { title: "地址",align: "center", key: "area" },
+          { title: "在读学校",align: "center", key: "school" },
+          { title: "年级",width: 80,align: "center", key: "grade" },
+          { title: "意向科目",align: "center", key: "subject",width:75 },
+          { title: "跟进状态",align: "center", key: "follow_status",width:95, },
+          { title: "渠道来源",width:160,align: "center", key: "refer" },
+          { title: "数据来源",align: "center", key: "data_source" },
+          { title: "数据类型",align: "center", key: "data_type" },
+          { title: "注册时间",width:120,align: "center", key: "create_time" },
           {
-            title: "操作",
+            title: "操作",align: "center",
             key: "action",
             align: "center",
             render: (h, params) => {
@@ -473,25 +473,26 @@ export default {
         ];
       } else if (this.num == 2) {
         this.columns2 = [
-         { type: "selection" ,width:60},
-          { title: "学员姓名", key: "student_name" },
-          { title: "注册手机", key: "mobile" },
-          { title: "地址", key: "area" },
-          { title: "在读学校", key: "school" },
-          { title: "年级", key: "grade" },
-          { title: "意向科目", key: "subject" },
-          { title: "渠道来源", key: "refer" },
-          { title: "跟进人", key: "follow_sale_name" },
-          { title: "跟进状态", key: "follow_status" },
-          { title: "意向度 ", key: "intention_option" },
-          { title: "学习阶段", key: "stage" },
-          { title: "流转类型", key: "transfer" },
-          { title: "分配时间", key: "receive_time" },
-          { title: "注册时间", key: "create_time" },
+         { type: "selection" ,width:60,fixed: 'left'},
+          { title: "学员姓名",align: "center",width:100, key: "student_name",fixed: 'left', },
+          { title: "注册手机",width:120,align: "center", key: "mobile",fixed: 'left', },
+          { title: "地址", width: 140,align: "center", key: "area" },
+          { title: "年级",width: 100,align: "center", key: "grade" },
+          { title: "意向科目", width: 100,align: "center", key: "subject" },
+          { title: "渠道来源",width:160,align: "center", key: "refer" },
+          { title: "跟进人", width: 100,align: "center", key: "follow_sale_name" },
+          { title: "跟进状态", width: 100,align: "center", key: "follow_status" },
+          { title: "意向度 ", width: 100,align: "center", key: "intention_option" },
+          { title: "学习阶段", width: 100,align: "center", key: "stage" },
+          { title: "流转类型", width: 100,align: "center", key: "transfer" },
+          { title: "分配时间",width:120,align: "center", key: "receive_time" },
+          { title: "注册时间",width:120,align: "center", key: "create_time" },
           {
-            title: "操作",
+            title: "操作",align: "center",
             key: "action",
             align: "center",
+            fixed: 'right',
+            width: 160,
             render: (h, params) => {
               return h("div", [
                 h(
@@ -546,22 +547,23 @@ export default {
       } else {
         this.columns2 = [
          { type: "selection" ,width:60},
-          { title: "学员姓名", key: "student_name" },
-          { title: "注册手机", key: "mobile" },
-          { title: "地址", key: "area" },
-          { title: "在读学校", key: "school" },
-          { title: "购买课程", key: "product_name" },
-          { title: "课程类型", key: "product_type" },
-          { title: "年级", key: "product_grade" },
-          { title: "科目", key: "product_subject" },
-          { title: "渠道来源", key: "refer" },
-          { title: "跟进状态", key: "follow_status" },
-          { title: "交易时间", key: "paytime" },
-          { title: "注册时间", key: "create_time" },
+          { title: "学员姓名",align: "center", key: "student_name" },
+          { title: "注册手机",width:120,align: "center", key: "mobile" },
+          { title: "地址",align: "center", key: "area" },
+          { title: "在读学校",align: "center", key: "school" },
+          { title: "购买课程",align: "center", key: "product_name" },
+          { title: "课程类型",align: "center", key: "product_type" },
+          { title: "年级",width: 80,align: "center", key: "product_grade" },
+          { title: "科目",align: "center",width: 75, key: "product_subject" },
+          { title: "渠道来源",width:160,align: "center", key: "refer" },
+          { title: "跟进状态",width: 100,align: "center", key: "follow_status" },
+          { title: "交易时间",width:120,align: "center", key: "paytime" },
+          { title: "注册时间",width:120,align: "center", key: "create_time" },
           {
-            title: "操作",
+            title: "操作",align: "center",
             key: "action",
             align: "center",
+            width: 75,
             render: (h, params) => {
               return h("div", [
                 h(
@@ -638,7 +640,7 @@ export default {
   margin-top: 0px !important;
 }
 .tabs li {
-  font-size: 12px;
+  /* font-size: 12px; */
   height: 100%;
   line-height: 35px;
   margin-right: 30px;

@@ -249,21 +249,28 @@ export default {
       if (this.num == "2") {
         this.columns = [
           { type: "selection", width: 60 },
-          { title: "学员姓名", key: "student_name" },
-          { title: "注册手机", key: "mobile" },
-          { title: "试听类型", key: "type" },
-          { title: "试听课程", key: "course_name" },
-          { title: "年级", key: "grade" },
-          { title: "科目", key: "subject" },
-          { title: "教师", key: "coach_id" },
-          { title: "上课日期", key: "date_time" },
-          { title: "上课时段", key: "time_block" },
-          { title: "状态", key: "appoint_status" },
-          { title: "预约提交时间", key: "create_time" },
-          { title: "备注", key: "note", tooltip: true, ellipsis: true },
+          { title: "学员姓名",width: 100, key: "student_name", align: "center" },
+          { title: "注册手机",width:130, key: "mobile", align: "center" },
+          { title: "试听类型", key: "type", align: "center" },
+          { title: "试听课程", key: "course_name", align: "center" },
+          { title: "年级",width: 80, key: "grade", align: "center" },
+          { title: "科目",width: 80, key: "subject", align: "center" },
+          { title: "教师", key: "coach_id", align: "center" },
+          { title: "上课日期",width:120, key: "date_time", align: "center" },
+          { title: "上课时段",width:75, key: "time_block", align: "center" },
+          { title: "状态", key: "appoint_status", align: "center" },
+          { title: "预约提交时间",width: 120, key: "create_time", align: "center" },
+          {
+            title: "备注",
+            key: "note",
+            align: "center",
+            tooltip: true,
+            ellipsis: true
+          },
           {
             title: "操作",
             key: "action",
+            align: "center",
             align: "center",
             render: (h, params) => {
               return h("div", [
@@ -304,21 +311,28 @@ export default {
       } else if (this.num == "1") {
         this.columns = [
           { type: "selection", width: 60 },
-          { title: "学员姓名", key: "student_name" },
-          { title: "注册手机", key: "mobile" },
-          { title: "试听类型", key: "type" },
-          { title: "试听课程", key: "course_name" },
-          { title: "年级", key: "grade" },
-          { title: "科目", key: "subject" },
-          { title: "教师", key: "coach_id" },
-          { title: "上课日期", key: "date_time" },
-          { title: "上课时段", key: "time_block" },
-          { title: "状态", key: "appoint_status" },
-          { title: "预约提交时间", key: "create_time" },
-          { title: "备注", key: "note", tooltip: true, ellipsis: true },
+          { title: "学员姓名",width: 100, key: "student_name", align: "center" },
+          { title: "注册手机",width:130, key: "mobile", align: "center" },
+          { title: "试听类型", key: "type", align: "center" },
+          { title: "试听课程", key: "course_name", align: "center" },
+          { title: "年级",width: 80, key: "grade", align: "center" },
+          { title: "科目",width: 80, key: "subject", align: "center" },
+          { title: "教师", key: "coach_id", align: "center" },
+          { title: "上课日期",width:120, key: "date_time", align: "center" },
+          { title: "上课时段",width:75, key: "time_block", align: "center" },
+          { title: "状态", key: "appoint_status", align: "center" },
+          { title: "预约提交时间",width: 120, key: "create_time", align: "center" },
+          {
+            title: "备注",
+            key: "note",
+            align: "center",
+            tooltip: true,
+            ellipsis: true
+          },
           {
             title: "操作",
             key: "action",
+            align: "center",
             align: "center",
             render: (h, params) => {
               return h("div", [
@@ -401,22 +415,29 @@ export default {
       } else {
         this.columns = [
           { type: "selection", width: 60 },
-          { title: "学员姓名", key: "student_name" },
-          { title: "注册手机", key: "mobile" },
-          { title: "试听类型", key: "type" },
-          { title: "试听课程", key: "course_name" },
-          { title: "年级", key: "grade" },
-          { title: "科目", key: "subject" },
-          { title: "教师", key: "coach_id" },
-          { title: "上课日期", key: "date_time" },
-          { title: "上课时段", key: "time_block" },
-          { title: "状态", key: "appoint_status" },
-          { title: "创建人", key: "create_user" },
-          { title: "预约提交时间", key: "create_time" },
-          { title: "备注", key: "note", tooltip: true, ellipsis: true },
+          { title: "学员姓名",width: 100, key: "student_name", align: "center" },
+          { title: "注册手机",width:130, key: "mobile", align: "center" },
+          { title: "试听类型", key: "type", align: "center" },
+          { title: "试听课程", key: "course_name", align: "center" },
+          { title: "年级",width: 80, key: "grade", align: "center" },
+          { title: "科目",width: 80, key: "subject", align: "center" },
+          { title: "教师", key: "coach_id", align: "center" },
+          { title: "上课日期",width:120, key: "date_time", align: "center" },
+          { title: "上课时段",width:75, key: "time_block", align: "center" },
+          { title: "状态", key: "appoint_status", align: "center" },
+          { title: "创建人", key: "create_user", align: "center" },
+          { title: "预约提交时间",width: 120, key: "create_time", align: "center" },
+          {
+            title: "备注",
+            key: "note",
+            align: "center",
+            tooltip: true,
+            ellipsis: true
+          },
           {
             title: "操作",
             key: "action",
+            align: "center",
             align: "center",
             render: (h, params) => {
               return h("div", [
@@ -668,7 +689,7 @@ export default {
 }
 .tabs li {
   height: 100%;
-  line-height: 50px;
+  line-height: 35px;
   margin-right: 30px;
   width: 100px;
   text-align: center;
@@ -678,11 +699,11 @@ export default {
 }
 .tabs {
   width: 100%;
-  height: 50px;
+  height: 35px;
   display: flex;
   border-bottom: 1px solid #ccc;
   margin-bottom: 20px;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 /* tabs */
 .dateplc {

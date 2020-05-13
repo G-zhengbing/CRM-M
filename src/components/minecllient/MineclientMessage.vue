@@ -2,7 +2,7 @@
   <div class="boxs">
     <!-- 选择课程 -->
     <Modal
-      width="1100"
+      width="1400"
       v-model="type.classify == 'order'"
       title="选择课程"
       @on-cancel="colseReserved"

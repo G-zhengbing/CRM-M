@@ -1,12 +1,8 @@
 <template>
   <div class="statisticAnalysis">
-    <!-- 面包屑 -->
-    <bread-crumb>
-      <template slot="title">统计分析</template>
-    </bread-crumb>
-    <Card class="card">
+    <div class="contaner">
       <div style="text-align:center">
-        <Tabs type="card" value="name1" @on-click="changeTab">
+        <Tabs type="card" value="name1" @on-click="changeTab" :animated="false">
           <TabPane label="今日" name="name1">
             <div class="title">
               <Form
@@ -38,7 +34,7 @@
           </TabPane>
         </Tabs>
       </div>
-    </Card>
+    </div>
     <Loading v-show="isLoading" />
   </div>
 </template>

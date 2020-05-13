@@ -99,13 +99,15 @@ const ADMINMERBERUSERLIST = BASEURL + "admin_merber_user_list" //设置，人员
 const CREATEDEPARTMENTNAME = BASEURL + "create_department_name" //设置，创建部门
 const UPDATEDEPARTMENTNAME = BASEURL + "update_department_name" //设置，修改部门名称
 const DELETEDEPARTMENTNAME = BASEURL + "delete_department_name" //设置，删除部门
-const ADMINMERBERDEPARTMENTNAMELIST = BASEURL + "admin_merber_department_name_list" //设置，删除部门
+const ADMINMERBERDEPARTMENTNAMELIST = BASEURL + "admin_merber_department_name_list" //设置，部门列表
 const ADMINMERBERROLELIST = BASEURL + "admin_merber_role_list" //设置，获取角色列表
 const CREATEADMINUSER = BASEURL + "create_admin_user" //设置，新增用户列表
+const PROHIBITADMINUSER = BASEURL + "prohibit_admin_user" //设置，新增用户列表
 
 const SCREENLIST = BASEURL + "screen_list" //教务/ 公共接口，select状态栏
 
 export {
+  PROHIBITADMINUSER,
   CREATEADMINUSER,
   ADMINMERBERROLELIST,
   ADMINMERBERDEPARTMENTNAMELIST,

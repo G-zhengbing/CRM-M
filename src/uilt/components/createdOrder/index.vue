@@ -116,8 +116,8 @@ export default {
         {
           title: "课程名称",
           key: "course_name",
-          align: "center",
-          width: 200
+          align: "left",
+          width: 240
         },
         {
           title: "课程类型",

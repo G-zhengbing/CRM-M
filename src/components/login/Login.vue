@@ -204,6 +204,7 @@ body::-webkit-scrollbar {
 .box {
   width: 100%;
   background-image: url(../../assets/img/beijing/png8.png);
+  height: 100%;
 }
 .content {
   width: 315px;

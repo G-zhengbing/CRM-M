@@ -26,7 +26,7 @@
                 <span>今日回访</span>
               </li>
               <li @click="tab(5)" :class="[num == 5? 'active' : '']">
-                <span>预期未回访</span>
+                <span>逾期未回访</span>
               </li>
               <li @click="tab(6)" :class="[num == 6? 'active' : '']">
                 <span>消息提醒</span>
@@ -94,7 +94,7 @@ export default {
   margin-top: 0px !important;
 }
 .tabs li {
-  font-size: 12px;
+  /* font-size: 12px; */
   height: 100%;
   line-height: 35px;
   margin-right: 30px;
