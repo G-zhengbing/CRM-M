@@ -361,7 +361,7 @@
     <!-- 转介绍 -->
     <Card style="width:500px" v-if="type.classify == 'introduce'">
       <p slot="title" v-if="type.types == 'createduser'">创建用户</p>
-      <p slot="title" v-else-if="type.types == 'introduce'">转介绍</p>
+      <p slot="title" v-else>转介绍</p>
       <a href="#" slot="extra" @click.prevent="closeIntroduce">
         <Icon type="md-close"></Icon>
       </a>

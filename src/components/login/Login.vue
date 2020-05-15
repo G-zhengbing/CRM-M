@@ -43,7 +43,7 @@ export default {
     window.onresize = function() {
       this.clientHeight = `${document.documentElement.clientHeight}`;
       if (that.$refs.headerconters) {
-        that.$refs.headerconters.style.minHeight = clientHeight + "px";
+        that.$refs.headerconters.style.minHeight = clientHeight*1  + "px";
       }
     };
   },
@@ -73,7 +73,7 @@ export default {
   methods: {
     changeFixed(clientHeight) {
       if (this.$refs.headerconters) {
-        this.$refs.headerconters.style.minHeight = clientHeight + "px";
+        this.$refs.headerconters.style.minHeight = clientHeight *1 + "px";
       }
     },
     doLogin() {
@@ -204,7 +204,7 @@ body::-webkit-scrollbar {
 .box {
   width: 100%;
   background-image: url(../../assets/img/beijing/png8.png);
-  height: 100%;
+  height: 110%;
 }
 .content {
   width: 315px;

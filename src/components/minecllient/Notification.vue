@@ -66,7 +66,6 @@
               :columns="columns"
               :data="notifiData"
               @on-selection-change="selectionChange"
-              height="500"
             ></Table>
             <Page
               @on-change="pageChange"

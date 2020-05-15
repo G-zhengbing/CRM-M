@@ -133,7 +133,7 @@
               :columns="columns"
               :data="clientkData"
               @on-selection-change="selectionChange"
-              height="500"
+              height="545"
             ></Table>
             <Page
               @on-change="pageChange"
