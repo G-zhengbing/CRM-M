@@ -9,7 +9,7 @@
       @on-cancel="editCancel"
     >
       <div class="content">
-        <Form ref="formValidate1" :model="formValidate1" :rules="ruleValidate" :label-width="100">
+        <Form ref="formValidate1" :model="formValidate1" :rules="ruleValidate" :label-width="100" :show-message="false">
           <FormItem v-if="add" label="登录名" prop="user_name">
             <Input v-model="formValidate1.user_name" placeholder="请输入" style="width: 300px"></Input>
           </FormItem>

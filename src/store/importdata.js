@@ -1,7 +1,7 @@
 import axios from 'axios'
 import storage from '../uilt/storage'
 import {
-  IMPORTANT
+  IMPORTCLUELIST
 } from '../uilt/url/url'
 
 export default {
@@ -30,7 +30,7 @@ export default {
       return new Promise((resolve, reject) => {
         axios({
           method: "get",
-          url: IMPORTANT,
+          url: IMPORTCLUELIST,
           headers: {
             "content-type": "application/x-www-form-urlencoded",
             Authorization: "bearer " + storage.get()

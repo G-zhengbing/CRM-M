@@ -239,7 +239,7 @@
 
 <script>
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
-import { MYRESERVATION, SCREENLIST } from "@/uilt/url/url";
+import { APPOINTMENTVIPCLASSLIST, SCREENLIST } from "@/uilt/url/url";
 import qs from "qs";
 import OneMyReservation from "@/store/onemyreservation";
 export default {
@@ -650,7 +650,7 @@ export default {
       this.formItem.type = 4; // 设置为一对一内容
       let res = await this.$request({
         method: "post",
-        url: MYRESERVATION,
+        url: APPOINTMENTVIPCLASSLIST,
         data: qs.stringify(this.formItem)
       });
 

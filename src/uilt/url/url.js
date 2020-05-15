@@ -6,8 +6,10 @@ const LOGINURL = BASEURL + "login" //登陆
 const GETUSER = BASEURL + "me" //获取用户信息
 const LOGINOUT = BASEURL + "logout" //退出登录
 const KEHULIST = BASEURL + "clues" //待分配/已分配/公共客户
+const PUBLICCLUES = BASEURL + "public_clues" // 公共资源池
 const FENPEI = BASEURL + "sales" //分配人员
 const ANALLOT = BASEURL + "paid_allocated" //已下单待分配
+const ASSIGNPAIDALLOCATED = BASEURL + "assign_paid_allocated" // 资源池,已下单待分配
 const FENPAIXS = BASEURL + "assign_clue" //分派线索
 const GENJIN = BASEURL + "clues" //线索跟进 
 const YIRUGONG = BASEURL + "clue_status" //移入/移除
@@ -58,7 +60,8 @@ const INTRODUCE = BASEURL + "get_mobile"//检测手机号
 const IMPORTDATA = BASEURL + "upload_csv"//线索导入
 const CREATEORDER = BASEURL + "create_order"//创建订单
 const HANDOVER = BASEURL + "handover"//交接单
-const IMPORTANT = BASEURL + 'import_list'//导入订单列表
+const IMPORTANT = BASEURL + 'import_order_list'//导入订单列表
+const IMPORTCLUELIST = BASEURL + 'import_clue_list'//导入线索
 const IMPORTLIST = BASEURL + "upload_csv"//导入线索
 const ACCOUNTORDER = BASEURL + "account_order"//升级订单列表
 const CREATEUPGRADE = BASEURL + "create_upgrade_order"//创建升级订单
@@ -75,12 +78,14 @@ const PAYINGSTUDENT = BASEURL + "paying_student" //教务/付费学员
 const CLASSTEACH = BASEURL + "teacher_list" //教务/select/班主任列表
 const MASSDISTRIBUTION = BASEURL + "order_distribution" //教务/批量分配
 const CLASSSTUDENTS = BASEURL + "class_user_list" //教务/班课学员
+const VIPUSERLIST = BASEURL + "vip_user_list" // 一对一学员
 const INCLASS = BASEURL + "class_start_user_list" //教务/班课开课中学员
 const USERTRACK = BASEURL + "user_track" //教务/学员跟进
 const CALLOUT = BASEURL + "callcellphone" //教务/呼出
 const AVAILABLECOACHLIST = BASEURL + "available_coach_list" //教务/ 预约选老师
 const APPOINTSTORE = BASEURL + "appoint_store" //教务/ 创建预约单
 const MYRESERVATION = BASEURL + "appointment_class_list" //教务/ 我的预约单
+const APPOINTMENTVIPCLASSLIST = BASEURL + "appointment_vip_class_list" // 一对一 我的预约单
 const LEARNINGREPORT = BASEURL + "learning_report" //教务/ 学情报告
 const LEARNINGREPORTINFO = BASEURL + "learning_report_info" //教务/ 学情报告/查看报告
 const CREATELEARNINGREPORT = BASEURL + "create_learning_report" //教务/ 学情报告/创建报告
@@ -151,17 +156,20 @@ export {
   LEARNINGREPORT,
   SCREENLIST,
   MYRESERVATION,
+  APPOINTMENTVIPCLASSLIST,
   APPOINTSTORE,
   AVAILABLECOACHLIST,
   CALLOUT,
   USERTRACK,
   INCLASS,
   CLASSSTUDENTS,
+  VIPUSERLIST,
   MASSDISTRIBUTION,
   CLASSTEACH,
   PAYINGSTUDENT,
   IMPORTLIST,
   IMPORTANT,
+  IMPORTCLUELIST,
   HANDOVER,
   CREATEORDER,
   IMPORTDATA,
@@ -196,10 +204,12 @@ export {
   UPLIST,
   PAYSTUDENT,
   ANALLOT,
+  ASSIGNPAIDALLOCATED,
   LOGINURL,
   GETUSER,
   LOGINOUT,
   KEHULIST,
+  PUBLICCLUES,
   FENPEI,
   FENPAIXS,
   GENJIN,

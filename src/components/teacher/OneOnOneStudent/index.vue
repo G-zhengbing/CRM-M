@@ -245,7 +245,7 @@
 
 <script>
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
-import { CLASSSTUDENTS } from "@/uilt/url/url";
+import { VIPUSERLIST } from "@/uilt/url/url";
 import qs from "qs";
 
 import oneononestudent from "@/store/oneononestudent";
@@ -639,7 +639,7 @@ export default {
       this.formItem.product_type = 4; // 设置一对一接口
       let res = await this.$request({
         method: "post",
-        url: CLASSSTUDENTS,
+        url: VIPUSERLIST,
         data: qs.stringify(this.formItem)
       });
       // 设置搜索选项，页码数     // 这个模块要在前面，否则后面无法渲染

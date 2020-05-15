@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {
-  KEHULIST,
+  PUBLICCLUES,
   YIRUGONG
 } from '../uilt/url/url'
 import storage from '../uilt/storage'
@@ -58,7 +58,7 @@ export default {
       return new Promise((resolve, reject) => {
         axios({
           method: "get",
-          url: KEHULIST,
+          url: PUBLICCLUES,
           headers: {
             "content-type": "application/x-www-form-urlencoded",
             Authorization: "bearer " + storage.get()

@@ -6,7 +6,7 @@ import {
   YIRUGONG,
   DINGDAN,
   HUCHU,
-  ANALLOT,
+  ASSIGNPAIDALLOCATED,
   REFER,
   PONESTATUS
 } from '../uilt/url/url'
@@ -314,7 +314,7 @@ export default {
         return new Promise((resolve, reject) => {
           axios({
             method: 'get',
-            url: ANALLOT,
+            url: ASSIGNPAIDALLOCATED,
             headers: {
               "content-type": "application/x-www-form-urlencoded",
               Authorization: "bearer " + storage.get()

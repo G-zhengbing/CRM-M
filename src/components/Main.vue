@@ -298,7 +298,7 @@ i {
   position: relative;
   top: 15px;
   left: 20px;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   text-align: center;
   line-height: 30px;

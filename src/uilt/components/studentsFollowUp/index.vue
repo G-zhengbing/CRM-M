@@ -99,7 +99,7 @@
         </div>
         <!-- 跟进情况 -->
         <div class="followUpSituation">
-          <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
+          <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80" :show-message="false">
             <FormItem label="呼出情况" prop="phone_status">
               <RadioGroup v-model="formValidate.phone_status">
                 <Radio label="1">正常接听</Radio>
