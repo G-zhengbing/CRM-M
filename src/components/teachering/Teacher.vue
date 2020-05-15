@@ -513,7 +513,7 @@
           <Col span="24">
             <FormItem>
               <Button type="primary" @click="createdTeacher('form')">确定</Button>
-              <Button @click="handleReset('form')" style="margin-left: 8px">重置</Button>
+              <Button @click="handleReset('form')" style="margin-left: 8px">取消</Button>
             </FormItem>
           </Col>
         </Row>
@@ -706,7 +706,8 @@ export default {
     },
     //重置form表单
     handleReset(name) {
-      this.$refs[name].resetFields();
+      this.showTeacherMessage = false
+      // this.$refs[name].resetFields();
     },
     //创建教师
     createdTeacher(name) {

@@ -659,7 +659,7 @@ export default {
       this.followForm.textbook_version = this.type.data.textbook_version;
       this.followForm.subject = this.type.data.subject;
       this.followForm.intention_option = this.type.data.intention_option;
-      this.followForm.next_follow_time = this.type.data.next_follow_time;
+      // this.followForm.next_follow_time = this.type.data.next_follow_time;
       this.followForm.visit_content = this.type.data.visit_content;
       this.followForm.order = this.type.data.order;
     }

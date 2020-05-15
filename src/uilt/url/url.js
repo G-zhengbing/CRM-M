@@ -103,10 +103,21 @@ const ADMINMERBERDEPARTMENTNAMELIST = BASEURL + "admin_merber_department_name_li
 const ADMINMERBERROLELIST = BASEURL + "admin_merber_role_list" //设置，获取角色列表
 const CREATEADMINUSER = BASEURL + "create_admin_user" //设置，新增用户列表
 const PROHIBITADMINUSER = BASEURL + "prohibit_admin_user" //设置，新增用户列表
+const GETPERMISSIONLIST = BASEURL + "get_permission_list" //设置，获取权限列表
+const UPDATEROLEPERMISSION = BASEURL + "update_role_permission" //设置，修改用户权限
+const GETROLEPERMISSION = BASEURL + "get_role_permission" //设置，角色权限获取
+const ADDROLE = BASEURL + "add_role" //设置，创建角色
+
+const MEPERMISSION = BASEURL + "me_permission" //获取当前角色权限列表
 
 const SCREENLIST = BASEURL + "screen_list" //教务/ 公共接口，select状态栏
 
 export {
+  ADDROLE,
+  GETROLEPERMISSION,
+  MEPERMISSION,
+  UPDATEROLEPERMISSION,
+  GETPERMISSIONLIST,
   PROHIBITADMINUSER,
   CREATEADMINUSER,
   ADMINMERBERROLELIST,
