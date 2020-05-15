@@ -5,7 +5,7 @@
       <div class="surplus">
         <div class="main-section-bottom">
           <div>
-            <Form :model="form" :label-width="80">
+            <Form :model="form" :label-width="20">
               <Row>
                 <Col span="4">
                   <FormItem style="width:230px;">
@@ -17,7 +17,7 @@
                     <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekKuhu"></Input>
                   </FormItem>
                 </Col>
-                <Col span="4">
+                <Col span="3">
                   <FormItem>
                     <Select
                       v-model="form.refer"
@@ -33,7 +33,7 @@
                     </Select>
                   </FormItem>
                 </Col>
-                <Col span="4">
+                <Col span="3">
                   <FormItem>
                     <Select
                       v-model="form.grade"
@@ -53,7 +53,7 @@
                     </Select>
                   </FormItem>
                 </Col>
-                <Col span="4">
+                <Col span="3">
                   <FormItem>
                     <Select
                       v-model="form.subject"
@@ -65,7 +65,7 @@
                     </Select>
                   </FormItem>
                 </Col>
-                <Col span="4">
+                <Col span="3">
                   <FormItem>
                     <Select
                       v-model="form.transfer"
@@ -77,7 +77,9 @@
                     </Select>
                   </FormItem>
                 </Col>
-                <Col span="4">
+                </Row>
+                <Row>
+                <Col span="3">
                   <FormItem>
                     <Select
                       v-model="form.sale_id"

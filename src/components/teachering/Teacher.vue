@@ -71,6 +71,7 @@
         label-position="left"
         :rules="ruleValidate"
         style="height:500px;overflow-y:auto;"
+        :show-message="false"
       >
         <Row>
           <Col span="24">教师基本信息</Col>

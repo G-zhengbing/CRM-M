@@ -1,11 +1,10 @@
 <template>
-<!-- AMEND: 2020.05.09 刘畅 删除微信昵称字段，添加意向度筛选条件 -->
   <div class="box" ref="box">
     <section class="main-section">
       <div class="surplus">
         <div class="main-section-bottom">
           <div>
-            <Form :model="form" :label-width="80">
+            <Form :model="form" :label-width="20">
               <Row>
                 <Col span="4">
                   <FormItem>
@@ -48,6 +47,8 @@
                     </Select>
                   </FormItem>
                 </Col>
+              </Row>
+              <Row>
                 <Col span="4">
                   <FormItem>
                     <Select v-model="form.grade" @on-change="seekClick" placeholder="年级">
@@ -63,7 +64,7 @@
                     </Select>
                   </FormItem>
                 </Col>
-                <Col span="4">
+                <Col span="3">
                   <FormItem>
                     <Select v-model="form.refer" @on-change="seekClick" placeholder="渠道类型">
                       <Option
@@ -74,7 +75,7 @@
                     </Select>
                   </FormItem>
                 </Col>
-                <Col span="4">
+                <Col span="3">
                   <FormItem>
                     <Select
                       v-model="form.intention_option"
@@ -86,7 +87,7 @@
                     </Select>
                   </FormItem>
                 </Col>
-                <Col span="6">
+                <Col span="5">
                   <FormItem>
                     <div class="dateplc">
                       <DatePicker
@@ -122,7 +123,7 @@
                     </div>
                   </FormItem>
                 </Col>
-                <Col span="4" style="text-indent: 60px">
+                <Col span="2" style="text-indent: 60px">
                   <Button type="primary" @click="clear">清除</Button>
                 </Col>
               </Row>
@@ -537,7 +538,7 @@ export default {
         this.setCurrentPage(num);
       });
     }
-  },
+  }
 };
 </script>
 <style scoped>
