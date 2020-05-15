@@ -8,14 +8,12 @@
               <li
                 @click="tab(1)"
                 :class="[num == 1? 'active' : '']"
-                v-if="$store.state.cId.is_sales == 'H'"
               >
                 <span>我的客户</span>
               </li>
               <li
                 @click="tab(2)"
                 :class="[num == 2? 'active' : '']"
-                v-if="$store.state.cId.is_sales == 'H'"
               >
                 <span>付费学员</span>
               </li>

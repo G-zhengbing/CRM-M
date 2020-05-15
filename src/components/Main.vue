@@ -1,28 +1,18 @@
 <template>
-  <div class="layout">
+  <div v-if="pageLoading" class="layout">
     <Layout>
       <Header>
         <Menu mode="horizontal" :theme="theme1" active-name="1">
-          <div class="layout-logo">全品在线</div>
+          <div class="layout-logo"><img class="logo-img" src="@/assets/img/logo/png8.png"></img>全品在线</div>
           <div class="layout-nav">
             <ul class="tabars">
               <li
-                v-if="$store.state.cId.is_market != 'N'"
-                @click="setActive(1)"
-                :class="{active:tabNum == 1}"
-              >CMS管理</li>
-              <li v-if="$store.state.cId.is_sales != 'N'" @click="setActive(2)" :class="{active:tabNum == 2}">CRM管理</li>
-              <li
-                v-if="$store.state.cId.is_headmaster != 'N'"
-                @click="setActive(3)"
-                :class="{active:tabNum == 3}"
-              >教务</li>
-              <!-- <li @click="setActive(4)" :class="{active:tabNum == 4}">排课</li> -->
-              <!-- <li
-                v-if="$store.state.cId.is_headmaster != 'N'"
-                @click="setActive(5)"
-                :class="{active:tabNum == 5 }"
-              >设置</li> -->
+                v-if="item.childrens.length"
+                @click="setActive(index)"
+                :class="{active:tabNum == index}"
+                v-for="(item,index) in jurisdictionList"
+                :key="index"
+              >{{item.display_name}}</li>
             </ul>
           </div>
           <div class="right">
@@ -37,80 +27,23 @@
       </Header>
       <Layout>
         <Sider hide-trigger :style="{background: '#fff','padding-top': '20px'}">
-          <template v-if="tabNum == 3">
-            <ul v-if="$store.state.cId.is_headmaster != 'N'" class="teacheing">
-              <router-link to="/main/classstudents" tag="li">班课学员</router-link>
-              <router-link to="/main/inclass" tag="li">开课中学员</router-link>
-              <router-link to="/main/myreservation" tag="li">我的预约单</router-link>
-              <router-link to="/main/oneononestudent" tag="li">一对一学员</router-link>
-              <router-link to="/main/onemyreservation" tag="li">一对一我的预约单</router-link>
-              <router-link to="/main/statisticanalysis" tag="li">统计分析</router-link>
-              <router-link
-                to="/main/payingstudents"
-                tag="li"
-                v-if="$store.state.cId.is_headmaster == 'H'"
-              >付费学员</router-link>
-            </ul>
-          </template>
-          <!-- <ul v-if="tabNum == 4" class="schedu">
-            <router-link to="/main/scheducourse" tag="li">课程管理</router-link>
-            <router-link to="/main/schedulessons" tag="li">课节统计</router-link>
-            <router-link to="/main/scheduteachers" tag="li">教师管理</router-link>
-            <router-link to="/main/schedustudent" tag="li">学员管理</router-link>
-          </ul>-->
-          <template v-if="$store.state.cId.is_sales != 'N'">
-            <ul v-if="tabNum == 2" class="crm">
-              <router-link to="/main/mineclient" tag="li">我的客户</router-link>
-              <router-link
-                v-if="$store.state.cId.is_sales != 'N'"
-                to="/main/reserved"
-                tag="li"
-              >我的预约单</router-link>
-              <router-link v-if="$store.state.cId.is_headmaster != 'N'" to="/main/allreserved" tag="li">全部预约单</router-link>
-              <router-link v-if="$store.state.cId.is_sales == 'H'" to="/main/daiban" tag="li">资源池</router-link>
-              <router-link v-if="$store.state.cId.is_sales == 'Y'" to="/main/public" tag="li">公共资源池</router-link>
-              <router-link v-if="$store.state.cId.is_market != 'N'" to="/main/erweima" tag="li">渠道管理</router-link>
-              <router-link
-                v-if="$store.state.cId.is_teacher != 'N'"
-                to="/main/teacher"
-                tag="li"
-              >教师管理</router-link>
-              <router-link
-                v-if="$store.state.cId.is_sales == 'H'"
-                to="/main/importdata"
-                tag="li"
-              >线索导入</router-link>
-              <router-link
-                v-if="$store.state.cId.is_headmaster == 'H'"
-                to="/main/importorder"
-                tag="li"
-              >订单导入</router-link>
-              <router-link
-                v-if="$store.state.cId.is_sales != 'N'"
-                to="/main/statistics"
-                tag="li"
-              >统计分析</router-link>
-              <router-link v-if="$store.state.cId.is_sales != 'N'" to="/main/money" tag="li">订单中心</router-link>
-            </ul>
-          </template>
-          <template v-if="$store.state.cId.is_sales != 'N'">
-            <ul v-if="tabNum == 5" class="crm">
-              <router-link to="/main/departments" tag="li">部门和用户</router-link>
-              <router-link to="/main/jurisdiction" tag="li">角色和权限</router-link>
-            </ul>
-          </template>
-          <template v-if="$store.state.cId.is_market != 'N'">
-            <ul v-if="tabNum == 1" class="cms">
-              <router-link to="/main/advertising" tag="li">广告管理</router-link>
-              <li class="cms_special">
+          <template
+            v-if="jurisdictionList[tabNum].childrens.length"
+            v-for="(item,index) in jurisdictionList[tabNum].childrens"
+          >
+            <ul class="teacheing">
+              <li v-if="item.childrens" class="cms_special">
                 <div>
-                  <span>专题管理</span>
+                  <span>{{item.display_name}}</span>
                 </div>
-                <router-link to="/main/special" tag="li">首页专题</router-link>
-                <router-link to="/main/bookcode" tag="li">一书一码</router-link>
+                <router-link
+                  v-for="(i,index) in item.childrens"
+                  :key="index"
+                  :to="i.web_path"
+                  tag="li"
+                >{{i.display_name}}</router-link>
               </li>
-              <router-link to="/main/curriculum" tag="li">课程管理</router-link>
-              <router-link to="/main/databank" tag="li">资料管理</router-link>
+              <router-link v-else :to="item.web_path" tag="li">{{item.display_name}}</router-link>
             </ul>
           </template>
         </Sider>
@@ -125,18 +58,38 @@
 </template>
 <script>
 import storeage from "../uilt/storage";
+import { MEPERMISSION } from "../uilt/url/url";
 import { mapState, mapActions } from "vuex";
 export default {
   mounted() {
-    // var s = window.screen.width / 1920;
-    // document.body.style.zoom = s;
     this.getReferList();
-    this.getUser().then();
+    this.getUser()
+      .then(res => {
+        // 这里面要做页面显示限制，否则数据没有更新，页面已经渲染，会报错
+        this.pageLoading = true;
+        if (res.data.data.permission.length == 0) {
+          this.$Modal.error({
+            title: "错误",
+            content: "请联系上级人员，该帐号未配置权限！"
+          });
+          this.pageLoading = false;
+          this.$router.push("/");
+        }
+      })
+      .catch(err => {
+        this.$Modal.error({
+          title: "错误",
+          content: "数据加载失败,请检查网络或联系管理员!"
+        });
+        this.pageLoading = false;
+        this.$router.push("/");
+      });
   },
   data() {
     return {
       tabNum: storeage.getMaintabnum(),
-      theme1: "light"
+      theme1: "light",
+      pageLoading: false
     };
   },
   methods: {
@@ -144,9 +97,10 @@ export default {
     //tabar
     setActive(num) {
       this.tabNum = num;
+      this.$router.push(this.jurisdictionList[num].childrens[0].web_path);
       storeage.savaMaintabnum(num);
     },
-    namePath(s) {
+    nameweb_path(s) {
       storeage.setMenuNum(s);
     },
     back() {
@@ -164,7 +118,8 @@ export default {
   computed: {
     ...mapState({
       uName: state => state.uName,
-      num: state => state.main.num
+      num: state => state.main.num,
+      jurisdictionList: state => state.permission
     })
   },
   watch: {
@@ -178,6 +133,11 @@ export default {
 };
 </script>
 <style scoped>
+/* logo图片 */
+.logo-img {
+  width: 20px;
+  margin-right: 10px;
+}
 .cms_special li {
   margin-left: 40px;
 }
@@ -230,7 +190,8 @@ li.router-link-exact-active.router-link-active {
   opacity: 0.8;
 }
 .tabars li {
-  width: 80px;
+  /* width: 80px; */
+  padding: 0 18px;
   color: #fff;
   text-align: center;
   cursor: pointer;
@@ -257,7 +218,7 @@ li.router-link-exact-active.router-link-active {
   height: 19px;
 }
 .right i {
-  margin: 0 76px 0 0;
+  /* margin: 0 76px 0 0; */
   cursor: pointer;
 }
 .right span,
@@ -274,9 +235,9 @@ i {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 300px;
-  min-width: 300px;
-  max-width: 300px;
+  width: 280px;
+  min-width: 280px;
+  max-width: 280px;
 }
 .layout-logo[data-v-bb0b6c44] {
   color: #fff;
@@ -326,10 +287,12 @@ i {
   height: 100%;
 }
 .layout-logo {
+  display: flex;
+  justify-content: center;
   margin-top: -5px;
   width: 150px;
   height: 30px;
-  background: #5b6270;
+  /* background: #5b6270; */
   border-radius: 3px;
   float: left;
   position: relative;

@@ -42,7 +42,8 @@ import learningReport from './learningReport'
 import {
   GETUSER,
   GENJIN,
-  REFER
+  REFER,
+  MEPERMISSION
 } from "../uilt/url/url";
 import storage from '../uilt/storage'
 
@@ -52,7 +53,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     cId: 0,
-    uName: ""
+    uName: "",
+    permission: []
   },
   mutations: {
     setuName(state, payload) {
@@ -60,6 +62,9 @@ export default new Vuex.Store({
     },
     setCid(state, payload) {
       state.cId = payload
+    },
+    setPermission(state, permission) {
+      state.permission = permission
     },
     clearuName(state) {
       state.uName = ""
@@ -125,14 +130,15 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         axios({
           method: "get",
-          url: GETUSER,
+          url: MEPERMISSION,
           headers: {
             "content-type": "application/x-www-form-urlencoded",
             Authorization: "bearer " + storage.get()
           }
         }).then(res => {
-          commit('setuName', res.data.data.login_name)
-          commit("setCid", res.data.data.role)
+          commit('setuName', res.data.data.user_name)
+          // commit("setCid", res.data.data.role)
+          commit("setPermission", res.data.data.permission)
           resolve(res)
         }).catch(e => {
           reject(e);

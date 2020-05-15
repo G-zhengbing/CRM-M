@@ -6,10 +6,10 @@
         <div class="main-section-bottom">
           <div class="contaner">
             <ul class="tabs">
-              <li @click="tab(1)" :class="[num == 1? 'active' : '']" v-if="$store.state.cId.is_sales == 'H'">
+              <li @click="tab(1)" :class="[num == 1? 'active' : '']">
                 <span>未下单待分配</span>
               </li>
-              <li @click="tab(3)" :class="[num == 3? 'active' : '']" v-if="$store.state.cId.is_sales == 'H'">
+              <li @click="tab(3)" :class="[num == 3? 'active' : '']">
                 <span>已下单待分配</span>
               </li>
               <li @click="tab(2)" :class="[num == 2? 'active' : '']">
