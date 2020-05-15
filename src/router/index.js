@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '../store/index'
 import Login from '../components/login/Login.vue'
 import Forget from '../components/login/Forget.vue'
 import Succeed from '../components/login/Succeed.vue'
