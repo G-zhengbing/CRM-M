@@ -139,6 +139,19 @@
                     </div>
                   </FormItem>
                 </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select
+                      v-model="form.is_schedule"
+                      style="width:150px"
+                      @on-change="seekClick"
+                      placeholder="是否排课"
+                    >
+                      <Option :value="2">已排课</Option>
+                      <Option :value="1">未排课</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
                 <Col span="4" style="text-indent: 60px">
                   <Button type="primary" @click="clear">清除</Button>
                 </Col>
@@ -180,6 +193,7 @@ import Loading from "../../uilt/loading/loading";
 import storage from "../../uilt/storage";
 import DaibanMessage from "../../uilt/newErweima/DaibanMessage";
 import ReservedMessage from "./ReservedMessage";
+import { UPDATEAPPOINTMENTISSCHEDULE } from "@/uilt/url/url";
 export default {
   components: {
     Loading,
@@ -249,17 +263,27 @@ export default {
       if (this.num == "2") {
         this.columns = [
           { type: "selection", width: 60 },
-          { title: "学员姓名",width: 100, key: "student_name", align: "center" },
-          { title: "注册手机",width:130, key: "mobile", align: "center" },
+          {
+            title: "学员姓名",
+            width: 100,
+            key: "student_name",
+            align: "center"
+          },
+          { title: "注册手机", width: 130, key: "mobile", align: "center" },
           { title: "试听类型", key: "type", align: "center" },
           { title: "试听课程", key: "course_name", align: "center" },
-          { title: "年级",width: 80, key: "grade", align: "center" },
-          { title: "科目",width: 80, key: "subject", align: "center" },
+          { title: "年级", width: 80, key: "grade", align: "center" },
+          { title: "科目", width: 80, key: "subject", align: "center" },
           { title: "教师", key: "coach_id", align: "center" },
-          { title: "上课日期",width:120, key: "date_time", align: "center" },
-          { title: "上课时段",width:75, key: "time_block", align: "center" },
+          { title: "上课日期", width: 120, key: "date_time", align: "center" },
+          { title: "上课时段", width: 75, key: "time_block", align: "center" },
           { title: "状态", key: "appoint_status", align: "center" },
-          { title: "预约提交时间",width: 120, key: "create_time", align: "center" },
+          {
+            title: "预约提交时间",
+            width: 120,
+            key: "create_time",
+            align: "center"
+          },
           {
             title: "备注",
             key: "note",
@@ -311,17 +335,27 @@ export default {
       } else if (this.num == "1") {
         this.columns = [
           { type: "selection", width: 60 },
-          { title: "学员姓名",width: 100, key: "student_name", align: "center" },
-          { title: "注册手机",width:130, key: "mobile", align: "center" },
+          {
+            title: "学员姓名",
+            width: 100,
+            key: "student_name",
+            align: "center"
+          },
+          { title: "注册手机", width: 130, key: "mobile", align: "center" },
           { title: "试听类型", key: "type", align: "center" },
           { title: "试听课程", key: "course_name", align: "center" },
-          { title: "年级",width: 80, key: "grade", align: "center" },
-          { title: "科目",width: 80, key: "subject", align: "center" },
+          { title: "年级", width: 80, key: "grade", align: "center" },
+          { title: "科目", width: 80, key: "subject", align: "center" },
           { title: "教师", key: "coach_id", align: "center" },
-          { title: "上课日期",width:120, key: "date_time", align: "center" },
-          { title: "上课时段",width:75, key: "time_block", align: "center" },
+          { title: "上课日期", width: 120, key: "date_time", align: "center" },
+          { title: "上课时段", width: 75, key: "time_block", align: "center" },
           { title: "状态", key: "appoint_status", align: "center" },
-          { title: "预约提交时间",width: 120, key: "create_time", align: "center" },
+          {
+            title: "预约提交时间",
+            width: 120,
+            key: "create_time",
+            align: "center"
+          },
           {
             title: "备注",
             key: "note",
@@ -414,23 +448,80 @@ export default {
         ];
       } else {
         this.columns = [
-          { type: "selection", width: 60 },
-          { title: "学员姓名",width: 100, key: "student_name", align: "center" },
-          { title: "注册手机",width:130, key: "mobile", align: "center" },
-          { title: "试听类型", key: "type", align: "center" },
-          { title: "试听课程", key: "course_name", align: "center" },
-          { title: "年级",width: 80, key: "grade", align: "center" },
-          { title: "科目",width: 80, key: "subject", align: "center" },
-          { title: "教师", key: "coach_id", align: "center" },
-          { title: "上课日期",width:120, key: "date_time", align: "center" },
-          { title: "上课时段",width:75, key: "time_block", align: "center" },
-          { title: "状态", key: "appoint_status", align: "center" },
-          { title: "创建人", key: "create_user", align: "center" },
-          { title: "预约提交时间",width: 120, key: "create_time", align: "center" },
+          { type: "selection", width: 60, fixed: "left" },
+          {
+            title: "学员姓名",
+            width: 100,
+            key: "student_name",
+            align: "center",
+            fixed: "left"
+          },
+          {
+            title: "注册手机",
+            width: 130,
+            key: "mobile",
+            align: "center",
+            fixed: "left"
+          },
+          { title: "试听类型", key: "type", width: 120, align: "center" },
+          {
+            title: "试听课程",
+            key: "course_name",
+            width: 120,
+            align: "center"
+          },
+          { title: "年级", width: 80, key: "grade", align: "center" },
+          { title: "科目", width: 80, key: "subject", align: "center" },
+          { title: "教师", key: "coach_id", width: 120, align: "center" },
+          { title: "上课日期", width: 120, key: "date_time", align: "center" },
+          { title: "上课时段", width: 75, key: "time_block", align: "center" },
+          { title: "状态", key: "appoint_status", width: 120, align: "center" },
+          {
+            title: "是否排课",
+            key: "is_schedule",
+            width: 120,
+            align: "center",
+            render: (h, params) => {
+              return h("i-switch", {
+                style: {
+                  width: "50px"
+                },
+                props: {
+                  type: "已排/未排",
+                  value: params.row.is_schedule == 2 ? true : false //设置它的值比如：true或false
+                },
+                on: {
+                  input: function(event) {
+                    if (event) {
+                      params.row.is_schedule = true;
+                    } else {
+                      params.row.is_schedule = false;
+                    }
+                  },
+                  "on-change": val => {
+                    //值发生了改变调用方法
+                    this.scheduleChange(params.row);
+                  }
+                },
+                scopedSlots: {
+                  open: () => h("span", "已排"),
+                  close: () => h("span", "未排")
+                }
+              });
+            }
+          },
+          { title: "创建人", key: "create_user", width: 120, align: "center" },
+          {
+            title: "预约提交时间",
+            width: 120,
+            key: "create_time",
+            align: "center"
+          },
           {
             title: "备注",
             key: "note",
             align: "center",
+            width: 120,
             tooltip: true,
             ellipsis: true
           },
@@ -438,7 +529,8 @@ export default {
             title: "操作",
             key: "action",
             align: "center",
-            align: "center",
+            width: 160,
+            fixed: "right",
             render: (h, params) => {
               return h("div", [
                 h(
@@ -518,6 +610,16 @@ export default {
           }
         ];
       }
+    },
+    // 排课改变
+    async scheduleChange(row) {
+      let res = await this.$request({
+        url: UPDATEAPPOINTMENTISSCHEDULE,
+        params: {
+          appointment_id: row.id,
+          is_schedule: row.is_schedule ? 2 : 1
+        }
+      });
     },
     //tabs
     tab(num) {

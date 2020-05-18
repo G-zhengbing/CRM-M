@@ -43,6 +43,7 @@ const NOTIFICATION = BASEURL + "action_list"//我的客户/消息提醒
 const CLIENTTYPE = BASEURL + "order_product" //创建订单/选择课程
 const RESERVED = BASEURL + "mine_appoint_list" //预约单/
 const RESERVEDAll = BASEURL + "system_appoint_list" //全部预约单/
+const UPDATEAPPOINTMENTISSCHEDULE = BASEURL + "update_appointment_is_schedule" //全部预约单,是否排课
 const USERRESERVED = BASEURL + "appoint_list" //用户预约单列表
 const CREATERESERVED = BASEURL + "appoint_store" //创建预约单
 const TEACHERLIST = BASEURL + "coach_list" //教师管理
@@ -140,6 +141,7 @@ export {
   PRODUCTINFOFILE,
   MATERIALUPLOAD,
   RESERVEDAll,
+  UPDATEAPPOINTMENTISSCHEDULE,
   CREATEUPGRADE,
   ACCOUNTORDER,
   GETACCOUNTSFOLLOW,

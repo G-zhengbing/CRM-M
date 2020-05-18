@@ -123,11 +123,13 @@ export default {
         {
           title: "姓名",
           key: "login_name",
+          width: 120,
           align: "center"
         },
         {
           title: "手机号",
           key: "mobile",
+          width: 130,
           align: "center"
         },
         {
@@ -138,6 +140,7 @@ export default {
         {
           title: "部门",
           key: "department_name",
+          width: 110,
           align: "center"
         },
         {
@@ -149,7 +152,7 @@ export default {
           title: "操作",
           key: "operation",
           align: "center",
-          width: 200,
+          width: 160,
           render: (h, params) => {
             return h("div", [
               h(

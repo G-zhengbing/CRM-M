@@ -249,15 +249,15 @@ export default {
       if (this.num == "2") {
         this.columns = [
           { type: "selection", width: 60 },
-          { title: "学员姓名", key: "student_name",width: 100 },
-          { title: "注册手机", key: "mobile",width: 130 },
+          { title: "学员姓名", key: "student_name", width: 100 },
+          { title: "注册手机", key: "mobile", width: 130 },
           { title: "试听类型", key: "type" },
           { title: "试听课程", key: "course_name" },
-          { title: "年级",width: 80, key: "grade" },
-          { title: "科目",width: 80, key: "subject" },
+          { title: "年级", width: 80, key: "grade" },
+          { title: "科目", width: 80, key: "subject" },
           { title: "教师", key: "coach_id" },
-          { title: "上课日期",width:120, key: "date_time" },
-          { title: "上课时段", key: "time_block",width:75 },
+          { title: "上课日期", width: 120, key: "date_time" },
+          { title: "上课时段", key: "time_block", width: 75 },
           { title: "状态", key: "appoint_status" },
           { title: "预约提交时间", key: "create_time" },
           { title: "备注", key: "note", tooltip: true, ellipsis: true },
@@ -304,15 +304,15 @@ export default {
       } else if (this.num == "1") {
         this.columns = [
           { type: "selection", width: 60 },
-          { title: "学员姓名", key: "student_name",width: 100 },
-          { title: "注册手机", key: "mobile",width: 130 },
+          { title: "学员姓名", key: "student_name", width: 100 },
+          { title: "注册手机", key: "mobile", width: 130 },
           { title: "试听类型", key: "type" },
           { title: "试听课程", key: "course_name" },
-          { title: "年级",width: 80, key: "grade" },
-          { title: "科目",width: 80, key: "subject" },
+          { title: "年级", width: 80, key: "grade" },
+          { title: "科目", width: 80, key: "subject" },
           { title: "教师", key: "coach_id" },
-          { title: "上课日期",width:120, key: "date_time" },
-          { title: "上课时段", key: "time_block",width:75 },
+          { title: "上课日期", width: 120, key: "date_time" },
+          { title: "上课时段", key: "time_block", width: 75 },
           { title: "状态", key: "appoint_status" },
           { title: "预约提交时间", key: "create_time" },
           { title: "备注", key: "note", tooltip: true, ellipsis: true },
@@ -388,23 +388,47 @@ export default {
         ];
       } else {
         this.columns = [
-          { type: "selection", width: 60 },
-          { title: "学员姓名", key: "student_name", align: "center",width: 100 },
-          { title: "注册手机", key: "mobile", align: "center",width: 130 },
-          { title: "试听类型", key: "type", align: "center" },
-          { title: "试听课程", key: "course_name", align: "center" },
-          { title: "年级",width: 80, key: "grade", align: "center" },
-          { title: "科目",width: 80, key: "subject", align: "center" },
-          { title: "教师", key: "coach_id", align: "center" },
-          { title: "上课日期",width:120, key: "date_time", align: "center" },
-          { title: "上课时段", key: "time_block",width:75, align: "center" },
-          { title: "状态", key: "appoint_status", align: "center" },
-          { title: "创建人", key: "create_user", align: "center" },
-          { title: "预约提交时间", key: "create_time", align: "center",width: 120 },
+          { type: "selection", width: 60, fixed: "left" },
+          {
+            title: "学员姓名",
+            key: "student_name",
+            align: "center",
+            width: 100,
+            fixed: "left"
+          },
+          {
+            title: "注册手机",
+            key: "mobile",
+            align: "center",
+            width: 130,
+            fixed: "left"
+          },
+          { title: "试听类型", key: "type", width: 100, align: "center" },
+          {
+            title: "试听课程",
+            key: "course_name",
+            width: 160,
+            align: "center"
+          },
+          
+          { title: "年级", width: 80, key: "grade", align: "center" },
+          { title: "科目", width: 80, key: "subject", align: "center" },
+          { title: "教师", key: "coach_id", width: 120, align: "center" },
+          { title: "上课日期", width: 120, key: "date_time", align: "center" },
+          { title: "上课时段", key: "time_block", width: 100, align: "center" },
+          { title: "状态", key: "appoint_status", width: 100, align: "center" },
+          { title: "创建人", key: "create_user", width: 100, align: "center" },
+          {
+            title: "预约提交时间",
+            key: "create_time",
+            align: "center",
+            width: 120
+          },
           {
             title: "备注",
             key: "note",
             align: "center",
+            width: 120,
             tooltip: true,
             ellipsis: true
           },
@@ -412,7 +436,8 @@ export default {
             title: "操作",
             key: "action",
             align: "center",
-            align: "center",
+            width: 200,
+            fixed: "right",
             render: (h, params) => {
               return h("div", [
                 h(
