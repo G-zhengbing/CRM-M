@@ -9,3 +9,7 @@ body {
 /* body {
 	font-size: 13px;
 } */
+
+.ivu-layout.ivu-layout-has-sider>.ivu-layout, .ivu-layout.ivu-layout-has-sider>.ivu-layout-content {
+	overflow-y: hidden;
+}

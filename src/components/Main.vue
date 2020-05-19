@@ -278,12 +278,12 @@ i {
   display: flex;
 }
 .ivu-layout {
-  height: 100%;
+  /* height: 100%; */
 }
 .layout {
   background: #f5f7f9;
   position: relative;
-  overflow: hidden;
+  /* overflow: hidden; */
   height: 100%;
 }
 .layout-logo {
