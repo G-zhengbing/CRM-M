@@ -1,27 +1,53 @@
 <template>
   <div class="box" ref="box">
-    <header class="main-header">
-      <ul>
-        <li style="margin-left:30px">
-          <span>消息提醒</span>
-        </li>
-      </ul>
-    </header>
     <section class="main-section">
       <div class="surplus">
         <div class="main-section-bottom">
           <div class="contaner">
-            <div style="height:30px;"></div>
             <Form :model="form" :label-width="80">
               <Row>
-                <Col span="4">
-                  <FormItem style="width:230px;">
-                    <Input v-model="form.name" placeholder="学员姓名" @on-change="seekClick"></Input>
+                <Col span="3">
+                  <FormItem>
+                    <Select v-model="form.visit_num" @on-change="seekClick" placeholder="授课类型">
+                      <Option :value="1">1次</Option>
+                      <Option :value="2">2次</Option>
+                      <Option :value="3">3次</Option>
+                      <Option :value="4">4次</Option>
+                      <Option :value="5">5次</Option>
+                      <Option :value="6">6次</Option>
+                      <Option :value="7">6次以上</Option>
+                    </Select>
                   </FormItem>
                 </Col>
-                <Col span="4">
+                <Col span="3">
                   <FormItem style="width:230px;">
-                    <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekClick"></Input>
+                    <Input v-model="form.mobile" placeholder="课程名称" @on-change="seekClick"></Input>
+                  </FormItem>
+                </Col>
+                <Col span="3">
+                  <FormItem>
+                    <Select v-model="form.visit_num" @on-change="seekClick" placeholder="课程状态">
+                      <Option :value="1">1次</Option>
+                      <Option :value="2">2次</Option>
+                      <Option :value="3">3次</Option>
+                      <Option :value="4">4次</Option>
+                      <Option :value="5">5次</Option>
+                      <Option :value="6">6次</Option>
+                      <Option :value="7">6次以上</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="3">
+                  <FormItem>
+                    <Select v-model="form.visit_num" @on-change="seekClick" placeholder="课程类型">
+                      <Option :value="1">1次</Option>
+                      <Option :value="2">2次</Option>
+                      <Option :value="3">3次</Option>
+                      <Option :value="4">4次</Option>
+                      <Option :value="5">5次</Option>
+                      <Option :value="6">6次</Option>
+                      <Option :value="7">6次以上</Option>
+                    </Select>
                   </FormItem>
                 </Col>
                 <Col span="6">
@@ -30,15 +56,13 @@
                       <DatePicker
                         v-model="startAccount"
                         type="date"
-                        placeholder="操作时间"
-                        style="width: 200px"
+                        placeholder="首次课日期"
                         @on-change="getTimes2"
                       ></DatePicker>
                       <DatePicker
                         v-model="endAccount"
                         type="date"
-                        placeholder="操作时间"
-                        style="width: 200px"
+                        placeholder="首次课日期"
                         @on-change="getTimes2"
                       ></DatePicker>
                     </div>
@@ -47,15 +71,12 @@
                 <Col span="4" style="text-indent: 60px">
                   <Button type="primary" @click="clear">清除</Button>
                 </Col>
+                <Col span="24">
+                  <Button type="primary" @click="addCourse">创建课程</Button>
+                </Col>
               </Row>
             </Form>
-            <Table
-              border
-              :columns="columns"
-              :data="notifiData"
-              @on-selection-change="selectionChange"
-              height="500"
-            ></Table>
+            <Table border :columns="columns" :data="notifiData" height="500"></Table>
             <Page
               @on-change="pageChange"
               :total="total"
@@ -70,22 +91,19 @@
       </div>
     </section>
     <Loading v-show="isLoading" />
-    <DaibanMessage :type="type" v-if="show" />
-    <MineclientMessage :type="type" v-if="showMine" />
+    <Coursemessage :type="type" v-if="show" />
   </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
-import Loading from "../../uilt/loading/loading";
-import storage from "../../uilt/storage";
-import DaibanMessage from "../../uilt/newErweima/DaibanMessage";
-import MineclientMessage from "../minecllient/MineclientMessage";
+import Loading from "../../../uilt/loading/loading";
+import storage from "../../../uilt/storage";
+import Coursemessage from "./Cuorsemessage";
 export default {
   components: {
     Loading,
-    DaibanMessage,
-    MineclientMessage
+    Coursemessage
   },
   mounted() {
     this.setCurrentPage(1);
@@ -105,6 +123,7 @@ export default {
   },
   data() {
     return {
+      isUpdate: false,
       endAccount: "",
       startAccount: "",
       showMine: false,
@@ -117,18 +136,22 @@ export default {
       stage: "",
       transfer: "",
       show: false,
-      type: {
-        status: "notification"
-      },
+      type: {},
       isLoading: false,
       form: {},
       columns: [
         { type: "selection", width: 60 },
-        { title: "学员姓名", key: "student_name" },
-        { title: "注册手机", key: "mobile" },
-        { title: "具体内容", key: "remarks" },
-        { title: "操作时间", key: "action_create_time" },
-        { title: "注册时间", key: "create_time" },
+        { title: "授课类型", key: "student_name" },
+        { title: "课程名称", key: "mobile" },
+        { title: "课程类型", key: "remarks" },
+        { title: "首节课日期", key: "action_create_time" },
+        { title: "课程进度", key: "create_time" },
+        { title: "课程有效期", key: "create_time" },
+        { title: "录播/直播/回放数", key: "create_time" },
+        { title: "教师数", key: "create_time" },
+        { title: "学生数", key: "create_time" },
+        { title: "旁听生数", key: "create_time" },
+        { title: "班主任", key: "create_time" },
         {
           title: "操作",
           key: "action",
@@ -144,11 +167,11 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.audition(params.row);
+                      this.update(params.row);
                     }
                   }
                 },
-                "试听"
+                "编辑"
               ),
               h(
                 "Button",
@@ -159,11 +182,11 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.order(params.row);
+                      this.mathdata(params.row);
                     }
                   }
                 },
-                "订单"
+                "教学数据"
               ),
               h(
                 "Button",
@@ -174,26 +197,11 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.getBtnClick3(params.row);
+                      this.endcourse(params.row);
                     }
                   }
                 },
-                "跟进"
-              ),
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "text",
-                    size: "small"
-                  },
-                  on: {
-                    click: () => {
-                      this.getBtnClick4(params.row);
-                    }
-                  }
-                },
-                "呼出"
+                "结课"
               )
             ]);
           }
@@ -209,17 +217,22 @@ export default {
       "getReferList",
       "getUserReservedList"
     ]),
-    //订单
-    order(item) {
-      this.setNotifiTypes(item);
-      this.showMine = true;
-      this.type.classify = "order";
+    //创建课程
+    addCourse() {
+      this.isUpdate = false;
+      this.type.classify = "createdCourse";
+      this.show = true;
+    },
+    //编辑
+    update(item) {
+      this.isUpdate = true;
+      this.type.classify = "createdCourse";
       this.type.form = this.form;
       this.type.page = this.currentPage;
-      this.type.data = { ...this.notifiTypes };
+      this.show = true;
     },
-    //试听
-    audition(item) {
+    //教学数据
+    mathdata(item) {
       // this.getUserReservedList({uid:item.id})
       this.setNotifiTypes(item);
       this.showMine = true;
@@ -227,6 +240,46 @@ export default {
       this.type.page = this.currentPage;
       this.type.form = this.form;
       this.type.data = { ...this.notifiTypes };
+    },
+    //结课
+    endcourse(item) {
+      this.setNotifiTypes(item);
+      this.show = true;
+      this.type.classify = "followUp";
+      this.type.page = this.currentPage;
+      this.type.form = this.form;
+      this.type.data = { ...this.notifiTypes };
+    },
+    //清空选线
+    clear() {
+      this.form = {};
+      this.startTime = "";
+      this.endTime = "";
+      this.startAccount = "";
+      this.endAccount = "";
+      this.seekClick();
+    },
+    //查询
+    seekClick() {
+      let page = 1;
+      let currentPage = this.currentPage;
+      if (currentPage > 1) {
+        this.setCurrentPage(page);
+      }
+      this.isLoading = true;
+      this.getNotificationList({ form: this.form, page }).then(res => {
+        this.isLoading = false;
+        this.setCurrentPage(page);
+      });
+    },
+    //分页
+    pageChange(num) {
+      this.isLoading = true;
+      this.setCurrentPage(num);
+      this.getNotificationList({ form: this.form }).then(res => {
+        this.isLoading = false;
+        this.setCurrentPage(num);
+      });
     },
     //设置返回的时间
     datePicker(time) {
@@ -255,82 +308,6 @@ export default {
         this.form.account_time_end = this.datePicker(this.endTime);
         this.seekClick();
       }
-    },
-    clear() {
-      this.form = {};
-      this.startTime = "";
-      this.endTime = "";
-      this.startAccount = "";
-      this.endAccount = "";
-      this.seekClick();
-    },
-    //查询
-    seekClick() {
-      let page = 1;
-      let currentPage = this.currentPage;
-      if (currentPage > 1) {
-        this.setCurrentPage(page);
-      }
-      this.isLoading = true;
-      this.getNotificationList({ form: this.form, page }).then(res => {
-        this.isLoading = false;
-        this.setCurrentPage(page);
-      });
-    },
-    selectionChange() {},
-    //跟进
-    getBtnClick3(item) {
-      this.setNotifiTypes(item);
-      this.show = true;
-      this.type.classify = "followUp";
-      this.type.page = this.currentPage;
-      this.type.form = this.form;
-      this.type.data = { ...this.notifiTypes };
-    },
-    //呼出
-    getBtnClick4(item) {
-      this.setNotifiTypes(item);
-      this.show = true;
-      this.type.classify = "followUp";
-      this.type.page = this.currentPage;
-      this.type.form = this.form;
-      this.type.data = { ...this.notifiTypes };
-      if (
-        typeof item.spare_phone == "undefined" ||
-        item.spare_phone == "" ||
-        item.spare_phone == null
-      ) {
-        this.isLoading = true;
-        this.RingUp({ form: item })
-          .then(res => {
-            if (res.data.code == 200) {
-              this.$Message.success("呼出成功");
-            }
-            if (res.data.code == 1000) {
-              this.$Message.error({
-                content: res.data.error,
-                duration: 4
-              });
-            }
-            this.isLoading = false;
-          })
-          .catch(e => {
-            if (e) {
-              this.isLoading = false;
-            }
-          });
-      } else {
-        this.type.classify = "ringupFollowUp";
-      }
-    },
-    //分页
-    pageChange(num) {
-      this.isLoading = true;
-      this.setCurrentPage(num);
-      this.getNotificationList({ form: this.form }).then(res => {
-        this.isLoading = false;
-        this.setCurrentPage(num);
-      });
     }
   }
 };

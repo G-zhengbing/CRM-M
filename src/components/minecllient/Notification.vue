@@ -62,6 +62,7 @@
               </Row>
             </Form>
             <Table
+              height="500"
               border
               :columns="columns"
               :data="notifiData"

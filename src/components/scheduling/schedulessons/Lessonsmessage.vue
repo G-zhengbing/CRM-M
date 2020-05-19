@@ -1,5 +1,5 @@
 <template>
-  <div>schedrlessons</div>
+  <div>lessons</div>
 </template>
 
 <script>

@@ -77,8 +77,8 @@
                     </Select>
                   </FormItem>
                 </Col>
-                </Row>
-                <Row>
+              </Row>
+              <Row>
                 <Col span="3">
                   <FormItem>
                     <Select
@@ -121,6 +121,7 @@
               </Row>
             </Form>
             <Table
+              height="500"
               border
               :columns="columns"
               :data="NotdataArr"
@@ -183,7 +184,7 @@ export default {
       form: {},
       columns: [
         { type: "selection", width: 60 },
-        { title: "学员姓名", key: "student_name", align: "center",width: 100 },
+        { title: "学员姓名", key: "student_name", align: "center", width: 100 },
         { title: "注册手机", key: "mobile", align: "center", width: 120 },
         { title: "购买课程", key: "product_subject", align: "center" },
         { title: "年级", key: "grade", align: "center" },
@@ -196,8 +197,8 @@ export default {
         // { title: "学习阶段", key: "follow_status",align: "center", },
         { title: "呼出情况", key: "many_calls", align: "center" },
         { title: "流转类型", key: "transfer", align: "center" },
-        { title: "分配时间", key: "receive_time", align: "center",width: 120, },
-        { title: "注册时间", key: "create_time", align: "center",width: 120, },
+        { title: "分配时间", key: "receive_time", align: "center", width: 120 },
+        { title: "注册时间", key: "create_time", align: "center", width: 120 },
         {
           title: "操作",
           key: "action",

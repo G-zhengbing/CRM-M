@@ -445,7 +445,7 @@
           <Col span="6">
             <FormItem label="注册手机" prop="mobile">
               <Input v-model="connectForm.mobile" placeholder="请输入注册手机" style="width:200px"></Input>
-            </FormItem>
+            </FormItem>s
           </Col>
           <Col span="6">
             <FormItem label="家长联系方式" prop="spare_phone">

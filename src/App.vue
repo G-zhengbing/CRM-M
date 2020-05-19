@@ -14,11 +14,6 @@ export default {
 };
 </script>
 <style>
-html,
-body {
-  height: 100%;
-  overflow: hidden;
-}
 .ive-page {
   margin-top: 20px;
   text-align: right;
