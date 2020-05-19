@@ -235,6 +235,10 @@ export default {
         [1, "男"],
         [2, "女"]
       ])
+      var is_schedule = new Map([
+        [1, "未排"],
+        [2, "已排"]
+      ])
 
       var age = new Map([
         [5, "5岁"],
@@ -268,6 +272,7 @@ export default {
         element.grade = maps.get(element.grade);
         element.sex = gender.get(element.sex);
         element.age = age.get(element.age);
+        element.is_schedule = is_schedule.get(element.is_schedule);
         // element.follow_status = follow.get(element.follow_status);
         // element.subject = subjects.get(element.subject);
         // element.is_course = course.get(element.is_course);

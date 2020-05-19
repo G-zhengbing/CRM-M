@@ -139,6 +139,19 @@
                     </div>
                   </FormItem>
                 </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select
+                      v-model="form.is_schedule"
+                      style="width:150px"
+                      @on-change="seekClick"
+                      placeholder="是否排课"
+                    >
+                      <Option :value="2">已排课</Option>
+                      <Option :value="1">未排课</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
                 <Col span="4" style="text-indent: 60px">
                   <Button type="primary" @click="clear">清除</Button>
                 </Col>
@@ -403,6 +416,7 @@ export default {
             width: 130,
             fixed: "left"
           },
+          { title: "是否排课", width: 100, key: "is_schedule", align: "center" },
           { title: "试听类型", key: "type", width: 100, align: "center" },
           {
             title: "试听课程",
