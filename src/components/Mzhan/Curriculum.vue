@@ -381,7 +381,7 @@ export default {
     getBtnClick1(item) {
       this.$Modal.confirm({
         title: "温馨提示",
-        content: "<p>确定要进行上架操作吗?</p>",
+        content: "<p>确定要进行下架操作吗?</p>",
         onOk: () => {
           this.loading(true);
           this.setCurrDownUp(item.id).then(res => {
