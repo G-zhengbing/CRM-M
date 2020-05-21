@@ -277,9 +277,6 @@ i {
   background: #515a6e;
   display: flex;
 }
-.ivu-layout {
-  /* height: 100%; */
-}
 .layout {
   background: #f5f7f9;
   position: relative;

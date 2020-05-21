@@ -244,7 +244,7 @@ export default {
   },
   mounted() {
     this.location = window.location.href;
-    console.log(window.location.href);
+    // console.log(window.location.href);
     if (this.type.classify == "chakan") {
       this.getQudao(this.type.data);
     }
