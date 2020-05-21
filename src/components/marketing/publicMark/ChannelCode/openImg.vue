@@ -2,7 +2,7 @@
   <div class="OpenImg">
     <Modal v-model="modal1" title="二维码" @on-ok="ok" @on-cancel="cancel">
       <div class="content">
-        <a :href="'http://localhost:8080/#/main/channelcode'" download="logo.png">
+        <a @click="downloadFile">
           <img :src="'http://liveapi.canpoint.net/upload_banner/-20200110191952.png'" alt />
         </a>
       </div>
@@ -29,11 +29,15 @@ export default {
   },
   data() {
     return {
-			modal1: this.showMod,
-			url: 'http://liveapi.canpoint.net/upload_banner/-20200110191952.png'
+      modal1: this.showMod,
+      url: "http://liveapi.canpoint.net/upload_banner/-20200110191952.png"
     };
   },
   methods: {
+    // 点击下载图片
+    downloadFile() {
+
+    },
     ok() {
       this.$emit("changeShowMod", false);
     },
