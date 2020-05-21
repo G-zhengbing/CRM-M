@@ -98,7 +98,7 @@ export default {
             ids: arr.length > 1 ? arr.join(',') : arr
           }
         }).then(res => {
-          dispatch("getCurrList")
+          dispatch("getCurrList",{})
           resolve(res)
         }).catch(e => {
           reject(e)
@@ -127,7 +127,7 @@ export default {
             type: form.is_hot
           }
         }).then(res => {
-          dispatch("getCurrList")
+          dispatch("getCurrList",{})
           resolve()
         }).catch(e => {
           reject(e)
