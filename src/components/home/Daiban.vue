@@ -148,7 +148,7 @@
                     </div>
                   </FormItem>
                 </Col>
-                <Col span="4">
+                <Col span="4" v-if="num == 2">
                   <FormItem>
                     <Select v-model="form.visit_num" @on-change="seekKuhu" placeholder="回访次数">
                       <Option :value="1">1次</Option>
@@ -165,6 +165,7 @@
                   <Button type="primary" @click="clear">清除</Button>
                 </Col>
               </Row>
+
             </Form>
             <div class="selsected">
               <div class="allot"  @click="allot">

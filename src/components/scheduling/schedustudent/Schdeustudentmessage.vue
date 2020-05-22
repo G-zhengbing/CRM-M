@@ -1,5 +1,5 @@
 <template>
-  <div>schedustudent</div>
+  <div>studentmessage</div>
 </template>
 
 <script>

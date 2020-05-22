@@ -36,7 +36,7 @@ import Importorder from '../components/minecllient/Importorder.vue'
 import Timeblock from '../uilt/timeblock/Timeblock.vue'
 import Scheducourse from '../components/scheduling/scheducourse/Scheducourse.vue'
 import Schedulessons from '../components/scheduling/schedulessons/Schedulessons.vue'
-import Schedustudent from '../components/scheduling/Schedustudent.vue'
+import Schedustudent from '../components/scheduling/schedustudent/Schedustudent.vue'
 import Scheduteachers from '../components/scheduling/Scheduteachers.vue'
 import storage from '../uilt/storage'
 
