@@ -3,7 +3,7 @@
     <Modal v-model="modal1" title="二维码" @on-ok="ok" @on-cancel="cancel">
       <div class="content">
         <a @click="downloadFile">
-          <img :src="'http://liveapi.canpoint.net/upload_banner/-20200110191952.png'" alt />
+          <img :src="row.channel_code_url" alt />
         </a>
       </div>
     </Modal>
@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { DOWNLOADFILE } from "@/uilt/url/marketing";
 export default {
   props: {
     row: {
@@ -29,14 +30,14 @@ export default {
   },
   data() {
     return {
-      modal1: this.showMod,
-      url: "http://liveapi.canpoint.net/upload_banner/-20200110191952.png"
+      modal1: this.showMod
     };
   },
   methods: {
     // 点击下载图片
-    downloadFile() {
-
+    async downloadFile() {
+      let url = DOWNLOADFILE + "?id=" + this.row.id;
+      window.location.href = url;
     },
     ok() {
       this.$emit("changeShowMod", false);
