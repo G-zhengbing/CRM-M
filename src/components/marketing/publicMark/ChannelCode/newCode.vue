@@ -227,7 +227,7 @@ export default {
           data: formData
         }).then(res => {
           this.formValidate.imgUrl =
-            "http://liveapi.canpoint.net/api/" + res.data.data.value;
+            "http://liveapi.canpoint.net" + res.data.data.value;
         });
       };
       return false;
@@ -332,6 +332,11 @@ export default {
         this.formValidate.imgUrl = this.formValidate.mini_program_image;
       }
       this.formValidate.timeTem = this.formValidate.code_end_time;
+      this.$nextTick(() => {
+        if (this.formValidate.text_content) {
+          this.$refs.wangditor.text = this.formValidate.text_content;
+        }
+      });
 
       this.labelList.forEach(item => {
         if (this.formValidate.fan_label_id == item.id) {
