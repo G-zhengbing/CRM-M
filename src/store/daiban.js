@@ -532,7 +532,7 @@ export default {
       var type = new Map([
         [1, "班课"],
         [2, "微课"],
-        [3, "一对一"]
+        [4, "一对一"]
       ])
 
       var age = new Map([

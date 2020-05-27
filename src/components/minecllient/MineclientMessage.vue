@@ -106,6 +106,7 @@
             <FormItem label="课程名称" class="type">
               <Input v-model="orderForm.course_name" readonly style="width:300px" />
             </FormItem>
+
             <FormItem label="购买数量" class="type">
               <Input
                 type="number"
