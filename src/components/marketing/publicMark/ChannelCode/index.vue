@@ -241,7 +241,7 @@ export default {
       current_page: 1,
       last_page: 1,
       labelList: [],
-      code_time_type: ["临时二维码", "持久二维码"],
+      code_time_type: ["临时二维码", "永久二维码"],
       code_type: ["图文推送", "文字推送", "小程序卡片"]
     };
   },
