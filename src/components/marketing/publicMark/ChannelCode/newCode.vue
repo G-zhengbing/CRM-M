@@ -43,7 +43,7 @@
           </template>
           <template v-if="formValidate.code_type == '2'">
             <FormItem label="推送文字">
-              <WangEditor
+              <WangeditorEmoticon
                 v-model="formValidate.text_content"
                 :catchData="catchData"
                 ref="wangditor"
@@ -59,7 +59,7 @@
               >
                 <Button type="primary">上传图片</Button>
               </Upload>
-              <p>扫码关注推送图片，不填写则不推送；</p>
+              <p style="color:#ccc">扫码关注推送图片，不填写则不推送；</p>
             </FormItem>
           </template>
           <template v-if="formValidate.code_type == '3'">
@@ -97,7 +97,7 @@
                 placeholder="请输入过期时间"
                 :disabled="row ? true : false"
               ></Input>
-              <p>临时二维码过期时间, 最大为30天（2592000秒）</p>
+              <p style="color:#ccc">临时二维码过期时间, 最大为30天（2592000秒）</p>
             </FormItem>
           </template>
           <FormItem v-else label="过期时间">
@@ -112,7 +112,7 @@
             >
               <Option v-for="item in labelList" :key="item.id" :value="item">{{item.name}}</Option>
             </Select>
-            <p>粉丝扫码关注自动打标签，标签自动同步至微信公众号后台；</p>
+            <p style="color:#ccc">粉丝扫码关注自动打标签，标签自动同步至微信公众号后台；</p>
           </FormItem>
         </Form>
       </div>
@@ -122,13 +122,13 @@
 </template>
 
 <script>
-import WangEditor from "@/uilt/wangeditor/Wangeditor";
+import WangeditorEmoticon from "@/uilt/wangeditor/Wangeditor-emoticon";
 import { UPLOADIMAGE } from "@/uilt/url/Murl";
 import { CREATECODE, GETCODEINFO, UPDATECODE } from "@/uilt/url/marketing";
 import qs from "qs";
 export default {
   components: {
-    WangEditor
+    WangeditorEmoticon
   },
   props: {
     row: {
@@ -248,6 +248,11 @@ export default {
         this.formValidate.mini_program_image = this.formValidate.imgUrl;
       }
       if (this.row) {
+        this.formValidate.text_content = this.formValidate.text_content.replace(/target="_blank"/g,"")
+        this.formValidate.text_content = this.formValidate.text_content.replace(/&nbsp;/g," ")
+        this.formValidate.text_content = this.formValidate.text_content.replace(/<br>/g,"\n")
+        this.formValidate.text_content = this.formValidate.text_content.replace(/ style="background-color: rgb(255, 255, 255);"/g,"")
+        this.formValidate.text_content = this.formValidate.text_content.replace(/😀/g,"[微笑]")
         this.formValidate.id = this.row.id;
         let res = await this.$request({
           method: "post",
@@ -334,6 +339,7 @@ export default {
       this.formValidate.timeTem = this.formValidate.code_end_time;
       this.$nextTick(() => {
         if (this.formValidate.text_content) {
+          this.formValidate.text_content = this.formValidate.text_content.replace(/\n/g,"<br>")
           this.$refs.wangditor.text = this.formValidate.text_content;
         }
       });

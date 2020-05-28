@@ -4,10 +4,10 @@
       <div class="content">
         <Form class="select" ref="formValidate" :model="formItem" inline>
           <FormItem>
-            <Input v-model="formItem.student_name" placeholder="请输入用户昵称"></Input>
+            <Input v-model="formItem.nickname" placeholder="请输入用户昵称"></Input>
           </FormItem>
           <FormItem>
-            <Select v-model="formItem.grade" placeholder="用户类型" style="width:160px;">
+            <Select v-model="formItem.wechat_account_type" placeholder="用户类型" style="width:160px;">
               <Option value="1">新用户</Option>
               <Option value="2">老用户</Option>
             </Select>
@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import qs from "qs";
+import { USERSLOG } from "@/uilt/url/marketing";
 export default {
   props: {
     row: {
@@ -55,6 +57,14 @@ export default {
   watch: {
     showMod(val) {
       this.modal1 = val;
+    },
+    formItem: {
+      deep: true,
+      handler(newName, oldName) {
+        window.setTimeout(() => {
+          this.getUserData();
+        }, 200);
+      }
     }
   },
   data() {
@@ -64,27 +74,27 @@ export default {
       columns: [
         {
           title: "用户昵称",
-          key: "visit_content",
+          key: "nickname",
           align: "center"
         },
         {
           title: "用户ID",
-          key: "visit_content",
+          key: "id",
           align: "center"
         },
         {
           title: "用户类型",
-          key: "visit_content",
+          key: "user_type",
           align: "center"
         },
         {
           title: "关注时间",
-          key: "visit_content",
+          key: "scan_code_attention_time",
           align: "center"
         }
       ],
       dataList: [],
-      total: 100,
+      total: 0,
       per_page: 10,
       current_page: 1,
       last_page: 1
@@ -96,15 +106,32 @@ export default {
       this.formItem.page = val;
     },
     // 转换日期格式
-    changeDate(time) {
-      console.log(time);
-      // this.formItem.next_follow_time = time;
+    changeDate(item) {
+      this.formItem.attention_start_time = item[0];
+      this.formItem.attention_end_time = item[1];
     },
     ok() {
       this.$emit("changeShowMod", false);
     },
     cancel() {
       this.$emit("changeShowMod", false);
+    },
+    // 获取用户记录数据
+    async getUserData() {
+      this.formItem.id = this.row.id;
+      let res = await this.$request({
+        method: "POST",
+        url: USERSLOG,
+        data: qs.stringify(this.formItem)
+      });
+      this.dataList = res.data.data.data;
+      this.dataList.forEach(item => {
+        item.user_type = item.user_type == 1 ? "新用户" : "老用户";
+      });
+      this.total = res.data.data.link.total;
+      this.per_page = res.data.data.link.per_page;
+      this.current_page = res.data.data.link.current_page;
+      this.last_page = res.data.data.link.last_page;
     }
   }
 };
@@ -112,6 +139,6 @@ export default {
 
 <style scoped>
 .page {
-	overflow: hidden;
+  overflow: hidden;
 }
 </style>

@@ -97,7 +97,11 @@ export default {
     //tabar
     setActive(num) {
       this.tabNum = num;
-      this.$router.push(this.jurisdictionList[num].childrens[0].web_path);
+      if(this.jurisdictionList[num].childrens[0].web_path == '/') {
+        this.$router.push(this.jurisdictionList[num].childrens[0].childrens[0].web_path);
+      } else {
+        this.$router.push(this.jurisdictionList[num].childrens[0].web_path);
+      }
       storeage.savaMaintabnum(num);
     },
     nameweb_path(s) {

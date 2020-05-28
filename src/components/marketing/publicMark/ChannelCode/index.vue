@@ -28,6 +28,9 @@
               @on-change="changeDate"
             ></DatePicker>
           </FormItem>
+          <FormItem>
+            <Button type="primary" @click="clear">清除</Button>
+          </FormItem>
         </Form>
       </div>
       <div class="main">
@@ -74,7 +77,7 @@ import NewCode from "./newCode";
 import Record from "./record";
 import OpenImg from "./openImg";
 import qs from "qs";
-import { GETLABELLIST, GETCODELIST,UPDATECODE } from "@/uilt/url/marketing";
+import { GETLABELLIST, GETCODELIST, UPDATECODE } from "@/uilt/url/marketing";
 export default {
   components: {
     NewCode,
@@ -106,7 +109,7 @@ export default {
         },
         {
           title: "推送类型",
-          key: "code_time_type",
+          key: "code_type",
           align: "center"
         },
         {
@@ -116,7 +119,7 @@ export default {
         },
         {
           title: "二维码类型",
-          key: "code_type",
+          key: "code_time_type",
           align: "center"
         },
         {
@@ -219,9 +222,9 @@ export default {
                           is_delete: 2
                         })
                       });
-                      if(res.data.code == 200) {
+                      if (res.data.code == 200) {
                         this.$Message.success("删除成功");
-                        this.getCodeList()
+                        this.getCodeList();
                       }
                     }
                   }
@@ -238,11 +241,15 @@ export default {
       current_page: 1,
       last_page: 1,
       labelList: [],
-      code_time_type: ["图文推送", "文字推送", "小程序卡片"],
-      code_type: ["临时二维码", "持久二维码"]
+      code_time_type: ["临时二维码", "持久二维码"],
+      code_type: ["图文推送", "文字推送", "小程序卡片"]
     };
   },
   methods: {
+    // 清除按钮
+    clear() {
+      this.formItem = {};
+    },
     OpenImg(row) {
       this.type = "OpenImg";
       this.row = row;

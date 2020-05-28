@@ -11,3 +11,5 @@ export const GETCODEINFO = BASEURL + "get_code_info" // 渠道码信息获取,�
 export const UPDATECODE = BASEURL + "update_code" // 渠道码信息修改
 
 export const DOWNLOADFILE = BASEURL + "download_file" // 图片下载
+
+export const USERSLOG = BASEURL + "users_log" // 记录，数据渲染
