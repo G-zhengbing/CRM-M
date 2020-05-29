@@ -20,14 +20,14 @@ Vue.use(ViewUI)
 Vue.prototype.$echarts = echarts
 Vue.config.productionTip = false
 
-Array.prototype.remove = function(b) {
+Array.prototype.remove = function (b) {
   var a = this.indexOf(b);
   if (a >= 0) {
-  this.splice(a, 1);
-  return true;
+    this.splice(a, 1);
+    return true;
   }
   return false;
-  };
+};
 
 new Vue({
   el: '#app',

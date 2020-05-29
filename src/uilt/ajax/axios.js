@@ -2,8 +2,14 @@ import axios from 'axios'
 import storage from '../storage'
 
 export default {
-  axiosGet({method, url, params}) {
-    return new Promise((resolve,reject) => {
+  axiosGet({
+    method,
+    url,
+    params
+  }) {
+    console.log(params)
+    return
+    return new Promise((resolve, reject) => {
       axios({
         method,
         url,
@@ -14,16 +20,20 @@ export default {
         params: {
           ...params
         }
-      }).then(res=>{
-				resolve(res)
-			}).catch(e=>{
-				reject(e)
-			})
+      }).then(res => {
+        resolve(res)
+      }).catch(e => {
+        reject(e)
+      })
     })
   },
-  axiosPost({method, url, params}) {
-		return new Promise((resolve,reject)=>{
-			axios({
+  axiosPost({
+    method,
+    url,
+    params
+  }) {
+    return new Promise((resolve, reject) => {
+      axios({
         method,
         url,
         headers: {
@@ -33,16 +43,20 @@ export default {
         data: {
           ...params
         }
-      }).then(res=>{
-				resolve(res)
-			}).catch(e=>{
-				reject(e)
-			})
-		})
-	},
-	axiosPut({method, url, params}) {
-		return new Promise((resolve,reject)=>{
-			axios({
+      }).then(res => {
+        resolve(res)
+      }).catch(e => {
+        reject(e)
+      })
+    })
+  },
+  axiosPut({
+    method,
+    url,
+    params
+  }) {
+    return new Promise((resolve, reject) => {
+      axios({
         method,
         url,
         headers: {
@@ -52,11 +66,11 @@ export default {
         params: {
           ...params
         }
-      }).then(res=>{
-				resolve(res)
-			}).catch(e=>{
-				reject(e)
-			})
-		})
+      }).then(res => {
+        resolve(res)
+      }).catch(e => {
+        reject(e)
+      })
+    })
   }
 }
