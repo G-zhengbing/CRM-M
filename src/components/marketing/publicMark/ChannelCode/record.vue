@@ -4,10 +4,10 @@
       <div class="content">
         <Form class="select" ref="formValidate" :model="formItem" inline>
           <FormItem>
-            <Input v-model="formItem.nickname" placeholder="请输入用户昵称"></Input>
+            <Input v-model="formItem.nickname" placeholder="请输入粉丝昵称"></Input>
           </FormItem>
           <FormItem>
-            <Select v-model="formItem.wechat_account_type" placeholder="用户类型" style="width:160px;">
+            <Select v-model="formItem.wechat_account_type" placeholder="粉丝类型" style="width:160px;">
               <Option value="1">新用户</Option>
               <Option value="2">老用户</Option>
             </Select>
@@ -73,17 +73,18 @@ export default {
       formItem: {},
       columns: [
         {
-          title: "用户昵称",
+          title: "粉丝昵称",
           key: "nickname",
           align: "center"
         },
         {
-          title: "用户ID",
-          key: "id",
-          align: "center"
+          title: "粉丝openid",
+          key: "openid",
+          align: "center",
+          width: 260
         },
         {
-          title: "用户类型",
+          title: "粉丝类型",
           key: "user_type",
           align: "center"
         },

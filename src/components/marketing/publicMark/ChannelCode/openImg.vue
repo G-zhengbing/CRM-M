@@ -2,10 +2,13 @@
   <div class="OpenImg">
     <Modal v-model="modal1" title="二维码" @on-ok="ok" @on-cancel="cancel">
       <div class="content">
-        <a @click="downloadFile">
-          <img :src="row.channel_code_url" alt />
-        </a>
+        <!-- <a @click="downloadFile"> -->
+          <img :src="row.channel_code_url" alt title="点击下载" />
+        <!-- </a> -->
       </div>
+      <div slot="footer">
+            <Button type="primary" size="large" long @click="downloadFile">下载</Button>
+        </div>
     </Modal>
   </div>
 </template>
@@ -38,9 +41,6 @@ export default {
     async downloadFile() {
       let url = DOWNLOADFILE + "?id=" + this.row.id;
       window.location.href = url;
-    },
-    ok() {
-      this.$emit("changeShowMod", false);
     },
     cancel() {
       this.$emit("changeShowMod", false);

@@ -105,7 +105,8 @@ export default {
         {
           title: "二维码名称",
           key: "code_name",
-          align: "center"
+          align: "center",
+          width: 210
         },
         {
           title: "推送类型",
@@ -140,7 +141,8 @@ export default {
         {
           title: "创建时间",
           key: "create_time",
-          align: "center"
+          align: "center",
+          width: 200
         },
         {
           title: "二维码",
