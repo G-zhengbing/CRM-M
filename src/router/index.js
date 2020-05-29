@@ -227,6 +227,11 @@ const router = new Router({
           path: '/main/jurisdiction', // 角色和权限
           component: () => import('@/components/setup/Jurisdiction')
         },
+
+        {
+          path: '/main/channelcode', // 营销,公众号,渠道码
+          component: () => import('@/components/Marketing/PublicMark/ChannelCode')
+        },
       ]
     }
   ]

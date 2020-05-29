@@ -49,7 +49,7 @@ export default {
 <style scoped>
 .paging {
   float: right;
-  margin: 50px 10px 30px;
+  margin: 20px 10px 30px;
   overflow: hidden;
   display: flex;
   align-items: center;
