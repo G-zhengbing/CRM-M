@@ -38,13 +38,15 @@
                 </Col>
               </Row>
             </Form>
-            <Table
-              :columns="columns"
-              :data="dataArrmoney"
-              :currentPage="currentPage"
+            <Table border :columns="columns" :data="dataArrmoney" height="550"></Table>
+            <Page
+              @on-change="pageChange"
               :total="total"
-              :pageSize="pageSize"
-              @page-change="pageChange"
+              :current="currentPage"
+              :page-size="pageSize"
+              show-total
+              show-elevator
+              class="ive-page"
             />
           </div>
         </div>
@@ -57,13 +59,11 @@
 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
-import Table from "../uilt/table/TablePlus";
 import Loading from "../uilt/loading/loading";
 import DaibanMessage from "../uilt/newErweima/DaibanMessage";
 import storage from '../uilt/storage'
 export default {
   components: {
-    Table,
     Loading,
     DaibanMessage
   },
@@ -92,21 +92,21 @@ export default {
       show: false,
       isLoading: false,
       columns: [
-        { type: "订单编号", key: "order_sn" },
-        { type: "订单类型", key: "is_upgrade" },
-        { type: "学员姓名", key: "student_name" },
-        { type: "学员电话", key: "mobile" },
-        { type: "购买科目", key: "product_subject" },
-        { type: "年级", key: "product_grade" },
-        { type: "购买课程", key: "product_name" },
-        { type: "订单状态", key: "status" },
-        { type: "订单金额", key: "order_amount" },
-        { type: "优惠金额", key: "discount_amount" },
-        { type: "实付金额", key: "pay_amount" },
-        { type: "支付方式", key: "pay_type" },
-        { type: "支付时间", key: "pay_time" },
-        { type: "签约人", key: "sale_name" },
-        { type: "创建时间", key: "order_create_time" }
+        { title: "订单编号", key: "order_sn" , fixed: "left",width:120},
+        { title: "订单类型", key: "is_upgrade" , fixed: "left",width:100},
+        { title: "学员姓名", key: "student_name" , fixed: "left",width:100},
+        { title: "学员电话", key: "mobile" , fixed: "left",width:120},
+        { title: "购买科目", key: "product_subject" ,width:100},
+        { title: "年级", key: "product_grade" ,width:80},
+        { title: "购买课程", key: "product_name" ,width:200},
+        { title: "订单状态", key: "status" ,width:100},
+        { title: "订单金额", key: "order_amount" ,width:110},
+        { title: "优惠金额", key: "discount_amount" ,width:110},
+        { title: "实付金额", key: "pay_amount" ,width:110},
+        { title: "支付方式", key: "pay_type" ,width:100},
+        { title: "支付时间", key: "pay_time" ,width:170},
+        { title: "签约人", key: "sale_name" ,width:80},
+        { title: "创建时间", key: "order_create_time",width:170 }
       ]
     };
   },

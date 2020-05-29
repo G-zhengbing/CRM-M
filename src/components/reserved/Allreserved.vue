@@ -667,7 +667,7 @@ export default {
     getTimes2() {
       if (this.startAccount && this.endAccount) {
         this.form.date_time_start = this.datePicker(this.startAccount);
-        this.form.date_time_end = this.datePicker(this.startAccount);
+        this.form.date_time_end = this.datePicker(this.endAccount);
         this.seekClick();
       }
     },

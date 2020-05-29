@@ -33,10 +33,9 @@ import Teacher from '../components/teachering/Teacher.vue'
 import Statistics from '../components/Statistics'
 import Importdata from '../components/minecllient/Importdata.vue'
 import Importorder from '../components/minecllient/Importorder.vue'
-import Timeblock from '../uilt/timeblock/Timeblock.vue'
 import Scheducourse from '../components/scheduling/scheducourse/Scheducourse.vue'
 import Schedulessons from '../components/scheduling/schedulessons/Schedulessons.vue'
-import Schedustudent from '../components/scheduling/Schedustudent.vue'
+import Schedustudent from '../components/scheduling/schedustudent/Schedustudent.vue'
 import Scheduteachers from '../components/scheduling/Scheduteachers.vue'
 import storage from '../uilt/storage'
 
@@ -159,10 +158,6 @@ const router = new Router({
         {
           path: '/main/statistics',
           component: Statistics
-        },
-        {
-          path: '/main/timeblock',
-          component: Timeblock
         },
         {
           path: '/main/importdata',

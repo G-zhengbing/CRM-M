@@ -293,6 +293,12 @@ export default {
           width: 140
         },
         {
+          title: "班主任",
+          key: "follow_user",
+          align: "center",
+          width: 140
+        },
+        {
           title: "上次跟进时间",
           key: "operation_time",
           align: "center",

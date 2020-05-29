@@ -16,6 +16,7 @@ import {
   CITY
 } from '../uilt/url/url'
 import storage from '../uilt/storage'
+import { axiosGet } from '../uilt/ajax/axios'
 
 export default {
   state: {
@@ -443,6 +444,14 @@ export default {
       state,
       commit
     }, {form, page}) {
+      // axiosGet({method:"get",url:MINECLIENT,params:{ ...form, page: page ? page : state.currentPage}}).then(res => {
+      //   commit("setMineclient", res.data.data.resources)
+      //   commit("setCurrentPage", res.data.data.links.current_page)
+      //   commit("setTotal", res.data.data.links.total)
+      //   resolve()
+      // }).catch(e => {
+      //   reject(e)
+      // })
       return new Promise((resolve, reject) => {
         axios({
           method: "get",

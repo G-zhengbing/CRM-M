@@ -55,6 +55,8 @@
                 <Option :value="30">30</Option>
                 <Option :value="50">50</Option>
                 <Option :value="100">100</Option>
+                <Option :value="150">150</Option>
+                <Option :value="200">200</Option>
               </Select>
             </FormItem>
           </Col>
@@ -104,6 +106,7 @@
             <FormItem label="课程名称" class="type">
               <Input v-model="orderForm.course_name" readonly style="width:300px" />
             </FormItem>
+
             <FormItem label="购买数量" class="type">
               <Input
                 type="number"

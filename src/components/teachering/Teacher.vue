@@ -706,7 +706,7 @@ export default {
     },
     //重置form表单
     handleReset(name) {
-      this.showTeacherMessage = false
+      this.showTeacherMessage = false;
       // this.$refs[name].resetFields();
     },
     //创建教师

@@ -132,26 +132,40 @@
                     </Select>
                   </FormItem>
                 </Col>
-                <Col span="6">
+                <Col span="8">
                   <FormItem>
                     <div class="dateplc">
-                      <DatePicker v-model="startTime" type="date" placeholder="注册时间" style="width: 200px" @on-change="getTimes"></DatePicker>
-                      <DatePicker v-model="endTime" type="date" placeholder="注册时间" style="width: 200px" @on-change="getTimes"></DatePicker>
+                      <DatePicker v-model="startTime" type="date" placeholder="注册时间" @on-change="getTimes"></DatePicker>
+                      <DatePicker v-model="endTime" type="date" placeholder="注册时间" @on-change="getTimes"></DatePicker>
                     </div>
                   </FormItem>
                 </Col>
-                <Col span="12">
+                <Col span="10">
                   <FormItem v-if="num == 2">
                     <div class="dateplc">
-                      <DatePicker v-model="startTime2" type="date" placeholder="分配时间" style="width: 200px" @on-change="getTimes2"></DatePicker>
-                      <DatePicker v-model="endTime2" type="date" placeholder="分配时间" style="width: 200px" @on-change="getTimes2"></DatePicker>
+                      <DatePicker v-model="startTime2" type="date" placeholder="分配时间" @on-change="getTimes2"></DatePicker>
+                      <DatePicker v-model="endTime2" type="date" placeholder="分配时间" @on-change="getTimes2"></DatePicker>
                     </div>
+                  </FormItem>
+                </Col>
+                <Col span="4" v-if="num == 2">
+                  <FormItem>
+                    <Select v-model="form.visit_num" @on-change="seekKuhu" placeholder="回访次数">
+                      <Option :value="1">1次</Option>
+                      <Option :value="2">2次</Option>
+                      <Option :value="3">3次</Option>
+                      <Option :value="4">4次</Option>
+                      <Option :value="5">5次</Option>
+                      <Option :value="6">6次</Option>
+                      <Option :value="7">6次以上</Option>
+                    </Select>
                   </FormItem>
                 </Col>
                 <Col span="1" style="margin-left:30px">
                   <Button type="primary" @click="clear">清除</Button>
                 </Col>
               </Row>
+
             </Form>
             <div class="selsected">
               <div class="allot"  @click="allot">
@@ -193,6 +207,18 @@
       </div>
     </section>
     <Loading v-show="isLoading" />
+    <Modal
+      width="800"
+      v-model="showVisit"
+      title="回访记录"
+      @on-cancel="showVisit = false"
+      :styles="{'margin-top' : '-70px'}"
+    >
+      <Table border :columns="visitColumns" :data="showVisitData" height="500"></Table>
+      <div slot="footer">
+        <Button type="text" size="large" @click="showVisit = false">取消</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -225,6 +251,13 @@ export default {
   },
   data() {
     return {
+      showVisitData:[],
+      visitColumns: [
+        { title: "回访内容", key: "visit_content" },
+        { title: "跟进人", key: "sale_name", width: 100 },
+        { title: "回访时间", key: "time", width: 170 }
+      ],
+      showVisit:false,
       subjectList:storage.getDaiban().screen_list.subject,
       internation:storage.getDaiban().screen_list.inter_nation,
       subjectList:storage.getDaiban().screen_list.subject,
@@ -262,6 +295,11 @@ export default {
       "setForm",
     ]),
     ...mapActions(["getKehuList", "getFenpeiList", "RingUp","getReferList"]),
+    //回访记录
+    visit(item) {
+      this.showVisit = true;
+      this.showVisitData = item.visit_content ? item.visit_content : [];
+    },
     //筛选每页显示条数
     selectedChange(){
       this.checkall.length = 0
@@ -482,6 +520,39 @@ export default {
           { title: "渠道来源",width:160,align: "center", key: "refer" },
           { title: "跟进人", width: 100,align: "center", key: "follow_sale_name" },
           { title: "跟进状态", width: 100,align: "center", key: "follow_status" },
+          {
+            title: "回访次数",
+            key: "visit_num",
+            width: 95,
+            render: (h, params) => {
+              return h("div", [
+                h(
+                  "span",
+                  {
+                    on: {
+                      props: {
+                        type: "text",
+                        size: "small"
+                      },
+                      click: () => {
+                        this.visit(params.row);
+                      }
+                    },
+                    style: {
+                      width: "98px",
+                      height: "70px",
+                      display: "inline-block",
+                      marginLeft: "-17px",
+                      textAlign: "center",
+                      lineHeight: "70px",
+                      cursor: "pointer"
+                    }
+                  },
+                  params.row.visit_num
+                )
+              ]);
+            }
+          },
           { title: "意向度 ", width: 100,align: "center", key: "intention_option" },
           { title: "学习阶段", width: 100,align: "center", key: "stage" },
           { title: "流转类型", width: 100,align: "center", key: "transfer" },

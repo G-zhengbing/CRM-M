@@ -270,6 +270,6 @@ table tr th,
 td {
   flex: 1;
   text-align: center;
-  min-width: 186px
+  min-width: 272px
 }
 </style>
