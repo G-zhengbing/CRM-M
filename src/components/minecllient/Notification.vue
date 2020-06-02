@@ -136,8 +136,10 @@ export default {
       form: {},
       columns: [
         { type: "selection", width: 60 },
-        { title: "学员姓名", key: "student_name" },
-        { title: "注册手机", key: "mobile" },
+        { title: "学员姓名", key: "student_name" ,width:120},
+        { title: "注册手机", key: "mobile" ,width:130},
+        { title: "年级", key: "grade" ,width: 100},
+        { title: "科目", key: "subject" ,width: 100},
         { title: "具体内容", key: "remarks" },
         { title: "操作时间", key: "action_create_time" },
         { title: "注册时间", key: "create_time" },
