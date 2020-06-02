@@ -232,6 +232,10 @@ const router = new Router({
           path: '/main/channelcode', // 营销,公众号,渠道码
           component: () => import('@/components/Marketing/PublicMark/ChannelCode')
         },
+        {
+          path: '/main/pageanalysis', // 数据，流量分析，页面分析
+          component: () => import('@/components/data/flowAnalysis/pageAnalysis')
+        },
       ]
     }
   ]
