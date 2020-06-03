@@ -20,14 +20,14 @@
               style="width: 210px"
             />
           </div>
-          <span class="ps">注：编辑框为空则表示无上限</span>
+          <span class="ps">注：编辑框为0则表示无上限</span>
           <div style="padding-top:20px">
             <span>指定分配渠道</span>
             <Select
               v-model="assign_channel_list"
               @on-change="editAssignChannel"
               multiple
-              style="width:260px"
+              style="width:600px"
             >
               <Option
                 v-for="item in cityList"
@@ -42,7 +42,7 @@
               v-model="real_time_channel_list"
               @on-change="editInTimeChannel"
               multiple
-              style="width:260px"
+              style="width:600px"
             >
               <Option
                 v-for="item in cityList"
@@ -68,6 +68,7 @@
       @changePages="changePages"
       style="margin-top: 50px;"
     />
+    <Loading v-show="isLoading" />
   </div>
 </template>
 
@@ -83,6 +84,7 @@ import {
 export default {
   data() {
     return {
+      isLoading: false,
       showUp: false,
       upper_limit: "",
       total: 100,
@@ -107,6 +109,7 @@ export default {
               },
               on: {
                 "on-blur": async e => {
+                  this.isLoading = true;
                   // 这里失去焦点保存设置
                   let res = await this.$request({
                     method: "POST",
@@ -116,6 +119,7 @@ export default {
                       weight: e.target.value
                     })
                   });
+                  this.isLoading = false;
                 }
               }
             });
@@ -136,6 +140,7 @@ export default {
   methods: {
     // 修改指定分配渠道
     async editAssignChannel() {
+      this.isLoading = true;
       let str = this.assign_channel_list.join();
       let res = await this.$request({
         method: "POST",
@@ -144,9 +149,11 @@ export default {
           assign_channel_list: str
         })
       });
+      this.isLoading = false;
     },
     // 修改及时分配渠道
     async editInTimeChannel() {
+      this.isLoading = true;
       let str = this.real_time_channel_list.join();
       let res = await this.$request({
         method: "POST",
@@ -155,9 +162,11 @@ export default {
           real_time_channel_list: str
         })
       });
+      this.isLoading = false;
     },
     // 修改每日分配上限
     async editUp() {
+      this.isLoading = true;
       let res = await this.$request({
         method: "POST",
         url: UPPERLIMIT,
@@ -165,16 +174,20 @@ export default {
           upper_limit: this.upper_limit
         })
       });
+      this.isLoading = false;
     },
     // 获取 select 数据
     async getSelectData() {
+      this.isLoading = true;
       let res = await this.$request({
         url: SCREENLIST
       });
       this.cityList = res.data.data.channel;
+      this.isLoading = false;
     },
     // 获取列表信息
     async getUserData() {
+      this.isLoading = true;
       let res = await this.$request({
         url: SALES,
         params: {
@@ -188,6 +201,7 @@ export default {
       this.per_page = data.links.per_page;
       this.current_page = data.links.current_page;
       this.last_page = data.links.last_page;
+      this.isLoading = false;
     },
     // 切换开关判断是否显示input
     async change(status) {
@@ -202,16 +216,22 @@ export default {
       // console.log(name);
     },
     async getUserSelect() {
+      this.isLoading = true;
       let res = await this.$request({
         url: GETUPPERLIMIT
       });
       this.upper_limit = res.data.data.upper_limit;
-      this.assign_channel_list = res.data.data.assign_channel_list
-        .split(",")
-        .map(Number);
-      this.real_time_channel_list = res.data.data.real_time_channel_list
-        .split(",")
-        .map(Number);
+      if (res.data.data.assign_channel_list) {
+        this.assign_channel_list = res.data.data.assign_channel_list
+          .split(",")
+          .map(Number);
+      }
+      if (res.data.data.real_time_channel_list) {
+        this.real_time_channel_list = res.data.data.real_time_channel_list
+          .split(",")
+          .map(Number);
+      }
+      this.isLoading = false;
     }
   },
   created() {
