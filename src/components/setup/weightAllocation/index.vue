@@ -54,8 +54,8 @@
         </div>
 
         <div class="content">
-          <Table border :columns="columns1" :data="data1" height="400"></Table>
-          <span class="ps">注；修改分配上限和权重比数值需要次日生效</span>
+          <Table style="margin-bottom: 10px;" border :columns="columns1" :data="data1" height="400"></Table>
+          <span class="ps">注；修改每日分配上限、指定分配渠道和及时分配渠道后立即生效。修改权重比后下一个周期生效。</span>
         </div>
       </Col>
     </Row>
