@@ -11,6 +11,14 @@
       </Col>
       <Col span="20" style="padding-left: 15px;">
         <div class="top">
+          <div>
+            <span>是否开启自动分配</span>
+            <i-Switch v-model="whether_or_not" @on-change="change">
+              <span slot="open">开</span>
+              <span slot="close">关</span>
+            </i-Switch>
+          </div>
+
           <div style="height: 50px;line-height: 50px;">
             <span>每日分配上限</span>
             <Input
@@ -20,7 +28,7 @@
               style="width: 210px"
             />
           </div>
-          <span class="ps">注：编辑框为0则表示无上限</span>
+          <span class="ps">注：编辑框为空或0则表示无上限</span>
           <div style="padding-top:20px">
             <span>指定分配渠道</span>
             <Select
@@ -85,7 +93,7 @@ export default {
   data() {
     return {
       isLoading: false,
-      showUp: false,
+      whether_or_not: false,
       upper_limit: "",
       total: 100,
       per_page: 10,
@@ -171,7 +179,8 @@ export default {
         method: "POST",
         url: UPPERLIMIT,
         data: qs.stringify({
-          upper_limit: this.upper_limit
+          upper_limit: this.upper_limit,
+          whether_or_not: this.whether_or_not ? 1 : 2
         })
       });
       this.isLoading = false;
@@ -205,7 +214,8 @@ export default {
     },
     // 切换开关判断是否显示input
     async change(status) {
-      status ? (this.showUp = true) : (this.showUp = false);
+      status ? (this.whether_or_not = true) : (this.whether_or_not = false);
+      this.editUp();
     },
     // 改变页码
     changePages(val) {
@@ -221,6 +231,7 @@ export default {
         url: GETUPPERLIMIT
       });
       this.upper_limit = res.data.data.upper_limit;
+      this.whether_or_not = res.data.data.whether_or_not == 1 ? true : false;
       if (res.data.data.assign_channel_list) {
         this.assign_channel_list = res.data.data.assign_channel_list
           .split(",")
