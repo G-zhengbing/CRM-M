@@ -46,14 +46,30 @@
       :showMod="showMod"
       @changeShowMod="changeShowMod"
     />
+    <ViewBook
+      v-if="type === 'ViewBook'"
+      :row="row"
+      :showMod="showMod"
+      @changeShowMod="changeShowMod"
+    />
+    <AddBook
+      v-if="type === 'AddBook'"
+      :row="row"
+      :showMod="showMod"
+      @changeShowMod="changeShowMod"
+    />
   </div>
 </template>
 
 <script>
 import NewBook from "./newBook";
+import ViewBook from "./viewBook";
+import AddBook from "./addBook";
 export default {
   components: {
-    NewBook
+    NewBook,
+    ViewBook,
+    AddBook
   },
   data() {
     return {
@@ -128,7 +144,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      // this.createdOrder(params.row);
+                      this.switch("NewBook", params.row);
                     }
                   }
                 },
@@ -143,7 +159,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      // this.Audition(params.row);
+                      this.switch('ViewBook', params.row);
                     }
                   }
                 },
@@ -158,7 +174,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      // this.Audition(params.row);
+                      this.switch('AddBook',params.row);
                     }
                   }
                 },
@@ -180,6 +196,12 @@ export default {
     };
   },
   methods: {
+    // 开关
+    switch(name, row) {
+      this.showMod = true;
+      this.row = row;
+      this.type = name;
+    },
     // 关闭窗口状态
     changeShowMod(val, index) {
       this.showMod = val;
