@@ -1,9 +1,9 @@
 <template>
   <div class="viewBook">
-    <Modal v-model="modal1" title="查看" width="60">
+    <Modal v-model="modal1" title="查看" width="60" @on-ok="ok" @on-cancel="cancel">
       <Form class="select" ref="formValidate" :model="formItem" inline>
         <FormItem>
-          <Input v-model="formItem.mobile" placeholder="注册手机"></Input>
+          <Input v-model="formItem.qrcode_title" placeholder="请输入二维码名称" @on-blur="getInBookSublevel"></Input>
         </FormItem>
         <FormItem>
           <DatePicker
@@ -16,7 +16,7 @@
         </FormItem>
         <Button @click="deleteFormData" style="margin-left: 8px">清空选项</Button>
       </Form>
-      <Table border :columns="columns" :data="data" height="400px"></Table>
+      <Table border :columns="columns" :data="data" height="400"></Table>
       <div class="page">
         <Page
           :total="total"
@@ -35,12 +35,15 @@
       v-if="type1 === 'AddBook'"
       :row="row1"
       :showMod="showMod1"
+      :isIn="true"
       @changeShowMod="changeShowMod"
     />
   </div>
 </template>
 
 <script>
+import qs from "qs";
+import { GETINBOOKSUBLEVEL } from "@/uilt/url/Murl";
 import AddBook from "./addBook";
 export default {
   components: {
@@ -70,46 +73,45 @@ export default {
       per_page: 10,
       current_page: 1,
       last_page: 1,
-      formValidate: {},
       columns: [
         {
           title: "二维码标题",
-          key: "student_name",
+          key: "qrcode_title",
           align: "center"
         },
         {
           title: "视频ID",
-          key: "student_name",
+          key: "videoid",
           align: "center"
         },
         {
           title: "扫码用户数",
-          key: "student_name",
+          key: "scan_qrcode_user_count",
           align: "center"
         },
         {
           title: "扫码用户量",
-          key: "student_name",
+          key: "scan_qrcode_count",
           align: "center"
         },
         {
           title: "关注量",
-          key: "student_name",
+          key: "attention_count",
           align: "center"
         },
         {
           title: "页面地址",
-          key: "student_name",
+          key: "web_url",
           align: "center"
         },
         {
           title: "视频简介",
-          key: "student_name",
+          key: "video_desc",
           align: "center"
         },
         {
           title: "创建时间",
-          key: "student_name",
+          key: "create_time",
           align: "center"
         },
         {
@@ -124,7 +126,8 @@ export default {
                 {
                   props: {
                     type: "text",
-                    size: "small"
+                    size: "small",
+                    disabled: params.row.is_publish == 2
                   },
                   on: {
                     click: () => {
@@ -143,8 +146,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.type1 = "AddBook";
-                      this.showMod1 = true;
+                      this.switch("AddBook", params.row);
                     }
                   }
                 },
@@ -155,7 +157,8 @@ export default {
                 {
                   props: {
                     type: "text",
-                    size: "small"
+                    size: "small",
+                    disabled: params.row.is_publish == 2
                   },
                   on: {
                     click: () => {
@@ -179,7 +182,24 @@ export default {
       showMod1: false
     };
   },
+  created() {
+    this.getInBookSublevel();
+  },
   methods: {
+    // 获取书籍列表
+    async getInBookSublevel() {
+      this.formItem.in_book_qrcode_id = this.row.id;
+      let res = await this.$request({
+        method: "POST",
+        url: GETINBOOKSUBLEVEL,
+        data: qs.stringify(this.formItem)
+      });
+      this.data = res.data.data.data;
+      this.total = res.data.data.links.total;
+      this.per_page = res.data.data.links.per_page;
+      this.current_page = res.data.data.links.current_page;
+      this.last_page = res.data.data.links.last_page;
+    },
     // 开关
     switch(name, row) {
       this.showMod1 = true;
@@ -191,6 +211,7 @@ export default {
       this.showMod1 = val;
       this.row1 = "";
       this.type1 = "";
+      this.getInBookSublevel()
     },
     // 改变页码
     changePages(val) {
@@ -198,15 +219,14 @@ export default {
     },
     // 点击清除选项
     deleteFormData() {
-      this.formItem = {
-        page: 1, // 页码
-        page_num: "10" // 每页条数
-      };
+      this.formItem = {}
+      this.getInBookSublevel()
     },
     // 转换date
     changeDate(time) {
-      // this.formItem.pay_start_time = time[0];
-      // this.formItem.pay_end_time = time[1];
+      this.formItem.create_start_time = time[0];
+      this.formItem.create_end_time = time[1];
+      this.getInBookSublevel();
     },
     ok() {
       this.$refs["formValidate"]
@@ -216,7 +236,9 @@ export default {
             // 这里发送操作请求
 
             this.$Message.success("成功！");
+            this.$emit("changeShowMod", false);
           }
+
           this.modal2 = true;
         });
     },

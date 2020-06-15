@@ -54,7 +54,8 @@ export default new Vuex.Store({
   state: {
     cId: 0,
     uName: "",
-    permission: []
+    permission: [],
+    screen_list: []
   },
   mutations: {
     setuName(state, payload) {
@@ -68,6 +69,9 @@ export default new Vuex.Store({
     },
     clearuName(state) {
       state.uName = ""
+    },
+    setScreen(state,payload) {
+      state.screen_list = payload
     }
   },
   actions: {
@@ -88,6 +92,7 @@ export default new Vuex.Store({
           storage.savaDaiban(res.data.data)
           commit("setRefer", res.data.data.channel)
           commit("setFenpeiList", res.data.data.sale_list)
+          commit("setScreen", res.data.data.screen_list)
           resolve()
         }).catch(e => {
           reject(e)

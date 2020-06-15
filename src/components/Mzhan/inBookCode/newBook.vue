@@ -12,8 +12,8 @@
           <FormItem label="书籍名称" prop="book_name">
             <Input v-model="formValidate.book_name" placeholder="请输入书籍名称"></Input>
           </FormItem>
-          <FormItem label="顶部图片" prop="city">
-            <img v-if="formValidate.TopimgUrl" :src="formValidate.TopimgUrl" class="imgUrl" />
+          <FormItem label="顶部图片" prop="title_image">
+            <img v-if="formValidate.title_image" :src="formValidate.title_image" class="imgUrl" />
             <Upload
               action="//jsonplaceholder.typicode.com/posts/"
               :before-upload="uploadImg"
@@ -22,8 +22,8 @@
               <Button icon="ios-cloud-upload-outline">上传图片</Button>
             </Upload>
           </FormItem>
-          <FormItem label="底部图片" prop="city">
-            <img v-if="formValidate.BooimgUrl" :src="formValidate.BooimgUrl" class="imgUrl" />
+          <FormItem label="底部图片" prop="bottom_image">
+            <img v-if="formValidate.bottom_image" :src="formValidate.bottom_image" class="imgUrl" />
             <Upload
               action="//jsonplaceholder.typicode.com/posts/"
               :before-upload="uploadBooImg"
@@ -34,12 +34,12 @@
           </FormItem>
           <FormItem label="年级" prop="grade">
             <Select v-model="formValidate.grade" placeholder="请选择年级">
-              <Option :value="item" v-for="(item,index) in grade_strList" :key="index">{{item}}</Option>
+              <Option :value="index" v-for="(item,index) in grade_strList" :key="index">{{item}}</Option>
             </Select>
           </FormItem>
           <FormItem label="科目" prop="subject">
             <Select v-model="formValidate.subject" placeholder="请选择科目">
-              <Option :value="item" v-for="(item,index) in subjectList" :key="index">{{item}}</Option>
+              <Option :value="index" v-for="(item,index) in subjectList" :key="index">{{item}}</Option>
             </Select>
           </FormItem>
         </Form>
@@ -49,9 +49,17 @@
 </template>
 
 <script>
-import { UPLOADIMAGE } from "@/uilt/url/Murl";
+import qs from "qs";
+import { mapState, mapActions } from "vuex";
+import { UPLOADIMAGE, CREATEINBOOK, UPDATEINBOOK } from "@/uilt/url/Murl";
 import { SCREENLIST } from "@/uilt/url/url";
 export default {
+  computed: {
+    ...mapState({
+      subjectList: state => state.screen_list.subject,
+      grade_strList: state => state.screen_list.grade_str
+    })
+  },
   props: {
     row: {
       type: [Object, String],
@@ -71,12 +79,18 @@ export default {
     return {
       modal1: "",
       formValidate: {
-        TopimgUrl: "",
-        BooimgUrl: ""
+        title_image: "",
+        bottom_image: ""
       },
       ruleValidate: {
         book_name: [
           { required: true, message: "请输入书籍名称", trigger: "blur" }
+        ],
+        title_image: [
+          { required: true, message: "请选择顶部图片", trigger: "change" }
+        ],
+        bottom_image: [
+          { required: true, message: "请选择底部图片", trigger: "change" }
         ],
         grade: [
           {
@@ -92,23 +106,43 @@ export default {
             trigger: "change"
           }
         ]
-      },
-      subjectList: [],
-      grade_strList: []
+      }
     };
   },
+  created() {
+    delete this.subjectList[-1];
+    if (this.row) {
+      this.formValidate = this.row;
+      this.formValidate.subject =
+        Object.keys(this.subjectList)
+          .map(item => this.subjectList[item])
+          .indexOf(this.row.subject) +
+        1 +
+        "";
+      this.formValidate.grade =
+        Object.keys(this.grade_strList)
+          .map(item => this.grade_strList[item])
+          .indexOf(this.row.grade) +
+        1 +
+        "";
+    }
+  },
   methods: {
-    // 获取年级科目，基本信息
-    async getpublic() {
+    // 编辑书籍
+    async editBook() {
       let res = await this.$request({
-        url: SCREENLIST
+        method: "POST",
+        url: UPDATEINBOOK,
+        data: qs.stringify(this.formValidate)
       });
-      let subject = res.data.data.screen_list.subject;
-      this.subjectList = Object.keys(subject)
-        .map(item => subject[item])
-        .filter(item => item.trim());
-      this.subjectList.splice(this.subjectList.indexOf("全科"));
-      this.grade_strList = res.data.data.screen_list.grade_str;
+    },
+    // 新建书籍
+    async createInBook() {
+      let res = await this.$request({
+        method: "POST",
+        url: CREATEINBOOK,
+        data: qs.stringify(this.formValidate)
+      });
     },
     // 上传图片
     async uploadImg(file) {
@@ -123,9 +157,9 @@ export default {
           url: UPLOADIMAGE,
           data: formData
         }).then(res => {
-          // this.formValidate.TopimgUrl =
+          // this.formValidate.title_image =
           // 	"http://liveapi.canpoint.net" + res.data.data.value;
-          this.formValidate.TopimgUrl =
+          this.formValidate.title_image =
             "http://39.107.156.22/canpoint" + res.data.data.value;
         });
       };
@@ -143,9 +177,9 @@ export default {
           url: UPLOADIMAGE,
           data: formData
         }).then(res => {
-          // this.formValidate.BooimgUrl =
+          // this.formValidate.bottom_image =
           // 	"http://liveapi.canpoint.net" + res.data.data.value;
-          this.formValidate.BooimgUrl =
+          this.formValidate.bottom_image =
             "http://39.107.156.22/canpoint" + res.data.data.value;
         });
       };
@@ -156,11 +190,20 @@ export default {
         .validate(valid => {})
         .then(val => {
           if (val) {
-            if (this.formValidate.TopimgUrl && this.formValidate.BooimgUrl) {
+            if (
+              this.formValidate.title_image &&
+              this.formValidate.bottom_image
+            ) {
               // 这里发送操作请求
-              
-              this.$Message.success("成功！");
-              this.$emit("changeShowMod", false);
+              this.row
+                ? this.editBook().then(() => {
+                    this.$Message.success("编辑成功！");
+                    this.$emit("changeShowMod", false);
+                  })
+                : this.createInBook().then(() => {
+                    this.$Message.success("新建成功！");
+                    this.$emit("changeShowMod", false);
+                  });
               return;
             }
             this.$Message.error("请选择图片!");
@@ -172,9 +215,6 @@ export default {
     cancel() {
       this.$emit("changeShowMod", false);
     }
-  },
-  created() {
-    this.getpublic();
   }
 };
 </script>

@@ -34,7 +34,23 @@ const CREATEBOOK = BASEURL + "create_book" //创建书籍
 const UPEXTENSION  = BASEURL + "extension" //上报推广
 const UPLOADIMAGE = BASEURL + 'upload_image' // 上传图片
 
+// 书内一书一码
+const GETINBOOKLIST = BASEURL + 'get_in_book_list' // 书籍列表
+const CREATEINBOOK = BASEURL + 'create_in_book' // 新建书籍
+const UPDATEINBOOK = BASEURL + 'update_in_book' // 编辑书籍
+const GETINBOOKSUBLEVEL = BASEURL + 'get_in_book_sublevel' // 获取书籍内码列表
+const CREATEINBOOKSUBLEVEL = BASEURL + 'create_in_book_sublevel' // 新建书籍内码列表
+const UPDATEINBOOKSUBLEVEL = BASEURL + 'update_in_book_sublevel' // 修改书籍内码列表
+const GETWXCODELIST = BASEURL + 'get_wx_code_list' // 获取渠道码列表
+
 export {
+  UPDATEINBOOKSUBLEVEL,
+  GETWXCODELIST,
+  CREATEINBOOKSUBLEVEL,
+  UPDATEINBOOK,
+  GETINBOOKSUBLEVEL,
+  CREATEINBOOK,
+  GETINBOOKLIST,
   CREATEBOOK,
   UPDATABOOK,
   UPLOADIMAGE,
