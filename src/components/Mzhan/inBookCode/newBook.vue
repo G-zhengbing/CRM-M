@@ -135,6 +135,7 @@ export default {
         url: UPDATEINBOOK,
         data: qs.stringify(this.formValidate)
       });
+      return res;
     },
     // 新建书籍
     async createInBook() {
@@ -143,6 +144,7 @@ export default {
         url: CREATEINBOOK,
         data: qs.stringify(this.formValidate)
       });
+      return res;
     },
     // 上传图片
     async uploadImg(file) {
@@ -196,13 +198,23 @@ export default {
             ) {
               // 这里发送操作请求
               this.row
-                ? this.editBook().then(() => {
-                    this.$Message.success("编辑成功！");
-                    this.$emit("changeShowMod", false);
+                ? this.editBook().then(res => {
+                    if (res.data.code == 100001) {
+                      this.$Message.error(res.data.error);
+                      this.modal1 = true;
+                    } else if (res.data.code == 200) {
+                      this.$Message.success("编辑成功！");
+                      this.$emit("changeShowMod", false);
+                    }
                   })
-                : this.createInBook().then(() => {
-                    this.$Message.success("新建成功！");
-                    this.$emit("changeShowMod", false);
+                : this.createInBook().then(res => {
+                    if (res.data.code == 100001) {
+                      this.$Message.error(res.data.error);
+                      this.modal1 = true;
+                    } else if (res.data.code == 200) {
+                      this.$Message.success("新建成功！");
+                      this.$emit("changeShowMod", false);
+                    }
                   });
               return;
             }

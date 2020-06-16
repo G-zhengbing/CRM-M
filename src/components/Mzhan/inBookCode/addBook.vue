@@ -3,10 +3,10 @@
     <Modal v-model="modal1" :title="isIn ? '编辑' : '添加'" @on-ok="ok" @on-cancel="cancel" width="40">
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
         <FormItem label="二维码标题" prop="qrcode_title">
-          <Input v-model="formValidate.qrcode_title" placeholder="请输入二维码标题"></Input>
+          <Input :disabled="isIn" v-model="formValidate.qrcode_title" placeholder="请输入二维码标题"></Input>
         </FormItem>
         <FormItem label="选择渠道码" prop="wechat_channel_code_id">
-          <Select v-model="formValidate.wechat_channel_code_id" placeholder="请选择渠道码">
+          <Select :disabled="isIn" v-model="formValidate.wechat_channel_code_id" placeholder="请选择渠道码">
             <Option :value="item.id+''" v-for="item in wxCodeList" :key="item.id">{{item.code_name}}</Option>
           </Select>
           <p style="color: #ccc;padding-top: 10px;">请先去营销公众号管理创建渠道二维码</p>

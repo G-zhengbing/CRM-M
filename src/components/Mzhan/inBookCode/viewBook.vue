@@ -3,7 +3,11 @@
     <Modal v-model="modal1" title="查看" width="60" @on-ok="ok" @on-cancel="cancel">
       <Form class="select" ref="formValidate" :model="formItem" inline>
         <FormItem>
-          <Input v-model="formItem.qrcode_title" placeholder="请输入二维码名称" @on-blur="getInBookSublevel"></Input>
+          <Input
+            v-model="formItem.qrcode_title"
+            placeholder="请输入二维码名称"
+            @on-blur="getInBookSublevel"
+          ></Input>
         </FormItem>
         <FormItem>
           <DatePicker
@@ -38,12 +42,17 @@
       :isIn="true"
       @changeShowMod="changeShowMod"
     />
+    <Loading v-show="isLoading" />
   </div>
 </template>
 
 <script>
 import qs from "qs";
-import { GETINBOOKSUBLEVEL } from "@/uilt/url/Murl";
+import {
+  GETINBOOKSUBLEVEL,
+  DELETEINBOOKQRCODE,
+  INBOOKSUBLEVELEXTENSION
+} from "@/uilt/url/Murl";
 import AddBook from "./addBook";
 export default {
   components: {
@@ -66,6 +75,7 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
       modal1: "",
       modal2: false,
       formItem: {},
@@ -90,7 +100,7 @@ export default {
           align: "center"
         },
         {
-          title: "扫码用户量",
+          title: "扫码量",
           key: "scan_qrcode_count",
           align: "center"
         },
@@ -130,8 +140,20 @@ export default {
                     disabled: params.row.is_publish == 2
                   },
                   on: {
-                    click: () => {
-                      // this.switch("NewBook", params.row);
+                    click: async () => {
+                      this.isLoading = true
+                      let res = await this.$request({
+                        method: "POST",
+                        url: INBOOKSUBLEVELEXTENSION,
+                        data: qs.stringify({
+                          id: params.row.id
+                        })
+                      });
+                      if(res.data.code == 200) {
+                        this.$Message.success('发布成功')
+                      }
+                      this.getInBookSublevel()
+                      this.isLoading = false
                     }
                   }
                 },
@@ -161,8 +183,21 @@ export default {
                     disabled: params.row.is_publish == 2
                   },
                   on: {
-                    click: () => {
-                      // this.switch("AddBook", params.row);
+                    click: async () => {
+                      this.isLoading = true;
+                      let res = await this.$request({
+                        method: "POST",
+                        url: DELETEINBOOKQRCODE,
+                        data: qs.stringify({
+                          ids: params.row.id,
+                          type: 2 // 1删除书籍 2删除书籍子级书内码
+                        })
+                      });
+                      if(res.data.code == 200) {
+                        this.$Message.success('删除成功')
+                      }
+                      this.getInBookSublevel();
+                      this.isLoading = false;
                     }
                   }
                 },
@@ -211,7 +246,7 @@ export default {
       this.showMod1 = val;
       this.row1 = "";
       this.type1 = "";
-      this.getInBookSublevel()
+      this.getInBookSublevel();
     },
     // 改变页码
     changePages(val) {
@@ -219,8 +254,8 @@ export default {
     },
     // 点击清除选项
     deleteFormData() {
-      this.formItem = {}
-      this.getInBookSublevel()
+      this.formItem = {};
+      this.getInBookSublevel();
     },
     // 转换date
     changeDate(time) {
