@@ -227,10 +227,18 @@ const router = new Router({
           path: '/main/jurisdiction', // 角色和权限
           component: () => import('@/components/setup/Jurisdiction')
         },
+        {
+          path: '/main/weightallocation', // 权重分配
+          component: () => import('@/components/setup/weightAllocation')
+        },
 
         {
           path: '/main/channelcode', // 营销,公众号,渠道码
           component: () => import('@/components/Marketing/PublicMark/ChannelCode')
+        },
+        {
+          path: '/main/pageanalysis', // 数据，流量分析，页面分析
+          component: () => import('@/components/data/flowAnalysis/pageAnalysis')
         },
       ]
     }

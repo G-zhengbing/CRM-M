@@ -6,8 +6,8 @@
           <div class="contaner">
             <Form :model="form" :label-width="30">
               <Row>
-                 <Col span="3">
-                  <FormItem
+                <Col span="3">
+                  <FormItem>
                     <Input v-model="form.course_name" placeholder="课程名称" @on-change="seekClick"></Input>
                   </FormItem>
                 </Col>
@@ -84,16 +84,19 @@ export default {
     Lessonsmessage
   },
   mounted() {
-    this.getLessonsList({});
+    this.isLoading = true;
+    this.getLessonsList({}).then(() => {
+      this.isLoading = false;
+    });
   },
   computed: {
     ...mapState(["lessonsList", "currentPage", "pageSize", "total"])
   },
   data() {
     return {
-      courseType:storage.getDaiban().screen_list.course_type,
-      startAccount:'',
-      endAccount:'',
+      courseType: storage.getDaiban().screen_list.course_type,
+      startAccount: "",
+      endAccount: "",
       show: false,
       type: {},
       isLoading: false,
@@ -125,8 +128,6 @@ export default {
     //清空选线
     clear() {
       this.form = {};
-      this.startTime = "";
-      this.endTime = "";
       this.startAccount = "";
       this.endAccount = "";
       this.seekClick();

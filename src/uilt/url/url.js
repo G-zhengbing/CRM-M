@@ -39,6 +39,7 @@ const TEPREPORT = BASEURL + "learn_report" //学情报告
 const TEPADDREPORT = BASEURL + "order_report" //新增学情报告
 // const REFER = "http://192.168.1.181:3000/api/" + 'screen_list' //渠道来源列表
 const REFER = BASEURL + 'screen_list' //渠道来源列表
+const SALES = BASEURL + 'sales' //渠道来源列表
 const MINECLIENT = BASEURL + "mine_clues"//我的客户
 const NOTIFICATION = BASEURL + "action_list"//我的客户/消息提醒
 const CLIENTTYPE = BASEURL + "order_product" //创建订单/选择课程
@@ -117,9 +118,16 @@ const ADDROLE = BASEURL + "add_role" //设置，创建角色
 
 const MEPERMISSION = BASEURL + "me_permission" //获取当前角色权限列表
 
+const UPDATESALESWEIGHT = BASEURL + "update_sales_weight" // 修改设置权重分配权重比
+const UPPERLIMIT = BASEURL + "update_user_assignment_task_channel_list_and_upper_limit" // 修改设置权重分配页面其他设置
+const GETUPPERLIMIT = BASEURL + "get_user_assignment_task_channel_list_and_upper_limit" // 获取权重分配指定渠道列表
+
 const SCREENLIST = BASEURL + "screen_list" //教务/ 公共接口，select状态栏
 
 export {
+  GETUPPERLIMIT,
+  UPPERLIMIT,
+  UPDATESALESWEIGHT,
   ADDROLE,
   GETROLEPERMISSION,
   MEPERMISSION,
@@ -197,6 +205,7 @@ export {
   PONESTATUS,
   MINECLIENT,
   REFER,
+  SALES,
   TEPADDREPORT,
   TEPREPORT,
   TEPCHE,

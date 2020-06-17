@@ -81,6 +81,9 @@
                       <Option :value="7">七年级</Option>
                       <Option :value="8">八年级</Option>
                       <Option :value="9">九年级</Option>
+                      <Option :value="10">高一</Option>
+                      <Option :value="11">高二</Option>
+                      <Option :value="12">高三</Option>
                     </Select>
                   </FormItem>
                 </Col>

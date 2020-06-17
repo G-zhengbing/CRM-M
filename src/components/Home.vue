@@ -2,7 +2,7 @@
   <div class="box">
     <div class="center">
       <img src="../assets/img/xiaoshou/png24.png" alt />
-      <span>销售小姐姐们加油 ~</span>
+      <span>顾问小哥哥,小姐姐们加油哦~</span>
     </div>
   </div>
 </template>
