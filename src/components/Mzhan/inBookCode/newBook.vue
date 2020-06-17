@@ -8,7 +8,7 @@
       width="60"
     >
       <div class="content">
-        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
+        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="140">
           <FormItem label="书籍名称" prop="book_name">
             <Input v-model="formValidate.book_name" placeholder="请输入书籍名称"></Input>
           </FormItem>
@@ -21,6 +21,9 @@
             >
               <Button icon="ios-cloud-upload-outline">上传图片</Button>
             </Upload>
+          </FormItem>
+          <FormItem label="顶部图片跳转链接" prop="title_action_url">
+            <Input v-model="formValidate.title_action_url" placeholder="请输入链接地址"></Input>
           </FormItem>
           <FormItem label="底部图片" prop="bottom_image">
             <img v-if="formValidate.bottom_image" :src="formValidate.bottom_image" class="imgUrl" />
@@ -86,6 +89,9 @@ export default {
         book_name: [
           { required: true, message: "请输入书籍名称", trigger: "blur" }
         ],
+        title_action_url: [
+          { required: true, message: "请输入跳转地址", trigger: "blur" }
+        ],
         title_image: [
           { required: true, message: "请选择顶部图片", trigger: "change" }
         ],
@@ -135,6 +141,7 @@ export default {
         url: UPDATEINBOOK,
         data: qs.stringify(this.formValidate)
       });
+      return res;
     },
     // 新建书籍
     async createInBook() {
@@ -143,6 +150,7 @@ export default {
         url: CREATEINBOOK,
         data: qs.stringify(this.formValidate)
       });
+      return res;
     },
     // 上传图片
     async uploadImg(file) {
@@ -157,10 +165,8 @@ export default {
           url: UPLOADIMAGE,
           data: formData
         }).then(res => {
-          // this.formValidate.title_image =
-          // 	"http://liveapi.canpoint.net" + res.data.data.value;
           this.formValidate.title_image =
-            "http://39.107.156.22/canpoint" + res.data.data.value;
+            "http://liveapi.canpoint.net" + res.data.data.value;
         });
       };
       return false;
@@ -177,10 +183,8 @@ export default {
           url: UPLOADIMAGE,
           data: formData
         }).then(res => {
-          // this.formValidate.bottom_image =
-          // 	"http://liveapi.canpoint.net" + res.data.data.value;
           this.formValidate.bottom_image =
-            "http://39.107.156.22/canpoint" + res.data.data.value;
+            "http://liveapi.canpoint.net" + res.data.data.value;
         });
       };
       return false;
@@ -196,13 +200,23 @@ export default {
             ) {
               // 这里发送操作请求
               this.row
-                ? this.editBook().then(() => {
-                    this.$Message.success("编辑成功！");
-                    this.$emit("changeShowMod", false);
+                ? this.editBook().then(res => {
+                    if (res.data.code == 100001) {
+                      this.$Message.error(res.data.error);
+                      this.modal1 = true;
+                    } else if (res.data.code == 200) {
+                      this.$Message.success("编辑成功！");
+                      this.$emit("changeShowMod", false);
+                    }
                   })
-                : this.createInBook().then(() => {
-                    this.$Message.success("新建成功！");
-                    this.$emit("changeShowMod", false);
+                : this.createInBook().then(res => {
+                    if (res.data.code == 100001) {
+                      this.$Message.error(res.data.error);
+                      this.modal1 = true;
+                    } else if (res.data.code == 200) {
+                      this.$Message.success("新建成功！");
+                      this.$emit("changeShowMod", false);
+                    }
                   });
               return;
             }

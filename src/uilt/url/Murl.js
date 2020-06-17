@@ -42,8 +42,12 @@ const GETINBOOKSUBLEVEL = BASEURL + 'get_in_book_sublevel' // 获取书籍内码
 const CREATEINBOOKSUBLEVEL = BASEURL + 'create_in_book_sublevel' // 新建书籍内码列表
 const UPDATEINBOOKSUBLEVEL = BASEURL + 'update_in_book_sublevel' // 修改书籍内码列表
 const GETWXCODELIST = BASEURL + 'get_wx_code_list' // 获取渠道码列表
+const DELETEINBOOKQRCODE = BASEURL + 'delete_in_book_qrcode' // 批量删除书籍&&书内删除
+const INBOOKSUBLEVELEXTENSION = BASEURL + 'in_book_sublevel_extension' // 书籍内码发布
 
 export {
+  INBOOKSUBLEVELEXTENSION,
+  DELETEINBOOKQRCODE,
   UPDATEINBOOKSUBLEVEL,
   GETWXCODELIST,
   CREATEINBOOKSUBLEVEL,

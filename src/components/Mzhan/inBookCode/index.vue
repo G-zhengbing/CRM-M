@@ -44,10 +44,10 @@
       </FormItem>
     </Form>
     <div class="btn">
-      <Button type="primary">批量删除</Button>
+      <Button type="primary" @click="batchDelete">批量删除</Button>
       <Button type="primary" @click="showMod = true;type = 'NewBook'">新建书籍</Button>
     </div>
-    <Table border :columns="columns" :data="data" height="500"></Table>
+    <Table @on-selection-change="selectUser" border :columns="columns" :data="data" height="500"></Table>
     <PagingBox
       :total="total"
       :per_page="per_page"
@@ -83,7 +83,11 @@ import NewBook from "./newBook";
 import ViewBook from "./viewBook";
 import AddBook from "./addBook";
 import { mapState, mapActions } from "vuex";
-import { GETINBOOKLIST, CREATEINBOOK } from "@/uilt/url/Murl";
+import {
+  GETINBOOKLIST,
+  CREATEINBOOK,
+  DELETEINBOOKQRCODE
+} from "@/uilt/url/Murl";
 export default {
   components: {
     NewBook,
@@ -218,7 +222,8 @@ export default {
       total: 0,
       per_page: 10,
       current_page: 1,
-      last_page: 1
+      last_page: 1,
+      ids: []
     };
   },
   created() {
@@ -226,12 +231,39 @@ export default {
     delete this.subjectList[-1];
   },
   methods: {
+    selectUser(name) {
+      if (name.length) {
+        let ids = []
+        name.map(item => {
+          ids.push(item.id);
+        });
+        this.ids = ids.join(",");
+      }
+    },
+    // 批量删除
+    async batchDelete() {
+      this.isLoading = true;
+      let res = await this.$request({
+        method: "POST",
+        url: DELETEINBOOKQRCODE,
+        data: qs.stringify({
+          ids: this.ids,
+          type: 1 // 1删除书籍 2删除书籍子级书内码
+        })
+      });
+      if(res.data.code == 200) {
+        this.$Message.success('删除成功')
+      } else if (res.data.code == 100001) {
+        this.$Message.error(res.data.error)
+      }
+      this.getInBookList();
+      this.isLoading = false;
+    },
     changeData(val) {
       this.getInBookList();
     },
     // 获取书籍列表
     async getInBookList() {
-      console.log(this.formItem);
       this.isLoading = true;
       let res = await this.$request({
         method: "POST",
@@ -264,7 +296,7 @@ export default {
     changeDate(time) {
       this.formItem.create_start_time = time[0];
       this.formItem.create_end_time = time[1];
-      this.getInBookList()
+      this.getInBookList();
     },
     // 点击清除选项
     deleteFormData() {
