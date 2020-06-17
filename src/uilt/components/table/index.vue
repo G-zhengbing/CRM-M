@@ -4,7 +4,6 @@
       <div class="allocation" v-if="allocationData">
         <span>已选条{{Items.length}}数</span>
         <Signin v-if="allocationData == '签到'" :btnSignin="true" :Items="Items" style="display: inline-block;padding-left: 15px;"/>
-        <!-- <Button v-if="allocationData == '删除'" class="btn" type="primary" @click="batchSignIn">批量删除</Button> -->
         <Allocation
           @refresh="refresh"
           :Items="Items"
@@ -23,6 +22,7 @@
     <Table
       height="400"
       @on-selection-change="selectItem"
+      @on-sort-change="selectSort"
       border
       ref="selection"
       :columns="columns"
@@ -110,9 +110,9 @@ export default {
     }
   },
   methods: {
-    // 批量签到
-    batchSignIn() {
-
+    // 排序
+    selectSort(data) {
+      this.$emit('selectSort',data.order)
     },
     // 分配完毕，刷新页面
     refresh() {
