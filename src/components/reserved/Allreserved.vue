@@ -1,186 +1,176 @@
 <template>
   <div class="box" ref="box">
-    <section class="main-section">
-      <div class="surplus">
-        <div class="main-section-bottom">
-          <div class="contaner">
-            <ul class="tabs">
-              <li @click="tab(3)" :class="[num == 3? 'active' : '']">
-                <span>全部预约单</span>
-              </li>
-              <li @click="tab(1)" :class="[num == 1? 'active' : '']">
-                <span>今日上课提醒</span>
-              </li>
-              <li @click="tab(2)" :class="[num == 2? 'active' : '']">
-                <span>今日上课情况</span>
-              </li>
-            </ul>
-            <Form :model="form" :label-width="80">
-              <Row>
-                <Col span="4">
-                  <FormItem style="width:230px;">
-                    <Input v-model="form.name" placeholder="学员姓名" @on-change="seekClick"></Input>
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <FormItem style="width:230px;">
-                    <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekClick"></Input>
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <FormItem>
-                    <Select
-                      v-model="form.type"
-                      style="width:150px"
-                      @on-change="seekClick"
-                      placeholder="试听类型"
-                    >
-                      <Option :value="i" v-for="(list,i) in course" :key="i">{{list}}</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="4" v-if="num == 3 || num == 2">
-                  <FormItem>
-                    <Select
-                      v-model="form.appoint_status"
-                      style="width:150px"
-                      @on-change="seekClick"
-                      placeholder="状态"
-                    >
-                      <Option :value="i" v-for="(list,i) in appoint" :key="i">{{list}}</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <FormItem>
-                    <Select
-                      v-model="form.subject"
-                      style="width:150px"
-                      @on-change="seekClick"
-                      placeholder="科目"
-                    >
-                      <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <FormItem>
-                    <Select
-                      v-model="form.grade"
-                      style="width:150px"
-                      @on-change="seekClick"
-                      placeholder="年级"
-                    >
-                      <Option :value="1">一年级</Option>
-                      <Option :value="2">二年级</Option>
-                      <Option :value="3">三年级</Option>
-                      <Option :value="4">四年级</Option>
-                      <Option :value="5">五年级</Option>
-                      <Option :value="6">六年级</Option>
-                      <Option :value="7">七年级</Option>
-                      <Option :value="8">八年级</Option>
-                      <Option :value="9">九年级</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="4" v-if="num == 3">
-                  <FormItem>
-                    <Select
-                      v-model="form.create_user"
-                      style="width:150px"
-                      @on-change="seekClick"
-                      placeholder="创建人"
-                    >
-                      <Option
-                        v-for="(list,i) in sale_list"
-                        :key="i"
-                        :value="list.id"
-                      >{{list.login_name}}</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="6" v-if="num == 3">
-                  <FormItem>
-                    <div class="dateplc">
-                      <DatePicker
-                        v-model="startAccount"
-                        type="date"
-                        placeholder="上课日期"
-                        style="width: 200px"
-                        @on-change="getTimes2"
-                      ></DatePicker>
-                      <DatePicker
-                        v-model="endAccount"
-                        type="date"
-                        placeholder="上课日期"
-                        style="width: 200px"
-                        @on-change="getTimes2"
-                      ></DatePicker>
-                    </div>
-                  </FormItem>
-                </Col>
-                <Col span="6">
-                  <FormItem>
-                    <div class="dateplc">
-                      <DatePicker
-                        v-model="startTime"
-                        type="date"
-                        placeholder="提交时间"
-                        style="width: 200px"
-                        @on-change="getTimes"
-                      ></DatePicker>
-                      <DatePicker
-                        v-model="endTime"
-                        type="date"
-                        placeholder="提交时间"
-                        style="width: 200px"
-                        @on-change="getTimes"
-                      ></DatePicker>
-                    </div>
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <FormItem>
-                    <Select
-                      v-model="form.is_schedule"
-                      style="width:150px"
-                      @on-change="seekClick"
-                      placeholder="是否排课"
-                    >
-                      <Option :value="2">已排课</Option>
-                      <Option :value="1">未排课</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="4" style="text-indent: 60px">
-                  <Button type="primary" @click="clear">清除</Button>
-                </Col>
-              </Row>
-            </Form>
-            <div class="allot" v-if="num == 1" @click="allot">
-              <span>{{'已选择'+ checkall.length + '条'}}</span>
-              <p>批量签到</p>
-            </div>
-            <Table
-              border
-              :columns="columns"
-              :data="reservedAllData"
-              @on-selection-change="selectionChange"
-              height="500"
-            ></Table>
-            <Page
-              @on-change="pageChange"
-              :total="total"
-              :current="currentPage"
-              :page-size="pageSize"
-              show-total
-              show-elevator
-              class="ive-page"
-            />
-          </div>
-        </div>
+    <div class="contaner">
+      <ul class="tabs">
+        <li @click="tab(3)" :class="[num == 3? 'active' : '']">
+          <span>全部预约单</span>
+        </li>
+        <li @click="tab(1)" :class="[num == 1? 'active' : '']">
+          <span>今日上课提醒</span>
+        </li>
+        <li @click="tab(2)" :class="[num == 2? 'active' : '']">
+          <span>今日上课情况</span>
+        </li>
+      </ul>
+      <Form :model="form" :label-width="80">
+        <Row>
+          <Col span="4">
+            <FormItem style="width:230px;">
+              <Input v-model="form.name" placeholder="学员姓名" @on-change="seekClick"></Input>
+            </FormItem>
+          </Col>
+          <Col span="4">
+            <FormItem style="width:230px;">
+              <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekClick"></Input>
+            </FormItem>
+          </Col>
+          <Col span="4">
+            <FormItem>
+              <Select
+                v-model="form.type"
+                style="width:150px"
+                @on-change="seekClick"
+                placeholder="试听类型"
+              >
+                <Option :value="i" v-for="(list,i) in course" :key="i">{{list}}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="4" v-if="num == 3 || num == 2">
+            <FormItem>
+              <Select
+                v-model="form.appoint_status"
+                style="width:150px"
+                @on-change="seekClick"
+                placeholder="状态"
+              >
+                <Option :value="i" v-for="(list,i) in appoint" :key="i">{{list}}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="4">
+            <FormItem>
+              <Select
+                v-model="form.subject"
+                style="width:150px"
+                @on-change="seekClick"
+                placeholder="科目"
+              >
+                <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="4">
+            <FormItem>
+              <Select
+                v-model="form.grade"
+                style="width:150px"
+                @on-change="seekClick"
+                placeholder="年级"
+              >
+                <Option :value="1">一年级</Option>
+                <Option :value="2">二年级</Option>
+                <Option :value="3">三年级</Option>
+                <Option :value="4">四年级</Option>
+                <Option :value="5">五年级</Option>
+                <Option :value="6">六年级</Option>
+                <Option :value="7">七年级</Option>
+                <Option :value="8">八年级</Option>
+                <Option :value="9">九年级</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="4" v-if="num == 3">
+            <FormItem>
+              <Select
+                v-model="form.create_user"
+                style="width:150px"
+                @on-change="seekClick"
+                placeholder="创建人"
+              >
+                <Option v-for="(list,i) in sale_list" :key="i" :value="list.id">{{list.login_name}}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="6" v-if="num == 3">
+            <FormItem>
+              <div class="dateplc">
+                <DatePicker
+                  v-model="startAccount"
+                  type="date"
+                  placeholder="上课日期"
+                  style="width: 200px"
+                  @on-change="getTimes2"
+                ></DatePicker>
+                <DatePicker
+                  v-model="endAccount"
+                  type="date"
+                  placeholder="上课日期"
+                  style="width: 200px"
+                  @on-change="getTimes2"
+                ></DatePicker>
+              </div>
+            </FormItem>
+          </Col>
+          <Col span="6">
+            <FormItem>
+              <div class="dateplc">
+                <DatePicker
+                  v-model="startTime"
+                  type="date"
+                  placeholder="提交时间"
+                  style="width: 200px"
+                  @on-change="getTimes"
+                ></DatePicker>
+                <DatePicker
+                  v-model="endTime"
+                  type="date"
+                  placeholder="提交时间"
+                  style="width: 200px"
+                  @on-change="getTimes"
+                ></DatePicker>
+              </div>
+            </FormItem>
+          </Col>
+          <Col span="4">
+            <FormItem>
+              <Select
+                v-model="form.is_schedule"
+                style="width:150px"
+                @on-change="seekClick"
+                placeholder="是否排课"
+              >
+                <Option :value="2">已排课</Option>
+                <Option :value="1">未排课</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="4" style="text-indent: 60px">
+            <Button type="primary" @click="clear">清除</Button>
+          </Col>
+        </Row>
+      </Form>
+      <div class="allot" v-if="num == 1" @click="allot">
+        <span>{{'已选择'+ checkall.length + '条'}}</span>
+        <p>批量签到</p>
       </div>
-    </section>
+      <Table
+        border
+        :columns="columns"
+        :data="reservedAllData"
+        @on-selection-change="selectionChange"
+        height="500"
+      ></Table>
+      <Page
+        @on-change="pageChange"
+        :total="total"
+        :current="currentPage"
+        :page-size="pageSize"
+        show-total
+        show-elevator
+        class="ive-page"
+      />
+    </div>
     <Loading v-show="isLoading" />
     <DaibanMessage :type="type" v-if="show" />
     <ReservedMessage :type="type" v-if="showMoadl" />
@@ -805,7 +795,6 @@ export default {
   display: flex;
   border-bottom: 1px solid #ccc;
   margin-bottom: 20px;
-  margin-top: 10px;
 }
 /* tabs */
 .dateplc {

@@ -17,6 +17,7 @@ const ADDCURR_URL = BASEURL + "create_products" //新增课程
 const CURRSHOW_URL = BASEURL + "update_show" //课程首页显示状态
 const CURRUPDOWN_URL = BASEURL + "update_status" //课程上架/下架
 const DELECURR_URL =BASEURL + "delete_products" //删除课程
+const COURSETEACHERS = BASEURL +'coach_lists' //班课班主任
 
 const DATA_URL =BASEURL + "materials" //资料列表
 const ADDDATA_URL = BASEURL + "store_material" //新建资料
@@ -55,6 +56,7 @@ export {
   GETINBOOKSUBLEVEL,
   CREATEINBOOK,
   GETINBOOKLIST,
+  COURSETEACHERS,
   CREATEBOOK,
   UPDATABOOK,
   UPLOADIMAGE,

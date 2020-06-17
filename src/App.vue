@@ -14,6 +14,9 @@ export default {
 };
 </script>
 <style>
+/* .ivu-layout{
+  height: 100%;
+} */
 html,body {
   height: 100%;
 }

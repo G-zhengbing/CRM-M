@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  COURSETEACHERS,
   CURR_URL,
   ADDCURR_URL,
   CURRSHOW_URL,
@@ -9,13 +10,18 @@ import {
 import storage from '../uilt/storage'
 
 export default {
+  namespaced: true,
   state: {
     currlList: [],
     currentPage: 1,
     pageSize: 5,
-    total: 0
+    total: 0,
+    currculumTeachs:''
   },
   mutations: {
+    setCUrrculumTeachs(state,payload){
+      state.currculumTeachs = payload
+    },
     setCurrList(state, payload) {
       state.currlList = payload
     },
@@ -30,6 +36,24 @@ export default {
     }
   },
   actions: {
+    //教师列表
+    getCurrculumTeachs({state,commit,dispatch}){
+      return new Promise((resolve,reject)=>{
+        axios({
+          method:"get",
+          url:COURSETEACHERS,
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            Authorization: "bearer " + storage.get()
+          }
+        }).then(res=>{
+          commit("setCUrrculumTeachs",res.data.data)
+          resolve()
+        }).catch(e=>{
+          reject(e)
+        })
+      })
+    },
     putawayData({
       state,
       commit,
@@ -108,7 +132,7 @@ export default {
     //是否首页展示
     setCurrSwitch({
       dispatch
-    }, form) {
+    }, {params,form}) {
       if (form.is_hot) {
         form.is_hot = 2
       } else {
@@ -127,7 +151,7 @@ export default {
             type: form.is_hot
           }
         }).then(res => {
-          dispatch("getCurrList",{})
+          dispatch("getCurrList",{form:params})
           resolve()
         }).catch(e => {
           reject(e)

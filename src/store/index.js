@@ -28,9 +28,9 @@ import teacher from './teacher'
 import statistics from './statistics'
 import importdata from './importdata'
 import importorder from './importorder'
-import scheducourse from './scheducourse'
-import schedulessons from './schedulessons'
-import schedustudent from './schedustudent'
+import scheducourse from './scheduling/scheducourse'
+import schedulessons from './scheduling/schedulessons'
+import schedustudent from './scheduling/schedustudent'
 import scheduteachers from './scheduteachers'
 import axios from "axios";
 

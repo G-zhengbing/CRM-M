@@ -1,10 +1,11 @@
+
 <template>
   <div class="box">
     <NewErweima v-if="show" :type="type" />
     <section class="main-section">
       <div class="surplus">
         <div class="main-section-top">
-          <Form :model="form" :label-width="80" style="height:111px;padding: 10px;">
+          <Form :model="form" :label-width="35" >
             <Row style="margin-top:30px;">
               <Col span="4">
                 <FormItem style="width:230px;">

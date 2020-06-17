@@ -53,6 +53,20 @@
                 </Select>
               </FormItem>
             </Col>
+            <Col span="11"  v-if="form.type == 1">
+              <FormItem label="教师" prop="lecturer">
+                <Select v-model="form.lecturer" placeholder="请选择">
+                  <Option :value="list.id" v-for="(list,i) in currculumTeachs" :key="i">{{list.name}}</Option>
+                </Select>
+              </FormItem>
+            </Col>
+             <Col span="11" offset="2"  v-if="form.type == 1">
+              <FormItem label="班主任" prop="header_id">
+                <Select v-model="form.header_id" placeholder="请选择">
+                  <Option :value="list.id" v-for="(list,i) in header_list" :key="i">{{list.login_name}}</Option>
+                </Select>
+              </FormItem>
+            </Col>
             <Col span="10">
             <FormItem label="是否寄送教材" prop="is_address">
               <RadioGroup v-model="form.is_address">
@@ -214,7 +228,7 @@
           <Input v-model="form.activity_price" placeholder="请输入该课程优惠价格"></Input>
         </FormItem>
         <FormItem>
-          <Button type="primary" @click="handleSubmit('form')">确定</Button>
+          <Button :loading="isSend" type="primary" @click="handleSubmit('form')">确定</Button>
           <Button @click="handleReset('form')" style="margin-left: 8px">重置</Button>
         </FormItem>
     </Form>
@@ -225,18 +239,25 @@
 
 <script>
 import Wangeditor from '../../uilt/wangeditor/Wangeditor'
-import { mapActions } from 'vuex'
+// import { mapActions,mapState } from 'vuex'
 import storage from '../../uilt/storage'
 import { UPLOADIMAGE } from '../../uilt/url/Murl'
 import { UPDATEPRODUCTS, CREATEPRODUCTS } from '../../uilt/url/url'
+import { createNamespacedHelpers } from 'vuex'
+const  { mapState,mapActions } = createNamespacedHelpers('curriculum')
 import axios from 'axios'
 export default {
   props:["item"],
 	components:{
 		Wangeditor
-	},
+  },
+  computed:{  
+    ...mapState(['currculumTeachs'])
+  },
   data() {
     return {
+      isSend:false,
+      header_list: storage.getDaiban().header_list,
       // 用来控制上传哪个图片
       imageIndex: "",
       videoIndex:0,
@@ -286,12 +307,18 @@ export default {
         start_date:[{ required: true, message: '课程周期是必填的'}],
         is_address:[
           { required: true, message: '是否寄送教材是必选的' }
+        ],
+        lecturer:[
+          { required: true, message: '教师是必选的' }
+        ],
+        header_id:[
+          { required: true, message: '班主任是必选的' }
         ]
       }
     };
   },
   methods: {
-    ...mapActions(["addCurrList","updataCurrList","getCurrList"]),
+    ...mapActions(["addCurrList","updataCurrList","getCurrList","getCurrculumTeachs"]),
     removeVideo(num){
       this.videoArr.splice(num,1);
     },
@@ -433,6 +460,7 @@ export default {
       this.$parent.isCurrMessage = false;
     },
     handleSubmit (name) {
+      this.isSend = true
       this.$refs[name].validate((valid) => {
         if (valid) {
           if(this.$parent.isUpdata){
@@ -454,6 +482,8 @@ export default {
               formData.append('end_date',b.getFullYear() + '-' + (b.getMonth() + 1) + '-' + b.getDate());
               formData.append('course_list',JSON.stringify(this.timeArr));
               formData.append('class_type',this.form.class_type);
+              formData.append('lecturer',this.form.lecturer);
+              formData.append('header_id',this.form.header_id);
               formData.append('image_1',this.uploadList[0]?this.uploadList[0]:"");
               formData.append('image_2',this.uploadList[1]?this.uploadList[1]:"");
               formData.append('image_3',this.uploadList[2]?this.uploadList[2]:"");
@@ -478,6 +508,7 @@ export default {
                 this.getCurrList({form:this.$parent.form,page:this.$parent.currentPage})
                 this.$parent.isCurrMessage = false
               }
+              this.isSend = false
             })
           }else{
             if(!this.form.product_content){
@@ -520,6 +551,8 @@ export default {
               formData.append('image_1',this.uploadList[0]?this.uploadList[0]:"");
               formData.append('image_2',this.uploadList[1]?this.uploadList[1]:"");
               formData.append('image_3',this.uploadList[2]?this.uploadList[2]:"");
+              formData.append('lecturer',this.form.lecturer);
+              formData.append('header_id',this.form.header_id);
             }else{
               formData.append('class_hour',this.form.class_hour);
               formData.append('update_state',this.form.update_state?this.form.update_state:"");
@@ -541,6 +574,7 @@ export default {
                 this.getCurrList({form:this.$parent.form,page:this.$parent.currentPage})
                 this.$parent.isCurrMessage = false
               }
+              this.isSend = false
             })
           }
         } else {
@@ -553,6 +587,7 @@ export default {
     }
   },
   mounted () {
+    this.getCurrculumTeachs()
     this.$refs.wangditor.text = ""
     if(this.$parent.isUpdata){
       this.form =  this.item

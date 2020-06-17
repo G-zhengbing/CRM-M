@@ -37,6 +37,7 @@ const TEPAYLIST = BASEURL + "head_master" //教务/付费学员/班主任列表
 const TEPCHE = BASEURL + "order_update" //班主任跟进
 const TEPREPORT = BASEURL + "learn_report" //学情报告
 const TEPADDREPORT = BASEURL + "order_report" //新增学情报告
+// const REFER = "http://192.168.1.181:3000/api/" + 'screen_list' //渠道来源列表
 const REFER = BASEURL + 'screen_list' //渠道来源列表
 const SALES = BASEURL + 'sales' //渠道来源列表
 const MINECLIENT = BASEURL + "mine_clues"//我的客户

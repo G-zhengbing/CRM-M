@@ -61,7 +61,6 @@
       width="1100"
       v-model="showTeacherMessage"
       :title="`${text}教师`"
-      :styles="{'margin-top' : '-70px'}"
       @on-cancel="colseModal"
     >
       <Form
@@ -732,6 +731,7 @@ export default {
             formData.append("name", this.form.name);
             formData.append("level", this.form.level);
             formData.append("sex", this.form.sex);
+            formData.append("type", this.form.type);
             formData.append("mobile", this.form.mobile);
             formData.append("subject", this.form.subject);
             formData.append(
@@ -739,7 +739,7 @@ export default {
               this.form.address_province_id
             );
             formData.append("address_city_id", this.form.address_city_id);
-            formData.append("classin_user", this.form.classin_user);
+            formData.append("classin_user", this.form.classin_user?this.form.classin_user:'');
             formData.append("bank_card_id", this.form.bank_card_id);
             formData.append(
               "bank_card_pic",
@@ -804,6 +804,7 @@ export default {
             formData.append("name", this.form.name);
             formData.append("level", this.form.level);
             formData.append("sex", this.form.sex);
+            formData.append("type", this.form.type);
             formData.append("mobile", this.form.mobile);
             formData.append("subject", this.form.subject);
             formData.append("grade", this.form.grade.join(","));

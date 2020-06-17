@@ -76,12 +76,12 @@
                 </Dropdown>
               </div>
             </div>
-            <Table height="500" border :columns="columns2" :data="data" @on-selection-change="selectionChange"></Table>
+            <Table height="500" border :columns="columns2" :data="$store.state.curriculum.currlList" @on-selection-change="selectionChange"></Table>
             <Page
               @on-change="pageChange"
-              :total="total"
-              :current="currentPage"
-              :page-size="pageSize"
+              :total="$store.state.curriculum.total"
+              :current="$store.state.curriculum.currentPage"
+              :page-size="$store.state.curriculum.pageSize"
               show-total
               show-elevator
               class="ive-page"
@@ -96,8 +96,11 @@
 
 <script>
 import CurrMessage from "../curriculum/CurrMessage";
-import { mapActions, mapState, mapMutations } from "vuex";
+// import { mapActions, mapState, mapMutations } from "vuex";
 import storage from "../../uilt/storage";
+import { IMPORTLIST } from '../../uilt/url/url';
+import { createNamespacedHelpers } from 'vuex'
+const {mapActions, mapState, mapMutations } = createNamespacedHelpers('curriculum')
 export default {
   components: {
     CurrMessage
@@ -283,10 +286,10 @@ export default {
   },
   computed: {
     ...mapState({
-      data: state => state.curriculum.currlList,
-      currentPage: state => state.curriculum.currentPage,
-      pageSize: state => state.curriculum.pageSize,
-      total: state => state.curriculum.total
+      // data: state => state.curriculum.currlList,
+      // currentPage: state => state.curriculum.currentPage,
+      // pageSize: state => state.curriculum.pageSize,
+      // total: state => state.curriculum.total
     })
   },
   methods: {
@@ -353,8 +356,9 @@ export default {
     },
     //是否首页展示
     functionFun(val, params) {
+      console.log(val,params)
       this.loading(true);
-      this.setCurrSwitch(params).then(() => {
+      this.setCurrSwitch({params:this.form,form:params}).then(() => {
         this.loading(false);
       });
     },

@@ -13,6 +13,10 @@
                 v-for="(item,index) in jurisdictionList"
                 :key="index"
               >{{item.display_name}}</li>
+              <!-- <li
+                @click="setActive(index)"
+                :class="{active:tabNum == index}"
+                >排课</li> -->
             </ul>
           </div>
           <div class="right">

@@ -24,7 +24,6 @@
       v-model="showMessage"
       title="批量导入线索"
       @on-cancel="showMessage =false"
-      :styles="{'margin-top' : '-70px'}"
     >
       <div class="steps">
         <ul>
@@ -89,7 +88,6 @@
       v-model="showLook"
       title="批量导入线索"
       @on-cancel="showLook =false"
-      :styles="{'margin-top' : '-70px'}"
     >
       <List header="Header" footer="Footer" border>
         <ListItem v-for="(list,i) in item" :key="i">{{list?list:'暂无'}}</ListItem>
