@@ -6,7 +6,6 @@
       v-model="type.classify == 'order'"
       title="选择课程"
       @on-cancel="colseReserved"
-      :styles="{'margin-top' : '-70px'}"
     >
       <Form :model="form" label-position="top" style="height:450px;overflow-y:auto;">
         <Row>
@@ -93,7 +92,6 @@
       v-model="showOrder"
       title="创建订单"
       @on-cancel="showOrder = false"
-      :styles="{'margin-top' : '-70px'}"
     >
       <Form :form="orderForm" label-position="left" style="height:450px;overflow-y:auto;">
         <FormItem label="基本信息"></FormItem>
@@ -140,7 +138,6 @@
       v-model="type.classify == 'audition'"
       title="预约试听"
       @on-cancel="colseReserved"
-      :styles="{'margin-top' : '-70px'}"
     >
       <Button type="primary" size="large" @click="createAudition">新建预约</Button>
       <Form label-position="top" style="height:500px;overflow-y:auto;">
@@ -172,7 +169,6 @@
       v-model="showCreateAudition"
       title="新建预约试听"
       @on-cancel="clearForm"
-      :styles="{'margin-top' : '-70px'}"
     >
       <Form :form="createAuditionForm" label-position="top" style="height:500px;overflow-y:auto;">
         <Row>
@@ -268,7 +264,6 @@
       v-model="showSignin"
       title="签到"
       @on-cancel="showSignin = false"
-      :styles="{'margin-top' : '-70px'}"
     >
       <div>
         <p>是否完成上课？</p>
@@ -288,7 +283,6 @@
       v-model="showAppraisal"
       title="查看测评"
       @on-cancel="showAppraisal = false"
-      :styles="{'margin-top' : '-70px'}"
     >
       <Form :form="appraisalForm" label-position="top" style="height:300px;overflow-y:auto;">
         <FormItem label="测评图片展示" v-if="this.appraisalForm.assess_image">
@@ -351,7 +345,6 @@
       v-model="showcallOff"
       title="取消预约"
       @on-cancel="showcallOff = false"
-      :styles="{'margin-top' : '-70px'}"
     >
       <div>
         <p>确定{{callOffForm.student_name}}取消预约？</p>
@@ -394,7 +387,6 @@
       v-model="type.classify == 'connect'"
       title="交接单"
       @on-cancel="colseReserved"
-      :styles="{'margin-top' : '-70px'}"
     >
       <Form
         v-if="type.classify == 'connect'"
@@ -540,7 +532,6 @@
       v-model="type.classify == 'remove'"
       title="确定要移出吗?"
       @on-cancel="colseReserved"
-      :styles="{'margin-top' : '-70px'}"
     >
       <div v-if="type.classify == 'remove'">
         <Input
@@ -562,7 +553,6 @@
       v-model="type.classify == 'upgrade'"
       title="补款升级"
       @on-cancel="colseReserved"
-      :styles="{'margin-top' : '-70px'}"
     >
       <Form
         v-if="type.classify == 'upgrade'"
@@ -1042,7 +1032,7 @@ export default {
       var start = "";
       var end = "";
       var b = 7;
-      for (var i = 1; i < 29; i++) {
+      for (var i = 1; i < 35; i++) {
         if (i % 2 == 0) {
           start = b + ":" + "30";
           b++;

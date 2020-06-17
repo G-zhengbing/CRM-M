@@ -63,7 +63,6 @@
         v-model="type.classify == 'datalis'"
         title="学员详情"
         @on-cancel="followUpColse"
-        :styles="{'margin-top' : '-70px'}"
       >
         <Form :model="form" label-position="top" style="height:500px;overflow-y:auto;">
           <Row>
@@ -239,7 +238,6 @@
     <!--  -->
     <template v-if="type.classify == 'followUp'">
       <Modal
-        :styles="{'margin-top' : '-70px'}"
         class="modal"
         width="1100"
         v-model="type.classify == 'followUp'"
@@ -255,7 +253,7 @@
             </Col>
             <Col span="4">
               <FormItem style="width:150px;" label="注册手机">
-                <Input :title="followForm.tel" readonly v-model="followForm.tel" placeholder="手机号"></Input>
+                <Input :title="followForm.tel" v-model="followForm.tel" placeholder="手机号"></Input>
               </FormItem>
             </Col>
             <Col span="4">
@@ -422,7 +420,6 @@
     <!--  -->
     <template>
       <Modal
-        :styles="{'margin-top' : '-70px'}"
         class="modal"
         width="500"
         v-model="type.classify == 'ringupFollowUp'"

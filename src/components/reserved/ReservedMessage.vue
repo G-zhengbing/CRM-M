@@ -7,7 +7,6 @@
         v-model="type.classify == 'signin'"
         title="签到"
         @on-cancel="$parent.showMoadl = false"
-        :styles="{'margin-top' : '-70px'}"
       >
         <div class="content">
           <p>是否完成上课？</p>
@@ -29,7 +28,6 @@
         v-model="type.classify == 'callOff'"
         title="取消预约"
         @on-cancel="$parent.showMoadl = false"
-        :styles="{'margin-top' : '-70px'}"
       >
         <div class="content">
           <p>确定{{type.data.student_name}}取消预约？</p>
@@ -47,7 +45,6 @@
         v-model="type.classify == 'appraisal'"
         title="查看测评"
         @on-cancel="$parent.showMoadl = false"
-        :styles="{'margin-top' : '-70px'}"
       >
         <Form :form="appraisalForm" label-position="top" style="height:300px;overflow-y:auto;">
           <FormItem label="测评图片展示" v-if="isUpdata">

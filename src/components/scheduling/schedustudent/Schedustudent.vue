@@ -1,93 +1,52 @@
 <template>
   <div class="box" ref="box">
-    <section class="main-section">
-      <div class="surplus">
-        <div class="main-section-bottom">
-          <div class="contaner">
-            <Form :model="form" :label-width="80">
-              <Row>
-                <Col span="3">
-                  <FormItem>
-                    <Select v-model="form.visit_num" @on-change="seekClick" placeholder="授课类型">
-                      <Option :value="1">1次</Option>
-                      <Option :value="2">2次</Option>
-                      <Option :value="3">3次</Option>
-                      <Option :value="4">4次</Option>
-                      <Option :value="5">5次</Option>
-                      <Option :value="6">6次</Option>
-                      <Option :value="7">6次以上</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="3">
-                  <FormItem style="width:230px;">
-                    <Input v-model="form.mobile" placeholder="课程名称" @on-change="seekClick"></Input>
-                  </FormItem>
-                </Col>
-                <Col span="3">
-                  <FormItem>
-                    <Select v-model="form.visit_num" @on-change="seekClick" placeholder="课程状态">
-                      <Option :value="1">1次</Option>
-                      <Option :value="2">2次</Option>
-                      <Option :value="3">3次</Option>
-                      <Option :value="4">4次</Option>
-                      <Option :value="5">5次</Option>
-                      <Option :value="6">6次</Option>
-                      <Option :value="7">6次以上</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="3">
-                  <FormItem>
-                    <Select v-model="form.visit_num" @on-change="seekClick" placeholder="课程类型">
-                      <Option :value="1">1次</Option>
-                      <Option :value="2">2次</Option>
-                      <Option :value="3">3次</Option>
-                      <Option :value="4">4次</Option>
-                      <Option :value="5">5次</Option>
-                      <Option :value="6">6次</Option>
-                      <Option :value="7">6次以上</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="6">
-                  <FormItem>
-                    <div class="dateplc">
-                      <DatePicker
-                        v-model="startAccount"
-                        type="date"
-                        placeholder="首次课日期"
-                        @on-change="getTimes2"
-                      ></DatePicker>
-                      <DatePicker
-                        v-model="endAccount"
-                        type="date"
-                        placeholder="首次课日期"
-                        @on-change="getTimes2"
-                      ></DatePicker>
-                    </div>
-                  </FormItem>
-                </Col>
-                <Col span="4" style="text-indent: 60px">
-                  <Button type="primary" @click="clear">清除</Button>
-                </Col>
-                <Col span="24">
-                  <Button type="primary" @click="addCourse">创建课程</Button>
-                </Col>
-              </Row>
-            </Form>
-            <Table border :columns="columns" :data="notifiData" height="500"></Table>
-            <Page
-              @on-change="pageChange"
-              :total="total"
-              :current="currentPage"
-              :page-size="pageSize"
-              show-total
-              show-elevator
-              class="ive-page"
-            />
-          </div>
-        </div>
+    <section>
+      <div class="contaner">
+        <Form :model="form" :label-width="30">
+          <Row>
+            <Col span="3">
+              <FormItem>
+                <Input v-model="form.name" placeholder="学员姓名" @on-change="seekClick"></Input>
+              </FormItem>
+            </Col>
+            <Col span="3">
+              <FormItem>
+                <Input v-model="form.mobile" placeholder="手机号" @on-change="seekClick"></Input>
+              </FormItem>
+            </Col>
+            <Col span="6">
+              <FormItem>
+                <div class="dateplc">
+                  <DatePicker
+                    v-model="startAccount"
+                    type="date"
+                    placeholder="注册时间"
+                    @on-change="getTimes"
+                  ></DatePicker>
+                  <DatePicker
+                    v-model="endAccount"
+                    type="date"
+                    placeholder="注册时间"
+                    @on-change="getTimes"
+                  ></DatePicker>
+                </div>
+              </FormItem>
+            </Col>
+            <Col span="4" style="text-indent: 60px">
+              <Button type="primary" @click="clear">清除</Button>
+            </Col>
+          </Row>
+        </Form>
+        <Table border :columns="columns" :data="studentList"></Table>
+        <Page
+          @on-change="pageChange"
+          :total="total"
+          :current="currentPage"
+          :page-size="pageSize "
+          show-total
+          show-elevator
+          class="ive-page"
+        />
       </div>
     </section>
     <Loading v-show="isLoading" />
@@ -96,34 +55,29 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
 import Loading from "../../../uilt/loading/loading";
 import storage from "../../../uilt/storage";
 import Schdeustudentmessage from "./Schdeustudentmessage";
+import { createNamespacedHelpers } from "vuex";
+const { mapState, mapMutations, mapActions } = createNamespacedHelpers(
+  "schedustudent"
+);
 export default {
   components: {
     Loading,
     Schdeustudentmessage
   },
   mounted() {
-    this.setCurrentPage(1);
     this.isLoading = true;
-    this.getNotificationList({ form: {}, page: 1 }).then(res => {
+    this.getStudentList({ form: {}, page: 1 }).then(res => {
       this.isLoading = false;
     });
   },
   computed: {
-    ...mapGetters(["notifiData", "notifiTypes"]),
-    ...mapState({
-      data: state => state.notification.notifiList,
-      currentPage: state => state.notification.currentPage,
-      total: state => state.notification.total,
-      pageSize: state => state.notification.pageSize
-    })
+    ...mapState(["studentList", "currentPage", "pageSize", "total"])
   },
   data() {
     return {
-      isUpdate: false,
       endAccount: "",
       startAccount: "",
       showMine: false,
@@ -141,17 +95,15 @@ export default {
       form: {},
       columns: [
         { type: "selection", width: 60 },
-        { title: "授课类型", key: "student_name" },
-        { title: "课程名称", key: "mobile" },
-        { title: "课程类型", key: "remarks" },
-        { title: "首节课日期", key: "action_create_time" },
-        { title: "课程进度", key: "create_time" },
-        { title: "课程有效期", key: "create_time" },
-        { title: "录播/直播/回放数", key: "create_time" },
-        { title: "教师数", key: "create_time" },
-        { title: "学生数", key: "create_time" },
-        { title: "旁听生数", key: "create_time" },
-        { title: "班主任", key: "create_time" },
+        { title: "学员姓名", key: "student_name" },
+        { title: "注册手机", key: "mobile" },
+        { title: "可用课时", key: "card_num" },
+        { title: "待上课节数", key: "wait_num" },
+        { title: "已排课节数", key: "have_num" },
+        { title: "取消课节数", key: "cancel_num" },
+        { title: "上课中", key: "lesson_num" },
+        { title: "是否推送", key: "classin_id" },
+        { title: "最新付费时间", key: "paytime" },
         {
           title: "操作",
           key: "action",
@@ -171,38 +123,38 @@ export default {
                     }
                   }
                 },
-                "编辑"
-              ),
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "text",
-                    size: "small"
-                  },
-                  on: {
-                    click: () => {
-                      this.mathdata(params.row);
-                    }
-                  }
-                },
-                "教学数据"
-              ),
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "text",
-                    size: "small"
-                  },
-                  on: {
-                    click: () => {
-                      this.endcourse(params.row);
-                    }
-                  }
-                },
-                "结课"
+                "排课"
               )
+              // h(
+              //   "Button",
+              //   {
+              //     props: {
+              //       type: "text",
+              //       size: "small"
+              //     },
+              //     on: {
+              //       click: () => {
+              //         this.mathdata(params.row);
+              //       }
+              //     }
+              //   },
+              //   "教学数据"
+              // ),
+              // h(
+              //   "Button",
+              //   {
+              //     props: {
+              //       type: "text",
+              //       size: "small"
+              //     },
+              //     on: {
+              //       click: () => {
+              //         this.endcourse(params.row);
+              //       }
+              //     }
+              //   },
+              //   "结课"
+              // )
             ]);
           }
         }
@@ -210,45 +162,15 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setNotifiTypes", "setCurrentPage", "setRefer"]),
-    ...mapActions([
-      "getNotificationList",
-      "RingUp",
-      "getReferList",
-      "getUserReservedList"
-    ]),
-    //创建课程
-    addCourse() {
-      this.isUpdate = false;
-      this.type.classify = "createdCourse";
-      this.show = true;
-    },
-    //编辑
+    ...mapMutations(["setCurrentPage"]),
+    ...mapActions(["getStudentList"]),
+    //排课
     update(item) {
-      this.isUpdate = true;
       this.type.classify = "createdCourse";
       this.type.form = this.form;
       this.type.page = this.currentPage;
+      this.type.obj = item;
       this.show = true;
-    },
-    //教学数据
-    mathdata(item) {
-      // this.getUserReservedList({uid:item.id})
-      this.setNotifiTypes(item);
-      this.showMine = true;
-      this.type.classify = "audition";
-      this.type.page = this.currentPage;
-      this.type.form = this.form;
-      this.type.data = { ...this.notifiTypes };
-    },
-    //结课
-    endcourse(item) {
-      this.setNotifiTypes(item);
-      this.show = true;
-      this.type.classify = "followUp";
-      this.type.page = this.currentPage;
-      this.type.form = this.form;
-      this.type.data = { ...this.notifiTypes };
     },
     //清空选线
     clear() {
@@ -267,7 +189,7 @@ export default {
         this.setCurrentPage(page);
       }
       this.isLoading = true;
-      this.getNotificationList({ form: this.form, page }).then(res => {
+      this.getStudentList({ form: this.form, page }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(page);
       });
@@ -276,7 +198,7 @@ export default {
     pageChange(num) {
       this.isLoading = true;
       this.setCurrentPage(num);
-      this.getNotificationList({ form: this.form }).then(res => {
+      this.getStudentList({ form: this.form }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(num);
       });
@@ -294,18 +216,10 @@ export default {
       return d;
     },
     //操作日期
-    getTimes2() {
-      if (this.startAccount && this.endAccount) {
-        this.form.create_time_start = this.datePicker(this.startAccount);
-        this.form.create_time_end = this.datePicker(this.startAccount);
-        this.seekClick();
-      }
-    },
-    //创建日期
     getTimes() {
-      if (this.startTime && this.endTime) {
-        this.form.account_time_start = this.datePicker(this.startTime);
-        this.form.account_time_end = this.datePicker(this.endTime);
+      if (this.startAccount && this.endAccount) {
+        this.form.create_time_start   = this.datePicker(this.startAccount);
+        this.form.create_time_end = this.datePicker(this.startAccount);
         this.seekClick();
       }
     }

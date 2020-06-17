@@ -154,7 +154,6 @@
       v-model="showVisit"
       title="回访记录"
       @on-cancel="showVisit = false"
-      :styles="{'margin-top' : '-70px'}"
     >
       <Table border :columns="visitColumns" :data="showVisitData" height="500"></Table>
       <div slot="footer">

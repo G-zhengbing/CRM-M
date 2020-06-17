@@ -14,7 +14,7 @@ export default {
 };
 </script>
 <style>
-html,body {
+html,body,.ivu-layout {
   height: 100%;
 }
 .ive-page {
@@ -75,7 +75,7 @@ ul {
   width: 100%;
   flex: 1;
   background: #fff;
-  min-height: 690px;
+  /* min-height: 690px; */
 }
 .daiban-button {
   border: none;
