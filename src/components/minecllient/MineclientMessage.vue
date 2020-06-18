@@ -6,6 +6,8 @@
       v-model="type.classify == 'order'"
       title="选择课程"
       @on-cancel="colseReserved"
+      :closable="false"
+      :mask-closable="false"
     >
       <Form :model="form" label-position="top" style="height:450px;overflow-y:auto;">
         <Row>

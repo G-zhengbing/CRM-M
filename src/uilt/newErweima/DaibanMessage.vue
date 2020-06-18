@@ -412,11 +412,41 @@
         <div slot="footer">
           <Button class="followup" type="warning" size="large" @click="followUpRemoveOk">移出</Button>
           <Button class="order" type="warning" size="large" @click="createOrder">订单</Button>
+          <Button class="sendSMS" type="warning" size="large" @click="openSms">发送信息</Button>
           <Button type="text" size="large" @click="followUpColse">取消</Button>
           <Button :loading="disableBtn" type="primary" size="large" @click="genjin">确定</Button>
         </div>
       </Modal>
     </template>
+    <!-- 发送信息 -->
+    <Modal
+      class="modal"
+      width="60"
+      v-model="sms"
+      title="发送信息"
+      :closable="false"
+      :mask-closable="false"
+    >
+      <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="170">
+        <FormItem label="选择模板" prop="city">
+          <Select v-model="formValidate.city" placeholder="请选择">
+              <Option value="beijing">New York</Option>
+              <Option value="shanghai">London</Option>
+              <Option value="shenzhen">Sydney</Option>
+          </Select>
+      </FormItem>
+      <FormItem label="短信内容">
+          <Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 8,maxRows: 5}" placeholder="模板签名+模板内容最多500字符"></Input>
+      </FormItem>
+      <FormItem label="请填写参数${usermobile}">
+          <Input v-model="formValidate.name" placeholder="请输入模板名称"></Input>
+      </FormItem>
+      </Form>
+      <div slot="footer" style="text-align: center;">
+        <Button type="primary" size="large" >发送</Button>
+        <Button size="large" style="border: 1px solid #000;margin-left: 20px;" @click="closeSms">取消</Button>
+      </div>
+    </Modal>
     <!--  -->
     <template>
       <Modal
@@ -681,6 +711,17 @@ export default {
     })
   },
   methods: {
+    //跟进/发送信息
+    sendSMS() {
+      
+    },
+    // 关闭短信弹窗
+    closeSms() {
+      this.sms = false
+    },
+    openSms() {
+      this.sms = true
+    },
     //跟进/订单
     createOrder() {
       this.$parent.showMine = true;
@@ -1175,13 +1216,24 @@ export default {
       form: {},
       item: null,
       time: null,
-      isItem: false
+      isItem: false,
+      sms: false,
+      formValidate: {},
+      ruleValidate: {
+        city: [
+          { required: true, message: '请选择模板', trigger: 'change' }
+        ],
+      },
     };
   }
 };
 </script>
 
 <style scoped>
+.sendSMS {
+  position: absolute;
+  left: 165px;
+}
 .order {
   position: absolute;
   left: 90px;
