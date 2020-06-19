@@ -40,7 +40,12 @@
 
 <script>
 import qs from "qs";
-import { MESSAGELIST, DELETEMESSAGE, STATUSMESSAGE } from "@/uilt/url/set";
+import {
+  MESSAGELIST,
+  DELETEMESSAGE,
+  STATUSMESSAGE,
+  SENDTEMPLATE
+} from "@/uilt/url/set";
 import NewSMS from "./newSMS";
 export default {
   components: {
@@ -93,6 +98,11 @@ export default {
           align: "center"
         },
         {
+          title: "审核状态",
+          key: "al_audit_type",
+          align: "center"
+        },
+        {
           title: "备注",
           key: "desc",
           align: "center"
@@ -104,6 +114,32 @@ export default {
           width: 200,
           render: (h, params) => {
             return h("div", [
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small",
+                    disabled:
+                      params.row.al_audit_type == "未审核" ? false : true
+                  },
+                  on: {
+                    click: async () => {
+                      this.isLoading = true;
+                      let res = await this.$request({
+                        method: "POST",
+                        url: SENDTEMPLATE,
+                        data: qs.stringify({
+                          id: params.row.id
+                        })
+                      });
+                      this.getSmsLidt();
+                      this.isLoading = false;
+                    }
+                  }
+                },
+                "提交审核"
+              ),
               h(
                 "Button",
                 {
@@ -157,7 +193,8 @@ export default {
           }
         }
       ],
-      data: []
+      data: [],
+      auditType: ["未审核", "审核中", "审核通过", "未通过"]
     };
   },
   created() {
@@ -173,6 +210,9 @@ export default {
         data: qs.stringify(this.formItem)
       });
       this.data = res.data.data.data;
+      this.data.map(item => {
+        item.al_audit_type = this.auditType[item.al_audit_type];
+      });
       this.current_page = res.data.data.links.current_page;
       this.last_page = res.data.data.links.last_page;
       this.per_page = res.data.data.links.per_page;
@@ -183,7 +223,7 @@ export default {
     changeShowMod(val) {
       this.showMod = val;
       this.type = "";
-      this.getSmsLidt()
+      this.getSmsLidt();
     },
     // 改变页码
     changePages(val) {
