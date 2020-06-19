@@ -2,18 +2,18 @@
   <div class="newSMS">
     <Modal v-model="modal5" title="新建短信模板" width="40" @on-ok="confirm" @on-cancel="cancel">
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
-        <FormItem label="模板名称" prop="gender">
-          <Input v-model="formValidate.student_name" placeholder="请输入模板名称"></Input>
+        <FormItem label="模板名称" prop="template_name">
+          <Input v-model="formValidate.template_name" placeholder="请输入模板名称"></Input>
         </FormItem>
-        <FormItem label="模板类型" prop="gender">
-          <RadioGroup v-model="formValidate.gender">
+        <FormItem label="模板类型" prop="template_type">
+          <RadioGroup v-model="formValidate.template_type">
             <Radio label="1">短信通知</Radio>
             <Radio label="2">推广短信</Radio>
           </RadioGroup>
         </FormItem>
-        <FormItem label="模板内容" prop="desc">
+        <FormItem label="模板内容" prop="template_contents">
           <Input
-            v-model="formValidate.desc"
+            v-model="formValidate.template_contents"
             type="textarea"
             :autosize="{minRows: 6,maxRows: 5}"
             placeholder="模板签名 + 模板内容最多500字符"
@@ -21,7 +21,7 @@
         </FormItem>
 
         <FormItem>
-          <div v-if="formValidate.gender == '1'">
+          <div v-if="formValidate.template_type == '1'">
             <p>说明：</p>
             <p>1.模板内容变量用${usermobile}进行表示</p>
             <p>2.模板内容不可含有“加微信”、“加公众号”等内容</p>
@@ -49,6 +49,8 @@
 </template>
 
 <script>
+import qs from "qs";
+import { CREATEMESSAGE } from "@/uilt/url/set";
 export default {
   props: {
     showMod: {
@@ -65,15 +67,68 @@ export default {
     return {
       modal5: "",
       formValidate: {
-        gender: "1"
+        template_type: "1"
       },
-      ruleValidate: {}
+      ruleValidate: {
+        template_name: [
+          {
+            required: true,
+            message: "请输入模板名称",
+            trigger: "blur"
+          }
+        ],
+        template_type: [
+          { required: true, message: "请选择模板类型", trigger: "change" }
+        ],
+        template_contents: [
+          {
+            required: true,
+            message: "请输入模板内容",
+            trigger: "blur"
+          },
+          {
+            type: "string",
+            max: 500,
+            message: "最多输入500字",
+            trigger: "blur"
+          }
+        ],
+        desc: [
+          {
+            required: true,
+            message: "请输入申请说明",
+            trigger: "blur"
+          }
+        ]
+      }
     };
   },
   methods: {
+    // 创建短信模板
+    async creatSMSTemplate() {
+      let res = await this.$request({
+        method: 'POST',
+        url: CREATEMESSAGE,
+        data: qs.stringify(this.formValidate)
+      })
+      if(res.data.code == 200) {
+        this.$Message.success('创建成功')
+      } else {
+        this.$Message.error('创建失败')
+      } 
+    },
     // 点击确认回调
     confirm() {
-      this.$emit("changeShowMod", false);
+      this.$refs["formValidate"]
+        .validate(valid => {})
+        .then(val => {
+          // 条件不满足，自动弹出
+          if (!val) {
+            return (this.modal5 = true);
+          }
+          this.creatSMSTemplate()
+          this.$emit("changeShowMod", false);
+        });
     },
     // 点击取消回调
     cancel() {

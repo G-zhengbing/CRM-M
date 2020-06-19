@@ -2,10 +2,10 @@
   <div class="smsSet">
     <Form class="select" ref="formValidate" :model="formItem" inline>
       <FormItem>
-        <Input v-model="formItem.student_name" placeholder="模板名称" style="width: 160px;"></Input>
+        <Input v-model="formItem.template_name" placeholder="模板名称" style="width: 160px;"></Input>
       </FormItem>
       <FormItem>
-        <Select v-model="formItem.grade" placeholder="模板类型" style="width: 160px;">
+        <Select v-model="formItem.template_type" placeholder="模板类型" style="width: 160px;">
           <Option :value="index" v-for="(item,index) in 10" :key="index">{{item}}</Option>
         </Select>
       </FormItem>
@@ -39,10 +39,22 @@
 </template>
 
 <script>
+import qs from "qs";
+import { MESSAGELIST, DELETEMESSAGE, STATUSMESSAGE } from "@/uilt/url/set";
 import NewSMS from "./newSMS";
 export default {
   components: {
     NewSMS
+  },
+  watch: {
+    formItem: {
+      deep: true,
+      handler(newName, oldName) {
+        window.setTimeout(() => {
+          this.getSmsLidt();
+        }, 200);
+      }
+    }
   },
   data() {
     return {
@@ -62,32 +74,27 @@ export default {
         },
         {
           title: "模板名称",
-          key: "follow_user",
+          key: "template_name",
           align: "center"
         },
         {
           title: "模板类型",
-          key: "follow_user",
+          key: "template_type",
           align: "center"
         },
         {
           title: "模板内容",
-          key: "follow_user",
+          key: "template_contents",
           align: "center"
         },
         {
           title: "创建时间",
-          key: "follow_user",
-          align: "center"
-        },
-        {
-          title: "审核状态",
-          key: "follow_user",
+          key: "create_time",
           align: "center"
         },
         {
           title: "备注",
-          key: "follow_user",
+          key: "desc",
           align: "center"
         },
         {
@@ -105,12 +112,22 @@ export default {
                     size: "small"
                   },
                   on: {
-                    click: () => {
-                      // this.createdOrder(params.row);
+                    click: async () => {
+                      this.isLoading = true;
+                      let res = await this.$request({
+                        method: "POST",
+                        url: STATUSMESSAGE,
+                        data: qs.stringify({
+                          id: params.row.id,
+                          status: params.row.status == 1 ? 2 : 1
+                        })
+                      });
+                      this.getSmsLidt();
+                      this.isLoading = false;
                     }
                   }
                 },
-                "停用"
+                params.row.status == 1 ? "启用" : "停用"
               ),
               h(
                 "Button",
@@ -120,8 +137,17 @@ export default {
                     size: "small"
                   },
                   on: {
-                    click: () => {
-                      // this.Audition(params.row);
+                    click: async () => {
+                      this.isLoading = true;
+                      let res = await this.$request({
+                        method: "POST",
+                        url: DELETEMESSAGE,
+                        data: qs.stringify({
+                          id: params.row.id
+                        })
+                      });
+                      this.getSmsLidt();
+                      this.isLoading = false;
                     }
                   }
                 },
@@ -131,14 +157,33 @@ export default {
           }
         }
       ],
-      data: [{ follow_user: 123 }]
+      data: []
     };
   },
+  created() {
+    this.getSmsLidt();
+  },
   methods: {
+    // 获取列表展示
+    async getSmsLidt() {
+      this.isLoading = true;
+      let res = await this.$request({
+        method: "POST",
+        url: MESSAGELIST,
+        data: qs.stringify(this.formItem)
+      });
+      this.data = res.data.data.data;
+      this.current_page = res.data.data.links.current_page;
+      this.last_page = res.data.data.links.last_page;
+      this.per_page = res.data.data.links.per_page;
+      this.total = res.data.data.links.total;
+      this.isLoading = false;
+    },
     // 关闭窗口状态
     changeShowMod(val) {
       this.showMod = val;
       this.type = "";
+      this.getSmsLidt()
     },
     // 改变页码
     changePages(val) {
@@ -146,8 +191,8 @@ export default {
     },
     // 转换date
     changeCreateDate(time) {
-      this.formItem.create_st_time = time[0];
-      this.formItem.create_en_time = time[1];
+      this.formItem.create_start_time = time[0];
+      this.formItem.create_end_time = time[1];
     }
   }
 };
