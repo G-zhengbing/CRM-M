@@ -133,6 +133,9 @@ export default {
                           id: params.row.id
                         })
                       });
+                      if(res.data.code == 200) {
+                        this.$Message.success('提交成功！')
+                      }
                       this.getSmsLidt();
                       this.isLoading = false;
                     }
@@ -158,6 +161,9 @@ export default {
                           status: params.row.status == 1 ? 2 : 1
                         })
                       });
+                      if(res.data.code == 200) {
+                        this.$Message.success('操作成功！')
+                      }
                       this.getSmsLidt();
                       this.isLoading = false;
                     }
@@ -182,6 +188,11 @@ export default {
                           id: params.row.id
                         })
                       });
+                      if (res.data.code == 200) {
+                        this.$Message.success("删除成功！");
+                      } else {
+                        this.$Message.error(res.data.error);
+                      }
                       this.getSmsLidt();
                       this.isLoading = false;
                     }
