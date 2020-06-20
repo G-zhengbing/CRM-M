@@ -45,6 +45,7 @@ export default {
             page: page ? page : state.currentPage
           }
         }).then(res => {
+          console.log(res)
           commit("setnNtifiList", res.data.data.resources)
           commit("setCurrentPage", res.data.data.links.current_page)
           commit("setTotal", res.data.data.links.total)
@@ -121,7 +122,7 @@ export default {
         ["20岁", 20],
       ])
 
-      type.grade = maps.get(type.grade)
+      type.action_grade = maps.get(type.action_grade)
       type.sex = gender.get(type.sex)
       type.age = age.get(type.age)
       type.follow_status = follow.get(type.follow_status)
@@ -191,6 +192,7 @@ export default {
         element.mobile = str.join("")
         element.phone_status = pone.get(element.phone_status);
         element.grade = maps.get(element.grade);
+        element.action_grade = maps.get(element.action_grade);
         element.sex = gender.get(element.sex);
         element.age = age.get(element.age);
         element.intention_option = intention.get(element.intention_option);
