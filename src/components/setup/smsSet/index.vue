@@ -45,7 +45,7 @@ import {
   DELETEMESSAGE,
   STATUSMESSAGE,
   SENDTEMPLATE
-} from "@/uilt/url/set";
+} from "@/uilt/url/setup";
 import NewSMS from "./newSMS";
 export default {
   components: {

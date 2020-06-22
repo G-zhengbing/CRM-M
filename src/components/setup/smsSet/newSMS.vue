@@ -50,7 +50,7 @@
 
 <script>
 import qs from "qs";
-import { CREATEMESSAGE } from "@/uilt/url/set";
+import { CREATEMESSAGE } from "@/uilt/url/setup";
 export default {
   props: {
     showMod: {
