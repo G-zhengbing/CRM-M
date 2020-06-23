@@ -148,16 +148,14 @@
                 </Select>
               </FormItem>
             </Col>
-            <Col span="4">
-              <FormItem label="意向度">
-                <Select
-                  v-model="type.data.intention_option"
-                  style="width:150px"
-                  placeholder="意向度"
-                  disabled
-                >
-                  <Option v-for="(list,i) in intention" :key="i*1" :value="list">{{list}}</Option>
-                </Select>
+            <Col span="6">
+              <FormItem label="意向度" style="margin-left: 10px">
+                <RadioGroup v-model="type.data.intention_option">
+                    <Radio label="1">高</Radio>
+                    <Radio label="2">中</Radio>
+                    <Radio label="3">低</Radio>
+                    <Radio label="4">无</Radio>
+                </RadioGroup>
               </FormItem>
             </Col>
             <Col span="24">
@@ -330,12 +328,15 @@
                 </Select>
               </FormItem>
             </Col>
-            <Col span="4">
-              <FormItem label="意向度">
-                <Select v-model="followForm.intention_option" style="width:150px" placeholder="意向度">
-                  <Option v-for="(list,i) in intention" :value="i *1" :key="i">{{list}}</Option>
-                </Select>
-              </FormItem>
+            <Col span="6">
+               <FormItem label="意向度" style="margin-left: 10px">
+                    <RadioGroup v-model="followForm.intention_option">
+                        <Radio label="1">高</Radio>
+                        <Radio label="2">中</Radio>
+                        <Radio label="3">低</Radio>
+                        <Radio label="4">无</Radio>
+                    </RadioGroup>
+                  </FormItem>
             </Col>
             <Col span="24">
               <FormItem label="呼出请况">
