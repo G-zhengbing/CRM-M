@@ -2,7 +2,7 @@
   <div class="smsAllot">
     <div class="title">
       <span>每月分配上限：</span>
-      <Input v-model="value" placeholder="请输入上限" style="width: 300px" />
+      <Input v-model="value" placeholder="请输入上限" style="width: 300px" @on-blur="changeSumNum" />
       <p style="color: #ccc;margin-top:10px">注：编辑框为空或0则表示无上限</p>
     </div>
     <div class="content">
@@ -16,9 +16,9 @@
       </div>
       <div class="content_main">
         <ul>
-          <li v-for="item in data1">
+          <li v-for="item in dataList">
             <div>{{item.login_name}}</div>
-            <Input v-model="item.weight" @on-blur="changeNum(item)" placeholder="100" />
+            <Input v-model="item.message_limit" @on-blur="changeNum(item)" />
           </li>
         </ul>
       </div>
@@ -27,21 +27,60 @@
 </template>
 
 <script>
+import qs from "qs";
+import { SALES } from "@/uilt/url/url";
+import { UPDATEUSERMESSAGELIMIT } from "@/uilt/url/setup";
 export default {
   data() {
     return {
       value: "",
-      data1: [
-        {
-          login_name: "刘畅",
-          weight: 12
-        }
-      ]
+      dataList: []
     };
   },
   methods: {
+    // 修改每月总条数
+    async changeSumNum() {
+      let res = await this.$request({
+        method: "POST",
+        url: UPDATEUSERMESSAGELIMIT,
+        data: qs.stringify({
+          system_message_limit: this.value
+        })
+      });
+      if (res.data.code == 200) {
+        this.$Message.success("操作成功！");
+      }
+      this.getUserList();
+    },
     // 修改每月条数
-    async changeNum() {}
+    async changeNum(item) {
+      let res = await this.$request({
+        method: "POST",
+        url: UPDATEUSERMESSAGELIMIT,
+        data: qs.stringify({
+          admin_member_id: item.id,
+          message_limit: item.message_limit,
+        })
+      });
+      if (res.data.code == 200) {
+        this.$Message.success("操作成功！");
+      }
+      this.getUserList();
+    },
+    // 获取cc列表
+    async getUserList() {
+      let res = await this.$request({
+        url: SALES,
+        params: {
+          type: "limit"
+        }
+      });
+      this.dataList = res.data.data.data;
+      this.value = res.data.data.message_month_limit;
+    }
+  },
+  created() {
+    this.getUserList();
   }
 };
 </script>
@@ -54,7 +93,7 @@ export default {
 
 /* 自定义表格 */
 .content {
-	margin-top: 10px;
+  margin-top: 10px;
 }
 .content ul {
   width: 100%;

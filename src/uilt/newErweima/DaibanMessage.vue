@@ -429,10 +429,8 @@
     >
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="170">
         <FormItem label="选择模板" prop="city">
-          <Select v-model="formValidate.city" placeholder="请选择">
-              <Option value="beijing">New York</Option>
-              <Option value="shanghai">London</Option>
-              <Option value="shenzhen">Sydney</Option>
+          <Select v-model="formValidate.city" placeholder="请选择" @on-change="selectTem">
+              <Option :value="index+''" v-for="(item,index) in SMSTemplate" :key="item.id">{{item.template_name}}</Option>
           </Select>
       </FormItem>
       <FormItem label="短信内容">
@@ -443,7 +441,7 @@
       </FormItem>
       </Form>
       <div slot="footer" style="text-align: center;">
-        <Button type="primary" size="large" >发送</Button>
+        <Button type="primary" size="large" @click="sendSMS">发送</Button>
         <Button size="large" style="border: 1px solid #000;margin-left: 20px;" @click="closeSms">取消</Button>
       </div>
     </Modal>
@@ -665,6 +663,7 @@
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import Loading from "../loading/loading";
 import storage from "../storage";
+import { MESSAGELIST } from '@/uilt/url/setup'
 export default {
   components: {
     Loading
@@ -711,15 +710,32 @@ export default {
     })
   },
   methods: {
+    selectTem(item) {
+      this.formValidate.desc = this.SMSTemplate[item].template_contents
+    },
+    // 获取短信模板
+    async getSMSTem(page) {
+      let res = await this.$request({
+        method: "POST",
+        url: MESSAGELIST
+      })
+      this.SMSTemplate.push(...res.data.data.data)
+      let last = res.data.data.links.last_page
+      if(page >= last) {
+        return false
+      }
+      this.getSMSTem(++page)
+    },
     //跟进/发送信息
     sendSMS() {
-      
+      console.log(this.followForm)
     },
     // 关闭短信弹窗
     closeSms() {
       this.sms = false
     },
     openSms() {
+      this.getSMSTem(1)
       this.sms = true
     },
     //跟进/订单
@@ -1224,6 +1240,7 @@ export default {
           { required: true, message: '请选择模板', trigger: 'change' }
         ],
       },
+      SMSTemplate: []
     };
   }
 };
