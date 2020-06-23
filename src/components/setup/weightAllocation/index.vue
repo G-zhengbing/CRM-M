@@ -72,7 +72,7 @@
               <li v-for="item in data1">
                 <div>{{item.login_name}}</div>
                 <div>
-                  <Input v-model="item.weight" @on-blur="changeNum(item)" placeholder="100" />
+                  <Input v-model="item.weight" @on-blur="changeNum(item)" placeholder="0" />
                 </div>
               </li>
             </ul>
@@ -184,16 +184,10 @@ export default {
       let res = await this.$request({
         url: SALES,
         params: {
-          type: "page",
-          page: this.page
+          type: "limit"
         }
       });
-      let data = res.data.data;
-      this.data1 = data.resources;
-      this.total = data.links.total;
-      this.per_page = data.links.per_page;
-      this.current_page = data.links.current_page;
-      this.last_page = data.links.last_page;
+      this.data1 = res.data.data.data;
       this.isLoading = false;
     },
     // 切换开关判断是否显示input
@@ -269,6 +263,7 @@ export default {
   border: 1px solid #dcdee2;
   text-align: center;
   background-color: #f8f8f9;
+  overflow: hidden;
 }
 
 .content_main ul {
@@ -277,5 +272,9 @@ export default {
   flex-wrap: wrap;
   align-content: flex-start;
   overflow: auto;
+}
+
+.content_main input {
+  height: 30px;
 }
 </style>
