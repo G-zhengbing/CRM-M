@@ -421,23 +421,23 @@
     <!-- 发送信息 -->
     <Modal
       class="modal"
-      width="60"
+      width="40"
       v-model="sms"
       title="发送信息"
       :closable="false"
       :mask-closable="false"
     >
-      <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="170">
-        <FormItem label="选择模板" prop="city">
-          <Select v-model="formValidate.city" placeholder="请选择" @on-change="selectTem">
+      <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="90">
+        <FormItem label="选择模板" prop="index">
+          <Select v-model="formValidate.index" placeholder="请选择" @on-change="selectTem">
               <Option :value="index+''" v-for="(item,index) in SMSTemplate" :key="item.id">{{item.template_name}}</Option>
           </Select>
       </FormItem>
       <FormItem label="短信内容">
-          <Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 8,maxRows: 5}" placeholder="模板签名+模板内容最多500字符"></Input>
+          <Input disabled v-model="formValidate.message_content" type="textarea" :autosize="{minRows: 6,maxRows: 5}" placeholder="模板签名+模板内容最多500字符"></Input>
       </FormItem>
-      <FormItem label="请填写参数${usermobile}">
-          <Input v-model="formValidate.name" placeholder="请输入模板名称"></Input>
+      <FormItem label="请填写参数">
+          <Input v-model="formValidate.data" placeholder="请输入模板名称"></Input>
       </FormItem>
       </Form>
       <div slot="footer" style="text-align: center;">
@@ -663,7 +663,8 @@
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import Loading from "../loading/loading";
 import storage from "../storage";
-import { MESSAGELIST } from '@/uilt/url/setup'
+import qs from 'qs'
+import { MESSAGETEMPLATELIST, SENDMESSAGE } from '@/uilt/url/setup'
 export default {
   components: {
     Loading
@@ -711,31 +712,38 @@ export default {
   },
   methods: {
     selectTem(item) {
-      this.formValidate.desc = this.SMSTemplate[item].template_contents
+      this.formValidate.message_content = this.SMSTemplate[item].template_contents
+      this.formValidate.message_template_id = this.SMSTemplate[item].id
     },
     // 获取短信模板
-    async getSMSTem(page) {
+    async getSMSTem() {
       let res = await this.$request({
-        method: "POST",
-        url: MESSAGELIST
+        url: MESSAGETEMPLATELIST
       })
-      this.SMSTemplate.push(...res.data.data.data)
-      let last = res.data.data.links.last_page
-      if(page >= last) {
-        return false
-      }
-      this.getSMSTem(++page)
+      this.SMSTemplate = res.data.data
     },
     //跟进/发送信息
-    sendSMS() {
-      console.log(this.followForm)
+   async sendSMS() {
+      this.formValidate.account_id = this.followForm.id
+      let res = await this.$request({
+        method: 'POST',
+        url: SENDMESSAGE,
+        data: qs.stringify(this.formValidate)
+      })
+      if(res.data.code == 200) {
+        this.$Message.success('操作成功')
+        this.closeSms()
+      } else if(res.data.code == 100001) {
+        this.$Message.error(res.data.error)
+      }
     },
     // 关闭短信弹窗
     closeSms() {
       this.sms = false
+      this.formValidate = {}
     },
     openSms() {
-      this.getSMSTem(1)
+      this.getSMSTem()
       this.sms = true
     },
     //跟进/订单
@@ -1236,7 +1244,7 @@ export default {
       sms: false,
       formValidate: {},
       ruleValidate: {
-        city: [
+        index: [
           { required: true, message: '请选择模板', trigger: 'change' }
         ],
       },
