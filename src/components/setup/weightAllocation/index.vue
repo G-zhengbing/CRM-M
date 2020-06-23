@@ -2,9 +2,6 @@
   <div class="weightAllocation">
     <Row>
       <Col span="4">
-        <!-- <div class="left-title">
-          <b>模块选择</b>
-        </div>-->
         <Menu theme="light" active-name="weight" @on-select="selectUser" style="float: right;">
           <MenuItem name="weight">权重自动分配</MenuItem>
         </Menu>
@@ -62,20 +59,29 @@
         </div>
 
         <div class="content">
-          <Table style="margin-bottom: 10px;" border :columns="columns1" :data="data1" height="400"></Table>
-          <span class="ps">注；修改每日分配上限、指定分配渠道和及时分配渠道后立即生效。修改权重比后下一个周期生效。</span>
+          <div class="content_title">
+            <ul>
+              <li v-for="item in 5">
+                <div>姓名</div>
+                <div>权重比</div>
+              </li>
+            </ul>
+          </div>
+          <div class="content_main">
+            <ul>
+              <li v-for="item in data1">
+                <div>{{item.login_name}}</div>
+                <div>
+                  <Input v-model="item.weight" @on-blur="changeNum(item)" placeholder="100" />
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
+        <span class="ps">注；修改每日分配上限、指定分配渠道和及时分配渠道后立即生效。修改权重比后下一个周期生效。</span>
       </Col>
     </Row>
 
-    <PagingBox
-      :total="total"
-      :per_page="per_page"
-      :current_page="current_page"
-      :last_page="last_page"
-      @changePages="changePages"
-      style="margin-top: 50px;"
-    />
     <Loading v-show="isLoading" />
   </div>
 </template>
@@ -95,45 +101,9 @@ export default {
       isLoading: false,
       whether_or_not: false,
       upper_limit: "",
-      total: 100,
-      per_page: 10,
-      current_page: 1,
-      last_page: 1,
       cityList: [],
       assign_channel_list: [],
       real_time_channel_list: [],
-      columns1: [
-        {
-          title: "姓名",
-          key: "login_name"
-        },
-        {
-          title: "权重比",
-          key: "weight",
-          render: (h, params) => {
-            return h("Input", {
-              props: {
-                value: params.row.weight
-              },
-              on: {
-                "on-blur": async e => {
-                  this.isLoading = true;
-                  // 这里失去焦点保存设置
-                  let res = await this.$request({
-                    method: "POST",
-                    url: UPDATESALESWEIGHT,
-                    data: qs.stringify({
-                      admin_member_id: params.row.id,
-                      weight: e.target.value
-                    })
-                  });
-                  this.isLoading = false;
-                }
-              }
-            });
-          }
-        }
-      ],
       data1: [],
       page: 1
     };
@@ -146,6 +116,20 @@ export default {
     }
   },
   methods: {
+    // 修改权重比
+    async changeNum(item) {
+      this.isLoading = true;
+      // 这里失去焦点保存设置
+      let res = await this.$request({
+        method: "POST",
+        url: UPDATESALESWEIGHT,
+        data: qs.stringify({
+          admin_member_id: item.id,
+          weight: item.weight
+        })
+      });
+      this.isLoading = false;
+    },
     // 修改指定分配渠道
     async editAssignChannel() {
       this.isLoading = true;
@@ -217,10 +201,6 @@ export default {
       status ? (this.whether_or_not = true) : (this.whether_or_not = false);
       this.editUp();
     },
-    // 改变页码
-    changePages(val) {
-      this.page = val;
-    },
     // 点击选择触发
     async selectUser(name) {
       // console.log(name);
@@ -263,11 +243,39 @@ export default {
   color: #ccc;
 }
 .content {
+  /* background-color: #000; */
   margin-top: 20px;
 }
-.content_title {
-  /* width: 400px; */
-  text-align: right;
-  padding-bottom: 10px;
+/* 自定义表格 */
+.content ul {
+  width: 100%;
+  display: flex;
+}
+.content_title ul li {
+  flex: 1;
+}
+.content_title ul li div {
+  flex: 1;
+}
+.content ul li {
+  display: flex;
+  width: 20%;
+}
+.content ul li div {
+  /* width: 80px; */
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  border: 1px solid #dcdee2;
+  text-align: center;
+  background-color: #f8f8f9;
+}
+
+.content_main ul {
+  height: 450px;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  overflow: auto;
 }
 </style>
