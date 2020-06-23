@@ -107,15 +107,17 @@ export default {
     // 创建短信模板
     async creatSMSTemplate() {
       let res = await this.$request({
-        method: 'POST',
+        method: "POST",
         url: CREATEMESSAGE,
         data: qs.stringify(this.formValidate)
-      })
-      if(res.data.code == 200) {
-        this.$Message.success('创建成功')
+      });
+      if (res.data.code == 200) {
+        this.$Message.success("创建成功");
+        this.$emit("changeShowMod", false, 1);
       } else {
-        this.$Message.error('创建失败')
-      } 
+        this.$Message.error("创建失败");
+      }
+      return res;
     },
     // 点击确认回调
     confirm() {
@@ -126,8 +128,7 @@ export default {
           if (!val) {
             return (this.modal5 = true);
           }
-          this.creatSMSTemplate()
-          this.$emit("changeShowMod", false);
+          this.creatSMSTemplate();
         });
     },
     // 点击取消回调

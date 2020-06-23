@@ -6,7 +6,8 @@
       </FormItem>
       <FormItem>
         <Select v-model="formItem.template_type" placeholder="模板类型" style="width: 160px;">
-          <Option :value="index" v-for="(item,index) in 10" :key="index">{{item}}</Option>
+          <Option :value="1">通知短信</Option>
+          <Option :value="2">营销短信</Option>
         </Select>
       </FormItem>
       <FormItem>
@@ -133,8 +134,10 @@ export default {
                           id: params.row.id
                         })
                       });
-                      if(res.data.code == 200) {
-                        this.$Message.success('提交成功！')
+                      if (res.data.code == 200) {
+                        this.$Message.success("提交成功！");
+                      } else if(res.data.code == 100001) {
+                        this.$Message.error(res.data.error.Message)
                       }
                       this.getSmsLidt();
                       this.isLoading = false;
@@ -161,8 +164,8 @@ export default {
                           status: params.row.status == 1 ? 2 : 1
                         })
                       });
-                      if(res.data.code == 200) {
-                        this.$Message.success('操作成功！')
+                      if (res.data.code == 200) {
+                        this.$Message.success("操作成功！");
                       }
                       this.getSmsLidt();
                       this.isLoading = false;
@@ -223,6 +226,7 @@ export default {
       this.data = res.data.data.data;
       this.data.map(item => {
         item.al_audit_type = this.auditType[item.al_audit_type];
+        item.template_type = item.template_type == 1 ? "通知短信" : "营销短信";
       });
       this.current_page = res.data.data.links.current_page;
       this.last_page = res.data.data.links.last_page;
@@ -231,10 +235,12 @@ export default {
       this.isLoading = false;
     },
     // 关闭窗口状态
-    changeShowMod(val) {
+    changeShowMod(val, sele) {
       this.showMod = val;
       this.type = "";
-      this.getSmsLidt();
+      if (sele) {
+        this.getSmsLidt();
+      }
     },
     // 改变页码
     changePages(val) {

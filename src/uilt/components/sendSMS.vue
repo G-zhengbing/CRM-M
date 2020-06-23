@@ -4,7 +4,7 @@
     <Modal
       class="modal"
       width="40"
-      v-model="true"
+      v-model="sms"
       title="发送信息"
       :closable="false"
       :mask-closable="false"
@@ -44,8 +44,24 @@
 import qs from 'qs'
 import { MESSAGETEMPLATELIST, SENDMESSAGE } from '@/uilt/url/setup'
 export default {
+	props: {
+    followForm: {
+      type: [Object, String],
+      required: false
+    },
+    showMod: {
+      type: [Boolean, String],
+      required: false
+    }
+  },
+  watch: {
+    showMod(val) {
+      this.modal5 = val;
+    }
+  },
   data() {
     return {
+			sms: this.showMod,
       formValidate: {},
       ruleValidate: {
         index: [{ required: true, message: "请选择模板", trigger: "change" }]
@@ -68,30 +84,35 @@ export default {
       this.SMSTemplate = res.data.data;
     },
     //跟进/发送信息
-    async sendSMS() {
-      this.formValidate.account_id = this.followForm.id;
-      let res = await this.$request({
-        method: "POST",
-        url: SENDMESSAGE,
-        data: qs.stringify(this.formValidate)
-      });
-      if (res.data.code == 200) {
-        this.$Message.success("操作成功");
-        this.closeSms();
-      } else if (res.data.code == 100001) {
-        this.$Message.error(res.data.error);
-      }
+    sendSMS() {
+			this.$refs["formValidate"].validate(async valid => {
+				if(valid) {
+					this.formValidate.account_id = this.followForm.id;
+					let res = await this.$request({
+						method: "POST",
+						url: SENDMESSAGE,
+						data: qs.stringify(this.formValidate)
+					});
+					if (res.data.code == 200) {
+						this.$Message.success("操作成功");
+						this.$emit("changeShowMod", false);
+					} else if (res.data.code == 100001) {
+						this.$Message.error(res.data.error);
+					}
+				} else {
+					this.$Message.error('请选择短信模板！')
+				}
+			})
     },
     // 关闭短信弹窗
     closeSms() {
-      this.sms = false;
-      this.formValidate = {};
-    },
-    openSms() {
-      this.getSMSTem();
-      this.sms = true;
+			this.$refs["formValidate"].resetFields();
+      this.$emit("changeShowMod", false);
     }
-  }
+	},
+	created() {
+		this.getSMSTem()
+	}
 };
 </script>
 

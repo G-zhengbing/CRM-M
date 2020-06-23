@@ -44,7 +44,7 @@ export default {
         method: "POST",
         url: UPDATEUSERMESSAGELIMIT,
         data: qs.stringify({
-          system_message_limit: this.value
+          system_message_limit: this.value || 0
         })
       });
       if (res.data.code == 200) {
