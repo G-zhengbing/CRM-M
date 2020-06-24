@@ -1,5 +1,4 @@
 <template>
-<!-- AMEND: 2020.05.08 刘畅 添加字段，增加回访次数弹窗 -->
   <div class="box">
     <DaibanMessage v-if="show" :type="type" />
     <section class="main-section">
@@ -54,13 +53,29 @@
                 <Col span="4">
                   <FormItem>
                     <Select
-                      v-model="form.intention_option"
+                      v-model="form.visit_num"
                       style="width:150px"
                       @on-change="seekKuhu"
-                      placeholder="意向度"
+                      placeholder="回访次数"
                     >
-                      <Option :value="i" v-for="(list,i) in intention" :key="i">{{list}}</Option>
+                      <Option :value="1">1次</Option>
+                      <Option :value="2">2次</Option>
+                      <Option :value="3">3次</Option>
+                      <Option :value="4">4次</Option>
+                      <Option :value="5">5次</Option>
+                      <Option :value="6">6次</Option>
+                      <Option :value="7">6次以上</Option>
                     </Select>
+                  </FormItem>
+                </Col>
+                <Col span="6">
+                  <FormItem label="意向度" style="margin-left: 60px">
+                    <RadioGroup v-model="form.intention_option" @on-change="seekKuhu">
+                      <Radio label="1">高</Radio>
+                      <Radio label="2">中</Radio>
+                      <Radio label="3">低</Radio>
+                      <Radio label="4">无</Radio>
+                    </RadioGroup>
                   </FormItem>
                 </Col>
                 <Col span="6">
@@ -86,18 +101,16 @@
                 <Col span="4">
                   <FormItem>
                     <Select
-                      v-model="form.visit_num"
+                      v-model="form.refer"
                       style="width:150px"
                       @on-change="seekKuhu"
-                      placeholder="回访次数"
+                      placeholder="渠道"
                     >
-                      <Option :value="1">1次</Option>
-                      <Option :value="2">2次</Option>
-                      <Option :value="3">3次</Option>
-                      <Option :value="4">4次</Option>
-                      <Option :value="5">5次</Option>
-                      <Option :value="6">6次</Option>
-                      <Option :value="7">6次以上</Option>
+                      <Option
+                        v-for="(list,i) in refer"
+                        :key="i"
+                        :value="list.id"
+                      >{{list.channel_title}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
@@ -181,14 +194,15 @@ export default {
       isLoading: false,
       form: {},
       columns: [
-        { type: "selection", width: 60 },
-        { title: "学员姓名", key: "student_name" },
-        { title: "注册手机", key: "mobile" },
-        { title: "地区",width:100, key: "area" },
-        { title: "年级",width:100, key: "grade" },
-        { title: "科目",width:100, key: "subject" },
-        { title: "上个跟进人",width:110, key: "last_sale_name" },
-        { title: "意向度",width:100, key: "intention_option" },
+        { type: "selection", width: 60, fixed: "left" },
+        { title: "学员姓名", key: "student_name", fixed: "left", width: 100 },
+        { title: "注册手机", key: "mobile", fixed: "left", width: 120 },
+        { title: "地区", width: 100, key: "area" },
+        { title: "年级", width: 100, key: "grade" },
+        { title: "科目", width: 100, key: "subject" },
+        { title: "上个跟进人", width: 110, key: "last_sale_name" },
+        { title: "渠道来源", width: 110, key: "refer" },
+        { title: "意向度", width: 100, key: "intention_option" },
         // { title: "上次回访内容", key: "last_visit_content" ,tooltip:true},
         {
           title: "回访次数",
@@ -223,14 +237,20 @@ export default {
             ]);
           }
         },
-        { title: "上次回访时间",width: 170,align: 'center', key: "last_follow_time" },
+        {
+          title: "上次回访时间",
+          width: 170,
+          align: "center",
+          key: "last_follow_time"
+        },
         { title: "说明", key: "assign_note", tooltip: true },
-        { title: "注册时间",width: 170,align: 'center', key: "create_time" },
+        { title: "注册时间", width: 170, align: "center", key: "create_time" },
         {
           title: "操作",
           key: "action",
           align: "center",
           width: 100,
+          fixed: "right",
           render: (h, params) => {
             return h("div", [
               h(
@@ -242,11 +262,16 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.getBtnClick3(params.row);
+                      this.setGet(params.row.id).then((res) => {
+                        console.log(res)
+                        // this.$Message.success("领取成功！");
+                        this.getBtnClick4(params.row);
+                        this.isLoading = false;
+                      });
                     }
                   }
                 },
-                "领取"
+                "呼出"
               )
             ]);
           }
@@ -301,22 +326,44 @@ export default {
       });
       this.setCurrentPage(page);
     },
-    ...mapActions(["getPublicList", "setGet"]),
-    ...mapMutations(["setCurrentPage"]),
+    ...mapActions(["getPublicList", "setGet", "RingUp"]),
+    ...mapMutations(["setCurrentPage", "setClientTypes"]),
     selectionChange() {},
-    //领取
-    getBtnClick3(item) {
-      this.$Modal.confirm({
-        title: "温馨提示",
-        content: "<p>确定要领取吗?</p>",
-        onOk: () => {
-          this.isLoading = true;
-          this.setGet(item.id).then(() => {
-            this.$Message.success("领取成功！");
+    //呼出
+    getBtnClick4(item) {
+      this.setClientTypes(item);
+      this.show = true;
+      this.type.classify = "followUp";
+      this.type.page = this.currentPage;
+      this.type.form = this.form;
+      this.type.data = { ...this.clientTypes };
+      if (
+        typeof item.spare_phone == "undefined" ||
+        item.spare_phone == "" ||
+        item.spare_phone == null
+      ) {
+        this.isLoading = true;
+        this.RingUp({ form: item })
+          .then(res => {
+            if (res.data.code == 200) {
+              this.$Message.success("呼出成功");
+            }
+            if (res.data.code == 1000) {
+              this.$Message.error({
+                content: res.data.error,
+                duration: 4
+              });
+            }
             this.isLoading = false;
+          })
+          .catch(e => {
+            if (e) {
+              this.isLoading = false;
+            }
           });
-        }
-      });
+      } else {
+        this.type.classify = "ringupFollowUp";
+      }
     },
     //分页
     pageChange(num) {
@@ -329,10 +376,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["puliceData"]),
+    ...mapGetters(["puliceData", "clientTypes"]),
     ...mapState({
       data: state => state.publics.publicList,
-      refer: state => state.publics.refer,
+      refer: state => state.daiban.refer,
       currentPage: state => state.daiban.currentPage,
       total: state => state.daiban.total,
       pageSize: state => state.daiban.pageSize

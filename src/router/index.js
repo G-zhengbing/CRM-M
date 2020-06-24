@@ -183,6 +183,14 @@ const router = new Router({
           path: '/main/scheduteachers',
           component: Scheduteachers
         },
+
+        // M站管理
+        {
+          path: '/main/inbookcode', // 书内一书一码
+          component: () => import('@/components/Mzhan/inBookCode')
+        },
+
+        // 教务
         {
           path: '/main/classstudents', // 班课学员
           component: () => import('@/components/teacher/ClassStudents')
@@ -219,6 +227,8 @@ const router = new Router({
           path: '/main/onemyreservation', // 我的预约单
           component: () => import('@/components/teacher/OneMyReservation')
         },
+
+        // 设置
         {
           path: '/main/departments', // 部门和用户
           component: () => import('@/components/setup/Departments')
@@ -231,7 +241,16 @@ const router = new Router({
           path: '/main/weightallocation', // 权重分配
           component: () => import('@/components/setup/weightAllocation')
         },
+        {
+          path: '/main/smsset', // 信息设置
+          component: () => import('@/components/setup/smsSet')
+        },
+        {
+          path: '/main/smsallot', // 信息分配
+          component: () => import('@/components/setup/smsAllot')
+        },
 
+        // 营销
         {
           path: '/main/channelcode', // 营销,公众号,渠道码
           component: () => import('@/components/Marketing/PublicMark/ChannelCode')

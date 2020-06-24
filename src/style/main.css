@@ -13,3 +13,14 @@ body {
 .ivu-layout.ivu-layout-has-sider>.ivu-layout, .ivu-layout.ivu-layout-has-sider>.ivu-layout-content {
 	overflow-y: hidden;
 }
+
+
+/* 固定弹窗样式 */
+.vertical-center-modal-1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vertical-center-modal-1 .ivu-modal {
+  top: 0;
+}

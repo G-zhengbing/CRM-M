@@ -1,7 +1,14 @@
 <template>
   <div class="boxs">
     <!-- 选择课程 -->
-    <Modal width="1400" v-model="type.classify == 'order'" title="选择课程" @on-cancel="colseReserved">
+    <Modal
+      width="1400"
+      v-model="type.classify == 'order'"
+      title="选择课程"
+      @on-cancel="colseReserved"
+      :closable="false"
+      :mask-closable="false"
+    >
       <Form :model="form" label-position="top" style="height:450px;overflow-y:auto;">
         <Row>
           <Col span="4">
@@ -1234,7 +1241,7 @@ export default {
       this.disableBtn = true;
       this.isLoading = true;
       this.createOrderList({
-        aid: this.type.data.id,
+        aid: this.type.data.account_id ? this.type.data.account_id : this.type.data.id,
         pid: this.orderPay[0].id,
         num: this.orderForm.goods_num
       }).then(res => {

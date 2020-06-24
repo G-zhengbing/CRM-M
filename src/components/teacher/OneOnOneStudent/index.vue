@@ -239,6 +239,24 @@
       :showMod="showMod"
       @changeShowMod="changeShowMod"
     />
+    <CreatedOrder
+      v-else-if="type == 'createdOrder'"
+      :row="row"
+      :showMod="showMod"
+      @changeShowMod="changeShowMod"
+    />
+    <Audition
+      v-else-if="type == 'Audition'"
+      :row="row"
+      :showMod="showMod"
+      @changeShowMod="changeShowMod"
+    />
+    <Referral
+      v-else-if="type == 'Referral'"
+      :row="row"
+      :showMod="showMod"
+      @changeShowMod="changeShowMod"
+    />
     <Loading v-show="isLoading" />
   </div>
 </template>
@@ -384,7 +402,7 @@ export default {
           key: "operation",
           align: "center",
           fixed: "right",
-          width: 240,
+          width: 200,
           render: (h, params) => {
             return h("div", [
               h(
@@ -396,7 +414,52 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.CallOut(params.row);
+                      this.switchModal('createdOrder',params.row);
+                    }
+                  }
+                },
+                "订单"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.switchModal('Audition',params.row);
+                    }
+                  }
+                },
+                "试听"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.switchModal('Referral',params.row);
+                    }
+                  }
+                },
+                "转介绍"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.switchModal('CallOut',params.row);
                     }
                   }
                 },
@@ -411,7 +474,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.StudentsFollowUp(params.row);
+                      this.switchModal('StudentsFollowUp',params.row);
                     }
                   }
                 },
@@ -514,7 +577,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.CallOut(params.row);
+                      this.switchModal("CallOut", params.row);
                     }
                   }
                 },
@@ -529,7 +592,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.StudentsFollowUp(params.row);
+                      this.switchModal("StudentsFollowUp", params.row);
                     }
                   }
                 },
@@ -564,29 +627,10 @@ export default {
       this.showMod = val;
       this.type = "";
     },
-    // 呼出
-    CallOut(row) {
+    switchModal(name, row) {
       this.showMod = true;
       this.row = row;
-      this.type = "CallOut";
-    },
-    // 跟进
-    StudentsFollowUp(row) {
-      this.showMod = true;
-      this.row = row;
-      this.type = "StudentsFollowUp";
-    },
-    // 查看测评
-    Appraisal(row) {
-      this.showMod = true;
-      this.row = row;
-      this.type = "Appraisal";
-    },
-    // 学情报告
-    LearningReport(row) {
-      this.showMod = true;
-      this.row = row;
-      this.type = "LearningReport";
+      this.type = name;
     },
     // 转换date
     changeSubmissionTime(time) {

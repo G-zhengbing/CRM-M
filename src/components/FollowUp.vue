@@ -48,18 +48,6 @@
                     </Select>
                   </FormItem>
                 </Col>
-                <Col span="6">
-                  <FormItem>
-                    <Select
-                      v-model="form.intention_option"
-                      style="width:150px"
-                      @on-change="seekKuhu"
-                      placeholder="意向度"
-                    >
-                      <Option :value="i" v-for="(list,i) in intention" :key="i">{{list}}</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
                 <Col span="4">
                   <FormItem>
                     <Select
@@ -74,6 +62,16 @@
                         :value="list.id"
                       >{{list.login_name}}</Option>
                     </Select>
+                  </FormItem>
+                </Col>
+                <Col span="6">
+                  <FormItem label="意向度" style="margin-left: 60px">
+                    <RadioGroup v-model="form.intention_option" @on-change="seekKuhu">
+                        <Radio label="1">高</Radio>
+                        <Radio label="2">中</Radio>
+                        <Radio label="3">低</Radio>
+                        <Radio label="4">无</Radio>
+                    </RadioGroup>
                   </FormItem>
                 </Col>
                 <Col span="4" style="text-indent: 60px;">

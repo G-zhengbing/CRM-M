@@ -82,10 +82,10 @@ export default {
       ])
 
       var intention = new Map([
-        ["A强烈", 1],
-        ["B一般", 2],
-        ["C挖掘", 3],
-        ["D无效", 4]
+        ["高", 1],
+        ["中", 2],
+        ["低", 3],
+        ["无", 4]
       ])
 
       var gender = new Map([
@@ -121,7 +121,7 @@ export default {
         ["20岁", 20],
       ])
 
-      type.grade = maps.get(type.grade)
+      type.action_grade = maps.get(type.action_grade)
       type.sex = gender.get(type.sex)
       type.age = age.get(type.age)
       type.follow_status = follow.get(type.follow_status)
@@ -143,10 +143,10 @@ export default {
         [9, '九年级']
       ]);
       var intention = new Map([
-        [1, "A强烈"],
-        [2, "B一般"],
-        [3, "C挖掘"],
-        [4, "D无效"]
+        [1, "高"],
+        [2, "中"],
+        [3, "低"],
+        [4, "无"]
       ])
 
       var pone = new Map([
@@ -191,6 +191,7 @@ export default {
         element.mobile = str.join("")
         element.phone_status = pone.get(element.phone_status);
         element.grade = maps.get(element.grade);
+        element.action_grade = maps.get(element.action_grade);
         element.sex = gender.get(element.sex);
         element.age = age.get(element.age);
         element.intention_option = intention.get(element.intention_option);

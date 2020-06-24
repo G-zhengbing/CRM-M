@@ -110,6 +110,7 @@
               </Form>
             </div>
             <TableBox
+              @selectSort="selectSort"
               @refresh="refresh"
               :empty="num"
               :page_num="page_num"
@@ -234,6 +235,7 @@
               </Form>
             </div>
             <TableBox
+              @selectSort="selectSort"
               @refresh="refresh"
               :empty="num"
               :page_num="page_num"
@@ -391,6 +393,7 @@ export default {
           title: "交易时间",
           key: "pay_time",
           align: "center",
+          sortable: "custom",
           width: 120
         },
         {
@@ -411,7 +414,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.Allocation(params.row);
+                      this.selectSwitch('Allocation',params.row);
                     }
                   }
                 },
@@ -520,6 +523,7 @@ export default {
           title: "交易时间",
           key: "pay_time",
           align: "center",
+          sortable: "custom",
           width: 180
         },
         {
@@ -546,7 +550,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.CallOut(params.row);
+                      this.selectSwitch('CallOut',params.row);
                     }
                   }
                 },
@@ -561,7 +565,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.Allocation(params.row);
+                      this.selectSwitch('Allocation',params.row);
                     }
                   }
                 },
@@ -576,7 +580,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.LearningReport(params.row);
+                      this.selectSwitch('LearningReport',params.row);
                     }
                   }
                 },
@@ -660,6 +664,7 @@ export default {
           title: "交易时间",
           key: "pay_time",
           align: "center",
+          sortable: "custom",
           width: 180
         },
         {
@@ -680,7 +685,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.Allocation(params.row);
+                      this.selectSwitch('Allocation',params.row);
                     }
                   }
                 },
@@ -777,6 +782,7 @@ export default {
           title: "交易时间",
           key: "pay_time",
           align: "center",
+          sortable: "custom",
           width: 180
         },
         {
@@ -803,7 +809,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.CallOut(params.row);
+                      this.selectSwitch('CallOut',params.row);
                     }
                   }
                 },
@@ -818,7 +824,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.Allocation(params.row);
+                      this.selectSwitch('Allocation',params.row);
                     }
                   }
                 },
@@ -833,7 +839,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.LearningReport(params.row);
+                      this.selectSwitch('LearningReport',params.row);
                     }
                   }
                 },
@@ -876,28 +882,19 @@ export default {
     }
   },
   methods: {
+    selectSort(sort) {
+      this.formItem.pay_time_type = sort == "asc" ? 2 : 1;
+    },
     // 关闭窗口状态
     changeShowMod(val) {
       this.showMod = val;
       this.type = "";
     },
-    // 呼出
-    CallOut(row) {
+    // 弹窗开关
+    selectSwitch(name,row) {
       this.showMod = true;
       this.row = row;
-      this.type = "CallOut";
-    },
-    // 跟进
-    Allocation(row) {
-      this.showMod = true;
-      this.row = row;
-      this.type = "Allocation";
-    },
-    // 学情报告
-    LearningReport(row) {
-      this.showMod = true;
-      this.row = row;
-      this.type = "LearningReport";
+      this.type = name;
     },
     // 转换date
     changeDate(time) {
@@ -908,7 +905,8 @@ export default {
     deleteFormData() {
       this.formItem = {
         page: 1, // 页码
-        page_num: "10" // 每页条数
+        page_num: "10", // 每页条数
+        pay_time_type: 1
       };
     },
     changeCurriculumTime(time) {
@@ -950,36 +948,16 @@ export default {
     // 选中分配状态
     pitchon(index) {
       this.pitchonStyle = index;
-
-      if (this.pitchonStyle == 1) {
-        this.deleteFormData();
-        this.columns = this.columns1;
+      this.deleteFormData();
+      if (index % 2) {
         this.is_distribution = 0;
-        this.formItem.is_distribution = this.is_distribution;
-        this.formItem.product_type = this.product_type;
-        this.getPayingData();
-      } else if (this.pitchonStyle == 2) {
-        this.deleteFormData();
-        this.columns = this.columns2;
+      } else {
         this.is_distribution = 1;
-        this.formItem.is_distribution = this.is_distribution;
-        this.formItem.product_type = this.product_type;
-        this.getPayingData();
-      } else if (this.pitchonStyle == 3) {
-        this.deleteFormData();
-        this.columns = this.columns3;
-        this.is_distribution = 0;
-        this.formItem.is_distribution = this.is_distribution;
-        this.formItem.product_type = this.product_type;
-        this.getPayingData();
-      } else if (this.pitchonStyle == 4) {
-        this.deleteFormData();
-        this.columns = this.columns4;
-        this.is_distribution = 1;
-        this.formItem.is_distribution = this.is_distribution;
-        this.formItem.product_type = this.product_type;
-        this.getPayingData();
       }
+      this.columns = eval(`this.columns${index}`);
+      this.formItem.is_distribution = this.is_distribution;
+      this.formItem.product_type = this.product_type;
+      this.getPayingData();
     },
     // 获取信息
     async getPayingData() {
