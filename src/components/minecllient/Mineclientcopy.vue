@@ -129,32 +129,27 @@
               </Row>
             </Form>
             <Button type="primary" @click="createUsers">创建用户</Button>
-            <Table
-              border
-              :columns="columns"
-              :data="clientkData"
-              @on-selection-change="selectionChange"
-              height="545"
-            ></Table>
-            <Page
-              @on-change="pageChange"
-              :total="total"
-              :current="currentPage"
-              :page-size="pageSize"
-              show-total
-              show-elevator
-              class="ive-page"
-            />
           </div>
+          <Table
+            border
+            :columns="columns"
+            :data="clientkData"
+            @on-selection-change="selectionChange"
+            height="545"
+          ></Table>
+          <Page
+            @on-change="pageChange"
+            :total="total"
+            :current="currentPage"
+            :page-size="pageSize"
+            show-total
+            show-elevator
+            class="ive-page"
+          />
         </div>
       </div>
     </section>
-    <Modal
-      width="800"
-      v-model="showVisit"
-      title="回访记录"
-      @on-cancel="showVisit = false"
-    >
+    <Modal width="800" v-model="showVisit" title="回访记录" @on-cancel="showVisit = false">
       <Table border :columns="visitColumns" :data="showVisitData" height="500"></Table>
       <div slot="footer">
         <Button type="text" size="large" @click="showVisit = false">取消</Button>
@@ -269,7 +264,7 @@ export default {
         { title: "年级", key: "grade", width: 80 },
         { title: "意向科目", key: "subject", width: 100 },
         { title: "渠道来源", key: "refer", width: 150 },
-        { title: "跟进人", key: "follow_sale_name", width: 80 },
+        { title: "跟进人", key: "follow_sale_name", width: 100 },
         { title: "跟进状态", key: "follow_status", width: 95 },
         { title: "学习阶段", key: "stage", width: 100 },
         { title: "意向度", key: "intention_option", width: 80 },

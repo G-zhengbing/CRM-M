@@ -132,18 +132,6 @@
               </div>
             </FormItem>
           </Col>
-          <Col span="4">
-            <FormItem>
-              <Select
-                v-model="form.is_schedule"
-                style="width:150px"
-                @on-change="seekClick"
-                placeholder="是否排课"
-              >
-                <Option :value="2">已排课</Option>
-                <Option :value="1">未排课</Option>
-              </Select>
-            </FormItem>
           </Col>
           <Col span="4" style="text-indent: 60px">
             <Button type="primary" @click="clear">清除</Button>
@@ -432,40 +420,6 @@ export default {
           { title: "上课日期", width: 120, key: "date_time", align: "center" },
           { title: "上课时段", width: 75, key: "time_block", align: "center" },
           { title: "状态", key: "appoint_status", width: 120, align: "center" },
-          {
-            title: "是否排课",
-            key: "is_schedule",
-            width: 120,
-            align: "center",
-            render: (h, params) => {
-              return h("i-switch", {
-                style: {
-                  width: "50px"
-                },
-                props: {
-                  type: "已排/未排",
-                  value: params.row.is_schedule == 2 ? true : false //设置它的值比如：true或false
-                },
-                on: {
-                  input: function(event) {
-                    if (event) {
-                      params.row.is_schedule = true;
-                    } else {
-                      params.row.is_schedule = false;
-                    }
-                  },
-                  "on-change": val => {
-                    //值发生了改变调用方法
-                    this.scheduleChange(params.row);
-                  }
-                },
-                scopedSlots: {
-                  open: () => h("span", "已排"),
-                  close: () => h("span", "未排")
-                }
-              });
-            }
-          },
           { title: "创建人", key: "create_user", width: 120, align: "center" },
           {
             title: "预约提交时间",

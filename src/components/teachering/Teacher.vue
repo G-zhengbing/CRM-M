@@ -57,12 +57,7 @@
       </div>
     </section>
     <Loading v-show="isLoading" />
-    <Modal
-      width="1100"
-      v-model="showTeacherMessage"
-      :title="`${text}教师`"
-      @on-cancel="colseModal"
-    >
+    <Modal width="1100" v-model="showTeacherMessage" :title="`${text}教师`" @on-cancel="colseModal">
       <Form
         v-if="showTeacherMessage"
         ref="form"
@@ -539,6 +534,13 @@ export default {
       this.isLoading = false;
     });
   },
+  watch: {
+    showTeacherMessage(v) {
+      if (!v) {
+        this.acArr.length = 0;
+      }
+    }
+  },
   computed: {
     ...mapGetters(["teacherData", "teacherTypes"]),
     ...mapState({
@@ -632,6 +634,7 @@ export default {
         { title: "教师等级", key: "level" },
         { title: "年级", key: "grade_ch" },
         { title: "教授科目", key: "subject" },
+        { title: "推送Classin", key: "classin_id" },
         { title: "创建时间", key: "create_time" },
         {
           title: "操作",
@@ -710,8 +713,6 @@ export default {
     },
     //创建教师
     createdTeacher(name) {
-      // console.log(this.acArr)
-      // return
       this.$refs[name].validate(valid => {
         if (valid) {
           this.isLoading = true;
@@ -736,16 +737,28 @@ export default {
             formData.append("subject", this.form.subject);
             formData.append(
               "address_province_id",
-              this.form.address_province_id?this.form.address_province_id:''
+              this.form.address_province_id ? this.form.address_province_id : ""
             );
-            formData.append("address_city_id", this.form.address_city_id?this.form.address_city_id:'');
-            formData.append("classin_user", this.form.classin_user?this.form.classin_user:'');
-            formData.append("bank_card_id", this.form.bank_card_id?this.form.bank_card_id:'');
+            formData.append(
+              "address_city_id",
+              this.form.address_city_id ? this.form.address_city_id : ""
+            );
+            formData.append(
+              "classin_user",
+              this.form.classin_user ? this.form.classin_user : ""
+            );
+            formData.append(
+              "bank_card_id",
+              this.form.bank_card_id ? this.form.bank_card_id : ""
+            );
             formData.append(
               "bank_card_pic",
               this.uploadList2[0] ? this.uploadList2[0] : ""
             );
-            formData.append("bank_card_open", this.form.bank_card_open?this.form.bank_card_open:'');
+            formData.append(
+              "bank_card_open",
+              this.form.bank_card_open ? this.form.bank_card_open : ""
+            );
             formData.append(
               "identity_id_pic1",
               this.uploadList4[0] ? this.uploadList4[0] : ""
@@ -814,14 +827,26 @@ export default {
               "address_province_id",
               this.form.address_province_id
             );
-            formData.append("address_city_id", this.form.address_city_id?this.form.address_city_id:'');
-            formData.append("classin_user", this.form.classin_user?this.form.classin_user:'');
-            formData.append("bank_card_id", this.form.bank_card_id?this.form.bank_card_id:'');
+            formData.append(
+              "address_city_id",
+              this.form.address_city_id ? this.form.address_city_id : ""
+            );
+            formData.append(
+              "classin_user",
+              this.form.classin_user ? this.form.classin_user : ""
+            );
+            formData.append(
+              "bank_card_id",
+              this.form.bank_card_id ? this.form.bank_card_id : ""
+            );
             formData.append(
               "bank_card_pic",
               this.uploadList2[0] ? this.uploadList2[0] : ""
             );
-            formData.append("bank_card_open", this.form.bank_card_open?this.form.bank_card_open:'');
+            formData.append(
+              "bank_card_open",
+              this.form.bank_card_open ? this.form.bank_card_open : ""
+            );
             formData.append(
               "identity_id_pic1",
               this.uploadList4[0] ? this.uploadList4[0] : ""
