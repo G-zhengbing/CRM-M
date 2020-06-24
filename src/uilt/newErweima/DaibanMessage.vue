@@ -331,10 +331,10 @@
             <Col span="6">
                <FormItem label="意向度" style="margin-left: 10px">
                     <RadioGroup v-model="followForm.intention_option">
-                        <Radio label="1">高</Radio>
-                        <Radio label="2">中</Radio>
-                        <Radio label="3">低</Radio>
-                        <Radio label="4">无</Radio>
+                        <Radio :label="1">高</Radio>
+                        <Radio :label="2">中</Radio>
+                        <Radio :label="3">低</Radio>
+                        <Radio :label="4">无</Radio>
                     </RadioGroup>
                   </FormItem>
             </Col>
