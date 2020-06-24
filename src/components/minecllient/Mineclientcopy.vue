@@ -4,7 +4,7 @@
       <div class="surplus">
         <div class="main-section-bottom">
           <div>
-            <Form :model="form" :label-width="20" >
+            <Form :model="form" :label-width="20">
               <Row>
                 <Col span="4">
                   <FormItem>
@@ -133,6 +133,7 @@
               border
               :columns="columns"
               :data="clientkData"
+              @on-sort-change="selectSort"
               @on-selection-change="selectionChange"
               height="545"
             ></Table>
@@ -266,6 +267,12 @@ export default {
         { title: "渠道来源", key: "refer", width: 150 },
         { title: "跟进人", key: "follow_sale_name", width: 80 },
         { title: "跟进状态", key: "follow_status", width: 95 },
+        {
+          title: "上次跟进时间",
+          key: "last_follow_time",
+          width: 170,
+          align: "center",
+        },
         { title: "学习阶段", key: "stage", width: 100 },
         { title: "意向度", key: "intention_option", width: 80 },
         { title: "上次呼出", key: "phone_status", width: 100 },
@@ -378,6 +385,10 @@ export default {
     };
   },
   methods: {
+    // 排序
+    selectSort(data) {
+      console.log(data)
+    },
     ...mapMutations(["setClientTypes", "setCurrentPage"]),
     ...mapActions(["getClientList", "RingUp", "getReferList"]),
     //回访记录

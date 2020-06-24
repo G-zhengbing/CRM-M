@@ -101,7 +101,38 @@ export default {
         {
           title: "审核状态",
           key: "al_audit_type",
-          align: "center"
+          align: "center",
+          render: (h, params) => {
+            // return h("div", [
+            //   h(
+            //     "Button",
+            //     {
+            //       props: {
+            //         type: "text",
+            //         size: "small"
+            //       },
+            //       on: {
+            //         click: () => {
+            //           console.log(params.row);
+            //         }
+            //       }
+            //     },
+            //     params.row.al_audit_type
+            //   )
+            // ]);
+            return h(
+              "Tooltip",
+              {
+                props: {
+                  trigger: "hover",
+                  content: params.row.al_audit_desc,
+                  'max-width': '300px',
+                  placement: "bottom"
+                }
+              },
+              [h("Tag", params.row.al_audit_type)]
+            );
+          }
         },
         {
           title: "备注",
@@ -136,8 +167,8 @@ export default {
                       });
                       if (res.data.code == 200) {
                         this.$Message.success("提交成功！");
-                      } else if(res.data.code == 100001) {
-                        this.$Message.error(res.data.error.Message)
+                      } else if (res.data.code == 100001) {
+                        this.$Message.error(res.data.error.Message);
                       }
                       this.getSmsLidt();
                       this.isLoading = false;

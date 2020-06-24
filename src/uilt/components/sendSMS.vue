@@ -29,7 +29,7 @@
           ></Input>
         </FormItem>
         <FormItem label="请填写参数">
-          <Input v-model="formValidate.data" placeholder="请输入模板名称"></Input>
+          <Input v-model="formValidate.data" placeholder="请输入参数"></Input>
         </FormItem>
       </Form>
       <div slot="footer" style="text-align: center;">

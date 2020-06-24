@@ -1271,7 +1271,7 @@ export default {
       this.disableBtn = true;
       this.isLoading = true;
       this.createOrderList({
-        aid: this.type.data.id,
+        aid: this.type.data.account_id ? this.type.data.account_id : this.type.data.id,
         pid: this.orderPay[0].id,
         num: this.orderForm.goods_num
       }).then(res => {

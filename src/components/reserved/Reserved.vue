@@ -175,6 +175,7 @@
     <Loading v-show="isLoading" />
     <DaibanMessage :type="type" v-if="show" />
     <ReservedMessage :type="type" v-if="showMoadl" />
+    <MineclientMessage :type="type" v-if="showMine" />
   </div>
 </template>
 
@@ -183,12 +184,14 @@ import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
 import Loading from "../../uilt/loading/loading";
 import storage from "../../uilt/storage";
 import DaibanMessage from "../../uilt/newErweima/DaibanMessage";
+import MineclientMessage from "../minecllient/MineclientMessage";
 import ReservedMessage from "./ReservedMessage";
 export default {
   components: {
     Loading,
     DaibanMessage,
-    ReservedMessage
+    ReservedMessage,
+    MineclientMessage
   },
   mounted() {
     if (JSON.stringify(storage.getReseredTab()) == "{}") {
@@ -202,7 +205,7 @@ export default {
     });
   },
   computed: {
-    ...mapGetters(["reservedData", "reservedTypes"]),
+    ...mapGetters(["reservedData", "reservedTypes", "clientTypes"]),
     ...mapState({
       data: state => state.reserved.reserved,
       currentPage: state => state.reserved.currentPage,
@@ -240,7 +243,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setReservedTypes", "setCurrentPage"]),
+    ...mapMutations(["setReservedTypes", "setCurrentPage","setClientTypes"]),
     ...mapActions(["getReservedList", "RingUp", "setSignin"]),
     //批量签到
     allot() {
@@ -271,6 +274,21 @@ export default {
             align: "center",
             render: (h, params) => {
               return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    on: {
+                      click: () => {
+                        this.order(params.row);
+                      }
+                    }
+                  },
+                  "订单"
+                ),
                 h(
                   "Button",
                   {
@@ -326,6 +344,21 @@ export default {
             align: "center",
             render: (h, params) => {
               return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    on: {
+                      click: () => {
+                        this.order(params.row);
+                      }
+                    }
+                  },
+                  "订单"
+                ),
                 h(
                   "Button",
                   {
@@ -450,6 +483,21 @@ export default {
             fixed: "right",
             render: (h, params) => {
               return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    on: {
+                      click: () => {
+                        this.order(params.row);
+                      }
+                    }
+                  },
+                  "订单"
+                ),
                 h(
                   "Button",
                   {
@@ -618,6 +666,15 @@ export default {
         arr.push(item[i].id);
       }
       this.allUid = arr;
+    },
+    //订单
+    order(item) {
+      this.setClientTypes(item);
+      this.showMine = true;
+      this.type.classify = "order";
+      this.type.form = this.form;
+      this.type.page = this.currentPage;
+      this.type.data = { ...this.clientTypes };
     },
     //呼出
     getBtnClick4(item) {

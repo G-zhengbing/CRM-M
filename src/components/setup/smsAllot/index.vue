@@ -23,16 +23,18 @@
         </ul>
       </div>
     </div>
+    <Loading v-show="isLoading" />
   </div>
 </template>
 
 <script>
 import qs from "qs";
 import { SALES } from "@/uilt/url/url";
-import { UPDATEUSERMESSAGELIMIT } from "@/uilt/url/setup";
+import { UPDATEUSERMESSAGELIMIT,UPDATEUSERMESSAGELIMITSUM } from "@/uilt/url/setup";
 export default {
   data() {
     return {
+      isLoading: false,
       value: "",
       dataList: []
     };
@@ -40,9 +42,10 @@ export default {
   methods: {
     // 修改每月总条数
     async changeSumNum() {
+      this.isLoading = true
       let res = await this.$request({
         method: "POST",
-        url: UPDATEUSERMESSAGELIMIT,
+        url: UPDATEUSERMESSAGELIMITSUM,
         data: qs.stringify({
           system_message_limit: this.value || 0
         })
@@ -51,9 +54,11 @@ export default {
         this.$Message.success("操作成功！");
       }
       this.getUserList();
+      this.isLoading = false
     },
     // 修改每月条数
     async changeNum(item) {
+      this.isLoading = true
       let res = await this.$request({
         method: "POST",
         url: UPDATEUSERMESSAGELIMIT,
@@ -66,9 +71,11 @@ export default {
         this.$Message.success("操作成功！");
       }
       this.getUserList();
+      this.isLoading = false
     },
     // 获取cc列表
     async getUserList() {
+      this.isLoading = true
       let res = await this.$request({
         url: SALES,
         params: {
@@ -77,6 +84,7 @@ export default {
       });
       this.dataList = res.data.data.data;
       this.value = res.data.data.message_month_limit;
+      this.isLoading = false
     }
   },
   created() {

@@ -390,7 +390,6 @@ export default {
   getters: {
     Types(state) {
       let type = state.genjinType
-      // console.log(type)
       var maps = new Map([
         ["一年级", 1],
         ["二年级", 2],
@@ -428,10 +427,10 @@ export default {
       ])
 
       var intention = new Map([
-        ["A强烈", 1],
-        ["B一般", 2],
-        ["C挖掘", 3],
-        ["D无效", 4]
+        ["高", 1],
+        ["中", 2],
+        ["低", 3],
+        ["无", 4]
       ])
 
       var gender = new Map([
@@ -518,10 +517,10 @@ export default {
       //   [9, "历史"]
       // ])
       var intention = new Map([
-        [1, "A强烈"],
-        [2, "B一般"],
-        [3, "C挖掘"],
-        [4, "D无效"]
+        [1, "高"],
+        [2, "中"],
+        [3, "低"],
+        [4, "无"]
       ])
 
       var gender = new Map([

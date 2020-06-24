@@ -9,6 +9,7 @@ export default {
   state: {
     publicList: [],
     refer: [],
+    refers: storage.getDaiban().channel,
     currentPage: 1,
     total: 0,
     pageSize: 10
@@ -42,7 +43,6 @@ export default {
             status:2
           }
         }).then(res=>{
-          console.log(res)
           dispatch("getPublicList")
           resolve()
         }).catch(e=>{
@@ -103,10 +103,10 @@ export default {
         [2, "已约课"]
       ])
       var intention = new Map([
-        [1, "A"],
-        [2, "B"],
-        [3, "C"],
-        [4, "D"],
+        [1, "高"],
+        [2, "中"],
+        [3, "低"],
+        [4, "无"],
         [5, "E"]
       ])
 
@@ -149,6 +149,11 @@ export default {
             str[i] = '*'
           }
         }
+        state.refers.map((i => {
+          if (i.id == element.refer) {
+            return element.refer = i.channel_title
+          }
+        }))
         element.mobile = str.join("")
         element.grade = maps.get(element.grade);
         element.sex = gender.get(element.sex);
