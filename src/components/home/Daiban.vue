@@ -87,6 +87,16 @@
                     </Select>
                   </FormItem>
                 </Col>
+                <Col span="6" v-if="num == 2">
+                  <FormItem label="意向度" style="margin-left: 60px">
+                    <RadioGroup v-model="form.intention_option" @on-change="seekKuhu">
+                      <Radio label="1">高</Radio>
+                      <Radio label="2">中</Radio>
+                      <Radio label="3">低</Radio>
+                      <Radio label="4">无</Radio>
+                    </RadioGroup>
+                  </FormItem>
+                </Col>
                 <Col span="4">
                   <FormItem>
                     <Select
@@ -96,18 +106,6 @@
                       placeholder="意向科目"
                     >
                       <Option :value="i" v-for="(list,i) in subjectList"  :key="i">{{list}}</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <FormItem v-if="num == 2">
-                    <Select
-                      v-model="form.intention_option"
-                      style="width:150px"
-                      @on-change="seekKuhu"
-                      placeholder="意向度"
-                    >
-                     <Option :value="i" v-for="(list,i) in internation"  :key="i">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
@@ -135,7 +133,7 @@
                     </Select>
                   </FormItem>
                 </Col>
-                <Col span="8">
+                <Col span="6">
                   <FormItem>
                     <div class="dateplc">
                       <DatePicker v-model="startTime" type="date" placeholder="注册时间" @on-change="getTimes"></DatePicker>
@@ -143,7 +141,12 @@
                     </div>
                   </FormItem>
                 </Col>
-                <Col span="10">
+                <Col span="4" style="margin-left:30px" v-if="!(num == 2)">
+                  <Button type="primary" @click="clear">清除</Button>
+                </Col>
+              </Row>
+              <Row>
+                <Col span="6">
                   <FormItem v-if="num == 2">
                     <div class="dateplc">
                       <DatePicker v-model="startTime2" type="date" placeholder="分配时间" @on-change="getTimes2"></DatePicker>
@@ -164,7 +167,7 @@
                     </Select>
                   </FormItem>
                 </Col>
-                <Col span="1" style="margin-left:30px">
+                <Col span="4" style="margin-left:30px"  v-if="num == 2">
                   <Button type="primary" @click="clear">清除</Button>
                 </Col>
               </Row>

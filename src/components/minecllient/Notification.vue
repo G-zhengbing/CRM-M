@@ -16,6 +16,22 @@
                     <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekClick"></Input>
                   </FormItem>
                 </Col>
+                <!-- <Col span="4">
+                  <FormItem>
+                    <Select
+                      v-model="form.sale_id"
+                      style="width:150px"
+                      @on-change="seekClick"
+                      placeholder="跟进人"
+                    >
+                      <Option
+                        v-for="(list,i) in sale_list"
+                        :key="i"
+                        :value="list.id"
+                      >{{list.login_name}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col> -->
                 <Col span="6">
                   <FormItem>
                     <div class="dateplc">
@@ -117,6 +133,7 @@ export default {
   },
   data() {
     return {
+      sale_list: storage.getDaiban().sale_list,
       endAccount: "",
       startAccount: "",
       showMine: false,
@@ -136,17 +153,19 @@ export default {
       form: {},
       columns: [
         { type: "selection", width: 60 },
-        { title: "学员姓名", key: "student_name" ,width:120},
-        { title: "注册手机", key: "mobile" ,width:130},
-        { title: "年级", key: "grade" ,width: 100},
-        { title: "科目", key: "subject" ,width: 100},
+        { title: "学员姓名", key: "student_name", width: 120 },
+        { title: "注册手机", key: "mobile", width: 130 },
+        { title: "年级", key: "action_grade", width: 100 },
+        { title: "科目", key: "action_subject", width: 100 },
         { title: "具体内容", key: "remarks" },
+        { title: "跟进人", key: "follow_sale_name", width: 100 },
         { title: "操作时间", key: "action_create_time" },
         { title: "注册时间", key: "create_time" },
         {
           title: "操作",
           key: "action",
           align: "center",
+          width: 220,
           render: (h, params) => {
             return h("div", [
               h(

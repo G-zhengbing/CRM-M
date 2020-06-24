@@ -75,18 +75,6 @@
                     </Select>
                   </FormItem>
                 </Col>
-                <Col span="3">
-                  <FormItem>
-                    <Select
-                      v-model="form.intention_option"
-                      style="width:150px"
-                      @on-change="seekClick"
-                      placeholder="意向度"
-                    >
-                      <Option :value="i" v-for="(list,i) in intention" :key="i">{{list}}</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
                 <Col span="5">
                   <FormItem>
                     <div class="dateplc">
@@ -123,12 +111,41 @@
                     </div>
                   </FormItem>
                 </Col>
-                <Col span="2" style="text-indent: 60px">
+              </Row>
+              <Row>
+                <Col span="6">
+                  <FormItem label="意向度" :label-width="100">
+                    <RadioGroup v-model="form.intention_option" @on-change="seekClick">
+                      <Radio label="1">高</Radio>
+                      <Radio label="2">中</Radio>
+                      <Radio label="3">低</Radio>
+                      <Radio label="4">无</Radio>
+                    </RadioGroup>
+                  </FormItem>
+                </Col>
+                <Col span="4" style="text-indent: 60px">
                   <Button type="primary" @click="clear">清除</Button>
                 </Col>
               </Row>
             </Form>
             <Button type="primary" @click="createUsers">创建用户</Button>
+            <Table
+              border
+              :columns="columns"
+              :data="clientkData"
+              @on-sort-change="selectSort"
+              @on-selection-change="selectionChange"
+              height="545"
+            ></Table>
+            <Page
+              @on-change="pageChange"
+              :total="total"
+              :current="currentPage"
+              :page-size="pageSize"
+              show-total
+              show-elevator
+              class="ive-page"
+            />
           </div>
           <Table
             border
@@ -266,6 +283,12 @@ export default {
         { title: "渠道来源", key: "refer", width: 150 },
         { title: "跟进人", key: "follow_sale_name", width: 100 },
         { title: "跟进状态", key: "follow_status", width: 95 },
+        {
+          title: "上次跟进时间",
+          key: "last_follow_time",
+          width: 170,
+          align: "center",
+        },
         { title: "学习阶段", key: "stage", width: 100 },
         { title: "意向度", key: "intention_option", width: 80 },
         { title: "上次呼出", key: "phone_status", width: 100 },
@@ -378,6 +401,10 @@ export default {
     };
   },
   methods: {
+    // 排序
+    selectSort(data) {
+      console.log(data)
+    },
     ...mapMutations(["setClientTypes", "setCurrentPage"]),
     ...mapActions(["getClientList", "RingUp", "getReferList"]),
     //回访记录

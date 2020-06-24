@@ -22,6 +22,7 @@ import appraisal from './appraisal'
 import createdOrder from './createdOrder'
 import newReport from './learningReport/newReport'
 import BreadCrumb from './bread-crumb'
+import SendSMS from './sendSMS'
 
 export default {
 	install(Vue) {
@@ -46,5 +47,6 @@ export default {
 		Vue.component('CreatedOrder', createdOrder); // 订单
 		Vue.component('NewReport', newReport); // 学情报告
 		Vue.component('bread-crumb', BreadCrumb); // 面包屑
+		Vue.component('SendSMS', SendSMS); // 发送信息
 	}
 }
