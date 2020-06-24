@@ -736,16 +736,16 @@ export default {
             formData.append("subject", this.form.subject);
             formData.append(
               "address_province_id",
-              this.form.address_province_id
+              this.form.address_province_id?this.form.address_province_id:''
             );
-            formData.append("address_city_id", this.form.address_city_id);
+            formData.append("address_city_id", this.form.address_city_id?this.form.address_city_id:'');
             formData.append("classin_user", this.form.classin_user?this.form.classin_user:'');
-            formData.append("bank_card_id", this.form.bank_card_id);
+            formData.append("bank_card_id", this.form.bank_card_id?this.form.bank_card_id:'');
             formData.append(
               "bank_card_pic",
               this.uploadList2[0] ? this.uploadList2[0] : ""
             );
-            formData.append("bank_card_open", this.form.bank_card_open);
+            formData.append("bank_card_open", this.form.bank_card_open?this.form.bank_card_open:'');
             formData.append(
               "identity_id_pic1",
               this.uploadList4[0] ? this.uploadList4[0] : ""
@@ -814,14 +814,14 @@ export default {
               "address_province_id",
               this.form.address_province_id
             );
-            formData.append("address_city_id", this.form.address_city_id);
-            formData.append("classin_user", this.form.classin_user);
-            formData.append("bank_card_id", this.form.bank_card_id);
+            formData.append("address_city_id", this.form.address_city_id?this.form.address_city_id:'');
+            formData.append("classin_user", this.form.classin_user?this.form.classin_user:'');
+            formData.append("bank_card_id", this.form.bank_card_id?this.form.bank_card_id:'');
             formData.append(
               "bank_card_pic",
               this.uploadList2[0] ? this.uploadList2[0] : ""
             );
-            formData.append("bank_card_open", this.form.bank_card_open);
+            formData.append("bank_card_open", this.form.bank_card_open?this.form.bank_card_open:'');
             formData.append(
               "identity_id_pic1",
               this.uploadList4[0] ? this.uploadList4[0] : ""

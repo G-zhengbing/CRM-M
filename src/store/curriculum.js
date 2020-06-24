@@ -41,7 +41,7 @@ export default {
       return new Promise((resolve,reject)=>{
         axios({
           method:"get",
-          url:COURSETEACHERS,
+          url:COURSETEACHERS + '/' + '1',
           headers: {
             "content-type": "application/x-www-form-urlencoded",
             Authorization: "bearer " + storage.get()

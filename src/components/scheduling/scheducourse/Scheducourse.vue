@@ -6,19 +6,54 @@
           <div class="contaner">
             <Form :model="form" :label-width="30">
               <Row>
-                 <Col span="3">
-                  <FormItem
+                <Col span="4">
+                  <FormItem>
                     <Input v-model="form.course_name" placeholder="课程名称" @on-change="seekClick"></Input>
                   </FormItem>
                 </Col>
-                <Col span="3">
+                <Col span="4">
+                  <FormItem>
+                    <Input v-model="form.student_name" @on-change="seekClick" placeholder="请输入学员名称"></Input>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Input v-model="form.mobile" @on-change="seekMobile" placeholder="请输入学员手机号"></Input>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select @on-change="seekClick" v-model="form.grade" placeholder="请选择年级">
+                      <Option :value="1">一年级</Option>
+                      <Option :value="2">二年级</Option>
+                      <Option :value="3">三年级</Option>
+                      <Option :value="4">四年级</Option>
+                      <Option :value="5">五年级</Option>
+                      <Option :value="6">六年级</Option>
+                      <Option :value="7">七年级</Option>
+                      <Option :value="8">八年级</Option>
+                      <Option :value="9">九年级</Option>
+                      <Option :value="10">高一</Option>
+                      <Option :value="11">高二</Option>
+                      <Option :value="12">高三</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select v-model="form.subject" @on-change="seekClick" placeholder="请选择科目">
+                      <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="4">
                   <FormItem>
                     <Select v-model="form.course_type" @on-change="seekClick" placeholder="授课类型">
                       <Option :value="i" v-for="(list,i) in courseType" :key="i">{{list}}</Option>
                     </Select>
                   </FormItem>
                 </Col>
-                <Col span="3">
+                <Col span="4">
                   <FormItem>
                     <Select v-model="form.class_type" @on-change="seekClick" placeholder="课程类型">
                       <Option :value="1">标准课</Option>
@@ -67,7 +102,7 @@
       </div>
     </section>
     <Loading v-show="isLoading" />
-    <Coursemessage :type="type" v-if="show"/>
+    <Coursemessage :type="type" v-if="show" />
   </div>
 </template>
 
@@ -75,25 +110,30 @@
 import Loading from "../../../uilt/loading/loading";
 import storage from "../../../uilt/storage";
 import Coursemessage from "./Cuorsemessage";
-import { createNamespacedHelpers } from 'vuex'
-const { mapState,mapMutations,mapActions } = createNamespacedHelpers('scheducourse')
+import { createNamespacedHelpers } from "vuex";
+const { mapState, mapMutations, mapActions } = createNamespacedHelpers(
+  "scheducourse"
+);
 export default {
   components: {
     Loading,
     Coursemessage
   },
   mounted() {
+ 
+
     this.isLoading = true;
-    this.getCourseList({}).then(()=>{
+    this.getCourseList({}).then(() => {
       this.isLoading = false;
-    })
+    });
   },
   computed: {
-    ...mapState(['courseList','currentPage','pageSize','total'])
+    ...mapState(["courseList", "currentPage", "pageSize", "total"])
   },
   data() {
     return {
-      courseType:storage.getDaiban().screen_list.course_type,
+      subjectList: storage.getDaiban().screen_list.subject,
+      courseType: storage.getDaiban().screen_list.course_type,
       isUpdate: false,
       endAccount: "",
       startAccount: "",
@@ -102,7 +142,6 @@ export default {
       startTime: "",
       channel: "",
       follow_status: "",
-      subjectList: "",
       intention: "",
       stage: "",
       transfer: "",
@@ -112,8 +151,11 @@ export default {
       form: {},
       columns: [
         { type: "selection", width: 60 },
-        { title: "授课类型", key: "course_type_str",className:'activeTh'},
-        { title: "课程名称", key: "course_name",
+        { title: "授课类型", key: "course_type_str", className: "activeTh" },
+        {
+          title: "课程名称",
+          key: "course_name",
+          width: "250",
           render: (h, params) => {
             return h("div", [
               h(
@@ -129,7 +171,7 @@ export default {
                     }
                   },
                   style: {
-                    color:'#2d8cf0',
+                    color: "#2d8cf0",
                     cursor: "pointer"
                   }
                 },
@@ -137,18 +179,21 @@ export default {
               )
             ]);
           }
-         },
+        },
         { title: "课程类型", key: "class_type_str" },
+        { title: "学员姓名", key: "student_name" },
+        { title: "手机号", key: "mobile", width: "125" },
         { title: "年级", key: "grade_str" },
         { title: "科目", key: "subject_str" },
-        { title: "班主任", key: "header_name" },
-        { title: "首节课日期", key: "start_date" },
+        { title: "班主任", key: "header_name", width: "180" },
+        { title: "首节课日期", key: "start_date", width: "120" },
+        { title: "创建时间", key: "created_at", width: "170" },
         {
           title: "操作",
           key: "action",
           align: "center",
           render: (h, params) => {
-            if(params.row.course_type ==1){
+            if (params.row.course_type == 1) {
               return h("div", [
                 h(
                   "Button",
@@ -164,7 +209,7 @@ export default {
                     }
                   },
                   "添加学员"
-                ),
+                )
                 // h(
                 //   "Button",
                 //   {
@@ -204,28 +249,31 @@ export default {
   },
   methods: {
     ...mapMutations(["setCurrentpage"]),
-    ...mapActions([
-      "getCourseList"
-    ]),
+    ...mapActions(["getCourseList"]),
+    //手机号
+    seekMobile(val) {
+      if (this.form.mobile.length >= 4) {
+        this.seekClick();
+      }
+    },
     //班课添加学员
-    addStudent(item){
-      this.show = true
-      this.type.classify = 'addStudents'
+    addStudent(item) {
+      this.show = true;
+      this.type.classify = "addStudents";
       this.type.form = this.form;
       this.type.page = this.currentPage;
-      this.type.obj = item
+      this.type.obj = item;
     },
     //课程
-    visit(item){
+    visit(item) {
       this.type.classify = "createdCourse";
-      this.show = true
+      this.show = true;
       this.type.form = this.form;
       this.type.page = this.currentPage;
-      this.type.obj = item
+      this.type.obj = item;
     },
     //创建课程
     addCourse() {
-      
       this.isUpdate = false;
       this.type.classify = "addcourse";
       this.show = true;
@@ -303,8 +351,8 @@ export default {
     //操作日期s
     getTimes() {
       if (this.startAccount && this.endAccount) {
-        this.form.create_time_start = this.datePicker(this.startAccount);
-        this.form.create_time_end = this.datePicker(this.startAccount);
+        this.form.start_date_start = this.datePicker(this.startAccount);
+        this.form.start_date_end = this.datePicker(this.startAccount);
         this.seekClick();
       }
     }

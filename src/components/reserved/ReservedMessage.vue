@@ -1,26 +1,5 @@
 <template>
   <div class="box">
-    <!-- 签到 -->
-    <template v-if="type.classify == 'signin'">
-      <Modal
-        width="300"
-        v-model="type.classify == 'signin'"
-        title="签到"
-        @on-cancel="$parent.showMoadl = false"
-      >
-        <div class="content">
-          <p>是否完成上课？</p>
-          <RadioGroup v-model="form.type">
-            <Radio :label="2">已上课</Radio>
-            <Radio :label="3">缺席</Radio>
-          </RadioGroup>
-        </div>
-        <div slot="footer">
-          <Button type="text" size="large" @click="$parent.showMoadl = false">取消</Button>
-          <Button type="primary" size="large" @click="loseFocus">确定</Button>
-        </div>
-      </Modal>
-    </template>
     <!-- 取消预约 -->
     <template v-if="type.classify == 'callOff'">
       <Modal
@@ -216,7 +195,7 @@ export default {
     },
     //取消预约
     callOff() {
-      this.setSignin({ uid: [this.type.data.id], status: 4 }).then(res => {
+      this.setSignin({ uid: this.type.data.id}).then(res => {
         if (res.data.ret) {
           this.$Message.success("预约取消成功");
           this.isLoading = true;
@@ -236,59 +215,6 @@ export default {
         }
         this.$parent.showMoadl = false;
       });
-    },
-    //签到
-    loseFocus() {
-      if (this.type.uid) {
-        this.setSignin({ uid: this.type.uid, status: this.form.type }).then(
-          res => {
-            if (res.data.ret) {
-              this.$Message.success("批量签到成功");
-              this.isLoading = true;
-              if (this.type.status == "reserved") {
-                this.getReservedList({ tab_type: this.$parent.num }).then(
-                  res => {
-                    this.isLoading = false;
-                  }
-                );
-              } else {
-                this.getReservedAllList({ tab_type: this.$parent.num }).then(
-                  res => {
-                    this.isLoading = false;
-                  }
-                );
-              }
-            } else {
-              this.$Message.success(res.data.error);
-            }
-            this.$parent.showMoadl = false;
-          }
-        );
-      } else {
-        this.setSignin({
-          uid: [this.type.data.id],
-          status: this.form.type
-        }).then(res => {
-          if (res.data.ret) {
-            this.$Message.success("签到成功");
-            this.isLoading = true;
-            if (this.type.status == "reserved") {
-              this.getReservedList({ tab_type: this.$parent.num }).then(res => {
-                this.isLoading = false;
-              });
-            } else {
-              this.getReservedAllList({ tab_type: this.$parent.num }).then(
-                res => {
-                  this.isLoading = false;
-                }
-              );
-            }
-          } else {
-            this.$Message.success(res.data.error);
-          }
-          this.$parent.showMoadl = false;
-        });
-      }
     }
   }
 };

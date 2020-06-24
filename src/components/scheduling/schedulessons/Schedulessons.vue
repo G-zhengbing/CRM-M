@@ -11,6 +11,41 @@
                     <Input v-model="form.course_name" placeholder="课程名称" @on-change="seekClick"></Input>
                   </FormItem>
                 </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Input v-model="form.student_name" @on-change="seekClick" placeholder="请输入学员名称"></Input>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Input v-model="form.mobile" @on-change="seekMobile" placeholder="请输入学员手机号"></Input>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select @on-change="seekClick" v-model="form.grade" placeholder="请选择年级">
+                      <Option :value="1">一年级</Option>
+                      <Option :value="2">二年级</Option>
+                      <Option :value="3">三年级</Option>
+                      <Option :value="4">四年级</Option>
+                      <Option :value="5">五年级</Option>
+                      <Option :value="6">六年级</Option>
+                      <Option :value="7">七年级</Option>
+                      <Option :value="8">八年级</Option>
+                      <Option :value="9">九年级</Option>
+                      <Option :value="10">高一</Option>
+                      <Option :value="11">高二</Option>
+                      <Option :value="12">高三</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
+                    <Select v-model="form.subject" @on-change="seekClick" placeholder="请选择科目">
+                      <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
                 <Col span="3">
                   <FormItem>
                     <Select v-model="form.course_type" @on-change="seekClick" placeholder="授课类型">
@@ -85,7 +120,7 @@ export default {
   },
   mounted() {
     this.isLoading = true;
-    this.getLessonsList({}).then(() => {
+    this.getLessonsList({form:{lesson_time_start:this.datePicker(this.startAccount),lesson_time_end:this.datePicker(this.endAccount)}}).then(() => {
       this.isLoading = false;
     });
   },
@@ -94,29 +129,40 @@ export default {
   },
   data() {
     return {
+      subjectList: storage.getDaiban().screen_list.subject,
       courseType: storage.getDaiban().screen_list.course_type,
-      startAccount: "",
-      endAccount: "",
+      startAccount: new Date(),
+      endAccount: new Date(new Date().getTime() + 24*60*60*1000),
       show: false,
       type: {},
       isLoading: false,
       form: {},
       columns: [
         { type: "selection", width: 60 },
-        { title: "课节名称", key: "course_name" },
-        { title: "授课类型", key: "course_type" },
-        { title: "状态", key: "status" },
-        { title: "星期", key: "week_day" },
-        { title: "开课日期", key: "lesson_date" },
-        { title: "开课时间", key: "lesson_time" },
-        { title: "授课教师", key: "coach_name" },
-        { title: "创建时间", key: "create_time" }
+        { title: "课节名称", key: "lesson_name", width: "200" },
+        { title: "授课类型", key: "course_type", width: "100" },
+        { title: "学员名称", key: "student_name", width: "100" },
+        { title: "学员电话", key: "student_mobile", width: "130" },
+        { title: "年级", key: "grade", width: "80" },
+        { title: "科目", key: "subject", width: "80" },
+        { title: "状态", key: "status", width: "80" },
+        { title: "星期", key: "week_day", width: "80" },
+        { title: "开课日期", key: "lesson_date", width: "120" },
+        { title: "开课时间", key: "lesson_time", width: "120" },
+        { title: "授课教师", key: "coach_name", width: "165" },
+        { title: "创建时间", key: "create_time", width: "170" }
       ]
     };
   },
   methods: {
     ...mapMutations(["setCurrentPage"]),
     ...mapActions(["getLessonsList"]),
+    //手机号
+    seekMobile() {
+      if (this.form.mobile.length >= 4) {
+        this.seekClick();
+      }
+    },
     //编辑
     update(item) {
       this.isUpdate = true;

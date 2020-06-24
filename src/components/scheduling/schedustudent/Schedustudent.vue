@@ -11,7 +11,7 @@
             </Col>
             <Col span="3">
               <FormItem>
-                <Input v-model="form.mobile" placeholder="手机号" @on-change="seekClick"></Input>
+                <Input v-model="form.mobile" placeholder="手机号" @on-change="seekMobile"></Input>
               </FormItem>
             </Col>
             <Col span="6">
@@ -103,7 +103,7 @@ export default {
         { title: "取消课节数", key: "cancel_num" },
         { title: "上课中", key: "lesson_num" },
         { title: "是否推送", key: "classin_id" },
-        { title: "最新付费时间", key: "paytime" },
+        { title: "最新付费时间", key: "paytime", width: "200" },
         {
           title: "操作",
           key: "action",
@@ -164,6 +164,12 @@ export default {
   methods: {
     ...mapMutations(["setCurrentPage"]),
     ...mapActions(["getStudentList"]),
+    //手机号
+    seekMobile() {
+      if (this.form.mobile.length >= 4) {
+        this.seekClick();
+      }
+    },
     //排课
     update(item) {
       this.type.classify = "createdCourse";
@@ -218,7 +224,7 @@ export default {
     //操作日期
     getTimes() {
       if (this.startAccount && this.endAccount) {
-        this.form.create_time_start   = this.datePicker(this.startAccount);
+        this.form.create_time_start = this.datePicker(this.startAccount);
         this.form.create_time_end = this.datePicker(this.startAccount);
         this.seekClick();
       }

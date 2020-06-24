@@ -161,8 +161,8 @@
       </div>
     </Modal>
     <Loading v-show="isLoading" />
-    <DaibanMessage :type="type" v-if="show" />
     <MineclientMessage :type="type" v-if="showMine" />
+    <DaibanMessage :type="type" v-if="show" />
   </div>
 </template>
 

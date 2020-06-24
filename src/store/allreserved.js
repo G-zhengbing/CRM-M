@@ -1,7 +1,6 @@
 import axios from 'axios'
 import {
-  RESERVEDAll,
-  QIANDAO
+  RESERVEDAll
 } from '../uilt/url/url'
 import storage from '../uilt/storage'
 

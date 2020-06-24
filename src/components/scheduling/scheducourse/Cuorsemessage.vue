@@ -112,7 +112,47 @@
         <Button type="text" size="large" @click="$parent.show = false">取消</Button>
         <Button :loading="disableBtn" type="primary" size="large" @click="handleSubmit">确定</Button>
       </div>
-    </Modal>-->
+    </Modal>--
+    <!-- 一对一编辑-->
+    <Modal width="900" v-model="updateLessons" @on-cancel="updateLessons = false" title="编辑">
+      <Form v-if="updateLessons" :model="updateLessonsForm" :label-width="80">
+        <FormItem label="时间">
+          <span class="required" style="margin-left:30px;"></span>
+          <Select v-model="updateLessonsForm.start_time" style="width:150px">
+            <Option :value="list" v-for="(list,i) in timeNum" :key="i">{{list}}</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="日期">
+          <span class="required" style="margin-left:30px;"></span>
+          <DatePicker
+            v-model="updateLessonsForm.lesson_date"
+            type="date"
+            placeholder="请选择"
+            @on-change="setDate"
+          ></DatePicker>
+        </FormItem>
+        <FormItem label="授课教师">
+          <span class="required"></span>
+          <Select
+            v-model="updateLessonsForm.coach_id"
+            placeholder="请选择"
+            filterable
+            style="width:250px"
+          >
+            <Option :value="list.id" v-for="(list,i) in lessonsTeacherList" :key="i">{{list.name}}</Option>
+          </Select>
+        </FormItem>
+      </Form>
+      <div slot="footer">
+        <Button type="text" size="large" @click="updateLessons = false">取消</Button>
+        <Button
+          :loading="updateLessonsLoading"
+          type="primary"
+          size="large"
+          @click="updateLessonsList"
+        >确定</Button>
+      </div>
+    </Modal>
     <!-- 班课添加学员 -->
     <Modal
       width="900"
@@ -188,9 +228,9 @@
         :label-width="80"
       >
         <FormItem label="课节名称" prop="lesson_name">
-          <Input v-model="addLessonsForm.lesson_name" placeholder="课节名称"></Input>
+          <Input v-model="addLessonsForm.lesson_name" placeholder="课节名称" style="width:200px"></Input>
         </FormItem>
-        <FormItem label="课程卡" prop="card_id">
+        <FormItem label="课程卡" prop="card_id" style="width:400px">
           <Select v-model="addLessonsForm.card_id" placeholder="请选择">
             <Option
               :value="list.id"
@@ -200,14 +240,14 @@
           </Select>
         </FormItem>
         <FormItem label="周数量" prop="times">
-          <Input v-model="addLessonsForm.times" placeholder="请输入课节数"></Input>
+          <Input v-model="addLessonsForm.times" placeholder="请输入课节数" style="width:200px"></Input>
         </FormItem>
         <FormItem label="开课日期" prop="start_date">
           <span class="required"></span>
           <DatePicker type="date" placeholder="请选择" @on-change="getTimes"></DatePicker>
         </FormItem>
         <FormItem label="授课教师" prop="coach_id">
-          <Select v-model="addLessonsForm.coach_id" placeholder="请选择">
+          <Select v-model="addLessonsForm.coach_id" placeholder="请选择" style="width:200px">
             <Option :value="list.id" v-for="(list,i) in lessonsTeacherList" :key="i">{{list.name}}</Option>
           </Select>
         </FormItem>
@@ -250,7 +290,6 @@
                 <li>22:00 - 22:30</li>
                 <li>22:30 - 23:00</li>
                 <li>23:00 - 23:30</li>
-                <li>23:30 - 24:00</li>
               </ul>
             </div>
             <div class="content-right">
@@ -270,12 +309,12 @@
                     :key="i"
                     :class="{active:timeBlock(k-1) == 'ok'}"
                     @click="getNum(i,$event)"
-                    v-if="k> 14"
+                    v-if="k> 14 && k < 48"
                   ></li>
                 </ul>
                 <ul>
                   <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<63}"
+                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<63 || k>95}"
                     @click="getNum(i,$event)"
                     v-for="(k,i) in num*2"
                     v-if=" k > num"
@@ -284,7 +323,7 @@
                 </ul>
                 <ul>
                   <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<111}"
+                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<111 || k>143}"
                     @click="getNum(i,$event)"
                     v-for="(k,i) in num*3"
                     v-if=" k > num*2"
@@ -293,7 +332,7 @@
                 </ul>
                 <ul>
                   <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<159}"
+                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<159 || k > 191}"
                     @click="getNum(i,$event)"
                     v-for="(k,i) in num*4"
                     v-if=" k > num*3"
@@ -302,7 +341,7 @@
                 </ul>
                 <ul>
                   <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<207}"
+                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<207 || k > 239}"
                     @click="getNum(i,$event)"
                     v-for="(k,i) in num*5"
                     v-if=" k > num*4"
@@ -311,7 +350,7 @@
                 </ul>
                 <ul>
                   <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<255}"
+                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<255 || k > 287}"
                     @click="getNum(i,$event)"
                     v-for="(k,i) in num*6"
                     v-if=" k > num*5"
@@ -320,7 +359,7 @@
                 </ul>
                 <ul>
                   <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<303}"
+                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<303  || k > 335}"
                     @click="getNum(i,$event)"
                     v-for="(k,i) in num*7"
                     v-if=" k > num*6"
@@ -437,7 +476,7 @@
           </FormItem>
         </FormItem>
       </Form>
-      <Form v-if="tabs == 2">
+      <Form v-if="tabs == 2 && type.classify == 'createdCourse'">
         <div class="cuorse">
           <Button
             v-if="type.obj.course_type == 4"
@@ -484,6 +523,17 @@ const { mapState, mapMutations, mapActions } = createNamespacedHelpers(
 export default {
   props: ["type"],
   watch: {
+    updateLessons(v, k) {
+      if (v) {
+        this.$store.dispatch(
+          "schedustudent/getTeacherList",
+          { type: 4 },
+          { root: true }
+        );
+      } else {
+        this.updateLessonsForm = {};
+      }
+    },
     showStudent(v, k) {
       if (!v) {
         this.lessonsStudentForm = {};
@@ -493,7 +543,7 @@ export default {
       if (v) {
         this.$store.dispatch(
           "schedustudent/getTeacherList",
-          {},
+          { type: 4 },
           {
             root: true
           }
@@ -540,6 +590,10 @@ export default {
   },
   data() {
     return {
+      updateLessonsLoading: false,
+      timeNum: [],
+      updateLessons: false,
+      updateLessonsForm: {},
       lessonsStudentLoading: false,
       lessonsStudentForm: {},
       lessonsStudentUid: "",
@@ -563,7 +617,7 @@ export default {
         times: [
           {
             required: true,
-            message: "开课日期是必填的",
+            message: "周数量是必填的",
             trigger: "blur"
           }
         ],
@@ -664,14 +718,88 @@ export default {
       },
       columns: [
         { type: "index", width: 60 },
-        { title: "课节名称", key: "course_name" },
-        { title: "授课类型", key: "course_type" },
-        { title: "状态", key: "status" },
-        { title: "星期", key: "week_day" },
-        { title: "开课日期", key: "lesson_date" },
-        { title: "开课时间", key: "lesson_time" },
-        { title: "授课教师", key: "coach_name" },
-        { title: "创建时间", key: "create_time" },
+        { title: "课节名称", key: "lesson_name", width: "170" },
+        { title: "授课类型", key: "course_type", width: "95" },
+        {
+          title: "学员姓名",
+          key: "student_name",
+          width: "95"
+          // render:()=>{
+
+          // }
+        },
+        { title: "学员手机号", key: "student_mobile", width: "130" },
+        { title: "年级", key: "grade", width: "70" },
+        { title: "科目", key: "subject", width: "70" },
+        { title: "状态", key: "status", width: "80" },
+        { title: "星期", key: "week_day", width: "80" },
+        { title: "开课日期", key: "lesson_date", width: "110" },
+        { title: "开课时间", key: "lesson_time", width: "120" },
+        {
+          title: "学员数量",
+          key: "student_num",
+          className: "selects",
+          width: "95",
+          // render: (h, params) => {
+          //   if (params.row.student_list.length != 0) {
+          //     return h("div", [
+          //       h(
+          //         "ul",
+          //         { props: { trigger: "hover", placement: "right-start" } },
+          //         [
+          //           params.row.student_list.map(i => {
+          //             return h("li", i.student_name + "/" + i.mobile);
+          //           })
+          //         ]
+          //       ),
+          //       params.row.student_num
+          //     ]);
+          //   } else {
+          //     return h("div", [
+          //       h(
+          //         "ul",
+          //         { props: { trigger: "hover", placement: "right-start" } }
+          //         // [
+          //         //   params.row.student_list.map(i => {
+          //         //     return h("li", i.student_name + "/" + i.mobile);
+          //         //   })
+          //         // ]
+          //       ),
+          //       params.row.student_num
+          //     ]);
+          //   }
+          // }
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "Tooltip",
+                {
+                  props: {
+                    placement: "top",
+                    transfer: true
+                  }
+                },
+                [
+                  params.row.student_num,
+                  params.row.student_list.map(i => {
+                    return h(
+                      "p",
+                      {
+                        slot: "content",
+                        style: {
+                          whiteSpace: "normal"
+                        }
+                      },
+                      i.student_name + "/" + i.mobile
+                    );
+                  })
+                ]
+              )
+            ]);
+          }
+        },
+        { title: "授课教师", key: "coach_name", width: "165" },
+        { title: "创建时间", key: "create_time", width: "170" },
         {
           title: "操作",
           key: "action",
@@ -695,6 +823,60 @@ export default {
                   "添加学员"
                 )
               ]);
+            } else if (this.type.obj.course_type == 4) {
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small",
+                      disabled: params.row.status == "已取消" ? true : false
+                    },
+                    on: {
+                      click: () => {
+                        this.update(params.row);
+                      }
+                    }
+                  },
+                  "编辑"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small",
+                      disabled: params.row.status == "已取消" ? true : false
+                    },
+                    on: {
+                      click: () => {
+                        this.cancel(params.row);
+                      }
+                    }
+                  },
+                  "取消课节"
+                )
+              ]);
+            } else if (this.type.obj.course_type == 5) {
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small",
+                      disabled: params.row.status == "已取消" ? true : false
+                    },
+                    on: {
+                      click: () => {
+                        this.cancelAudition(params.row);
+                      }
+                    }
+                  },
+                  "取消"
+                )
+              ]);
             }
           }
         }
@@ -713,12 +895,126 @@ export default {
       "setStudentCurrentpage"
     ]),
     ...mapActions([
+      "cancelLesson",
+      "updateLesson",
       "addLessonsStudent",
       "getLessonsList",
       "setCreatedlessons",
       "getlessonsStudent",
       "addCourseStudents"
     ]),
+    //预约课取消
+    cancelAudition(item) {
+      this.$Modal.confirm({
+        title: "提示",
+        content: "<p>确定要取消该课节吗？</p>",
+        onOk: () => {
+          this.lessonsLoading = true;
+          this.cancelLesson({ uid: item.id }).then(res => {
+            if (res.data.ret) {
+              this.$Message.success("取消成功");
+            } else {
+              this.$Message.error(res.data.error);
+            }
+            this.getLessonsList({
+              uid: this.type.obj.id,
+              page: this.lessonsCurrentpage,
+              form: this.lessonsForm
+            });
+            this.lessonsLoading = false;
+          });
+        }
+      });
+    },
+    //取消一对一课节
+    cancel(item) {
+      this.$Modal.confirm({
+        title: "提示",
+        content: "<p>确定要取消该课节吗？</p>",
+        onOk: () => {
+          this.lessonsLoading = true;
+          this.cancelLesson({ uid: item.id }).then(res => {
+            if (res.data.ret) {
+              this.$Message.success("取消成功");
+            } else {
+              this.$Message.error(res.data.error);
+            }
+            this.getLessonsList({
+              uid: this.type.obj.id,
+              page: this.lessonsCurrentpage,
+              form: this.lessonsForm
+            });
+            this.lessonsLoading = false;
+          });
+        }
+      });
+    },
+    //修改一对一课节
+    updateLessonsList() {
+      if (!this.updateLessonsForm.lesson_date) {
+        this.$Message.error("时间是必选的");
+        return;
+      } else if (!this.updateLessonsForm.start_time) {
+        this.$Message.error("日期是必选的");
+        return;
+      } else if (!this.updateLessonsForm.coach_id) {
+        this.$Message.error("授课教师必选的");
+        return;
+      }
+      this.updateLessonsLoading = true;
+      this.updateLesson({ form: this.updateLessonsForm }).then(res => {
+        if (res.data.ret) {
+          this.$Message.success("修改成功");
+        } else {
+          this.$Message.error(res.data.error);
+        }
+        this.getLessonsList({
+          uid: this.type.obj.id,
+          page: this.lessonsCurrentpage,
+          form: this.lessonsForm
+        });
+        this.updateLessons = false;
+        this.updateLessonsLoading = false;
+      });
+    },
+    //设置年月日
+    setDate(date) {
+      this.updateLessonsForm.lesson_date = date;
+    },
+    //计算时间段
+    getTimeBlock() {
+      var start = "";
+      var end = "";
+      var b = 7;
+      for (var i = 1; i < 35; i++) {
+        if (i % 2 == 0) {
+          start = b + ":" + "30";
+          b++;
+          end = b + ":" + "00";
+          this.timeNum.push(start);
+        } else {
+          start = b + ":" + "00";
+          end = b + ":" + "30";
+          this.timeNum.push(start);
+        }
+      }
+    },
+    //一对一修改课节
+    update(item) {
+      this.getTimeBlock();
+      if (item.start_time.split(":")[0].split("")[0] == "0") {
+        this.updateLessonsForm.start_time =
+          item.start_time.split(":")[0].split("")[1] +
+          ":" +
+          item.start_time.split(":")[1];
+      } else {
+        this.updateLessonsForm.start_time = item.start_time;
+      }
+      this.updateLessonsForm.uid = item.id;
+      this.updateLessonsForm.coach_id = item.coach_id;
+      this.updateLessonsForm.lesson_date = item.lesson_date;
+      this.updateLessons = true;
+    },
     //班课添加学员查询
     seekKuhu() {
       this.lessonsStudentLoading = true;
@@ -834,10 +1130,10 @@ export default {
               this.$Message.error(res.data.error);
               return;
             } else if (res.data.data.lesson.class) {
-              this.$Message.error(res.data.data.lesson.class);
+              this.$Message.error(res.data.data.lesson.class + " 课程时间冲突");
               return;
             } else if (res.data.data.lesson.coach) {
-              this.$Message.error(res.data.data.lesson.coach);
+              this.$Message.error(res.data.data.lesson.coach + " 老师时间冲突");
               return;
             } else {
               this.$Message.success("添加课节成功");
@@ -867,12 +1163,17 @@ export default {
     //获取当前时间块
     getNum(num, e) {
       var arr = this.acArr;
-
       e.path[0].className = "active";
-      if (e.target.nextSibling.className == "active") {
-        this.$Message.error("当前时间块不可重叠");
+      if (e.target.nextSibling == null) {
+        this.$Message.error("当前时间块不可选");
         e.path[0].className = " ";
         return;
+      } else {
+        if (e.target.nextSibling.className == "active") {
+          this.$Message.error("当前时间块不可重叠");
+          e.path[0].className = " ";
+          return;
+        }
       }
       if (e.target.nextSibling) {
         e.target.nextSibling.className = "actives";
@@ -996,7 +1297,42 @@ export default {
   }
 };
 </script>
-
+<style>
+.selects ul li:hover {
+  background: #f3f3f3;
+}
+.selects ul li {
+  margin: 0;
+  line-height: normal;
+  padding: 7px 16px;
+  clear: both;
+  color: #515a6e;
+  font-size: 13px !important;
+  white-space: nowrap;
+  list-style: none;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+.selects ul {
+  display: none;
+  position: absolute;
+  top: 20px;
+  left: 0;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+  width: 150%;
+  border-radius: 4px;
+  background-color: #fff;
+  z-index: 999999;
+  max-height: 150px;
+  overflow-y: auto;
+}
+.selects:hover ul {
+  display: block;
+}
+.selects {
+  position: relative;
+}
+</style>
 <style scoped>
 .required::after {
   content: "*";

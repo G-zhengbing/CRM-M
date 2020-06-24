@@ -65,14 +65,17 @@ export default {
     getTeacherList({
       state,
       commit
-    }) {
+    },{type ,form}) {
       return new Promise((resolve, reject) => {
         axios({
           method: "get",
-          url: TEACHERLIST,
+          url: TEACHERLIST + '/' + type,
           headers: {
             "content-type": "application/x-www-form-urlencoded",
             Authorization: "bearer " + storage.get()
+          },
+          params:{
+            ...form
           }
         }).then(res => {
           commit("setTEacherList", res.data.data)
@@ -107,6 +110,9 @@ export default {
           }
         }).then(res => {
           commit("setStudentList", res.data.data.resources)
+          commit('setPageSize',res.data.data.links.per_page)
+          commit('setTotal',res.data.data.links.total)
+          commit('setCurrentPage',res.data.data.links.current_page)
           resolve()
         }).catch(e => {
           reject(e)

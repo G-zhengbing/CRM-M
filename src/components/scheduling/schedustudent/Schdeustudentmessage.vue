@@ -1,25 +1,25 @@
 <template>
   <div class="box">
     <Modal
-      fullscreen
+    width="1200"
       v-model="type.classify == 'createdCourse'"
       title="添加课节"
       @on-ok="createdCourse"
       @on-cancel="$parent.show = false"
       class-name="vertical-center-modal"
     >
-      <Form ref="formValidate" :model="form" :rules="ruleValidate" :label-width="80">
+      <Form ref="formValidate" :model="form" :rules="ruleValidate" :label-width="80" style="maxHeight:500px;overflow-y:auto">
+        <FormItem label="课程卡" prop="card_id">
+          <Select v-model="form.card_id" placeholder="请选择" style="width:350px">
+            <Option :value="list.id" v-for="(list,i) in courseCard" :key="i">{{list.card_name}}</Option>
+          </Select>
+        </FormItem>
         <FormItem label="周数量" prop="times">
-          <Input v-model="form.times" placeholder="请输入课节数"></Input>
+          <Input v-model="form.times" placeholder="请输入课节数" style="width:200px"></Input>
         </FormItem>
         <FormItem label="开课日期" prop="start_date">
           <span class="required"></span>
-          <DatePicker type="date" placeholder="请选择" @on-change="getTimes"></DatePicker>
-        </FormItem>
-        <FormItem label="课程卡" prop="card_id">
-          <Select v-model="form.card_id" placeholder="请选择">
-            <Option :value="list.id" v-for="(list,i) in courseCard" :key="i">{{list.card_name}}</Option>
-          </Select>
+          <DatePicker :options="optionsDate" type="date" placeholder="请选择" @on-change="getTimes"></DatePicker>
         </FormItem>
         <FormItem label="每周规律">
           <span class="required"></span>
@@ -141,13 +141,8 @@
             </div>
           </div>
         </FormItem>
-        <FormItem label="授课教师" prop="coach_id">
-          <Select v-model="form.coach_id" placeholder="请选择">
-            <Option :value="list.id" v-for="(list,i) in teacherList" :key="i">{{list.name}}</Option>
-          </Select>
-        </FormItem>
         <FormItem label="年级" prop="grade">
-          <Select v-model="form.grade" placeholder="请选择">
+          <Select v-model="form.grade" placeholder="请选择" style="width:200px">
             <Option :value="1">一年级</Option>
             <Option :value="2">二年级</Option>
             <Option :value="3">三年级</Option>
@@ -163,11 +158,22 @@
           </Select>
         </FormItem>
         <FormItem label="科目" prop="subject">
-          <Select v-model="form.subject" placeholder="请选择">
+          <Select v-model="form.subject" placeholder="请选择" style="width:200px">
             <Option :value="i" v-for="(list,i) in subject" :key="i">{{list}}</Option>
           </Select>
         </FormItem>
-        <FormItem label="课程封面展示" v-if="this.form.assess_image">
+        <FormItem label="授课教师" prop="coach_id">
+          <Select
+            v-model="form.coach_id"
+            placeholder="请选择"
+            filterable
+            style="width:200px"
+            @on-open-change="getTeacherData"
+          >
+            <Option :value="list.id" v-for="(list,i) in teacherList" :key="i">{{list.name}}</Option>
+          </Select>
+        </FormItem>
+        <!-- <FormItem label="课程封面展示" v-if="this.form.assess_image">
           <div class="demo-upload-list">
             <img :src="'http://liveapi.canpoint.net/'+ form.assess_image" />
             <div class="demo-upload-list-cover">
@@ -206,9 +212,10 @@
               <Icon type="ios-camera" size="20"></Icon>
             </div>
           </Upload>
-        </FormItem>
+        </FormItem> -->
         <FormItem label="课程简介" prop="course_desc">
           <Input
+            style="width:600px"
             v-model="form.course_desc"
             type="textarea"
             :autosize="{minRows: 3,maxRows: 5}"
@@ -216,7 +223,7 @@
           ></Input>
         </FormItem>
         <FormItem label="班主任" prop="header_id">
-          <Select v-model="form.header_id" placeholder="请选择">
+          <Select v-model="form.header_id" placeholder="请选择" style="width:200px">
             <Option :value="list.id" v-for="(list,i) in header_list" :key="i">{{list.login_name}}</Option>
           </Select>
         </FormItem>
@@ -251,11 +258,15 @@ export default {
     ...mapState(["teacherList", "courseCard"])
   },
   mounted() {
-    this.getTeacherList();
     this.getCoursecard(this.type.obj.id);
   },
   data() {
     return {
+      optionsDate: {
+        disabledDate: date => {
+          return date && date.valueOf() < Date.now() - 86400000;
+        }
+      },
       setActive: [],
       acArr: [],
       showTimeBlock: false,
@@ -309,6 +320,19 @@ export default {
   },
   methods: {
     ...mapActions(["getTeacherList", "getCoursecard"]),
+    //获取老师列表
+    getTeacherData(item) {
+      if (item) {
+        if (this.form.grade && this.form.subject) {
+          this.getTeacherList({
+            type: 4,
+            form: { grade: this.form.grade, subject: this.form.subject }
+          });
+        }else{
+          this.$Message.error('请先选择年级和科目')
+        }
+      }
+    },
     getTimes(value) {
       this.form.start_date = this.datePicker(value);
     },
@@ -348,12 +372,12 @@ export default {
         this.$Message.error("当前时间块不可选");
         e.path[0].className = " ";
         return;
-      }else if (e.target.nextSibling.className == "active") {
+      } else if (e.target.nextSibling.className == "active") {
         this.$Message.error("当前时间块不可重叠");
         e.path[0].className = " ";
         return;
       }
-      
+
       if (e.target.nextSibling) {
         e.target.nextSibling.className = "actives";
       } else {
@@ -449,10 +473,10 @@ export default {
           );
           formData.append("header_id", this.form.header_id);
           formData.append("times_block", arr);
-          formData.append(
-            "uploadList",
-            this.uploadList[0] ? this.uploadList[0] : ""
-          );
+          // formData.append(
+          //   "uploadList",
+          //   this.uploadList[0] ? this.uploadList[0] : ""
+          // );
           let config = {
             headers: {
               "Content-Type": "multipart/form-data",

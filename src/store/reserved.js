@@ -34,20 +34,15 @@ export default {
       commit,
       dispatch
     }, {
-      status,
       uid
     }) {
       return new Promise((resolve, reject) => {
         axios({
           method: "put",
-          url: QIANDAO,
+          url: QIANDAO +'/' + uid,
           headers: {
             "content-type": "application/x-www-form-urlencoded",
             Authorization: "bearer " + storage.get()
-          },
-          params: {
-            appoint_status: status,
-            appoint_id: uid
           }
         }).then(res => {
           resolve(res)

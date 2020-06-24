@@ -11,8 +11,12 @@ const LESSONSSTUDENT = BASEURL +'get_account'//学生列表
 const ADDLESSONSSTUDENT = BASEURL +'add_lesson_student'//班课添加课节学生
 const ADDALLSTUDENT = BASEURL +'add_student'//班课添加课程学生
 const SCHEDULESSONSLIST = BASEURL + 'system_lesson' //课节列表 
+const UPDATELESSONLIST = BASEURL  + 'modify_lesson' //一对一课节修改
+const CANCELLESSONS = BASEURL +'cancel_lesson'//一对一取消课节
 
 export {
+    CANCELLESSONS,
+    UPDATELESSONLIST,
     SCHEDULESSONSLIST,
     ADDALLSTUDENT,
     ADDLESSONSSTUDENT,

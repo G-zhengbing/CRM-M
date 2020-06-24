@@ -1,4 +1,6 @@
 import {
+  CANCELLESSONS,
+  UPDATELESSONLIST,
   COURSELIST,
   LESSONSLIST,
   CREATEDLESSONS,
@@ -72,6 +74,46 @@ export default {
     }
   },
   actions: {
+    //一对一取消课节
+    cancelLesson({state,commit,dispatch},{uid}){
+      return new Promise((resolve,reject)=>{
+        axios({
+          method:'put',
+          url:CANCELLESSONS + '/' + uid,
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            Authorization: "bearer " + storage.get()
+          },
+          params:{}
+        }).then(res=>{
+          resolve(res)
+        }).catch(e=>{
+          reject(e)
+        })
+      })
+    },
+    //一对一课节修改
+    updateLesson({stata,commit,dispatch},{form}){
+      return new Promise((resolve,reject)=>{
+        axios({
+          method:"post",
+          url:UPDATELESSONLIST + '/' + form.uid,
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            Authorization: "bearer " + storage.get()
+          },
+          params:{
+            lesson_date:form.lesson_date,
+            start_time:form.start_time,
+            coach_id:form.coach_id
+          }
+        }).then(res=>{
+          resolve(res)
+        }).catch(e=>{
+          reject(e)
+        })
+      })
+    },
     //班课添加课节学员
     addLessonsStudent({state,commit,dispatch},{uid,form,page,parentForm,cid}){
       return new Promise((resolve,reject)=>{

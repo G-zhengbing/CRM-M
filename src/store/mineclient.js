@@ -16,7 +16,6 @@ import {
   CITY
 } from '../uilt/url/url'
 import storage from '../uilt/storage'
-import { axiosGet } from '../uilt/ajax/axios'
 
 export default {
   state: {

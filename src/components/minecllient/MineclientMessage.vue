@@ -1,12 +1,7 @@
 <template>
   <div class="boxs">
     <!-- 选择课程 -->
-    <Modal
-      width="1400"
-      v-model="type.classify == 'order'"
-      title="选择课程"
-      @on-cancel="colseReserved"
-    >
+    <Modal width="1400" v-model="type.classify == 'order'" title="选择课程" @on-cancel="colseReserved">
       <Form :model="form" label-position="top" style="height:450px;overflow-y:auto;">
         <Row>
           <Col span="4">
@@ -87,12 +82,7 @@
       </div>
     </Modal>
     <!-- 创建订单 -->
-    <Modal
-      width="700"
-      v-model="showOrder"
-      title="创建订单"
-      @on-cancel="showOrder = false"
-    >
+    <Modal width="700" v-model="showOrder" title="创建订单" @on-cancel="showOrder = false">
       <Form :form="orderForm" label-position="left" style="height:450px;overflow-y:auto;">
         <FormItem label="基本信息"></FormItem>
         <div class="procude">
@@ -134,7 +124,7 @@
     </Modal>
     <!-- 预约试听 -->
     <Modal
-      width="1100"
+      width="1200"
       v-model="type.classify == 'audition'"
       title="预约试听"
       @on-cancel="colseReserved"
@@ -146,7 +136,6 @@
           :columns="Acolumns"
           :data="notifiDatas"
           @on-selection-change="auditionSelectionChange"
-          height="500"
         ></Table>
         <Page
           @on-change="auditionPageChange"
@@ -164,19 +153,13 @@
       </div>
     </Modal>
     <!-- 新建预约试听 -->
-    <Modal
-      width="700"
-      v-model="showCreateAudition"
-      title="新建预约试听"
-      @on-cancel="clearForm"
-    >
+    <Modal width="700" v-model="showCreateAudition" title="新建预约试听" @on-cancel="clearForm">
       <Form :form="createAuditionForm" label-position="top" style="height:500px;overflow-y:auto;">
         <Row>
           <Col span="24">
             <FormItem label="预约试听类型">
               <RadioGroup v-model="createAuditionForm.type">
                 <Radio :label="4">一对一</Radio>
-                <Radio :label="1">班课</Radio>
               </RadioGroup>
             </FormItem>
           </Col>
@@ -220,7 +203,8 @@
           <Col span="24">
             <FormItem label="试听课日期">
               <DatePicker
-                v-model="createAuditionForm.date_time"
+                v-model="auditionTimes"
+                @on-change="auditionTime"
                 type="date"
                 placeholder="选择日期"
                 style="width: 300px"
@@ -230,7 +214,12 @@
           <Col span="24">
             <FormItem label="试听课时段">
               <Select v-model="createAuditionForm.time_block">
-                <Option :value="list.split('-')[0]" v-for="(list,i) in timeNum" :key="i">{{list}}</Option>
+                <Option
+                  :disabled="setSelectDate(list.split('-')[0])"
+                  :value="list.split('-')[0]"
+                  v-for="(list,i) in timeNum"
+                  :key="i"
+                >{{list}}</Option>
               </Select>
             </FormItem>
           </Col>
@@ -258,32 +247,8 @@
         <Button :loading="disableBtn" type="primary" size="large" @click="createAuditionOk">确定</Button>
       </div>
     </Modal>
-    <!-- 签到 -->
-    <Modal
-      width="300"
-      v-model="showSignin"
-      title="签到"
-      @on-cancel="showSignin = false"
-    >
-      <div>
-        <p>是否完成上课？</p>
-        <RadioGroup v-model="signinForm.type">
-          <Radio :label="2">已上课</Radio>
-          <Radio :label="3">缺席</Radio>
-        </RadioGroup>
-      </div>
-      <div slot="footer">
-        <Button type="text" size="large" @click="showSignin = false">取消</Button>
-        <Button type="primary" size="large" @click="signinOk">确定</Button>
-      </div>
-    </Modal>
     <!-- 查看测评 -->
-    <Modal
-      width="500"
-      v-model="showAppraisal"
-      title="查看测评"
-      @on-cancel="showAppraisal = false"
-    >
+    <Modal width="500" v-model="showAppraisal" title="查看测评" @on-cancel="showAppraisal = false">
       <Form :form="appraisalForm" label-position="top" style="height:300px;overflow-y:auto;">
         <FormItem label="测评图片展示" v-if="this.appraisalForm.assess_image">
           <div class="demo-upload-list">
@@ -340,12 +305,7 @@
       </div>
     </Modal>
     <!-- 取消预约 -->
-    <Modal
-      width="300"
-      v-model="showcallOff"
-      title="取消预约"
-      @on-cancel="showcallOff = false"
-    >
+    <Modal width="300" v-model="showcallOff" title="取消预约" @on-cancel="showcallOff = false">
       <div>
         <p>确定{{callOffForm.student_name}}取消预约？</p>
       </div>
@@ -382,12 +342,7 @@
       </Form>
     </Card>
     <!-- 交接单 -->
-    <Modal
-      width="1100"
-      v-model="type.classify == 'connect'"
-      title="交接单"
-      @on-cancel="colseReserved"
-    >
+    <Modal width="1100" v-model="type.classify == 'connect'" title="交接单" @on-cancel="colseReserved">
       <Form
         v-if="type.classify == 'connect'"
         :model="connectForm"
@@ -440,7 +395,7 @@
           <Col span="6">
             <FormItem label="注册手机" prop="mobile">
               <Input v-model="connectForm.mobile" placeholder="请输入注册手机" style="width:200px"></Input>
-            </FormItem>s
+            </FormItem>
           </Col>
           <Col span="6">
             <FormItem label="家长联系方式" prop="spare_phone">
@@ -548,12 +503,7 @@
       </div>
     </Modal>
     <!-- 补款升级 -->
-    <Modal
-      width="800"
-      v-model="type.classify == 'upgrade'"
-      title="补款升级"
-      @on-cancel="colseReserved"
-    >
+    <Modal width="800" v-model="type.classify == 'upgrade'" title="补款升级" @on-cancel="colseReserved">
       <Form
         v-if="type.classify == 'upgrade'"
         :model="upgradeForm"
@@ -683,7 +633,41 @@ export default {
       city: state => state.mineclient.city,
       accountList: state => state.studentpay.accountList,
       ordersnList: state => state.studentpay.ordersnList
-    })
+    }),
+    setSelectDate: function() {
+      return function(item) {
+        var date = new Date();
+        if (
+          this.datePicker(date).split("-")[1] +
+            "-" +
+            this.datePicker(date).split("-")[2] ==
+          this.datePicker(this.createAuditionForm.date_time).split("-")[1] +
+            "-" +
+            this.datePicker(this.createAuditionForm.date_time).split("-")[2]
+        ) {
+          if (
+            this.datePickers(date).split(":")[0] * 1 >
+            item.split(":")[0] * 1
+          ) {
+            return true;
+          } else if (
+            this.datePickers(date).split(":")[0] * 1 ==
+            item.split(":")[0] * 1
+          ) {
+            if (
+              this.datePickers(date).split(":")[1] * 1 >
+                item.split(":")[1] * 1 ||
+              this.datePickers(date).split(":")[1] * 1 + 15 >
+                item.split(":")[1] * 1
+            ) {
+              return true;
+            }
+          } else {
+            return false;
+          }
+        }
+      };
+    }
   },
   mounted() {
     if (this.type.classify == "connect") {
@@ -718,6 +702,7 @@ export default {
   },
   data() {
     return {
+      auditionTimes: "",
       isUpdata: false,
       timeNum: [],
       vaersion: storage.getDaiban().screen_list.book_version,
@@ -865,8 +850,6 @@ export default {
       visible: false,
       appraisalForm: {},
       signinItem: {},
-      signinForm: {},
-      showSignin: false,
       time: "",
       teachersV: [],
       setActive: 0,
@@ -890,27 +873,6 @@ export default {
           align: "center",
           render: (h, params) => {
             return h("div", [
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "text",
-                    size: "small",
-                    disabled:
-                      params.row.appoint_status == "已取消" ||
-                      params.row.appoint_status == "已上课" ||
-                      params.row.appoint_status == "缺席"
-                        ? true
-                        : false
-                  },
-                  on: {
-                    click: () => {
-                      this.signin(params.row);
-                    }
-                  }
-                },
-                "签到"
-              ),
               h(
                 "Button",
                 {
@@ -1027,12 +989,15 @@ export default {
       "getTeacherListN",
       "removeMineclient"
     ]),
+    auditionTime(date) {
+      this.auditionTimes = date;
+    },
     //计算时间段
     getTimeBlock() {
       var start = "";
       var end = "";
       var b = 7;
-      for (var i = 1; i < 35; i++) {
+      for (var i = 1; i < 34; i++) {
         if (i % 2 == 0) {
           start = b + ":" + "30";
           b++;
@@ -1393,58 +1358,36 @@ export default {
         _this.uploadList.push(file);
       };
     },
-    //签到
-    signinOk() {
-      this.setSignin({
-        uid: [this.signinItem.id],
-        status: this.signinForm.type
-      }).then(res => {
-        if (res.data.ret) {
-          this.$Message.success("签到成功");
-          this.isLoading = true;
-          this.getUserReservedList({
-            page: 1,
-            uid: this.type.data.id
-          }).then(res => {});
-        } else {
-          this.$Message.success(res.data.error);
-        }
-        this.isLoading = false;
-        this.showSignin = false;
-        this.signinForm = {};
-      });
-    },
     //获取预约单老师列表
-    getTeachers() {
+    getTeachers(isShow) {
       this.teachersV.length = 0;
       var form = {};
-      this.createAuditionForm.date_time = this.datePicker(
-        this.createAuditionForm.date_time
-      );
       form.subject = this.createAuditionForm.subject;
       form.grade = this.createAuditionForm.grade;
       form.time_block = this.createAuditionForm.time_block;
-      form.date_time = this.createAuditionForm.date_time;
+      form.date_time = this.auditionTimes;
       form.type = this.createAuditionForm.type;
-      if (
-        this.createAuditionForm.subject &&
-        this.createAuditionForm.grade &&
-        this.createAuditionForm.time_block &&
-        this.createAuditionForm.date_time &&
-        this.createAuditionForm.type
-      ) {
-        this.getTeacherListN(form).then(res => {
-          if (!res.data.ret) {
-            this.$Message.error(res.data.error);
-            return;
-          }
-          if (res.data.data.length == 0) {
-            this.$Message.error("暂无老师");
-            this.getUserReservedList({ page: 1, uid: this.type.data.id });
-          } else {
-            this.teachersV = res.data.data;
-          }
-        });
+      if (isShow) {
+        if (
+          this.createAuditionForm.subject &&
+          this.createAuditionForm.grade &&
+          this.createAuditionForm.time_block &&
+          this.auditionTimes &&
+          this.createAuditionForm.type
+        ) {
+          this.getTeacherListN(form).then(res => {
+            if (!res.data.ret) {
+              this.$Message.error(res.data.error);
+              return;
+            }
+            if (res.data.data.length == 0) {
+              this.$Message.error("暂无老师");
+              // this.getUserReservedList({ page: 1, uid: this.type.data.id });
+            } else {
+              this.teachersV = res.data.data;
+            }
+          });
+        }
       }
     },
     //创建订单
@@ -1473,11 +1416,6 @@ export default {
         this.appraisalForm.assess_image = item.assess_image;
         this.appraisalForm.visit_content = item.visit_content;
       }
-    },
-    //新建预约/签到
-    signin(item) {
-      this.showSignin = true;
-      this.signinItem = item;
     },
     //预约试听
     audition() {},
@@ -1520,7 +1458,7 @@ export default {
       } else if (!this.createAuditionForm.subject) {
         this.$Message.error("科目不能为空");
         return;
-      } else if (!this.createAuditionForm.date_time) {
+      } else if (!this.auditionTimes) {
         this.$Message.error("试听课日期不能为空");
         return;
       } else if (!this.createAuditionForm.time_block) {
@@ -1535,9 +1473,7 @@ export default {
       }
       this.showLoading = true;
       this.disableBtn = true;
-      this.createAuditionForm.date_time = this.datePicker(
-        this.createAuditionForm.date_time
-      );
+      this.createAuditionForm.date_time = this.auditionTimes
       this.createdReserved({
         form: this.createAuditionForm,
         uid: this.type.data.id
@@ -1547,7 +1483,7 @@ export default {
           this.getUserReservedList({ page: 1, uid: this.type.data.id });
           this.clearForm();
         } else {
-          this.$Message.error(res.error);
+          this.$Message.error(res.data.error);
         }
         this.showLoading = false;
         this.time = "";
@@ -1617,7 +1553,36 @@ export default {
       if (shi < 10) shi = "0" + shi;
       if (fen < 10) fen = "0" + fen;
       if (miao < 10) miao = "0" + miao;
-      d = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+      d =
+        d.getFullYear() +
+        "-" +
+        (d.getMonth() + 1) +
+        "-" +
+        d.getDate() +
+        "-" +
+        shi +
+        "-" +
+        fen;
+      return d;
+    },
+
+    //设置返回当前时间
+    datePickers(time) {
+      var d = new Date(time);
+      let shi = d.getHours();
+      let fen = d.getMinutes();
+      let miao = d.getSeconds();
+      if (shi < 10) shi = "0" + shi;
+      if (fen < 10) fen = "0" + fen;
+      if (miao < 10) miao = "0" + miao;
+      d =
+        // d.getFullYear() +
+        // "-" +
+        // (d.getMonth() + 1) +
+        // "-" +
+        // d.getDate() +
+        // "-" +
+        shi + ":" + fen;
       return d;
     }
   }

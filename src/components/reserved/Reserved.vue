@@ -150,15 +150,10 @@
           </Col>
         </Row>
       </Form>
-      <div class="allot" v-if="num == 1" @click="allot">
-        <span>{{'已选择'+ checkall.length + '条'}}</span>
-        <p>批量签到</p>
-      </div>
       <Table
         border
         :columns="columns"
         :data="reservedData"
-        @on-selection-change="selectionChange"
         height="500"
       ></Table>
       <Page
@@ -213,9 +208,7 @@ export default {
   data() {
     return {
       sale_list: storage.getDaiban().sale_list,
-      allUid: [],
       showMoadl: false,
-      checkall: [],
       num: storage.getReseredTab(),
       course: storage.getDaiban().screen_list.course_type,
       appoint: storage.getDaiban().screen_list.appoint_status,
@@ -242,12 +235,6 @@ export default {
   methods: {
     ...mapMutations(["setReservedTypes", "setCurrentPage"]),
     ...mapActions(["getReservedList", "RingUp", "setSignin"]),
-    //批量签到
-    allot() {
-      this.type.classify = "signin";
-      this.showMoadl = true;
-      this.type.uid = this.allUid;
-    },
     //设置展示的操作内容
     setStatus() {
       if (this.num == "2") {
@@ -326,21 +313,6 @@ export default {
             align: "center",
             render: (h, params) => {
               return h("div", [
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "text",
-                      size: "small"
-                    },
-                    on: {
-                      click: () => {
-                        this.signin(params.row);
-                      }
-                    }
-                  },
-                  "签到"
-                ),
                 h(
                   "Button",
                   {
@@ -455,27 +427,6 @@ export default {
                   {
                     props: {
                       type: "text",
-                      size: "small",
-                      disabled:
-                        params.row.appoint_status == "已取消" ||
-                        params.row.appoint_status == "已上课" ||
-                        params.row.appoint_status == "缺席"
-                          ? true
-                          : false
-                    },
-                    on: {
-                      click: () => {
-                        this.signin(params.row);
-                      }
-                    }
-                  },
-                  "签到"
-                ),
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "text",
                       size: "small"
                     },
                     on: {
@@ -552,12 +503,6 @@ export default {
       this.showMoadl = true;
       this.type.data = item;
     },
-    //签到
-    signin(item) {
-      this.type.classify = "signin";
-      this.showMoadl = true;
-      this.type.data = item;
-    },
     //设置返回的时间
     datePicker(time) {
       var d = new Date(time);
@@ -610,14 +555,6 @@ export default {
         this.isLoading = false;
         this.setCurrentPage(page);
       });
-    },
-    selectionChange(item) {
-      let arr = [];
-      this.checkall = item;
-      for (var i = 0; i < item.length; i++) {
-        arr.push(item[i].id);
-      }
-      this.allUid = arr;
     },
     //呼出
     getBtnClick4(item) {
