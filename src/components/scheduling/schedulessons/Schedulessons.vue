@@ -120,7 +120,12 @@ export default {
   },
   mounted() {
     this.isLoading = true;
-    this.getLessonsList({form:{lesson_time_start:this.datePicker(this.startAccount),lesson_time_end:this.datePicker(this.endAccount)}}).then(() => {
+    this.getLessonsList({
+      form: {
+        lesson_time_start: this.datePicker(this.startAccount),
+        lesson_time_end: this.datePicker(this.endAccount)
+      }
+    }).then(() => {
       this.isLoading = false;
     });
   },
@@ -132,31 +137,64 @@ export default {
       subjectList: storage.getDaiban().screen_list.subject,
       courseType: storage.getDaiban().screen_list.course_type,
       startAccount: new Date(),
-      endAccount: new Date(new Date().getTime() + 24*60*60*1000),
+      endAccount: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
       show: false,
       type: {},
       isLoading: false,
       form: {},
       columns: [
-        { type: "selection", width: 60 },
-        { title: "课节名称", key: "lesson_name", width: "200" },
+        { type: "selection", width: 60, fixed: "left" },
+        { title: "课节名称", key: "lesson_name", width: "200", fixed: "left" },
         { title: "授课类型", key: "course_type", width: "100" },
         { title: "学员名称", key: "student_name", width: "100" },
         { title: "学员电话", key: "student_mobile", width: "130" },
         { title: "年级", key: "grade", width: "80" },
         { title: "科目", key: "subject", width: "80" },
         { title: "状态", key: "status", width: "80" },
-        { title: "星期", key: "week_day", width: "80" },
-        { title: "开课日期", key: "lesson_date", width: "120" },
-        { title: "开课时间", key: "lesson_time", width: "120" },
-        { title: "授课教师", key: "coach_name", width: "165" },
-        { title: "创建时间", key: "create_time", width: "170" }
+        { title: "开课日期", key: "lesson_date", width: "110" },
+        { title: "开课时间", key: "lesson_time", width: "160" },
+        { title: "授课教师", key: "coach_name", width: "185" },
+        // {
+        //   title: "回放地址",
+        //   key: "coach_name",
+        //   width: "200",
+        //   render: (h, params) => {
+        //     return h("div", [
+        //       h(
+        //         "span",
+        //         {
+        //           on: {
+        //             props: {
+        //               type: "text",
+        //               size: "small"
+        //             },
+        //             click: () => {
+        //               this.goBank(params.row);
+        //             }
+        //           },
+        //           style: {
+        //             width: "100%",
+        //             display: "inline-block",
+        //             cursor: "pointer",
+        //             color:'#2d8cf0'
+        //           }
+        //         },
+        //         params.row.coach_name
+        //       )
+        //     ]);
+        //   }
+        // },
+        { title: "创建时间", key: "create_time", width: "200" }
       ]
     };
   },
   methods: {
     ...mapMutations(["setCurrentPage"]),
     ...mapActions(["getLessonsList"]),
+    //回放地址
+    goBank(item){
+      // console.log(window.open('https://www.baidu.com'))
+    },
     //手机号
     seekMobile() {
       if (this.form.mobile.length >= 4) {

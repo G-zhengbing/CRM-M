@@ -724,17 +724,13 @@ export default {
           title: "学员姓名",
           key: "student_name",
           width: "95"
-          // render:()=>{
-
-          // }
         },
         { title: "学员手机号", key: "student_mobile", width: "130" },
         { title: "年级", key: "grade", width: "70" },
         { title: "科目", key: "subject", width: "70" },
         { title: "状态", key: "status", width: "80" },
-        { title: "星期", key: "week_day", width: "80" },
-        { title: "开课日期", key: "lesson_date", width: "110" },
-        { title: "开课时间", key: "lesson_time", width: "120" },
+        { title: "上课日期", key: "lesson_date", width: "110" },
+        { title: "上课时间", key: "lesson_time", width: "120" },
         {
           title: "学员数量",
           key: "student_num",
