@@ -55,14 +55,9 @@
 import qs from "qs";
 import { mapState, mapActions } from "vuex";
 import { UPLOADIMAGE, CREATEINBOOK, UPDATEINBOOK } from "@/uilt/url/Murl";
+import storage from "@/uilt/storage.js";
 import { SCREENLIST } from "@/uilt/url/url";
 export default {
-  computed: {
-    ...mapState({
-      subjectList: state => state.screen_list.subject,
-      grade_strList: state => state.screen_list.grade_str
-    })
-  },
   props: {
     row: {
       type: [Object, String],
@@ -80,6 +75,8 @@ export default {
   },
   data() {
     return {
+      subjectList: storage.getDaiban().screen_list.subject,
+      grade_strList: storage.getDaiban().screen_list.grade_str,
       modal1: "",
       formValidate: {
         title_image: "",

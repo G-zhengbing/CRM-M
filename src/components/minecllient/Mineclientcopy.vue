@@ -130,22 +130,6 @@
             </Form>
             <Button type="primary" @click="createUsers">创建用户</Button>
           </div>
-          <Table
-            border
-            :columns="columns"
-            :data="clientkData"
-            @on-selection-change="selectionChange"
-            height="545"
-          ></Table>
-          <Page
-            @on-change="pageChange"
-            :total="total"
-            :current="currentPage"
-            :page-size="pageSize"
-            show-total
-            show-elevator
-            class="ive-page"
-          />
         </div>
       </div>
     </section>

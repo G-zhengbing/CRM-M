@@ -4,72 +4,21 @@
       <div style="text-align:center">
         <Tabs type="card" value="name1" @on-click="changeTab" :animated="false">
           <TabPane label="我的学员" name="name1">
-            <div class="title">
-              <Form class="select" ref="formValidate" :model="formItem" inline>
-                <FormItem>
-                  <Input v-model="formItem.student_name" placeholder="学员姓名" style="width: 80px;"></Input>
-                </FormItem>
-                <FormItem>
-                  <Input v-model="formItem.mobile" placeholder="注册手机" style="width: 80px;"></Input>
-                </FormItem>
-                <FormItem>
-                  <Select v-model="formItem.grade" placeholder="选择年级" style="width: 100px;">
-                    <Option
-                      :value="index"
-                      v-for="(item,index) in selectState.grade"
-                      :key="index"
-                    >{{item}}</Option>
-                  </Select>
-                </FormItem>
-                <FormItem>
-                  <Select v-model="formItem.subject" placeholder="选择科目" style="width: 100px;">
-                    <Option
-                      :value="index"
-                      v-for="(item,index) in selectState.subject"
-                      :key="index"
-                    >{{item}}</Option>
-                  </Select>
-                </FormItem>
-                <FormItem>
-                  <Input v-model="formItem.course_name" placeholder="课程名称" style="width: 80px;"></Input>
-                </FormItem>
-                <FormItem>
-                  <DatePicker
-                    v-model="formItem.allocateTime"
-                    type="datetimerange"
-                    placement="bottom-end"
-                    placeholder="分配时间 - 分配时间"
-                    style="width: 165px"
-                    @on-change="changeAllocateTimeDate"
-                  ></DatePicker>
-                </FormItem>
-                <FormItem>
-                  <Select
-                    v-model="formItem.dial_up_situation"
-                    placeholder="首电呼出情况"
-                    style="width: 120px;"
-                  >
-                    <Option value="1">已完成</Option>
-                    <Option value="2">进行中</Option>
-                    <Option value="3">超时</Option>
-                  </Select>
-                </FormItem>
-                <FormItem>
-                  <DatePicker
-                    v-model="formItem.submissionTime"
-                    type="datetimerange"
-                    placement="bottom-end"
-                    placeholder="提交时间 - 提交时间"
-                    @on-change="changeSubmissionTime"
-                    style="width: 165px"
-                  ></DatePicker>
-                </FormItem>
-                <FormItem>
-                  <Button @click="deleteFormData" style="margin-left: 8px">清空选项</Button>
-                </FormItem>
-              </Form>
-            </div>
-            <TableBox :columns="columns" :dataList="dataList" />
+            <SelectBox
+              @formData="formData"
+              :classType="true"
+              :tradingHour="true"
+              :chooseSubject="true"
+              :placeholder="true"
+              :firstState="true"
+            />
+            <TableBox
+              :columns="columns"
+              :dataList="dataList"
+              :selectData="true"
+              :page_num="formItem.page_num"
+              @pageNums="pageNums"
+            />
             <PagingBox
               :total="total"
               :per_page="per_page"
@@ -79,72 +28,20 @@
             />
           </TabPane>
           <TabPane label="今日新分" name="name2">
-            <div class="title">
-              <Form class="select" ref="formValidate" :model="formItem" inline>
-                <FormItem>
-                  <Input v-model="formItem.student_name" placeholder="学员姓名" style="width: 80px;"></Input>
-                </FormItem>
-                <FormItem>
-                  <Input v-model="formItem.mobile" placeholder="注册手机" style="width: 80px;"></Input>
-                </FormItem>
-                <FormItem>
-                  <Select v-model="formItem.grade" placeholder="选择年级" style="width: 100px;">
-                    <Option
-                      :value="index"
-                      v-for="(item,index) in selectState.grade"
-                      :key="index"
-                    >{{item}}</Option>
-                  </Select>
-                </FormItem>
-                <FormItem>
-                  <Select v-model="formItem.subject" placeholder="选择科目" style="width: 100px;">
-                    <Option
-                      :value="index"
-                      v-for="(item,index) in selectState.subject"
-                      :key="index"
-                    >{{item}}</Option>
-                  </Select>
-                </FormItem>
-                <FormItem>
-                  <Input v-model="formItem.course_name" placeholder="课程名称" style="width: 80px;"></Input>
-                </FormItem>
-                <FormItem>
-                  <DatePicker
-                    v-model="formItem.allocateTime"
-                    type="datetimerange"
-                    placement="bottom-end"
-                    placeholder="分配时间 - 分配时间"
-                    style="width: 165px"
-                    @on-change="changeAllocateTimeDate"
-                  ></DatePicker>
-                </FormItem>
-                <FormItem>
-                  <Select
-                    v-model="formItem.dial_up_situation"
-                    placeholder="首电呼出情况"
-                    style="width: 120px;"
-                  >
-                    <Option value="1">已完成</Option>
-                    <Option value="2">进行中</Option>
-                    <Option value="3">超时</Option>
-                  </Select>
-                </FormItem>
-                <FormItem>
-                  <DatePicker
-                    v-model="formItem.submissionTime"
-                    type="datetimerange"
-                    placement="bottom-end"
-                    placeholder="提交时间 - 提交时间"
-                    @on-change="changeSubmissionTime"
-                    style="width: 165px"
-                  ></DatePicker>
-                </FormItem>
-                <FormItem>
-                  <Button @click="deleteFormData" style="margin-left: 8px">清空选项</Button>
-                </FormItem>
-              </Form>
-            </div>
-            <TableBox :columns="columns" :dataList="dataList" />
+            <SelectBox
+              @formData="formData"
+              :tradingHour="true"
+              :chooseSubject="true"
+              :placeholder="true"
+              :firstState="true"
+            />
+            <TableBox
+              :columns="columns"
+              :dataList="dataList"
+              :selectData="true"
+              :page_num="formItem.page_num"
+              @pageNums="pageNums"
+            />
             <PagingBox
               :total="total"
               :per_page="per_page"
@@ -154,61 +51,20 @@
             />
           </TabPane>
           <TabPane label="首电待完成" name="name3">
-            <div class="title">
-              <Form class="select" ref="formValidate" :model="formItem" inline>
-                <FormItem>
-                  <Input v-model="formItem.student_name" placeholder="学员姓名" style="width: 80px;"></Input>
-                </FormItem>
-                <FormItem>
-                  <Input v-model="formItem.mobile" placeholder="注册手机" style="width: 80px;"></Input>
-                </FormItem>
-                <FormItem>
-                  <Select v-model="formItem.grade" placeholder="选择年级" style="width: 100px;">
-                    <Option
-                      :value="index"
-                      v-for="(item,index) in selectState.grade"
-                      :key="index"
-                    >{{item}}</Option>
-                  </Select>
-                </FormItem>
-                <FormItem>
-                  <Select v-model="formItem.subject" placeholder="选择科目" style="width: 100px;">
-                    <Option
-                      :value="index"
-                      v-for="(item,index) in selectState.subject"
-                      :key="index"
-                    >{{item}}</Option>
-                  </Select>
-                </FormItem>
-                <FormItem>
-                  <Input v-model="formItem.course_name" placeholder="课程名称" style="width: 80px;"></Input>
-                </FormItem>
-                <FormItem>
-                  <DatePicker
-                    v-model="formItem.allocateTime"
-                    type="datetimerange"
-                    placement="bottom-end"
-                    placeholder="分配时间 - 分配时间"
-                    style="width: 165px"
-                    @on-change="changeAllocateTimeDate"
-                  ></DatePicker>
-                </FormItem>
-                <FormItem>
-                  <DatePicker
-                    v-model="formItem.submissionTime"
-                    type="datetimerange"
-                    placement="bottom-end"
-                    placeholder="提交时间 - 提交时间"
-                    @on-change="changeSubmissionTime"
-                    style="width: 165px"
-                  ></DatePicker>
-                </FormItem>
-                <FormItem>
-                  <Button @click="deleteFormData" style="margin-left: 8px">清空选项</Button>
-                </FormItem>
-              </Form>
-            </div>
-            <TableBox :columns="columns" :dataList="dataList" />
+            <SelectBox
+              @formData="formData"
+              :tradingHour="true"
+              :chooseSubject="true"
+              :placeholder="true"
+              :allocateTime="true"
+            />
+            <TableBox
+              :columns="columns"
+              :dataList="dataList"
+              :selectData="true"
+              :page_num="formItem.page_num"
+              @pageNums="pageNums"
+            />
             <PagingBox
               :total="total"
               :per_page="per_page"
@@ -221,20 +77,8 @@
       </div>
     </div>
     <CallOut v-if="type == 'CallOut'" :row="row" :showMod="showMod" @changeShowMod="changeShowMod" />
-    <Appraisal
-      v-else-if="type == 'Appraisal'"
-      :row="row"
-      :showMod="showMod"
-      @changeShowMod="changeShowMod"
-    />
     <StudentsFollowUp
       v-else-if="type == 'StudentsFollowUp'"
-      :row="row"
-      :showMod="showMod"
-      @changeShowMod="changeShowMod"
-    />
-    <LearningReport
-      v-else-if="type == 'LearningReport'"
       :row="row"
       :showMod="showMod"
       @changeShowMod="changeShowMod"
@@ -246,9 +90,9 @@
 <script>
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import { VIPUSERLIST } from "@/uilt/url/url";
+import storage from "@/uilt/storage";
 import qs from "qs";
 
-import oneononestudent from "@/store/oneononestudent";
 export default {
   computed: {
     ...mapState({
@@ -396,7 +240,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.CallOut(params.row);
+                      this.switch("CallOut", params.row);
                     }
                   }
                 },
@@ -411,7 +255,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.StudentsFollowUp(params.row);
+                      this.switch("StudentsFollowUp", params.row);
                     }
                   }
                 },
@@ -514,7 +358,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.CallOut(params.row);
+                      this.switch("CallOut", params.row);
                     }
                   }
                 },
@@ -529,7 +373,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.StudentsFollowUp(params.row);
+                      this.switch("StudentsFollowUp", params.row);
                     }
                   }
                 },
@@ -538,7 +382,8 @@ export default {
             ]);
           }
         }
-      ]
+      ],
+      teacherList: storage.getDaiban().header_list
     };
   },
   watch: {
@@ -559,39 +404,21 @@ export default {
     }
   },
   methods: {
+    // 每页条数
+    pageNums(val) {
+      this.formItem.page_num = val;
+      this.getUserData();
+    },
     // 关闭窗口状态
     changeShowMod(val) {
       this.showMod = val;
       this.type = "";
     },
-    // 呼出
-    CallOut(row) {
+    // 开关
+    switch(name, row) {
       this.showMod = true;
       this.row = row;
-      this.type = "CallOut";
-    },
-    // 跟进
-    StudentsFollowUp(row) {
-      this.showMod = true;
-      this.row = row;
-      this.type = "StudentsFollowUp";
-    },
-    // 查看测评
-    Appraisal(row) {
-      this.showMod = true;
-      this.row = row;
-      this.type = "Appraisal";
-    },
-    // 学情报告
-    LearningReport(row) {
-      this.showMod = true;
-      this.row = row;
-      this.type = "LearningReport";
-    },
-    // 转换date
-    changeSubmissionTime(time) {
-      this.formItem.create_start_time = time[0];
-      this.formItem.create_end_time = time[1];
+      this.type = name;
     },
     // 点击清除选项
     deleteFormData() {
@@ -599,11 +426,6 @@ export default {
         page: 1, // 页码
         page_num: "10" // 每页条数
       };
-    },
-    // 转换date
-    changeAllocateTimeDate(time) {
-      this.formItem.create_st_time = time[0];
-      this.formItem.create_en_time = time[1];
     },
     ...mapMutations(["setCurrentPages", "setSelectState", "setRefresh"]),
     // 改变页码
@@ -613,30 +435,25 @@ export default {
     },
     // 设置mode搜索词汇
     formData(val) {
-      this.mode = val;
+      let list_type = this.formItem.list_type
+      this.formItem = val;
+      this.formItem.list_type = list_type
     },
     // 点击选项卡切换触发
     changeTab(value) {
       this.value = value;
+      this.deleteFormData();
       if (this.value === "name1") {
-        this.deleteFormData();
         this.columns = this.columns1;
-        this.list_type = 1;
-        this.formItem.list_type = this.list_type;
-        this.getUserData();
+        this.formItem.list_type = 1;
       } else if (this.value == "name2") {
-        this.deleteFormData();
         this.columns = this.columns2;
-        this.list_type = 2;
-        this.formItem.list_type = this.list_type;
-        this.getUserData();
+        this.formItem.list_type = 2;
       } else if (this.value == "name3") {
-        this.deleteFormData();
         this.columns = this.columns2;
-        this.list_type = 3;
-        this.formItem.list_type = this.list_type;
-        this.getUserData();
+        this.formItem.list_type = 3;
       }
+      this.getUserData();
     },
     // 获取信息
     async getUserData() {
@@ -693,7 +510,6 @@ export default {
     }
   },
   created() {
-    this.getUserData();
     this.columns = this.columns1;
   }
 };

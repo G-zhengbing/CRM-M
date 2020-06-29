@@ -102,7 +102,7 @@ export default {
     },
     // 监控每页条数，清空formdata自动变更
     page_num(val) {
-      this.model1 = val;
+      this.model1 = val || '10';
     },
     // 切换页面，清空选中状态计数
     empty() {
