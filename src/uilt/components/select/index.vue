@@ -25,20 +25,12 @@
       </Select>
     </FormItem>
     <FormItem v-if="payingStudents || chooseSubject">
-      <Select
-        v-model="formItem.subject"
-        placeholder="选择科目"
-        style="width: 100px;"
-      >
+      <Select v-model="formItem.subject" placeholder="选择科目" style="width: 100px;">
         <Option :value="index" v-for="(item,index) in subjectList" :key="index">{{item}}</Option>
       </Select>
     </FormItem>
-    <FormItem v-if="!classType">
-      <Select
-        v-model="formItem.class_type"
-        placeholder="选择班级类型"
-        style="width: 120px;"
-      >
+    <FormItem v-if="classType">
+      <Select v-model="formItem.class_type" placeholder="选择班级类型" style="width: 120px;">
         <Option :value="index" v-for="(item,index) in classTypeList" :key="index">{{item}}</Option>
       </Select>
     </FormItem>
@@ -51,19 +43,11 @@
       </Select>
     </FormItem>-->
     <FormItem v-if="placeholder">
-      <Select
-        v-model="formItem.teacher_id"
-        placeholder="班主任"
-        style="width: 80px;"
-      >
-        <Option
-          :value="item.teacher_id"
-          v-for="item in classTeacherList"
-          :key="item.teacher_id"
-        >{{item.teacher_name}}</Option>
+      <Select v-model="formItem.teacher_id" placeholder="班主任" style="width: 80px;">
+        <Option :value="item.id" v-for="item in classTeacherList" :key="item.id">{{item.login_name}}</Option>
       </Select>
     </FormItem>
-    
+
     <FormItem v-if="!classname">
       <Input v-model="formItem.course_name" placeholder="课程名称" style="width: 80px;"></Input>
     </FormItem>
@@ -99,20 +83,12 @@
       ></DatePicker>
     </FormItem>
     <FormItem v-if="turnOut">
-      <Select
-        v-model="formItem.class_attendance"
-        placeholder="本周到课情况"
-        style="width: 120px;"
-      >
+      <Select v-model="formItem.class_attendance" placeholder="本周到课情况" style="width: 120px;">
         <Option v-for="(item,index) in WeekClassList" :value="index" :key="index">{{item}}</Option>
       </Select>
     </FormItem>
     <FormItem v-if="turnOut">
-      <Select
-        v-model="formItem.delivery_of_work"
-        placeholder="上周交作业情况"
-        style="width: 120px;"
-      >
+      <Select v-model="formItem.delivery_of_work" placeholder="上周交作业情况" style="width: 120px;">
         <Option v-for="(item,index) in HomeWorkList" :key="index" :value="index">{{item}}</Option>
       </Select>
     </FormItem>
@@ -192,6 +168,7 @@
 </template>
 <script>
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
+import storage from "@/uilt/storage";
 export default {
   props: {
     // 学员姓名
@@ -319,7 +296,6 @@ export default {
       subjectList: state => state.selectState.subject,
       gradeList: state => state.selectState.grade,
       classTypeList: state => state.selectState.class_type,
-      classTeacherList: state => state.selectState.classTeacher,
       WeekClassList: state => state.selectState.class_attendance,
       HomeWorkList: state => state.selectState.delivery_of_work,
       typeList: state => state.selectState.type,
@@ -328,7 +304,8 @@ export default {
   },
   data() {
     return {
-      formItem: {}
+      formItem: {},
+      classTeacherList: storage.getDaiban().header_list
     };
   },
   watch: {
@@ -366,8 +343,8 @@ export default {
     // 点击清除选项
     deleteFormData() {
       this.formItem = {};
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped>
