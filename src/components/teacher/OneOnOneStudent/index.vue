@@ -31,6 +31,15 @@
                   </Select>
                 </FormItem>
                 <FormItem>
+                  <Select v-model="formItem.teacher_id" placeholder="班主任" style="width: 100px;">
+                    <Option
+                      :value="item.id"
+                      v-for="item in teacherList"
+                      :key="item.id"
+                    >{{item.login_name}}</Option>
+                  </Select>
+                </FormItem>
+                <FormItem>
                   <Input v-model="formItem.course_name" placeholder="课程名称" style="width: 80px;"></Input>
                 </FormItem>
                 <FormItem>
@@ -69,7 +78,7 @@
                 </FormItem>
               </Form>
             </div>
-            <TableBox :columns="columns" :dataList="dataList" />
+            <TableBox :columns="columns" :dataList="dataList" :selectData="true" @pageNums="pageNums" />
             <PagingBox
               :total="total"
               :per_page="per_page"
@@ -106,6 +115,15 @@
                   </Select>
                 </FormItem>
                 <FormItem>
+                  <Select v-model="formItem.teacher_id" placeholder="班主任" style="width: 100px;">
+                    <Option
+                      :value="item.id"
+                      v-for="item in teacherList"
+                      :key="item.id"
+                    >{{item.login_name}}</Option>
+                  </Select>
+                </FormItem>
+                <FormItem>
                   <Input v-model="formItem.course_name" placeholder="课程名称" style="width: 80px;"></Input>
                 </FormItem>
                 <FormItem>
@@ -144,7 +162,7 @@
                 </FormItem>
               </Form>
             </div>
-            <TableBox :columns="columns" :dataList="dataList" />
+            <TableBox :columns="columns" :dataList="dataList" :selectData="true" @pageNums="pageNums" />
             <PagingBox
               :total="total"
               :per_page="per_page"
@@ -181,6 +199,15 @@
                   </Select>
                 </FormItem>
                 <FormItem>
+                  <Select v-model="formItem.teacher_id" placeholder="班主任" style="width: 100px;">
+                    <Option
+                      :value="item.id"
+                      v-for="item in teacherList"
+                      :key="item.id"
+                    >{{item.login_name}}</Option>
+                  </Select>
+                </FormItem>
+                <FormItem>
                   <Input v-model="formItem.course_name" placeholder="课程名称" style="width: 80px;"></Input>
                 </FormItem>
                 <FormItem>
@@ -208,7 +235,7 @@
                 </FormItem>
               </Form>
             </div>
-            <TableBox :columns="columns" :dataList="dataList" />
+            <TableBox :columns="columns" :dataList="dataList" :selectData="true" @pageNums="pageNums" />
             <PagingBox
               :total="total"
               :per_page="per_page"
@@ -246,6 +273,7 @@
 <script>
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import { VIPUSERLIST } from "@/uilt/url/url";
+import storage from "@/uilt/storage";
 import qs from "qs";
 
 import oneononestudent from "@/store/oneononestudent";
@@ -538,7 +566,8 @@ export default {
             ]);
           }
         }
-      ]
+      ],
+      teacherList: storage.getDaiban().header_list
     };
   },
   watch: {
@@ -559,6 +588,11 @@ export default {
     }
   },
   methods: {
+    // 每页条数
+    pageNums(val) {
+      this.formItem.page_num = val
+      this.getUserData()
+    },
     // 关闭窗口状态
     changeShowMod(val) {
       this.showMod = val;
