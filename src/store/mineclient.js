@@ -442,7 +442,7 @@ export default {
     getClientList({
       state,
       commit
-    }, {form, page}) {
+    }, {form, page,sort}) {
       // axiosGet({method:"get",url:MINECLIENT,params:{ ...form, page: page ? page : state.currentPage}}).then(res => {
       //   commit("setMineclient", res.data.data.resources)
       //   commit("setCurrentPage", res.data.data.links.current_page)
@@ -461,7 +461,8 @@ export default {
           },
           params: {
             ...form,
-            page: page ? page : state.currentPage
+            page: page ? page : state.currentPage,
+            sort
           }
         }).then(res => {
           commit("setMineclient", res.data.data.resources)

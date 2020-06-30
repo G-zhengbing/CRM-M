@@ -717,8 +717,8 @@ export default {
         ]
       },
       columns: [
-        { type: "index", width: 60 },
-        { title: "课节名称", key: "lesson_name", width: "170" },
+        { type: "index", width: 60 ,fixed:'left'},
+        { title: "课节名称", key: "lesson_name", width: "170",fixed:'left' },
         { title: "授课类型", key: "course_type", width: "95" },
         {
           title: "学员姓名",
@@ -726,11 +726,11 @@ export default {
           width: "95"
         },
         { title: "学员手机号", key: "student_mobile", width: "130" },
-        { title: "年级", key: "grade", width: "70" },
+        { title: "年级", key: "grade", width: "100" },
         { title: "科目", key: "subject", width: "70" },
         { title: "状态", key: "status", width: "80" },
         { title: "上课日期", key: "lesson_date", width: "110" },
-        { title: "上课时间", key: "lesson_time", width: "120" },
+        { title: "上课时间", key: "lesson_time", width: "150" },
         {
           title: "学员数量",
           key: "student_num",
@@ -794,12 +794,66 @@ export default {
             ]);
           }
         },
-        { title: "授课教师", key: "coach_name", width: "165" },
+        {
+          title: "回放地址",
+          key: "coach_name",
+          width: "100",
+          render: (h, params) => {
+            if (params.row.is_show == 1) {
+              return h("div", [
+                h(
+                  "span",
+                  {
+                    on: {
+                      props: {
+                        type: "text",
+                        size: "small"
+                      },
+                      click: () => {
+                        this.goBank(params.row);
+                      }
+                    },
+                    style: {
+                      width: "100%",
+                      display: "inline-block",
+                      cursor: "pointer",
+                      color: "#2d8cf0"
+                    }
+                  },
+                 '直播/回放'
+                )
+              ]);
+            } else {
+              return h("div", [
+                h(
+                  "span",
+                  {
+                    on: {
+                      props: {
+                        type: "text",
+                        size: "small"
+                      }
+                    },
+                    style: {
+                      width: "100%",
+                      display: "inline-block",
+                      cursor: "pointer",
+                      color: "#ccc"
+                    }
+                  },
+                  '直播/回放'
+                )
+              ]);
+            }
+          }
+        },
+        { title: "授课教师", key: "coach_name", width: "180" },
         { title: "创建时间", key: "create_time", width: "170" },
         {
           title: "操作",
           key: "action",
           align: "center",
+          width:'100',
           render: (h, params) => {
             if (this.type.obj.course_type == 1) {
               return h("div", [
@@ -899,6 +953,10 @@ export default {
       "getlessonsStudent",
       "addCourseStudents"
     ]),
+    //回放地址
+    goBank(item) {
+      window.open(item.web_cast)
+    },
     //预约课取消
     cancelAudition(item) {
       this.$Modal.confirm({

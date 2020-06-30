@@ -129,6 +129,23 @@
               </Row>
             </Form>
             <Button type="primary" @click="createUsers">创建用户</Button>
+            <Table
+              border
+              :columns="columns"
+              :data="clientkData"
+              @on-selection-change="selectionChange"
+              height="500"
+              @on-sort-change="sortTable"
+            ></Table>
+            <Page
+              @on-change="pageChange"
+              :total="total"
+              :current="currentPage"
+              :page-size="pageSize"
+              show-total
+              show-elevator
+              class="ive-page"
+            />
           </div>
         </div>
       </div>
@@ -181,6 +198,7 @@ export default {
   },
   data() {
     return {
+      lastFollowTimeSort:'',
       visitColumns: [
         { title: "回访内容", key: "visit_content" },
         { title: "跟进人", key: "sale_name", width: 100 },
@@ -255,6 +273,7 @@ export default {
           key: "last_follow_time",
           width: 170,
           align: "center",
+          sortable: true
         },
         { title: "学习阶段", key: "stage", width: 100 },
         { title: "意向度", key: "intention_option", width: 80 },
@@ -369,8 +388,18 @@ export default {
   },
   methods: {
     // 排序
-    selectSort(data) {
-      console.log(data)
+    sortTable(item) {
+      if(item.order == 'asc'){
+        this.lastFollowTimeSort = 2
+      }else if(item.order == 'desc'){
+        this.lastFollowTimeSort = 1
+      }else{
+        this.lastFollowTimeSort = ''
+      }
+      this.isLoading = true;
+      this.getClientList({ form: this.form ,sort:this.lastFollowTimeSort}).then(res => {
+        this.isLoading = false;
+      });
     },
     ...mapMutations(["setClientTypes", "setCurrentPage"]),
     ...mapActions(["getClientList", "RingUp", "getReferList"]),
@@ -466,7 +495,7 @@ export default {
         this.setCurrentPage(page);
       }
       this.isLoading = true;
-      this.getClientList({ form: this.form, page }).then(res => {
+      this.getClientList({ form: this.form, page,sort:this.lastFollowTimeSort }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(page);
       });
@@ -521,7 +550,7 @@ export default {
     pageChange(num) {
       this.isLoading = true;
       this.setCurrentPage(num);
-      this.getClientList({ form: this.form }).then(res => {
+      this.getClientList({ form: this.form ,sort:this.lastFollowTimeSort}).then(res => {
         this.isLoading = false;
         this.setCurrentPage(num);
       });

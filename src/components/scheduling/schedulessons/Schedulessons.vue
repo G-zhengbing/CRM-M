@@ -154,36 +154,59 @@ export default {
         { title: "开课日期", key: "lesson_date", width: "110" },
         { title: "开课时间", key: "lesson_time", width: "160" },
         { title: "授课教师", key: "coach_name", width: "185" },
-        // {
-        //   title: "回放地址",
-        //   key: "coach_name",
-        //   width: "200",
-        //   render: (h, params) => {
-        //     return h("div", [
-        //       h(
-        //         "span",
-        //         {
-        //           on: {
-        //             props: {
-        //               type: "text",
-        //               size: "small"
-        //             },
-        //             click: () => {
-        //               this.goBank(params.row);
-        //             }
-        //           },
-        //           style: {
-        //             width: "100%",
-        //             display: "inline-block",
-        //             cursor: "pointer",
-        //             color:'#2d8cf0'
-        //           }
-        //         },
-        //         params.row.coach_name
-        //       )
-        //     ]);
-        //   }
-        // },
+        {
+          title: "回放地址",
+          key: "coach_name",
+          width: "100",
+          render: (h, params) => {
+            if (params.row.is_show == 1) {
+              return h("div", [
+                h(
+                  "span",
+                  {
+                    on: {
+                      props: {
+                        type: "text",
+                        size: "small"
+                      },
+                      click: () => {
+                        this.goBank(params.row);
+                      }
+                    },
+                    style: {
+                      width: "100%",
+                      display: "inline-block",
+                      cursor: "pointer",
+                      color: "#2d8cf0"
+                    }
+                  },
+                 '直播/回放'
+                )
+              ]);
+            } else {
+              return h("div", [
+                h(
+                  "span",
+                  {
+                    on: {
+                      props: {
+                        type: "text",
+                        size: "small"
+                      }
+                    },
+                    style: {
+                      width: "100%",
+                      display: "inline-block",
+                      cursor: "pointer",
+                      color: "#ccc"
+                    }
+                  },
+                  '直播/回放'
+                )
+              ]);
+            }
+          }
+        },
         { title: "创建时间", key: "create_time", width: "200" }
       ]
     };
@@ -192,8 +215,8 @@ export default {
     ...mapMutations(["setCurrentPage"]),
     ...mapActions(["getLessonsList"]),
     //回放地址
-    goBank(item){
-      // console.log(window.open('https://www.baidu.com'))
+    goBank(item) {
+      window.open(item.web_cast)
     },
     //手机号
     seekMobile() {
