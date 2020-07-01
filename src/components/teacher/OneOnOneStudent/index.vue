@@ -246,7 +246,7 @@ export default {
           key: "operation",
           align: "center",
           fixed: "right",
-          width: 200,
+          width: 160,
           render: (h, params) => {
             return h("div", [
               h(
@@ -279,21 +279,21 @@ export default {
                 },
                 "试听"
               ),
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "text",
-                    size: "small"
-                  },
-                  on: {
-                    click: () => {
-                      this.switch("Referral", params.row);
-                    }
-                  }
-                },
-                "转介绍"
-              ),
+              // h(
+              //   "Button",
+              //   {
+              //     props: {
+              //       type: "text",
+              //       size: "small"
+              //     },
+              //     on: {
+              //       click: () => {
+              //         this.switch("Referral", params.row);
+              //       }
+              //     }
+              //   },
+              //   "转介绍"
+              // ),
               h(
                 "Button",
                 {
@@ -409,7 +409,7 @@ export default {
           key: "operation",
           align: "center",
           fixed: "right",
-          width: 200,
+          width: 160,
           render: (h, params) => {
             return h("div", [
               h(
@@ -442,21 +442,21 @@ export default {
                 },
                 "试听"
               ),
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "text",
-                    size: "small"
-                  },
-                  on: {
-                    click: () => {
-                      this.switch("Referral", params.row);
-                    }
-                  }
-                },
-                "转介绍"
-              ),
+              // h(
+              //   "Button",
+              //   {
+              //     props: {
+              //       type: "text",
+              //       size: "small"
+              //     },
+              //     on: {
+              //       click: () => {
+              //         this.switch("Referral", params.row);
+              //       }
+              //     }
+              //   },
+              //   "转介绍"
+              // ),
               h(
                 "Button",
                 {
