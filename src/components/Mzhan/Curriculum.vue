@@ -28,6 +28,14 @@
                 </Col>
                 <Col span="4">
                   <FormItem>
+                    <Select @on-change="seek" v-model="form.status" style="width:200px" placeholder="上下架状态">
+                      <Option :value="1">上架</Option>
+                      <Option :value="2">下架</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="4">
+                  <FormItem>
                     <Select @on-change="seek" v-model="form.grade" style="width:200px" placeholder="年级">
                       <Option :value="1">一年级</Option>
                       <Option :value="2">二年级</Option>
