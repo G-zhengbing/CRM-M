@@ -162,10 +162,8 @@ export default {
           url: UPLOADIMAGE,
           data: formData
         }).then(res => {
-          // this.formValidate.title_image =
-          //   "http://liveapi.canpoint.net" + res.data.data.value;
           this.formValidate.title_image =
-            "http://39.107.156.22/canpoint" + res.data.data.value;
+            "http://liveapi.canpoint.net" + res.data.data.value;
         });
       };
       return false;
@@ -182,10 +180,8 @@ export default {
           url: UPLOADIMAGE,
           data: formData
         }).then(res => {
-          // this.formValidate.bottom_image =
-          //   "http://liveapi.canpoint.net" + res.data.data.value;
           this.formValidate.bottom_image =
-            "http://39.107.156.22/canpoint" + res.data.data.value;
+            "http://liveapi.canpoint.net" + res.data.data.value;
         });
       };
       return false;

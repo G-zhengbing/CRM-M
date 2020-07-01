@@ -2,8 +2,8 @@
   <div class="addBook">
     <Modal v-model="modal1" :title="isIn ? '编辑' : '添加'" @on-ok="ok" @on-cancel="cancel" width="40">
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
-        <FormItem label="二维码标题" prop="qrcode_title">
-          <Input :disabled="isIn" v-model="formValidate.qrcode_title" placeholder="请输入二维码标题"></Input>
+        <FormItem label="视频标题" prop="qrcode_title">
+          <Input :disabled="isIn" v-model="formValidate.qrcode_title" placeholder="请输入视频标题"></Input>
         </FormItem>
         <FormItem label="选择渠道码" prop="wechat_channel_code_id">
           <Select
@@ -80,7 +80,7 @@ export default {
         qrcode_title: [
           {
             required: true,
-            message: "请输入二维码标题",
+            message: "请输入视频标题",
             trigger: "blur"
           }
         ],
@@ -125,10 +125,8 @@ export default {
           url: UPLOADIMAGE,
           data: formData
         }).then(res => {
-          // this.formValidate.video_image =
-          //   "http://liveapi.canpoint.net" + res.data.data.value;
           this.formValidate.video_image =
-            "http://39.107.156.22/canpoint" + res.data.data.value;
+            "http://liveapi.canpoint.net" + res.data.data.value;
         });
       };
       return false;
