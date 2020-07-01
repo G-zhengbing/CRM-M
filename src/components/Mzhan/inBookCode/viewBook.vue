@@ -141,7 +141,7 @@ export default {
                   },
                   on: {
                     click: async () => {
-                      this.isLoading = true
+                      this.isLoading = true;
                       let res = await this.$request({
                         method: "POST",
                         url: INBOOKSUBLEVELEXTENSION,
@@ -149,11 +149,11 @@ export default {
                           id: params.row.id
                         })
                       });
-                      if(res.data.code == 200) {
-                        this.$Message.success('发布成功')
+                      if (res.data.code == 200) {
+                        this.$Message.success("发布成功");
                       }
-                      this.getInBookSublevel()
-                      this.isLoading = false
+                      this.getInBookSublevel();
+                      this.isLoading = false;
                     }
                   }
                 },
@@ -193,8 +193,8 @@ export default {
                           type: 2 // 1删除书籍 2删除书籍子级书内码
                         })
                       });
-                      if(res.data.code == 200) {
-                        this.$Message.success('删除成功')
+                      if (res.data.code == 200) {
+                        this.$Message.success("删除成功");
                       }
                       this.getInBookSublevel();
                       this.isLoading = false;
@@ -278,7 +278,7 @@ export default {
         });
     },
     cancel() {
-      this.$emit("changeShowMod", false);
+      this.$emit("changeShowMod", false, 1);
     }
   }
 };

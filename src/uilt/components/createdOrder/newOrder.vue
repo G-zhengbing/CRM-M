@@ -39,7 +39,7 @@
 
 <script>
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
-import { ADDORDER } from "@/uilt/url/url";
+import { CREATEORDER } from "@/uilt/url/url";
 import qs from "qs";
 export default {
   props: {
@@ -91,7 +91,7 @@ export default {
     async createdOrder() {
       let res = await this.$request({
         method: "post",
-        url: ADDORDER,
+        url: CREATEORDER,
         data: qs.stringify({
           account_id: this.account_id,
           product_id: this.Items.id,

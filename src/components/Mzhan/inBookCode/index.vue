@@ -291,7 +291,9 @@ export default {
       this.showMod = val;
       this.row = "";
       this.type = "";
-      this.getInBookList();
+      if(!index) {
+        this.getInBookList();
+      }
     },
     // 转换date
     changeDate(time) {

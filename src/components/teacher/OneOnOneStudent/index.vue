@@ -83,6 +83,24 @@
       :showMod="showMod"
       @changeShowMod="changeShowMod"
     />
+    <CreatedOrder
+      v-else-if="type == 'createdOrder'"
+      :row="row"
+      :showMod="showMod"
+      @changeShowMod="changeShowMod"
+    />
+    <Audition
+      v-else-if="type == 'Audition'"
+      :row="row"
+      :showMod="showMod"
+      @changeShowMod="changeShowMod"
+    />
+    <Referral
+      v-else-if="type == 'Referral'"
+      :row="row"
+      :showMod="showMod"
+      @changeShowMod="changeShowMod"
+    />
     <Loading v-show="isLoading" />
   </div>
 </template>
@@ -228,9 +246,54 @@ export default {
           key: "operation",
           align: "center",
           fixed: "right",
-          width: 240,
+          width: 160,
           render: (h, params) => {
             return h("div", [
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.switch("createdOrder", params.row);
+                    }
+                  }
+                },
+                "订单"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.switch("Audition", params.row);
+                    }
+                  }
+                },
+                "试听"
+              ),
+              // h(
+              //   "Button",
+              //   {
+              //     props: {
+              //       type: "text",
+              //       size: "small"
+              //     },
+              //     on: {
+              //       click: () => {
+              //         this.switch("Referral", params.row);
+              //       }
+              //     }
+              //   },
+              //   "转介绍"
+              // ),
               h(
                 "Button",
                 {
@@ -346,9 +409,54 @@ export default {
           key: "operation",
           align: "center",
           fixed: "right",
-          width: 200,
+          width: 160,
           render: (h, params) => {
             return h("div", [
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.switch("createdOrder", params.row);
+                    }
+                  }
+                },
+                "订单"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.switch("Audition", params.row);
+                    }
+                  }
+                },
+                "试听"
+              ),
+              // h(
+              //   "Button",
+              //   {
+              //     props: {
+              //       type: "text",
+              //       size: "small"
+              //     },
+              //     on: {
+              //       click: () => {
+              //         this.switch("Referral", params.row);
+              //       }
+              //     }
+              //   },
+              //   "转介绍"
+              // ),
               h(
                 "Button",
                 {
@@ -435,9 +543,9 @@ export default {
     },
     // 设置mode搜索词汇
     formData(val) {
-      let list_type = this.formItem.list_type
+      let list_type = this.formItem.list_type;
       this.formItem = val;
-      this.formItem.list_type = list_type
+      this.formItem.list_type = list_type;
     },
     // 点击选项卡切换触发
     changeTab(value) {

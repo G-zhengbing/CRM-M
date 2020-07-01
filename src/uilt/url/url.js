@@ -99,7 +99,6 @@ const APPIONTMODIFY = BASEURL + "appiont_modify" //教务/ 查看测评
 const UPDATELEARNINGSTATE = BASEURL + "update_learning_state" //教务/ 本周到课状态，上周作业情况
 const GETMOBILE = BASEURL + "get_mobile" //教务/ 转介绍
 const ORDERPRODUCT = BASEURL + "order_product" //教务/ 订单 选择课程
-const ADDORDER = BASEURL + "add_order" //教务/ 订单 创建订单
 const GETACCOUNTSFOLLOW = BASEURL + "get_accounts_follow" //教务/ 跟进，信息展示
 const CALLRECORDSTATISTICS = BASEURL + "call_record_statistics" //教务/ 拨号预约统计分析
 
@@ -154,7 +153,6 @@ export {
   CREATEUPGRADE,
   ACCOUNTORDER,
   GETACCOUNTSFOLLOW,
-  ADDORDER,
   ORDERPRODUCT,
   GETMOBILE,
   UPDATELEARNINGSTATE,
