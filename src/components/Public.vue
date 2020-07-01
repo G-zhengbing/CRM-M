@@ -263,7 +263,6 @@ export default {
                   on: {
                     click: () => {
                       this.setGet(params.row.id).then((res) => {
-                        console.log(res)
                         // this.$Message.success("领取成功！");
                         this.getBtnClick4(params.row);
                         this.isLoading = false;
