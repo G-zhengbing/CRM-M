@@ -1078,7 +1078,8 @@ export default {
         this.upgradeForm.order_sn = this.classNum.order_sn;
         this.upgradeForm.product_id = this.classAll.id;
       }
-      this.upgradeForm.account_id = this.type.data.id;
+      this.upgradeForm.account_id =
+        this.type.data.id || this.type.data.account_id;
       this.createUpOrder(this.upgradeForm).then(res => {
         if (!res.data.ret) {
           this.$Message.error(res.data.error);
@@ -1241,7 +1242,9 @@ export default {
       this.disableBtn = true;
       this.isLoading = true;
       this.createOrderList({
-        aid: this.type.data.account_id ? this.type.data.account_id : this.type.data.id,
+        aid: this.type.data.account_id
+          ? this.type.data.account_id
+          : this.type.data.id,
         pid: this.orderPay[0].id,
         num: this.orderForm.goods_num
       }).then(res => {
@@ -1480,7 +1483,7 @@ export default {
       }
       this.showLoading = true;
       this.disableBtn = true;
-      this.createAuditionForm.date_time = this.auditionTimes
+      this.createAuditionForm.date_time = this.auditionTimes;
       this.createdReserved({
         form: this.createAuditionForm,
         uid: this.type.data.id
