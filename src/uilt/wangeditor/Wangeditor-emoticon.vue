@@ -8,14 +8,14 @@ import E from "wangeditor";
 import axios from "axios";
 import storage from "../../uilt/storage";
 import { PRODUCTINFOFILE } from "../../uilt/url/url";
-import emojiJSON from "./emoji";
+import emojiList from "./emoji";
+import content from "./emotions";
 export default {
   data() {
     return {
       editor: null,
       editorContent: "",
       text: "",
-      emojiList: emojiJSON
     };
   },
   // catchData是一个类似回调函数，来自父组件，当然也可以自己写一个函数，主要是用来获取富文本编辑器中的html内容用来传递给服务端
@@ -39,12 +39,14 @@ export default {
       {
         // tab 的标题
         title: "emoji",
-        // type -> 'emoji' / 'emoji'
         type: "emoji",
-        // content -> 数组
-        // content: ['😀', '😃', '😄', '😁', '😆']
-        content: this.emojiList
+        content: emojiList
       },
+      {
+        title: "扩展emoji",
+        type: "emoji",
+        content
+      }
     ];
 
     var that = this.editor;
