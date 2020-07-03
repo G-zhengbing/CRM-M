@@ -17,7 +17,7 @@
             <span>已分配</span>
           </li>
         </ul>
-        <Form :model="form">
+        <Form :model="form" :label-width="20">
           <Row>
             <Col span="3">
               <FormItem>
@@ -153,8 +153,8 @@
               </FormItem>
             </Col>
             
-            <Col span="4" v-if="num == 2">
-              <FormItem label="意向度">
+            <Col span="5" v-if="num == 2">
+              <FormItem label="意向度" :label-width="80">
                 <RadioGroup v-model="form.intention_option" @on-change="seekKuhu">
                   <Radio label="1">高</Radio>
                   <Radio label="2">中</Radio>

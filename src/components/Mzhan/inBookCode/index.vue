@@ -43,7 +43,7 @@
         <Button @click="deleteFormData" style="margin-left: 8px">清空选项</Button>
       </FormItem>
     </Form>
-    <div class="btn">
+    <div class="btns">
       <Button type="primary" @click="batchDelete">批量删除</Button>
       <Button type="primary" @click="showMod = true;type = 'NewBook'">新建书籍</Button>
     </div>
@@ -82,6 +82,7 @@ import qs from "qs";
 import NewBook from "./newBook";
 import ViewBook from "./viewBook";
 import AddBook from "./addBook";
+import storage from "@/uilt/storage";
 import { mapState, mapActions } from "vuex";
 import {
   GETINBOOKLIST,
@@ -96,8 +97,8 @@ export default {
   },
   computed: {
     ...mapState({
-      subjectList: state => state.screen_list.subject,
-      grade_strList: state => state.screen_list.grade_str
+      subjectList: state => storage.getDaiban().screen_list.subject,
+      grade_strList: state => storage.getDaiban().screen_list.grade_str
     })
   },
   data() {
@@ -315,10 +316,10 @@ export default {
 .inBookCode {
   padding: 20px;
 }
-.btn {
+.btns {
   margin-bottom: 10px;
 }
-.btn button {
+.btns button {
   margin: 10px;
 }
 </style>

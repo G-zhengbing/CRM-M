@@ -2,7 +2,7 @@
   <div class="channelCode">
     <div class="page-content">
       <div class="content-title">
-        <Form class="select" ref="formValidate" :model="formItem" inline>
+        <Form class="select" ref="formValidate" :model="formItem" inline :label-width="20">
           <FormItem>
             <Input v-model="formItem.code_name" placeholder="请输入二维码名称"></Input>
           </FormItem>

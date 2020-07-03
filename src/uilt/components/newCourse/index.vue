@@ -1,6 +1,6 @@
 <template>
   <div class="newCourse">
-    <Button class="btn" type="primary" @click="modal10 = true">新建课程</Button>
+    <Button class="btns" type="primary" @click="modal10 = true">新建课程</Button>
     <Modal
       title="新建/编辑课程"
       width="50"
@@ -384,7 +384,7 @@ export default {
 
 <style scoped>
 /* 设置按钮样式 */
-.btn {
+.btns {
   float: right;
   margin-top: 18px;
   margin-right: 8px;

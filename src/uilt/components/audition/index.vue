@@ -10,7 +10,7 @@
       class-name="vertical-center-modal-1"
     >
       <div class="content">
-        <NewAudition class="btn" :row="row" />
+        <NewAudition class="btns" :row="row" />
         <div class="title">试听记录</div>
         <Table :columns="columns" :data="dataList"></Table>
       </div>
@@ -183,7 +183,7 @@ export default {
   line-height: 40px;
   padding-left: 10px;
 }
-.btn {
+.btns {
   margin: 0 0 20px 10px;
 }
 </style>

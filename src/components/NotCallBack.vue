@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Form :model="form">
+    <Form :model="form" :label-width="20">
       <Row>
         <Col span="4">
           <FormItem>
@@ -42,7 +42,7 @@
           </FormItem>
         </Col>
         <Col span="6">
-          <FormItem label="意向度">
+          <FormItem label="意向度" :label-width="80">
             <RadioGroup v-model="form.intention_option" @on-change="seekClick">
               <Radio label="1">高</Radio>
               <Radio label="2">中</Radio>

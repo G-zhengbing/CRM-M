@@ -9,7 +9,7 @@
       :closable="false"
       :mask-closable="false"
     >
-      <Form :model="form" label-position="top" style="height:450px;overflow-y:auto;">
+      <Form :model="form" label-position="top" style="height:450px;overflow-y:auto;" :label-width="20">
         <Row>
           <Col span="4">
             <FormItem>
@@ -87,7 +87,7 @@
     </Modal>
     <!-- 创建订单 -->
     <Modal width="700" v-model="showOrder" title="创建订单" @on-cancel="showOrder = false">
-      <Form :form="orderForm" label-position="left" style="height:450px;overflow-y:auto;">
+      <Form :form="orderForm" label-position="left" style="height:450px;overflow-y:auto;" :label-width="20">
         <FormItem label="基本信息"></FormItem>
         <div class="procude">
           <div class="procude-top">
@@ -158,7 +158,7 @@
     </Modal>
     <!-- 新建预约试听 -->
     <Modal width="700" v-model="showCreateAudition" title="新建预约试听" @on-cancel="clearForm">
-      <Form :form="createAuditionForm" label-position="top" style="height:500px;overflow-y:auto;">
+      <Form :form="createAuditionForm" label-position="top" style="height:500px;overflow-y:auto;" :label-width="20">
         <Row>
           <Col span="24">
             <FormItem label="预约试听类型">
@@ -289,7 +289,7 @@
     </Modal>
     <!-- 查看测评 -->
     <Modal width="500" v-model="showAppraisal" title="查看测评" @on-cancel="showAppraisal = false">
-      <Form :form="appraisalForm" label-position="top" style="height:300px;overflow-y:auto;">
+      <Form :form="appraisalForm" label-position="top" style="height:300px;overflow-y:auto;" :label-width="20">
         <FormItem label="测评图片展示" v-if="this.appraisalForm.assess_image">
           <div class="demo-upload-list">
             <img :src="'http://liveapi.canpoint.net/'+ appraisalForm.assess_image" />

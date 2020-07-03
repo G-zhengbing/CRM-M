@@ -1,7 +1,7 @@
 <template>
   <div>
-    <DaibanMessage v-if="show" :type="type" />
-    <Form :model="form">
+    <DaibanMessage v-if="show" :type="type"/>
+    <Form :model="form" :label-width="20">
       <Row>
         <Col span="4">
           <FormItem>

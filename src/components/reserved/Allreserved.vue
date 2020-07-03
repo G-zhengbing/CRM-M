@@ -12,7 +12,7 @@
           <span>今日上课情况</span>
         </li>
       </ul>
-      <Form :model="form">
+      <Form :model="form" :label-width="20">
         <Row>
           <Col span="2">
             <FormItem>
@@ -105,6 +105,8 @@
               </div>
             </FormItem>
           </Col>
+          </Row>
+          <Row>
           <Col span="6">
             <FormItem>
               <div class="dateplc">
