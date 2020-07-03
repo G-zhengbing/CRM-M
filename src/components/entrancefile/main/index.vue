@@ -3,7 +3,7 @@
     <Layout>
       <Header>
         <Menu mode="horizontal" :theme="theme1" active-name="1">
-          <div class="layout-logo"><img class="logo-img" src="@/assets/img/logo/png8.png"></img>全品在线</div>
+          <div class="layout-logo"><img class="logo-img" src="../../../assets/img/logo/png8.png"></img>全品在线</div>
           <div class="layout-nav">
             <ul class="tabars">
               <li
@@ -13,16 +13,12 @@
                 v-for="(item,index) in jurisdictionList"
                 :key="index"
               >{{item.display_name}}</li>
-              <!-- <li
-                @click="setActive(index)"
-                :class="{active:tabNum == index}"
-                >排课</li> -->
             </ul>
           </div>
           <div class="right">
-            <img src="../assets/img/xiaoxitongzhi/png24.png" alt class="lin" v-if="num >0" />
-            <img src="../assets/img/xiaoxitongzhi/not/png24.png" alt class="lin" v-if="num== 0" />
-            <img src="../assets/img/touxiang/png24.png" alt class="txiang" />
+            <img src="../../../assets/img/xiaoxitongzhi/png24.png" alt class="lin" v-if="num >0" />
+            <img src="../../../assets/img/xiaoxitongzhi/not/png24.png" alt class="lin" v-if="num== 0" />
+            <img src="../../../assets/img/touxiang/png24.png" alt class="txiang" />
             <span>{{uName}}</span>
             <div>|</div>
             <i @click="back">退出</i>
@@ -51,8 +47,8 @@
             </ul>
           </template>
         </Sider>
-        <Layout :style="{padding: '0 10px 10px'}">
-          <Content :style="{ minHeight: '280px', background: '#fff'}">
+        <Layout :style="{padding: '0 0 0 10px'}">
+          <Content :style="{ background: '#fff'}">
             <router-view style="padding-top: 20px" />
           </Content>
         </Layout>
@@ -61,8 +57,8 @@
   </div>
 </template>
 <script>
-import storeage from "../uilt/storage";
-import { MEPERMISSION } from "../uilt/url/url";
+import storeage from "../../../uilt/storage";
+import { MEPERMISSION } from "../../../uilt/url/url";
 import { mapState, mapActions } from "vuex";
 export default {
   mounted() {
@@ -160,9 +156,6 @@ li.router-link-exact-active.router-link-active {
   color: #2d8cf0;
   border-right: 1.5px solid #2d8cf0;
 }
-/* .ivu-layout-sider[data-v-54d3a52e]{
-  background-color: #ccc!important;
-} */
 .teacheing li,
 .schedu li,
 .crm li,
@@ -198,7 +191,6 @@ li.router-link-exact-active.router-link-active {
   opacity: 0.8;
 }
 .tabars li {
-  /* width: 80px; */
   padding: 0 18px;
   color: #fff;
   text-align: center;
@@ -209,9 +201,6 @@ li.router-link-exact-active.router-link-active {
   height: 100%;
   display: flex;
   margin-left: 68px;
-}
-.ivu-layout-content {
-  min-height: 660px !important;
 }
 .right div {
   margin: 0 10px;
@@ -226,7 +215,6 @@ li.router-link-exact-active.router-link-active {
   height: 19px;
 }
 .right i {
-  /* margin: 0 76px 0 0; */
   cursor: pointer;
 }
 .right span,
@@ -254,10 +242,6 @@ i {
   line-height: 30px;
   font-weight: 700;
   margin-top: -5px;
-}
-.ivu-menu.ivu-menu-light.ivu-menu-vertical {
-  height: 100%;
-  width: 140px !important;
 }
 .layout-nav[data-v-bb0b6c44] ul li {
   color: #fff;
@@ -288,16 +272,14 @@ i {
 .layout {
   background: #f5f7f9;
   position: relative;
-  /* overflow: hidden; */
   height: 100%;
 }
 .layout-logo {
   display: flex;
   justify-content: center;
   margin-top: -5px;
-  width: 150px;
+  width: 160px;
   height: 30px;
-  /* background: #5b6270; */
   border-radius: 3px;
   float: left;
   position: relative;
@@ -315,10 +297,6 @@ i {
   margin-right: 20px;
   display: flex;
   width: 100%;
-}
-.ivu-menu.ivu-menu-light.ivu-menu-vertical {
-  width: 140px !important;
-  height: 100%;
 }
 .menuitem ul.menu > li.router-link-exact-active.router-link-active {
   background: #1b73b0;

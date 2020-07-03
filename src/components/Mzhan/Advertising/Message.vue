@@ -21,7 +21,7 @@
           </Modal>
           </FormItem>
           <FormItem label="广告图片" prop="banner_pic" class="active_span">
-            <span class="active_red">*</span>
+            <span class="required"></span>
             <template>
               <div class="demo-upload-list" v-for="(item,i) in uploadList"  :key="i">
                 <img :src="item.url">
@@ -76,8 +76,8 @@
 <script>
 import { mapActions} from 'vuex'
 import axios from 'axios'
-import storage from '../../uilt/storage'
-import { ADDADVER_URL,UPDATAADVER_URL } from '../../uilt/url/Murl'
+import storage from '../../../uilt/storage'
+import { ADDADVER_URL,UPDATAADVER_URL } from '../../../uilt/url/Murl'
 import qs from 'qs'
 export default {
   props:["item"],
@@ -230,6 +230,7 @@ export default {
 </script>
 
 <style scoped>
+
 .demo-upload-list{
   display: inline-block;
   width: 60px;
@@ -266,7 +267,6 @@ export default {
   cursor: pointer;
   margin: 0 2px;
 }
-/*  */
 .ivu-radio.ivu-radio-checked span{
   box-sizing: border-box;
 }
@@ -294,7 +294,5 @@ export default {
 }
 .ivu-card.ivu-card-bordered {
   width: 1200px;
-  height: 540px;
-  overflow-y: auto;
 }
 </style>

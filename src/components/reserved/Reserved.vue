@@ -1,5 +1,5 @@
 <template>
-  <div class="box" ref="box">
+  <div>
     <div class="contaner">
       <ul class="tabs">
         <li @click="tab(3)" :class="[num == 3? 'active' : '']">
@@ -12,62 +12,42 @@
           <span>今日上课情况</span>
         </li>
       </ul>
-      <Form :model="form" :label-width="80">
+      <Form :model="form">
         <Row>
-          <Col span="4">
-            <FormItem style="width:230px;">
+          <Col span="2">
+            <FormItem>
               <Input v-model="form.name" placeholder="学员姓名" @on-change="seekClick"></Input>
             </FormItem>
           </Col>
-          <Col span="4">
-            <FormItem style="width:230px;">
+          <Col span="3">
+            <FormItem>
               <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekClick"></Input>
             </FormItem>
           </Col>
-          <Col span="4">
+          <Col span="2">
             <FormItem>
-              <Select
-                v-model="form.type"
-                style="width:150px"
-                @on-change="seekClick"
-                placeholder="试听类型"
-              >
+              <Select v-model="form.type" @on-change="seekClick" placeholder="试听类型">
                 <Option :value="i" v-for="(list,i) in course" :key="i">{{list}}</Option>
               </Select>
             </FormItem>
           </Col>
-          <Col span="4" v-if="num == 3 || num == 2">
+          <Col span="2" v-if="num == 3 || num == 2">
             <FormItem>
-              <Select
-                v-model="form.appoint_status"
-                style="width:150px"
-                @on-change="seekClick"
-                placeholder="状态"
-              >
+              <Select v-model="form.appoint_status" @on-change="seekClick" placeholder="状态">
                 <Option :value="i" v-for="(list,i) in appoint" :key="i">{{list}}</Option>
               </Select>
             </FormItem>
           </Col>
-          <Col span="4">
+          <Col span="2">
             <FormItem>
-              <Select
-                v-model="form.subject"
-                style="width:150px"
-                @on-change="seekClick"
-                placeholder="科目"
-              >
+              <Select v-model="form.subject" @on-change="seekClick" placeholder="科目">
                 <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
               </Select>
             </FormItem>
           </Col>
-          <Col span="4">
+          <Col span="2">
             <FormItem>
-              <Select
-                v-model="form.grade"
-                style="width:150px"
-                @on-change="seekClick"
-                placeholder="年级"
-              >
+              <Select v-model="form.grade" @on-change="seekClick" placeholder="年级">
                 <Option :value="1">一年级</Option>
                 <Option :value="2">二年级</Option>
                 <Option :value="3">三年级</Option>
@@ -80,69 +60,50 @@
               </Select>
             </FormItem>
           </Col>
-          <Col span="4" v-if="num == 3">
+          <Col span="3" v-if="num == 3">
             <FormItem>
-              <Select
-                v-model="form.create_user"
-                style="width:150px"
-                @on-change="seekClick"
-                placeholder="创建人"
-              >
+              <Select v-model="form.create_user" @on-change="seekClick" placeholder="创建人">
                 <Option v-for="(list,i) in sale_list" :key="i" :value="list.id">{{list.login_name}}</Option>
               </Select>
             </FormItem>
           </Col>
-          <Col span="6" v-if="num == 3">
+          <Col span="5" v-if="num == 3">
             <FormItem>
               <div class="dateplc">
                 <DatePicker
                   v-model="startAccount"
                   type="date"
                   placeholder="上课日期"
-                  style="width: 200px"
                   @on-change="getTimes2"
                 ></DatePicker>
                 <DatePicker
                   v-model="endAccount"
                   type="date"
                   placeholder="上课日期"
-                  style="width: 200px"
                   @on-change="getTimes2"
                 ></DatePicker>
               </div>
             </FormItem>
           </Col>
-          <Col span="6">
+          <Col span="5">
             <FormItem>
               <div class="dateplc">
                 <DatePicker
                   v-model="startTime"
                   type="date"
                   placeholder="提交时间"
-                  style="width: 200px"
                   @on-change="getTimes"
                 ></DatePicker>
-                <DatePicker
-                  v-model="endTime"
-                  type="date"
-                  placeholder="提交时间"
-                  style="width: 200px"
-                  @on-change="getTimes"
-                ></DatePicker>
+                <DatePicker v-model="endTime" type="date" placeholder="提交时间" @on-change="getTimes"></DatePicker>
               </div>
             </FormItem>
           </Col>
-          <Col span="4" style="text-indent: 60px">
+          <Col span="2">
             <Button type="primary" @click="clear">清除</Button>
           </Col>
         </Row>
       </Form>
-      <Table
-        border
-        :columns="columns"
-        :data="reservedData"
-        height="500"
-      ></Table>
+      <Table border :columns="columns" :data="reservedData" height="550"></Table>
       <Page
         @on-change="pageChange"
         :total="total"
@@ -223,29 +184,31 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setReservedTypes", "setCurrentPage","setClientTypes"]),
+    ...mapMutations(["setReservedTypes", "setCurrentPage", "setClientTypes"]),
     ...mapActions(["getReservedList", "RingUp", "setSignin"]),
     //设置展示的操作内容
     setStatus() {
       if (this.num == "2") {
         this.columns = [
-          { type: "selection", width: 60 },
-          { title: "学员姓名", key: "student_name", width: 100 },
-          { title: "注册手机", key: "mobile", width: 130 },
-          { title: "试听类型", key: "type" },
-          { title: "试听课程", key: "course_name" },
-          { title: "年级", width: 80, key: "grade" },
-          { title: "科目", width: 80, key: "subject" },
-          { title: "教师", key: "coach_id" },
+          { type: "selection", width: 60, fixed: "left" },
+          { title: "学员姓名", key: "student_name", width: 100, fixed: "left" },
+          { title: "注册手机", key: "mobile", width: 130, fixed: "left" },
+          { title: "试听类型", key: "type", width: 100 },
+          { title: "试听课程", key: "course_name", width: 160 },
+          { title: "年级", width: 80, key: "grade", width: 80 },
+          { title: "科目", width: 80, key: "subject", width: 80 },
+          { title: "教师", key: "coach_id", width: 200 },
           { title: "上课日期", width: 120, key: "date_time" },
-          { title: "上课时段", key: "time_block", width: 75 },
-          { title: "状态", key: "appoint_status" },
-          { title: "预约提交时间", key: "create_time" },
+          { title: "上课时段", key: "time_block", width: 100 },
+          { title: "状态", key: "appoint_status", width: 100 },
+          { title: "预约提交时间", key: "create_time", width: 200 },
           { title: "备注", key: "note", tooltip: true, ellipsis: true },
           {
             title: "操作",
             key: "action",
             align: "center",
+            width:200,
+            fixed:'right',
             render: (h, params) => {
               return h("div", [
                 h(
@@ -299,23 +262,25 @@ export default {
         ];
       } else if (this.num == "1") {
         this.columns = [
-          { type: "selection", width: 60 },
-          { title: "学员姓名", key: "student_name", width: 100 },
-          { title: "注册手机", key: "mobile", width: 130 },
-          { title: "试听类型", key: "type" },
-          { title: "试听课程", key: "course_name" },
-          { title: "年级", width: 80, key: "grade" },
-          { title: "科目", width: 80, key: "subject" },
-          { title: "教师", key: "coach_id" },
+          { type: "selection", width: 60, fixed: "left" },
+          { title: "学员姓名", key: "student_name", width: 100, fixed: "left" },
+          { title: "注册手机", key: "mobile", width: 130, fixed: "left" },
+          { title: "试听类型", key: "type", width: 100 },
+          { title: "试听课程", key: "course_name", width: 160 },
+          { title: "年级", width: 80, key: "grade", width: 80 },
+          { title: "科目", width: 80, key: "subject", width: 80 },
+          { title: "教师", key: "coach_id", width: 200 },
           { title: "上课日期", width: 120, key: "date_time" },
-          { title: "上课时段", key: "time_block", width: 75 },
-          { title: "状态", key: "appoint_status" },
-          { title: "预约提交时间", key: "create_time" },
+          { title: "上课时段", key: "time_block", width: 100 },
+          { title: "状态", key: "appoint_status", width: 100 },
+          { title: "预约提交时间", key: "create_time", width: 200 },
           { title: "备注", key: "note", tooltip: true, ellipsis: true },
           {
             title: "操作",
             key: "action",
             align: "center",
+            fixed:'right',
+            width: 200,
             render: (h, params) => {
               return h("div", [
                 h(
@@ -394,16 +359,16 @@ export default {
 
           { title: "年级", width: 80, key: "grade", align: "center" },
           { title: "科目", width: 80, key: "subject", align: "center" },
-          { title: "教师", key: "coach_id", width: 120, align: "center" },
+          { title: "教师", key: "coach_id", width: 200, align: "center" },
           { title: "上课日期", width: 120, key: "date_time", align: "center" },
           { title: "上课时段", key: "time_block", width: 100, align: "center" },
           { title: "状态", key: "appoint_status", width: 100, align: "center" },
-          { title: "创建人", key: "create_user", width: 100, align: "center" },
+          { title: "创建人", key: "create_user", width: 120, align: "center" },
           {
             title: "预约提交时间",
             key: "create_time",
             align: "center",
-            width: 120
+            width: 200
           },
           {
             title: "备注",
@@ -638,36 +603,4 @@ export default {
   cursor: pointer;
 }
 /*  */
-/* tabs */
-.tabs li.active span {
-  color: #2d8cf0;
-}
-.tabs li.active {
-  border: 1px solid #ccc;
-  border-bottom: 1px solid #fff;
-}
-.main-section .main-section-bottom {
-  margin-top: 0px !important;
-}
-.tabs li {
-  height: 100%;
-  line-height: 35px;
-  margin-right: 30px;
-  width: 100px;
-  text-align: center;
-  margin-top: 1px;
-  cursor: pointer;
-  box-sizing: border-box;
-}
-.tabs {
-  width: 100%;
-  height: 35px;
-  display: flex;
-  border-bottom: 1px solid #ccc;
-  margin-bottom: 20px;
-}
-/* tabs */
-.dateplc {
-  display: flex;
-}
 </style>

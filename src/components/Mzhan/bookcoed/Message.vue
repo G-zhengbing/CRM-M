@@ -29,7 +29,7 @@
             </col>
             <Col span="24">
               <FormItem label="介绍头图" prop="Introduction_diagram" class="active_span">
-                <span class="active_red">*</span>
+                <span class="required"></span>
                 <template v-if="bannerUrl">
                   <div class="demo-upload-list">
                     <img :src="bannerUrl">
@@ -88,7 +88,7 @@
             <template>
             <Col span="12">
               <FormItem label="选择课程">
-                <span class="active_red">*</span>
+                <span class="required"></span>
                 <Select v-model="form.type" placeholder="请选择" @on-change="getSelClass3">
                   <Option :value="1">直播课</Option> 
                   <Option :value="2">录播课</Option> 
@@ -105,7 +105,7 @@
             </Col>
             <Col span="24">
                 <FormItem label="推荐位" class="active_span">
-                  <span class="active_red">*</span>
+                  <span class="required"></span>
                     <div class="recommend">
                         <div class="recommendOne">
                         <span>推荐位1</span>
@@ -274,8 +274,8 @@
 
 <script>
 import { mapActions } from 'vuex'
-import storage from '../../uilt/storage'
-import { UPDATABOOK,CREATEBOOK,UPLOADIMAGE } from "../../uilt/url/Murl";
+import storage from '../../../uilt/storage'
+import { UPDATABOOK,CREATEBOOK,UPLOADIMAGE } from "../../../uilt/url/Murl";
 import axios from 'axios'
 export default {
   props:["item"],

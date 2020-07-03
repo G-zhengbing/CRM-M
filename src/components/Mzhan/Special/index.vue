@@ -1,83 +1,79 @@
 <template>
   <div class="box">
-    <section class="main-section">
-      <div class="surplus">
-        <div class="main-section-top">
-          <div class="main-section-top-top">
-            <div style="height:10px"></div>
-            <Form :model="form" :label-width="80">
-              <Row>
-                <Col span="4">
-                  <FormItem prop="materials_name">
-                    <Input
-                      @on-change="seekKuhu"
-                      v-model="form.title"
-                      placeholder="请输入专题标题"
-                    />
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <FormItem>
-                    <Button type="primary" style="margin-left: 8px" @click="clear">清空</Button>
-                  </FormItem>
-                </Col>
-              </Row>
-            </Form>
-          </div>
-        </div>
-        <div class="main-section-bottom">
-          <div class="contaner">
-            <div style="height:1px;"></div>
-            <div class="batch">
-              <div class="batch-let">
-                <button class="btn" @click="isDele">批量删除</button>
-              </div>
-              <div class="batch-right">
-                <button class="btn" @click="addAd">新建专题</button>
-                <Dropdown style="margin-left: 20px" @on-click="getSelect">
-                  <Button type="primary">
-                    排序
-                    <Icon type="ios-arrow-down"></Icon>
-                  </Button>
-                  <DropdownMenu slot="list">
-                    <DropdownItem name="1">上线优先</DropdownItem>
-                    <DropdownItem name="2">阅读数</DropdownItem>
-                    <DropdownItem name="3">点赞数</DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
-              </div>
-            </div>
-            <Table border :columns="columns2" :data="data" @on-selection-change="selectionChange"></Table>
-            <Page
-            @on-change="pageChange"
-              :total="total"
-              :current="spCurrentPage"
-              :page-size="pageSize"
-              show-total
-              show-elevator
-              class="ive-page"
-            />
-          </div>
-        </div>
+    <Form :model="form">
+      <Row>
+        <Col span="4">
+          <FormItem prop="materials_name">
+            <Input @on-change="seekKuhu" v-model="form.title" placeholder="请输入专题标题" />
+          </FormItem>
+        </Col>
+        <Col span="4">
+          <FormItem>
+            <Button type="primary" style="margin-left: 8px" @click="clear">清空</Button>
+          </FormItem>
+        </Col>
+      </Row>
+    </Form>
+
+    <div class="batch">
+      <div class="batch-let">
+        <button class="btn" @click="isDele">批量删除</button>
       </div>
-    </section>
-    <SpeMessage v-if="isSpeMessage" :item="item"/>
+      <div class="batch-right">
+        <button class="btn" @click="addAd">新建专题</button>
+        <Dropdown style="margin-left: 20px" @on-click="getSelect">
+          <Button type="primary">
+            排序
+            <Icon type="ios-arrow-down"></Icon>
+          </Button>
+          <DropdownMenu slot="list">
+            <DropdownItem name="1">上线优先</DropdownItem>
+            <DropdownItem name="2">阅读数</DropdownItem>
+            <DropdownItem name="3">点赞数</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+      </div>
+    </div>
+    <Table
+      hiheight-row
+      border
+      :columns="columns2"
+      :data="data"
+      @on-selection-change="selectionChange"
+      ref="table"
+      :height="tableHeight"
+      style="minHeight:40px"
+    ></Table>
+    <Page
+      @on-change="pageChange"
+      :total="total"
+      :current="spCurrentPage"
+      :page-size="pageSize"
+      show-total
+      show-elevator
+      class="ive-page"
+    />
+    <Message v-if="isSpeMessage" :item="item" />
   </div>
 </template>
 
 <script>
-import SpeMessage from "../Special/SpeMessage";
-import { mapActions, mapState,mapMutations } from "vuex";
+import Message from "./Message";
+import { mapActions, mapState, mapMutations } from "vuex";
 export default {
   components: {
-    SpeMessage
+    Message
   },
   mounted() {
     this.loading(true);
-    this.getSpecialList({page:1}).then(()=>{
+    this.getSpecialList({ page: 1 }).then(() => {
       this.loading(false);
-      this.setCurrerntPage(1)
+      this.setCurrerntPage(1);
     });
+    window.addEventListener("resize", this.changeFixed);
+  },
+  beforeDestroy(){
+    window.removeEventListener("resize", this.changeFixed);
   },
   computed: {
     ...mapState({
@@ -89,8 +85,10 @@ export default {
   },
   data() {
     return {
-      item:{},
-      isUpdata:false,
+      tableHeight: 0,
+      clientHeight: "",
+      item: {},
+      isUpdata: false,
       checkAll: [],
       isSpeMessage: false,
       form: {},
@@ -119,8 +117,8 @@ export default {
             return h("img", {
               style: {
                 //设置样式
-                "width":"30px",
-                "height":"30px",
+                width: "30px",
+                height: "30px",
                 "margin-top": "5px",
                 "border-radius": "5%"
               },
@@ -148,8 +146,8 @@ export default {
             // 重点
             let _this = this;
             return h("i-switch", {
-              style:{
-                "width":"50px"
+              style: {
+                width: "50px"
               },
               //按钮的话是：button自行替换
               props: {
@@ -222,14 +220,18 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["getSpecialList", "deleSpecialList","setSpSwitch"]),
+    ...mapActions(["getSpecialList", "deleSpecialList", "setSpSwitch"]),
     ...mapMutations(["setCurrerntPage"]),
+    changeFixed() {
+        this.tableHeight =
+          window.innerHeight - this.$refs.table.$el.offsetTop - 15;
+    },
     //排序
-    getSelect(val){
+    getSelect(val) {
       this.loading(true);
-      this.getSpecialList({field:val}).then(()=>{
+      this.getSpecialList({ field: val }).then(() => {
         this.loading(false);
-      })
+      });
     },
     //loading
     loading(status) {
@@ -253,7 +255,7 @@ export default {
       }
     },
     //分页
-    pageChange(num){
+    pageChange(num) {
       this.loading(true);
       this.setCurrerntPage(num);
       this.getSpecialList({ page: num }).then(() => {
@@ -262,7 +264,7 @@ export default {
     },
     functionFun(val, params) {
       this.loading(true);
-      this.setSpSwitch(params).then(()=>{
+      this.setSpSwitch(params).then(() => {
         this.loading(false);
       });
     },
@@ -314,21 +316,21 @@ export default {
     },
     //新建广告
     addAd() {
-      this.isUpdata = false
+      this.isUpdata = false;
       this.isSpeMessage = true;
     },
     clear() {
       this.form = {};
       this.loading(true);
-      this.getSpecialList(this.form).then(()=>{
+      this.getSpecialList(this.form).then(() => {
         this.loading(false);
-      })
+      });
     },
     seekKuhu() {
       this.loading(true);
-      this.getSpecialList(this.form).then(()=>{
+      this.getSpecialList(this.form).then(() => {
         this.loading(false);
-      })
+      });
     },
     selectionChange(item) {
       var arr = [];
@@ -340,30 +342,3 @@ export default {
   }
 };
 </script>
-<style scoped>
-.ivu-page-options-elevator input {
-  height: 22px;
-}
-.ive-page {
-  float: right;
-  margin: 30px 0;
-}
-.batch-let {
-  flex: 1;
-}
-.batch {
-  display: flex;
-  margin: 15px 0;
-}
-.btn {
-  width: 100px;
-  height: 30px;
-  color: #fff;
-  font-size: 14px;
-  background: #2d8cf0;
-  outline: none;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-</style>

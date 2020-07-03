@@ -1,63 +1,61 @@
 <template>
-  <div class="box" ref="box">
-    <section>
-      <div class="contaner">
-        <Form :model="form" :label-width="30">
-          <Row>
-            <Col span="3">
-              <FormItem>
-                <Input v-model="form.name" placeholder="学员姓名" @on-change="seekClick"></Input>
-              </FormItem>
-            </Col>
-            <Col span="3">
-              <FormItem>
-                <Input v-model="form.mobile" placeholder="手机号" @on-change="seekMobile"></Input>
-              </FormItem>
-            </Col>
-            <Col span="6">
-              <FormItem>
-                <div class="dateplc">
-                  <DatePicker
-                    v-model="startAccount"
-                    type="date"
-                    placeholder="注册时间"
-                    @on-change="getTimes"
-                  ></DatePicker>
-                  <DatePicker
-                    v-model="endAccount"
-                    type="date"
-                    placeholder="注册时间"
-                    @on-change="getTimes"
-                  ></DatePicker>
-                </div>
-              </FormItem>
-            </Col>
-            <Col span="4" style="text-indent: 60px">
-              <Button type="primary" @click="clear">清除</Button>
-            </Col>
-          </Row>
-        </Form>
-        <Table border :columns="columns" :data="studentList"></Table>
-        <Page
-          @on-change="pageChange"
-          :total="total"
-          :current="currentPage"
-          :page-size="pageSize "
-          show-total
-          show-elevator
-          class="ive-page"
-        />
-      </div>
-    </section>
+  <div>
+    <div class="contaner">
+      <Form :model="form">
+        <Row>
+          <Col span="3">
+            <FormItem>
+              <Input v-model="form.name" placeholder="学员姓名" @on-change="seekClick"></Input>
+            </FormItem>
+          </Col>
+          <Col span="3">
+            <FormItem>
+              <Input v-model="form.mobile" placeholder="手机号" @on-change="seekMobile"></Input>
+            </FormItem>
+          </Col>
+          <Col span="6">
+            <FormItem>
+              <div class="dateplc">
+                <DatePicker
+                  v-model="startAccount"
+                  type="date"
+                  placeholder="注册时间"
+                  @on-change="getTimes"
+                ></DatePicker>
+                <DatePicker
+                  v-model="endAccount"
+                  type="date"
+                  placeholder="注册时间"
+                  @on-change="getTimes"
+                ></DatePicker>
+              </div>
+            </FormItem>
+          </Col>
+          <Col span="2">
+            <Button type="primary" @click="clear">清除</Button>
+          </Col>
+        </Row>
+      </Form>
+      <Table border :columns="columns" :data="studentList"></Table>
+      <Page
+        @on-change="pageChange"
+        :total="total"
+        :current="currentPage"
+        :page-size="pageSize "
+        show-total
+        show-elevator
+        class="ive-page"
+      />
+    </div>
     <Loading v-show="isLoading" />
-    <Schdeustudentmessage :type="type" v-if="show" />
+    <Message :type="type" v-if="show" />
   </div>
 </template>
 
 <script>
 import Loading from "../../../uilt/loading/loading";
 import storage from "../../../uilt/storage";
-import Schdeustudentmessage from "./Schdeustudentmessage";
+import Message from "./Message";
 import { createNamespacedHelpers } from "vuex";
 const { mapState, mapMutations, mapActions } = createNamespacedHelpers(
   "schedustudent"
@@ -65,7 +63,7 @@ const { mapState, mapMutations, mapActions } = createNamespacedHelpers(
 export default {
   components: {
     Loading,
-    Schdeustudentmessage
+    Message
   },
   mounted() {
     this.isLoading = true;

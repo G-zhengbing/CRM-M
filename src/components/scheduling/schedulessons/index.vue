@@ -1,114 +1,108 @@
 <template>
-  <div class="box" ref="box">
-    <section class="main-section">
-      <div class="surplus">
-        <div class="main-section-bottom">
-          <div class="contaner">
-            <Form :model="form" :label-width="30">
-              <Row>
-                <Col span="3">
-                  <FormItem>
-                    <Input v-model="form.course_name" placeholder="课程名称" @on-change="seekClick"></Input>
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <FormItem>
-                    <Input v-model="form.student_name" @on-change="seekClick" placeholder="请输入学员名称"></Input>
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <FormItem>
-                    <Input v-model="form.mobile" @on-change="seekMobile" placeholder="请输入学员手机号"></Input>
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <FormItem>
-                    <Select @on-change="seekClick" v-model="form.grade" placeholder="请选择年级">
-                      <Option :value="1">一年级</Option>
-                      <Option :value="2">二年级</Option>
-                      <Option :value="3">三年级</Option>
-                      <Option :value="4">四年级</Option>
-                      <Option :value="5">五年级</Option>
-                      <Option :value="6">六年级</Option>
-                      <Option :value="7">七年级</Option>
-                      <Option :value="8">八年级</Option>
-                      <Option :value="9">九年级</Option>
-                      <Option :value="10">高一</Option>
-                      <Option :value="11">高二</Option>
-                      <Option :value="12">高三</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <FormItem>
-                    <Select v-model="form.subject" @on-change="seekClick" placeholder="请选择科目">
-                      <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="3">
-                  <FormItem>
-                    <Select v-model="form.course_type" @on-change="seekClick" placeholder="授课类型">
-                      <Option :value="i" v-for="(list,i) in courseType" :key="i">{{list}}</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="3">
-                  <FormItem>
-                    <Select v-model="form.status" @on-change="seekClick" placeholder="课程状态">
-                      <Option :value="1">待上课</Option>
-                      <Option :value="2">上课中</Option>
-                      <Option :value="3">已结束</Option>
-                      <Option :value="4">已取消</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="6">
-                  <FormItem>
-                    <div class="dateplc">
-                      <DatePicker
-                        v-model="startAccount"
-                        type="date"
-                        placeholder="上课日期"
-                        @on-change="getTimes"
-                      ></DatePicker>
-                      <DatePicker
-                        v-model="endAccount"
-                        type="date"
-                        placeholder="上课日期"
-                        @on-change="getTimes"
-                      ></DatePicker>
-                    </div>
-                  </FormItem>
-                </Col>
-                <Col span="4" style="text-indent: 60px">
-                  <Button type="primary" @click="clear">清除</Button>
-                </Col>
-              </Row>
-            </Form>
-            <Table border :columns="columns" :data="lessonsList"></Table>
-            <Page
-              @on-change="pageChange"
-              :total="total"
-              :current="currentPage"
-              :page-size="pageSize"
-              show-total
-              show-elevator
-              class="ive-page"
-            />
-          </div>
-        </div>
-      </div>
-    </section>
+  <div>
+    <div class="contaner">
+      <Form :model="form">
+        <Row>
+          <Col span="3">
+            <FormItem>
+              <Input v-model="form.course_name" placeholder="课程名称" @on-change="seekClick"></Input>
+            </FormItem>
+          </Col>
+          <Col span="3">
+            <FormItem>
+              <Input v-model="form.student_name" @on-change="seekClick" placeholder="请输入学员名称"></Input>
+            </FormItem>
+          </Col>
+          <Col span="3">
+            <FormItem>
+              <Input v-model="form.mobile" @on-change="seekMobile" placeholder="请输入学员手机号"></Input>
+            </FormItem>
+          </Col>
+          <Col span="3">
+            <FormItem>
+              <Select @on-change="seekClick" v-model="form.grade" placeholder="请选择年级">
+                <Option :value="1">一年级</Option>
+                <Option :value="2">二年级</Option>
+                <Option :value="3">三年级</Option>
+                <Option :value="4">四年级</Option>
+                <Option :value="5">五年级</Option>
+                <Option :value="6">六年级</Option>
+                <Option :value="7">七年级</Option>
+                <Option :value="8">八年级</Option>
+                <Option :value="9">九年级</Option>
+                <Option :value="10">高一</Option>
+                <Option :value="11">高二</Option>
+                <Option :value="12">高三</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="3">
+            <FormItem>
+              <Select v-model="form.subject" @on-change="seekClick" placeholder="请选择科目">
+                <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="3">
+            <FormItem>
+              <Select v-model="form.course_type" @on-change="seekClick" placeholder="授课类型">
+                <Option :value="i" v-for="(list,i) in courseType" :key="i">{{list}}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="3">
+            <FormItem>
+              <Select v-model="form.status" @on-change="seekClick" placeholder="课程状态">
+                <Option :value="1">待上课</Option>
+                <Option :value="2">上课中</Option>
+                <Option :value="3">已结束</Option>
+                <Option :value="4">已取消</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="6">
+            <FormItem>
+              <div class="dateplc">
+                <DatePicker
+                  v-model="startAccount"
+                  type="date"
+                  placeholder="上课日期"
+                  @on-change="getTimes"
+                ></DatePicker>
+                <DatePicker
+                  v-model="endAccount"
+                  type="date"
+                  placeholder="上课日期"
+                  @on-change="getTimes"
+                ></DatePicker>
+              </div>
+            </FormItem>
+          </Col>
+          <Col span="2">
+            <Button type="primary" @click="clear">清除</Button>
+          </Col>
+        </Row>
+      </Form>
+      <Table border :columns="columns" :data="lessonsList"></Table>
+      <Page
+        @on-change="pageChange"
+        :total="total"
+        :current="currentPage"
+        :page-size="pageSize"
+        show-total
+        show-elevator
+        class="ive-page"
+      />
+    </div>
     <Loading v-show="isLoading" />
-    <Lessonsmessage :type="type" v-if="show" />
+    <Message :type="type" v-if="show" />
   </div>
 </template>
 
 <script>
 import Loading from "../../../uilt/loading/loading";
 import storage from "../../../uilt/storage";
-import Lessonsmessage from "./Lessonsmessage";
+import Message from "./Message";
 import { createNamespacedHelpers } from "vuex";
 const { mapActions, mapState, mapMutations } = createNamespacedHelpers(
   "schedulessons"
@@ -116,7 +110,7 @@ const { mapActions, mapState, mapMutations } = createNamespacedHelpers(
 export default {
   components: {
     Loading,
-    Lessonsmessage
+    Message
   },
   mounted() {
     this.isLoading = true;
@@ -180,7 +174,7 @@ export default {
                       color: "#2d8cf0"
                     }
                   },
-                 '直播/回放'
+                  "直播/回放"
                 )
               ]);
             } else {
@@ -201,7 +195,7 @@ export default {
                       color: "#ccc"
                     }
                   },
-                  '直播/回放'
+                  "直播/回放"
                 )
               ]);
             }
@@ -216,7 +210,7 @@ export default {
     ...mapActions(["getLessonsList"]),
     //回放地址
     goBank(item) {
-      window.open(item.web_cast)
+      window.open(item.web_cast);
     },
     //手机号
     seekMobile() {

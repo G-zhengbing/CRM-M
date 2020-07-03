@@ -1,79 +1,75 @@
 <template>
   <div class="box">
-    <section class="main-section">
-      <div class="surplus">
-        <div class="main-section-top">
-          <div class="main-section-top-top">
-            <div style="height:10px"></div>
-            <Form :model="form" :label-width="80">
-              <Row>
-                <Col span="4">
-                  <FormItem prop="materials_name">
-                    <Input
-                      @on-change="seekKuhu"
-                      v-model="form.materials_name"
-                      placeholder="请输入资料名称"
-                      style="width: 300px"
-                    />
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <FormItem>
-                    <Button type="primary" style="margin-left: 8px" @click="clear">清空</Button>
-                  </FormItem>
-                </Col>
-              </Row>
-            </Form>
-          </div>
-        </div>
-        <div class="main-section-bottom">
-          <div class="contaner">
-            <div style="height:1px;"></div>
-            <div class="batch">
-              <div class="batch-let">
-                <button class="btn" @click="isDele">批量删除</button>
-              </div>
-              <div class="batch-right">
-                <button class="btn" @click="addAd">新建资料</button>
-                <Select style="width:100px" placeholder="排序方式">
-                  <Option value="1">{{ 1 }}</Option>
-                </Select>
-              </div>
-            </div>
-            <Table border :columns="columns2" :data="data" @on-selection-change="selectionChange"></Table>
-            <Page
-              @on-change="pageChange"
-              :total="total"
-              :current="currentPage"
-              :page-size="pageSize"
-              show-total
-              show-elevator
-              class="ive-page"
-            />
-          </div>
-        </div>
+    <Form :model="form">
+      <Row>
+        <Col span="3">
+          <FormItem prop="materials_name">
+            <Input @on-change="seekKuhu" v-model="form.materials_name" placeholder="请输入资料名称" />
+          </FormItem>
+        </Col>
+        <Col span="4">
+          <FormItem>
+            <Button type="primary" @click="clear">清空</Button>
+          </FormItem>
+        </Col>
+      </Row>
+    </Form>
+
+    <div class="batch">
+      <div class="batch-let">
+        <button class="btn" @click="isDele">批量删除</button>
       </div>
-    </section>
-    <DataMessage v-if="isDataMessage" ref="datamessage" :item="item" />
+      <div class="batch-right">
+        <button class="btn" @click="addAd">新建资料</button>
+        <Select style="width:100px" placeholder="排序方式">
+          <Option value="1">{{ 1 }}</Option>
+        </Select>
+      </div>
+    </div>
+    <Table
+      ref="table"
+      hiheight-row
+      :height="tableHeight"
+      style="minHeight:40px"
+      border
+      :columns="columns2"
+      :data="data"
+      @on-selection-change="selectionChange"
+    ></Table>
+    <Page
+      @on-change="pageChange"
+      :total="total"
+      :current="currentPage"
+      :page-size="pageSize"
+      show-total
+      show-elevator
+      class="ive-page"
+    />
+    <Message v-if="isDataMessage" ref="datamessage" :item="item" />
   </div>
 </template>
 
 <script>
-import DataMessage from "../databank/DataMessage";
+import Message from "./Message";
 import { mapActions, mapState, mapMutations } from "vuex";
 export default {
   components: {
-    DataMessage
+    Message
   },
   mounted() {
     this.loading(true);
-    this.getDatabankList({page:1}).then(res => {
+    this.getDatabankList({ page: 1 }).then(res => {
       this.loading(false);
-      this.setCurrerntPage(1)
+      this.setCurrerntPage(1);
     });
+    window.addEventListener("resize", this.changeFixed);
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.changeFixed);
   },
   data() {
     return {
+      tableHeight: 0,
       item: {},
       isUpdata: false,
       cityList: [],
@@ -110,8 +106,8 @@ export default {
             // 重点
             let _this = this;
             return h("i-switch", {
-              style:{
-                "width":"50px"
+              style: {
+                width: "50px"
               },
               //按钮的话是：button自行替换
               props: {
@@ -194,6 +190,10 @@ export default {
   methods: {
     ...mapActions(["getDatabankList", "deleDataList", "setDaSwitch"]),
     ...mapMutations(["setCurrerntPage"]),
+    changeFixed() {
+      this.tableHeight =
+        window.innerHeight - this.$refs.table.$el.offsetTop - 105;
+    },
     //loading
     loading(status) {
       if (status) {
@@ -261,7 +261,7 @@ export default {
         title: "温馨提示",
         content: "<p>确定要删除该条记录吗?</p>",
         onOk: () => {
-           this.loading(true);
+          this.loading(true);
           this.deleDataList([item.id]).then(res => {
             if (res.data.code == 200) {
               this.$Message.success("删除成功！");
@@ -280,9 +280,9 @@ export default {
     clear() {
       this.loading(true);
       this.form = {};
-      this.getDatabankList(this.form).then(()=>{
+      this.getDatabankList(this.form).then(() => {
         this.loading(false);
-      })
+      });
     },
     seekKuhu() {
       this.loading(true);
@@ -304,41 +304,5 @@ export default {
 <style>
 .demo-spin-icon-load {
   animation: ani-demo-spin 1s linear infinite;
-}
-</style>
-<style scoped>
-.ivu-page-options-elevator input {
-  height: 22px;
-}
-.ive-page {
-  float: right;
-  margin: 30px 0;
-}
-form label {
-  margin-right: 30px;
-}
-.ivu-input-wrapper {
-  width: 150px !important;
-}
-.ivu-select.ivu-select-single.ivu-select-default {
-  margin-left: 15px;
-}
-.batch-let {
-  flex: 1;
-}
-.batch {
-  display: flex;
-  margin: 15px 0;
-}
-.btn {
-  width: 100px;
-  height: 30px;
-  color: #fff;
-  font-size: 14px;
-  background: #2d8cf0;
-  outline: none;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
 }
 </style>

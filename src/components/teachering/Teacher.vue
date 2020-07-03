@@ -1,61 +1,43 @@
 <template>
-  <div class="box" ref="box">
-    <section class="main-section">
-      <div class="surplus">
-        <div class="main-section-bottom">
-          <div class="contaner">
-            <div style="height:10px"></div>
-            <Form :model="seekForm" :label-width="80">
-              <Row>
-                <Col span="4">
-                  <FormItem style="width:230px;">
-                    <Input v-model="seekForm.name" placeholder="教师姓名" @on-change="seekClick"></Input>
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <FormItem style="width:230px;">
-                    <Input v-model="seekForm.mobile" placeholder="联系方式" @on-change="seekClick"></Input>
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <FormItem>
-                    <Select
-                      v-model="seekForm.subject"
-                      style="width:150px"
-                      @on-change="seekClick"
-                      placeholder="意向科目"
-                    >
-                      <Option :value="i" v-for="(list,i) in subject" :key="i">{{list}}</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="4" style="text-indent: 60px">
-                  <Button type="primary" @click="clear">清除</Button>
-                </Col>
-                <Col span="24">
-                  <Button type="primary" @click="showTeacher">添加教师</Button>
-                </Col>
-              </Row>
-            </Form>
-            <Table
-              border
-              :columns="columns"
-              :data="teacherData"
-              @on-selection-change="selectionChange"
-            ></Table>
-            <Page
-              @on-change="pageChange"
-              :total="total"
-              :current="currentPage"
-              :page-size="pageSize"
-              show-total
-              show-elevator
-              class="ive-page"
-            />
-          </div>
-        </div>
-      </div>
-    </section>
+  <div class="box">
+    <Form :model="seekForm">
+      <Row>
+        <Col span="3">
+          <FormItem>
+            <Input v-model="seekForm.name" placeholder="教师姓名" @on-change="seekClick"></Input>
+          </FormItem>
+        </Col>
+        <Col span="3">
+          <FormItem>
+            <Input v-model="seekForm.mobile" placeholder="联系方式" @on-change="seekClick"></Input>
+          </FormItem>
+        </Col>
+        <Col span="3">
+          <FormItem>
+            <Select v-model="seekForm.subject" @on-change="seekClick" placeholder="意向科目">
+              <Option :value="i" v-for="(list,i) in subject" :key="i">{{list}}</Option>
+            </Select>
+          </FormItem>
+        </Col>
+        <Col span="2">
+          <Button type="primary" @click="clear">清除</Button>
+        </Col>
+        <Col span="24">
+          <Button type="primary" @click="showTeacher">添加教师</Button>
+        </Col>
+      </Row>
+    </Form>
+    <Table border :columns="columns" :data="teacherData" @on-selection-change="selectionChange"></Table>
+    <Page
+      @on-change="pageChange"
+      :total="total"
+      :current="currentPage"
+      :page-size="pageSize"
+      show-total
+      show-elevator
+      class="ive-page"
+    />
+
     <Loading v-show="isLoading" />
     <Modal width="1100" v-model="showTeacherMessage" :title="`${text}教师`" @on-cancel="colseModal">
       <Form
@@ -69,34 +51,34 @@
       >
         <Row>
           <Col span="24">教师基本信息</Col>
-          <Col span="12">
+          <Col span="4">
             <FormItem label="教师姓名" prop="name">
-              <Input v-model="form.name" placeholder="请输入教师姓名" style="width:300px"></Input>
+              <Input v-model="form.name" placeholder="请输入教师姓名"></Input>
             </FormItem>
           </Col>
-          <Col span="12">
+          <Col span="4">
             <FormItem label="性别" prop="sex">
-              <Select v-model="form.sex" style="width:300px">
+              <Select v-model="form.sex">
                 <Option :value="1">男</Option>
                 <Option :value="2">女</Option>
               </Select>
             </FormItem>
           </Col>
-          <Col span="12">
+          <Col span="4">
             <FormItem label="联系方式" prop="mobile">
-              <Input v-model="form.mobile" placeholder="请输入联系方式" style="width:300px"></Input>
+              <Input v-model="form.mobile" placeholder="请输入联系方式"></Input>
             </FormItem>
           </Col>
-          <Col span="12">
+          <Col span="4">
             <FormItem label="教授科目" prop="subject">
-              <Select v-model="form.subject" style="width:300px">
+              <Select v-model="form.subject">
                 <Option :value="i*1" v-for="(list,i) in subject" :key="i">{{list}}</Option>
               </Select>
             </FormItem>
           </Col>
-          <Col span="12">
+          <Col span="4">
             <FormItem label="教授年级" prop="grade">
-              <Select multiple v-model="form.grade" style="width:300px">
+              <Select multiple v-model="form.grade" max-tag-count="1">
                 <Option :value="1">一年级</Option>
                 <Option :value="2">二年级</Option>
                 <Option :value="3">三年级</Option>
@@ -112,9 +94,9 @@
               </Select>
             </FormItem>
           </Col>
-          <Col span="12">
+          <Col span="4">
             <FormItem label="教师等级" prop="level">
-              <Select v-model="form.level" style="width:300px">
+              <Select v-model="form.level">
                 <Option :value="1">中级</Option>
                 <Option :value="2">高级</Option>
                 <Option :value="3">特一级</Option>
@@ -123,36 +105,38 @@
               </Select>
             </FormItem>
           </Col>
-          <Col span="12">
-            <FormItem label="所在地区" prop="address_province_id">
-              <Select
-                @on-open-change="getProv"
-                v-model="form.address_province_id"
-                style="width:100px"
-              >
-                <Option :value="list.Id" v-for="(list,i) in provinceList" :key="i">{{list.Name}}</Option>
-              </Select>
-              <Select v-model="form.address_city_id" style="width:100px">
-                <Option :value="list.Id" v-for="(list,i) in city" :key="i">{{list.Name}}</Option>
-              </Select>
+          <Col span="4">
+            <FormItem label="所在地区" prop="address_province_id" style="display:flex;flex-direction:column">
+              <div class="dateplc">
+                <Select
+                  @on-open-change="getProv"
+                  v-model="form.address_province_id"
+                  style="width:100px"
+                >
+                  <Option :value="list.Id" v-for="(list,i) in provinceList" :key="i">{{list.Name}}</Option>
+                </Select>
+                <Select v-model="form.address_city_id" style="width:100px">
+                  <Option :value="list.Id" v-for="(list,i) in city" :key="i">{{list.Name}}</Option>
+                </Select>
+              </div>
             </FormItem>
           </Col>
-          <Col span="12">
+          <Col span="4">
             <FormItem label="classin账号" prop="classin_user">
-              <Input v-model="form.classin_user" placeholder="请输入classin账号" style="width:300px"></Input>
+              <Input v-model="form.classin_user" placeholder="请输入classin账号"></Input>
             </FormItem>
           </Col>
-          <Col span="12">
+          <Col span="4">
             <FormItem label="招商银行卡号" prop="bank_card_id">
-              <Input v-model="form.bank_card_id" placeholder="请输入16位招商银行卡号" style="width:300px"></Input>
+              <Input v-model="form.bank_card_id" placeholder="请输入16位招商银行卡号"></Input>
             </FormItem>
           </Col>
-          <Col span="12">
+          <Col span="4">
             <FormItem label="招商银行开户行" prop="bank_card_open">
-              <Input v-model="form.bank_card_open" placeholder="请输入招商银行开户行" style="width:300px"></Input>
+              <Input v-model="form.bank_card_open" placeholder="请输入招商银行开户行"></Input>
             </FormItem>
           </Col>
-          <Col span="12">
+          <Col span="24">
             <FormItem label="教授类型">
               <RadioGroup v-model="form.type">
                 <Radio :label="1">班课</Radio>
@@ -160,7 +144,7 @@
               </RadioGroup>
             </FormItem>
           </Col>
-          <Col span="12" style="display:flex" class="actives">
+          <Col span="10" style="display:flex" class="actives">
             <span>*</span>
             <FormItem label="老师头像" prop="avatar" class="active_span" style="margin-left:20px">
               <template>
@@ -203,7 +187,7 @@
               </Modal>
             </FormItem>
           </Col>
-          <Col span="12" style="display:flex">
+          <Col span="10" style="display:flex">
             <FormItem label="招商银行卡" prop="bank_card_pic" class="active_span">
               <template>
                 <div class="demo-upload-list" v-for="(item,i) in uploadList2" :key="i">
@@ -245,7 +229,7 @@
               </Modal>
             </FormItem>
           </Col>
-          <Col span="12" style="display:flex">
+          <Col span="10" style="display:flex">
             <FormItem label="身份证正面照" prop="identity_id_pic1" class="active_span">
               <template>
                 <div class="demo-upload-list" v-for="(item,i) in uploadList4" :key="i">
@@ -287,7 +271,7 @@
               </Modal>
             </FormItem>
           </Col>
-          <Col span="12" style="display:flex">
+          <Col span="10" style="display:flex">
             <FormItem label="身份证背面照" prop="identity_id_pic2" class="active_span">
               <template>
                 <div class="demo-upload-list" v-for="(item,i) in uploadList5" :key="i">
@@ -329,7 +313,7 @@
               </Modal>
             </FormItem>
           </Col>
-          <Col span="12" style="display:flex">
+          <Col span="10" style="display:flex">
             <FormItem label="教师资格证" prop="teacher_nvq_pic" class="active_span">
               <template>
                 <div class="demo-upload-list" v-for="(item,i) in uploadList7" :key="i">
@@ -632,10 +616,10 @@ export default {
         { title: "性别", key: "sex" },
         { title: "联系方式", key: "mobile" },
         { title: "教师等级", key: "level" },
-        { title: "年级", key: "grade_ch" },
+        { title: "年级", key: "grade_ch", width: 300 },
         { title: "教授科目", key: "subject" },
         { title: "推送Classin", key: "classin_id" },
-        { title: "创建时间", key: "create_time" },
+        { title: "创建时间", key: "create_time", width: 170 },
         {
           title: "操作",
           key: "action",
@@ -1245,9 +1229,12 @@ export default {
 };
 </script>
 <style scoped>
+.active_span .ivu-form-item-label{
+  margin-left: 15px;
+}
 .actives > span {
   position: absolute;
-  top: 50px;
+  top: 7px;
   left: 0;
   font-size: 20px;
   color: red;
@@ -1353,8 +1340,5 @@ export default {
   font-size: 20px;
   cursor: pointer;
   margin: 0 2px;
-}
-.dateplc {
-  display: flex;
 }
 </style>

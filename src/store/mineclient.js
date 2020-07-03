@@ -443,14 +443,6 @@ export default {
       state,
       commit
     }, {form, page,sort}) {
-      // axiosGet({method:"get",url:MINECLIENT,params:{ ...form, page: page ? page : state.currentPage}}).then(res => {
-      //   commit("setMineclient", res.data.data.resources)
-      //   commit("setCurrentPage", res.data.data.links.current_page)
-      //   commit("setTotal", res.data.data.links.total)
-      //   resolve()
-      // }).catch(e => {
-      //   reject(e)
-      // })
       return new Promise((resolve, reject) => {
         axios({
           method: "get",
@@ -512,20 +504,6 @@ export default {
         ["地理", 8],
         ["历史", 9]
       ])
-
-      // var version = new Map([
-      //   ["人教版",1],
-      //   ["北师大版",2],
-      //   ["华师大版",3],
-      //   ["苏教版",4],
-      //   ["鄂教版",5],
-      //   ["鲁教版",6],
-      //   ["沪教版",7],
-      //   ["冀教版",8],
-      //   ["浙教版",9],
-      //   ["河大版",10],
-      // ])
-
       var intention = new Map([
         ["高", 1],
         ["中", 2],
@@ -588,38 +566,12 @@ export default {
         [8, '八年级'],
         [9, '九年级']
       ]);
-      // var subjects = new Map(...state.subject)
-      // var subjects = new Map([
-      //   [1, '数学'],
-      //   [2, "英语"],
-      //   [3, "语文"],
-      //   [4, "物理"],
-      //   [5, "化学"],
-      //   [6, "政治"],
-      //   [7, "生物"],
-      //   [8, "地理"],
-      //   [9, "历史"]
-      // ])
       var intention = new Map([
         [1, "高"],
         [2, "中"],
         [3, "低"],
         [4, "无"]
       ])
-      // var version = new Map([
-      //   [1,"人教版"],
-      //   ["北师大版"],
-      //   ["华师大版",3],
-      //   ["苏教版",4],
-      //   ["鄂教版",5],
-      //   ["鲁教版",6],
-      //   ["沪教版",7],
-      //   ["冀教版",8],
-      //   ["浙教版",9],
-      //   ["河大版",10],
-      // ])
-
-      // var follow = new Map(state.follow_status)
 
       var pone = new Map([
         [1, "正常接听"],
@@ -671,9 +623,6 @@ export default {
         element.grade = maps.get(element.grade);
         element.sex = gender.get(element.sex);
         element.age = age.get(element.age);
-        // element.follow_status = follow.get(element.follow_status);
-        // element.subject = subjects.get(element.subject);
-        // element.is_course = course.get(element.is_course);
         element.intention_option = intention.get(element.intention_option);
         return element;
       });

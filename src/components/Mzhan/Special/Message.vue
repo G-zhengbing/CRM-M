@@ -19,12 +19,12 @@
                 <Icon type="ios-eye-outline" @click.native="handleView('http://liveapi.canpoint.net/' + form.event_pic)"></Icon>
               </div>
             </div>
-            <Modal title="View Image" v-model="visible">
+            <Modal title="预览" v-model="visible">
               <img :src="imgName" v-if="visible" style="width: 100%">
             </Modal>
           </FormItem>
-          <FormItem label="专题图片" prop="event_pic" class="active_span">
-            <span class="active_red">*</span>
+          <FormItem label="专题图片" prop="event_pic">
+            <span class="required"></span>
             <template v-if="uploadList.length>=1">
               <div class="demo-upload-list" v-for="(item,i) in uploadList"  :key="i">
                 <img :src="item.url">
@@ -48,12 +48,12 @@
           </Upload>
           <p>只能上传jpg/png格式文件，文件不能超过2M，图片尺寸：180px * 180px</p>
           </FormItem>
-          <FormItem label="专题内容" prop="content" class="active_span">
-            <span class="active_red">*</span>
+          <FormItem label="专题内容" prop="content">
+            <span class="required"></span>
             <Wangeditor v-model="form.content"  :catchData="catchData" ref="wangditor"/>
           </FormItem>
-          <FormItem label="状态" prop="status" class="label-left active_span">
-            <span class="active_red active_red_a">*</span>
+          <FormItem label="状态" prop="status">
+            <span class="required" style="left:-50px"></span>
             <RadioGroup v-model="form.status">
               <Radio :label="1">启用</Radio>
               <Radio :label="2">隐藏</Radio>
@@ -70,11 +70,11 @@
 </template>
 
 <script>
-import Wangeditor from '../../uilt/wangeditor/Wangeditor'
+import Wangeditor from '../../../uilt/wangeditor/Wangeditor'
 import { mapActions} from 'vuex'
 import axios from 'axios'
-import storage from '../../uilt/storage'
-import { ADDSPECIAL_URL ,UPDATASPECIAL_URL} from '../../uilt/url/Murl'
+import storage from '../../../uilt/storage'
+import { ADDSPECIAL_URL ,UPDATASPECIAL_URL} from '../../../uilt/url/Murl'
 import qs from 'qs'
 export default {
   components:{
@@ -287,9 +287,6 @@ export default {
 /*  */
 .ivu-radio.ivu-radio-checked span{
   box-sizing: border-box;
-}
-.label-left{
-  margin-left: -25px;
 }
 .contanner{
   margin: 20px 20px 20px 0;

@@ -1,10 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import store from '../store/index'
-import Login from '../components/login/Login.vue'
-import Forget from '../components/login/Forget.vue'
-import Succeed from '../components/login/Succeed.vue'
-import Main from '../components/Main.vue'
 import Home from '../components/Home.vue'
 import Erweima from '../components/Erweima.vue'
 import Daiban from '../components/home/Daiban'
@@ -13,16 +8,8 @@ import Public from '../components/Public'
 import FollowUp from '../components/FollowUp'
 import Money from '../components/Money'
 import Number from '../components/Number'
-// import Minestudent from '../components/teacher/Minestudent'
-// import Payingstudent from '../components/teacher/Payingstudent'
-// import StatisticAnalysis from '../components/teacher/StatisticAnalysis'
 import Paystudent from '../components/Paystudent'
 import NotCallBack from '../components/NotCallBack'
-import Advertising from '../components/Mzhan/Advertising'
-import Curriculum from '../components/Mzhan/Curriculum'
-import Databank from '../components/Mzhan/Databank'
-import Special from '../components/Mzhan/Special'
-import Bookcode from '../components/Mzhan/Bookcode'
 import Studentpay from '../components/minecllient/Studentpay.vue'
 import Mineclient from '../components/minecllient/Mineclient.vue'
 import Mineclientcopy from '../components/minecllient/Mineclientcopy.vue'
@@ -33,9 +20,6 @@ import Teacher from '../components/teachering/Teacher.vue'
 import Statistics from '../components/Statistics'
 import Importdata from '../components/minecllient/Importdata.vue'
 import Importorder from '../components/minecllient/Importorder.vue'
-import Scheducourse from '../components/scheduling/scheducourse/Scheducourse.vue'
-import Schedulessons from '../components/scheduling/schedulessons/Schedulessons.vue'
-import Schedustudent from '../components/scheduling/schedustudent/Schedustudent.vue'
 import Scheduteachers from '../components/scheduling/Scheduteachers.vue'
 import storage from '../uilt/storage'
 
@@ -50,38 +34,38 @@ const router = new Router({
   routes: [{
       path: '/',
       name: 'Login',
-      component: Login
+      component: ()=>import('../components/entrancefile/login/index.vue')
     },
     {
       path: '/forget',
-      component: Forget
+      component: ()=>import('../components/entrancefile/login/Forget.vue')
     },
     {
       path: '/succeed',
-      component: Succeed
+      component: ()=>import('../components/entrancefile/login/Succeed.vue')
     },
     {
       path: '/main',
-      component: Main,
+      component: ()=>import('../components/entrancefile/main/index.vue'),
       children: [{
           path: '/main/bookcode',
-          component: Bookcode
+          component: ()=>import('../components/Mzhan/bookcoed/index.vue')
         },
         {
           path: '/main/special',
-          component: Special
+          component: ()=>import('../components/Mzhan/Special/index.vue')
         },
         {
           path: '/main/databank',
-          component: Databank
+          component: ()=>import('../components/Mzhan/databank/index.vue')
         },
         {
           path: '/main/curriculum',
-          component: Curriculum
+          component: ()=>import('../components/Mzhan/curriculum/index.vue')
         },
         {
           path: '/main/advertising',
-          component: Advertising
+          component:()=>import('../components/Mzhan/Advertising/index.vue')
         },
         {
           path: '/main',
@@ -169,15 +153,15 @@ const router = new Router({
         },
         {
           path: '/main/scheducourse',
-          component: Scheducourse
+          component: ()=>import('../components/scheduling/scheducourse/index.vue')
         },
         {
           path: '/main/schedulessons',
-          component: Schedulessons
+          component: ()=>import('../components/scheduling/schedulessons/index.vue')
         },
         {
           path: '/main/schedustudent',
-          component: Schedustudent
+          component: ()=>import('../components/scheduling/schedustudent/index.vue')
         },
         {
           path: '/main/scheduteachers',

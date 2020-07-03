@@ -1,145 +1,93 @@
 <template>
-  <div class="box">
+  <div>
     <DaibanMessage v-if="show" :type="type" />
-    <section class="main-section">
-      <div class="surplus">
-        <div class="main-section-bottom">
-          <div>
-            <Form :model="form" :label-width="20">
-              <Row>
-                <Col span="4">
-                  <FormItem style="width:230px;">
-                    <Input v-model="form.name" placeholder="学员姓名" @on-change="seekKuhu"></Input>
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <FormItem style="width:230px;">
-                    <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekKuhu"></Input>
-                  </FormItem>
-                </Col>
-                <Col span="3">
-                  <FormItem>
-                    <Select
-                      v-model="form.refer"
-                      style="width:150px"
-                      @on-change="seekKuhu"
-                      placeholder="渠道"
-                    >
-                      <Option
-                        v-for="(list,i) in refer"
-                        :key="i"
-                        :value="list.id"
-                      >{{list.channel_title}}</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="3">
-                  <FormItem>
-                    <Select
-                      v-model="form.grade"
-                      style="width:150px"
-                      @on-change="seekKuhu"
-                      placeholder="年级"
-                    >
-                      <Option :value="1">一年级</Option>
-                      <Option :value="2">二年级</Option>
-                      <Option :value="3">三年级</Option>
-                      <Option :value="4">四年级</Option>
-                      <Option :value="5">五年级</Option>
-                      <Option :value="6">六年级</Option>
-                      <Option :value="7">七年级</Option>
-                      <Option :value="8">八年级</Option>
-                      <Option :value="9">九年级</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="3">
-                  <FormItem>
-                    <Select
-                      v-model="form.subject"
-                      style="width:150px"
-                      @on-change="seekKuhu"
-                      placeholder="意向科目"
-                    >
-                      <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="3">
-                  <FormItem>
-                    <Select
-                      v-model="form.transfer"
-                      style="width:150px"
-                      @on-change="seekKuhu"
-                      placeholder="流转类型"
-                    >
-                      <Option v-for="(list,i) in transfer" :key="i" :value="i">{{list}}</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-              </Row>
-              <Row>
-                <Col span="3">
-                  <FormItem>
-                    <Select
-                      v-model="form.sale_id"
-                      style="width:150px"
-                      @on-change="seekKuhu"
-                      placeholder="跟进人"
-                    >
-                      <Option
-                        v-for="(list,i) in sale_list"
-                        :key="i"
-                        :value="list.id"
-                      >{{list.login_name}}</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="8">
-                  <FormItem>
-                    <div class="dateplc">
-                      <DatePicker
-                        v-model="startTime"
-                        type="date"
-                        placeholder="注册时间"
-                        style="width: 200px"
-                        @on-change="getTimes"
-                      ></DatePicker>
-                      <DatePicker
-                        v-model="endTime"
-                        type="date"
-                        placeholder="注册时间"
-                        style="width: 200px"
-                        @on-change="getTimes"
-                      ></DatePicker>
-                    </div>
-                  </FormItem>
-                </Col>
-                <Col span="4" style="margin-left:30px">
-                  <Button type="primary" @click="clear">清除</Button>
-                </Col>
-              </Row>
-            </Form>
-            <Table
-              height="500"
-              border
-              :columns="columns"
-              :data="NotdataArr"
-              @on-selection-change="selectionChange"
-            ></Table>
-            <Page
-              @on-change="pageChange"
-              :total="total"
-              :current="currentPage"
-              :page-size="pageSize"
-              show-total
-              show-elevator
-              class="ive-page"
-            />
-          </div>
-        </div>
-      </div>
-    </section>
+    <Form :model="form">
+      <Row>
+        <Col span="4">
+          <FormItem>
+            <Input v-model="form.name" placeholder="学员姓名" @on-change="seekKuhu"></Input>
+          </FormItem>
+        </Col>
+        <Col span="4">
+          <FormItem>
+            <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekKuhu"></Input>
+          </FormItem>
+        </Col>
+        <Col span="3">
+          <FormItem>
+            <Select v-model="form.refer" @on-change="seekKuhu" placeholder="渠道">
+              <Option v-for="(list,i) in refer" :key="i" :value="list.id">{{list.channel_title}}</Option>
+            </Select>
+          </FormItem>
+        </Col>
+        <Col span="3">
+          <FormItem>
+            <Select v-model="form.grade" @on-change="seekKuhu" placeholder="年级">
+              <Option :value="1">一年级</Option>
+              <Option :value="2">二年级</Option>
+              <Option :value="3">三年级</Option>
+              <Option :value="4">四年级</Option>
+              <Option :value="5">五年级</Option>
+              <Option :value="6">六年级</Option>
+              <Option :value="7">七年级</Option>
+              <Option :value="8">八年级</Option>
+              <Option :value="9">九年级</Option>
+            </Select>
+          </FormItem>
+        </Col>
+        <Col span="3">
+          <FormItem>
+            <Select v-model="form.subject" @on-change="seekKuhu" placeholder="意向科目">
+              <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
+            </Select>
+          </FormItem>
+        </Col>
+        <Col span="3">
+          <FormItem>
+            <Select v-model="form.transfer" @on-change="seekKuhu" placeholder="流转类型">
+              <Option v-for="(list,i) in transfer" :key="i" :value="i">{{list}}</Option>
+            </Select>
+          </FormItem>
+        </Col>
+      </Row>
+      <Row>
+        <Col span="3">
+          <FormItem>
+            <Select v-model="form.sale_id" @on-change="seekKuhu" placeholder="跟进人">
+              <Option v-for="(list,i) in sale_list" :key="i" :value="list.id">{{list.login_name}}</Option>
+            </Select>
+          </FormItem>
+        </Col>
+        <Col span="8">
+          <FormItem>
+            <div class="dateplc">
+              <DatePicker v-model="startTime" type="date" placeholder="注册时间" @on-change="getTimes"></DatePicker>
+              <DatePicker v-model="endTime" type="date" placeholder="注册时间" @on-change="getTimes"></DatePicker>
+            </div>
+          </FormItem>
+        </Col>
+        <Col span="4">
+          <Button type="primary" @click="clear">清除</Button>
+        </Col>
+      </Row>
+    </Form>
+    <Table
+      height="550"
+      border
+      :columns="columns"
+      :data="NotdataArr"
+      @on-selection-change="selectionChange"
+    ></Table>
+    <Page
+      @on-change="pageChange"
+      :total="total"
+      :current="currentPage"
+      :page-size="pageSize"
+      show-total
+      show-elevator
+      class="ive-page"
+    />
+
     <Loading v-show="isLoading" />
     <MineclientMessage :type="type" v-if="showMine" />
   </div>

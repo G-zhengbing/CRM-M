@@ -1,102 +1,64 @@
 <template>
-  <div class="box" ref="box">
-    <section class="main-section">
-      <div class="surplus">
-        <div class="main-section-bottom">
-          <div>
-            <Form :model="form" :label-width="80">
-              <Row>
-                <Col span="4">
-                  <FormItem style="width:230px;">
-                    <Input v-model="form.name" placeholder="学员姓名" @on-change="seekClick"></Input>
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <FormItem style="width:230px;">
-                    <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekClick"></Input>
-                  </FormItem>
-                </Col>
-                <!-- <Col span="4">
-                  <FormItem>
-                    <Select
-                      v-model="form.sale_id"
-                      style="width:150px"
-                      @on-change="seekClick"
-                      placeholder="跟进人"
-                    >
-                      <Option
-                        v-for="(list,i) in sale_list"
-                        :key="i"
-                        :value="list.id"
-                      >{{list.login_name}}</Option>
-                    </Select>
-                  </FormItem>
-                </Col> -->
-                <Col span="6">
-                  <FormItem>
-                    <div class="dateplc">
-                      <DatePicker
-                        v-model="startAccount"
-                        type="date"
-                        placeholder="操作时间"
-                        style="width: 200px"
-                        @on-change="getTimes2"
-                      ></DatePicker>
-                      <DatePicker
-                        v-model="endAccount"
-                        type="date"
-                        placeholder="操作时间"
-                        style="width: 200px"
-                        @on-change="getTimes2"
-                      ></DatePicker>
-                    </div>
-                  </FormItem>
-                </Col>
-                <Col span="6">
-                  <FormItem>
-                    <div class="dateplc">
-                      <DatePicker
-                        v-model="startTime"
-                        type="date"
-                        placeholder="注册时间"
-                        style="width: 200px"
-                        @on-change="getTimes"
-                      ></DatePicker>
-                      <DatePicker
-                        v-model="endTime"
-                        type="date"
-                        placeholder="注册时间"
-                        style="width: 200px"
-                        @on-change="getTimes"
-                      ></DatePicker>
-                    </div>
-                  </FormItem>
-                </Col>
-                <Col span="4" style="text-indent: 60px">
-                  <Button type="primary" @click="clear">清除</Button>
-                </Col>
-              </Row>
-            </Form>
-            <Table
-              height="500"
-              border
-              :columns="columns"
-              :data="notifiData"
-              @on-selection-change="selectionChange"
-            ></Table>
-            <Page
-              @on-change="pageChange"
-              :total="total"
-              :current="currentPage"
-              :page-size="pageSize"
-              show-total
-              show-elevator
-              class="ive-page"
-            />
-          </div>
-        </div>
-      </div>
-    </section>
+  <div>
+    <Form :model="form">
+      <Row>
+        <Col span="3">
+          <FormItem>
+            <Input v-model="form.name" placeholder="学员姓名" @on-change="seekClick"></Input>
+          </FormItem>
+        </Col>
+        <Col span="3">
+          <FormItem>
+            <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekClick"></Input>
+          </FormItem>
+        </Col>
+        <Col span="6">
+          <FormItem>
+            <div class="dateplc">
+              <DatePicker
+                v-model="startAccount"
+                type="date"
+                placeholder="操作时间"
+                @on-change="getTimes2"
+              ></DatePicker>
+              <DatePicker
+                v-model="endAccount"
+                type="date"
+                placeholder="操作时间"
+                @on-change="getTimes2"
+              ></DatePicker>
+            </div>
+          </FormItem>
+        </Col>
+        <Col span="6">
+          <FormItem>
+            <div class="dateplc">
+              <DatePicker v-model="startTime" type="date" placeholder="注册时间" @on-change="getTimes"></DatePicker>
+              <DatePicker v-model="endTime" type="date" placeholder="注册时间" @on-change="getTimes"></DatePicker>
+            </div>
+          </FormItem>
+        </Col>
+        <Col span="3">
+          <Button type="primary" @click="clear">清除</Button>
+        </Col>
+      </Row>
+    </Form>
+    <Table
+      border
+      :columns="columns"
+      :data="notifiData"
+      @on-selection-change="selectionChange"
+    ></Table>
+    <Page
+      @on-change="pageChange"
+      :total="total"
+      :current="currentPage"
+      :page-size="pageSize"
+      show-total
+      show-elevator
+      class="ive-page"
+    />
+
     <Loading v-show="isLoading" />
     <DaibanMessage :type="type" v-if="show" />
     <MineclientMessage :type="type" v-if="showMine" />

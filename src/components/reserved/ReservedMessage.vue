@@ -25,7 +25,7 @@
         title="查看测评"
         @on-cancel="$parent.showMoadl = false"
       >
-        <Form :form="appraisalForm" label-position="top" style="height:300px;overflow-y:auto;">
+        <Form :form="appraisalForm" label-position="top">
           <FormItem label="测评图片展示" v-if="isUpdata">
             <div class="demo-upload-list">
               <img :src="'http://liveapi.canpoint.net/'+ appraisalForm.assess_image" />

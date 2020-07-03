@@ -1,5 +1,5 @@
 .ivu-form-item {
-	margin-bottom: 22px;
+	margin-bottom: 10px;
 }
 
 body {
@@ -23,4 +23,9 @@ body {
 }
 .vertical-center-modal-1 .ivu-modal {
   top: 0;
+}
+
+
+.ivu-col{
+  margin-right: 30px;
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="box" ref="box">
+  <div>
     <div class="contaner">
       <ul class="tabs">
         <li @click="tab(3)" :class="[num == 3? 'active' : '']">
@@ -12,23 +12,22 @@
           <span>今日上课情况</span>
         </li>
       </ul>
-      <Form :model="form" :label-width="80">
+      <Form :model="form">
         <Row>
-          <Col span="4">
-            <FormItem style="width:230px;">
+          <Col span="2">
+            <FormItem>
               <Input v-model="form.name" placeholder="学员姓名" @on-change="seekClick"></Input>
             </FormItem>
           </Col>
           <Col span="4">
-            <FormItem style="width:230px;">
+            <FormItem>
               <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekClick"></Input>
             </FormItem>
           </Col>
-          <Col span="4">
+          <Col span="2">
             <FormItem>
               <Select
                 v-model="form.type"
-                style="width:150px"
                 @on-change="seekClick"
                 placeholder="试听类型"
               >
@@ -36,11 +35,10 @@
               </Select>
             </FormItem>
           </Col>
-          <Col span="4" v-if="num == 3 || num == 2">
+          <Col span="3" v-if="num == 3 || num == 2">
             <FormItem>
               <Select
                 v-model="form.appoint_status"
-                style="width:150px"
                 @on-change="seekClick"
                 placeholder="状态"
               >
@@ -48,11 +46,10 @@
               </Select>
             </FormItem>
           </Col>
-          <Col span="4">
+          <Col span="2">
             <FormItem>
               <Select
                 v-model="form.subject"
-                style="width:150px"
                 @on-change="seekClick"
                 placeholder="科目"
               >
@@ -60,11 +57,10 @@
               </Select>
             </FormItem>
           </Col>
-          <Col span="4">
+          <Col span="2">
             <FormItem>
               <Select
                 v-model="form.grade"
-                style="width:150px"
                 @on-change="seekClick"
                 placeholder="年级"
               >
@@ -80,11 +76,10 @@
               </Select>
             </FormItem>
           </Col>
-          <Col span="4" v-if="num == 3">
+          <Col span="2" v-if="num == 3">
             <FormItem>
               <Select
                 v-model="form.create_user"
-                style="width:150px"
                 @on-change="seekClick"
                 placeholder="创建人"
               >
@@ -99,14 +94,12 @@
                   v-model="startAccount"
                   type="date"
                   placeholder="上课日期"
-                  style="width: 200px"
                   @on-change="getTimes2"
                 ></DatePicker>
                 <DatePicker
                   v-model="endAccount"
                   type="date"
                   placeholder="上课日期"
-                  style="width: 200px"
                   @on-change="getTimes2"
                 ></DatePicker>
               </div>
@@ -119,21 +112,19 @@
                   v-model="startTime"
                   type="date"
                   placeholder="提交时间"
-                  style="width: 200px"
                   @on-change="getTimes"
                 ></DatePicker>
                 <DatePicker
                   v-model="endTime"
                   type="date"
                   placeholder="提交时间"
-                  style="width: 200px"
                   @on-change="getTimes"
                 ></DatePicker>
               </div>
             </FormItem>
           </Col>
           </Col>
-          <Col span="4" style="text-indent: 60px">
+          <Col span="2">
             <Button type="primary" @click="clear">清除</Button>
           </Col>
         </Row>
@@ -631,58 +622,3 @@ export default {
   }
 };
 </script>
-<style scoped>
-/* 批量 */
-.allot > p {
-  border-left: 1px solid #fff;
-}
-.allot > p,
-.allot > span {
-  flex: 1;
-  text-align: center;
-}
-.allot {
-  display: flex;
-  width: 150px;
-  height: 30px;
-  background: #2d8cf0;
-  color: #fff;
-  border-radius: 6px;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-}
-/*  */
-/* tabs */
-.tabs li.active span {
-  color: #2d8cf0;
-}
-.tabs li.active {
-  border: 1px solid #ccc;
-  border-bottom: 1px solid #fff;
-}
-.main-section .main-section-bottom {
-  margin-top: 0px !important;
-}
-.tabs li {
-  height: 100%;
-  line-height: 35px;
-  margin-right: 30px;
-  width: 100px;
-  text-align: center;
-  margin-top: 1px;
-  cursor: pointer;
-  box-sizing: border-box;
-}
-.tabs {
-  width: 100%;
-  height: 35px;
-  display: flex;
-  border-bottom: 1px solid #ccc;
-  margin-bottom: 20px;
-}
-/* tabs */
-.dateplc {
-  display: flex;
-}
-</style>

@@ -1,117 +1,105 @@
 <template>
   <div class="box">
-    <section class="main-section">
-      <div class="surplus">
-        <div class="main-section-top">
-          <div class="main-section-top-top">
-            <div style="height:10px"></div>
-            <Form :model="form" :label-width="80">
-              <Row>
-                <Col span="4">
-                  <FormItem>
-                    <Input @on-change="seek" v-model="form.course_name" placeholder="课程名称"></Input>
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <FormItem>
-                    <Select @on-change="seek" v-model="form.type" style="width:200px" placeholder="课程类型">
-                      <Option :value="i" v-for="(list,i) in course" :key="i">{{list}}</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <FormItem>
-                    <Select @on-change="seek" v-model="form.subject" style="width:200px" placeholder="科目">
-                      <Option v-for="(list,i) in subject" :value="i" :key="i">{{list}}</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <FormItem>
-                    <Select @on-change="seek" v-model="form.status" style="width:200px" placeholder="上下架状态">
-                      <Option :value="1">上架</Option>
-                      <Option :value="2">下架</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <FormItem>
-                    <Select @on-change="seek" v-model="form.grade" style="width:200px" placeholder="年级">
-                      <Option :value="1">一年级</Option>
-                      <Option :value="2">二年级</Option>
-                      <Option :value="3">三年级</Option>
-                      <Option :value="4">四年级</Option>
-                      <Option :value="5">五年级</Option>
-                      <Option :value="6">六年级</Option>
-                      <Option :value="7">七年级</Option>
-                      <Option :value="8">八年级</Option>
-                      <Option :value="9">九年级</Option>
-                      <Option :value="10">高一</Option>
-                      <Option :value="11">高二</Option>
-                      <Option :value="12">高三</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <FormItem>
-                    <Button type="primary" style="margin-left: 8px" @click="clear">清空</Button>
-                  </FormItem>
-                </Col>
-              </Row>
-            </Form>
-          </div>
-        </div>
-        <div class="main-section-bottom">
-          <div class="contaner">
-            <div style="height:1px;"></div>
-            <div class="batch">
-              <div class="batch-let">
-                <button class="btn" @click="isDele">批量删除</button>
-              </div>
-              <div class="batch-right">
-                <button class="btn" @click="addAd">新建课程</button>
-                <Dropdown style="margin-left: 20px" @on-click="getSelect">
-                  <Button type="primary">
-                    排序
-                    <Icon type="ios-arrow-down"></Icon>
-                  </Button>
-                  <DropdownMenu slot="list">
-                    <DropdownItem name="1">售价由高到低</DropdownItem>
-                    <DropdownItem name="2">售价由低到高</DropdownItem>
-                    <DropdownItem name="3">活动价由高到底</DropdownItem>
-                    <DropdownItem name="4">活动价由低到高</DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
-              </div>
-            </div>
-            <Table height="500" border :columns="columns2" :data="$store.state.curriculum.currlList" @on-selection-change="selectionChange"></Table>
-            <Page
-              @on-change="pageChange"
-              :total="$store.state.curriculum.total"
-              :current="$store.state.curriculum.currentPage"
-              :page-size="$store.state.curriculum.pageSize"
-              show-total
-              show-elevator
-              class="ive-page"
-            />
-          </div>
-        </div>
+    <Form :model="form">
+      <Row>
+        <Col span="3">
+          <FormItem>
+            <Input @on-change="seek" v-model="form.course_name" placeholder="课程名称"></Input>
+          </FormItem>
+        </Col>
+        <Col span="3">
+          <FormItem>
+            <Select @on-change="seek" v-model="form.type" placeholder="课程类型">
+              <Option :value="i" v-for="(list,i) in course" :key="i">{{list}}</Option>
+            </Select>
+          </FormItem>
+        </Col>
+        <Col span="3">
+          <FormItem>
+            <Select @on-change="seek" v-model="form.subject" placeholder="科目">
+              <Option v-for="(list,i) in subject" :value="i" :key="i">{{list}}</Option>
+            </Select>
+          </FormItem>
+        </Col>
+        <Col span="3">
+          <FormItem>
+            <Select @on-change="seek" v-model="form.grade" placeholder="年级">
+              <Option :value="1">一年级</Option>
+              <Option :value="2">二年级</Option>
+              <Option :value="3">三年级</Option>
+              <Option :value="4">四年级</Option>
+              <Option :value="5">五年级</Option>
+              <Option :value="6">六年级</Option>
+              <Option :value="7">七年级</Option>
+              <Option :value="8">八年级</Option>
+              <Option :value="9">九年级</Option>
+              <Option :value="10">高一</Option>
+              <Option :value="11">高二</Option>
+              <Option :value="12">高三</Option>
+            </Select>
+          </FormItem>
+        </Col>
+        <Col span="4">
+          <FormItem>
+            <Button type="primary" style="margin-left: 8px" @click="clear">清空</Button>
+          </FormItem>
+        </Col>
+      </Row>
+    </Form>
+    <div class="batch">
+      <div class="batch-let">
+        <button class="btn" @click="isDele">批量删除</button>
       </div>
-    </section>
-    <CurrMessage v-if="isCurrMessage" :item="item" ref="messages" />
+      <div class="batch-right">
+        <button class="btn" @click="addAd">新建课程</button>
+        <Dropdown style="margin-left: 20px" @on-click="getSelect">
+          <Button type="primary">
+            排序
+            <Icon type="ios-arrow-down"></Icon>
+          </Button>
+          <DropdownMenu slot="list">
+            <DropdownItem name="1">售价由高到低</DropdownItem>
+            <DropdownItem name="2">售价由低到高</DropdownItem>
+            <DropdownItem name="3">活动价由高到底</DropdownItem>
+            <DropdownItem name="4">活动价由低到高</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+      </div>
+    </div>
+    <Table
+      hiheight-row
+      ref="table"
+      :height="tableHeight"
+      style="minHeight:40px"
+      border
+      :columns="columns2"
+      :data="$store.state.curriculum.currlList"
+      @on-selection-change="selectionChange"
+    ></Table>
+    <Page
+      @on-change="pageChange"
+      :total="$store.state.curriculum.total"
+      :current="$store.state.curriculum.currentPage"
+      :page-size="$store.state.curriculum.pageSize"
+      show-total
+      show-elevator
+      class="ive-page"
+    />
+    <Message v-if="isCurrMessage" :item="item" ref="messages" />
   </div>
 </template>
 
 <script>
-import CurrMessage from "../curriculum/CurrMessage";
-// import { mapActions, mapState, mapMutations } from "vuex";
-import storage from "../../uilt/storage";
-import { IMPORTLIST } from '../../uilt/url/url';
-import { createNamespacedHelpers } from 'vuex'
-const {mapActions, mapState, mapMutations } = createNamespacedHelpers('curriculum')
+import Message from "./Message";
+import storage from "../../../uilt/storage";
+import { IMPORTLIST } from "../../../uilt/url/url";
+import { createNamespacedHelpers } from "vuex";
+const { mapActions, mapState, mapMutations } = createNamespacedHelpers(
+  "curriculum"
+);
 export default {
   components: {
-    CurrMessage
+    Message
   },
   mounted() {
     this.loading(true);
@@ -119,10 +107,15 @@ export default {
       this.loading(false);
       this.setCurrerntPage(1);
     });
+    window.addEventListener("resize", this.changeFixed);
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.changeFixed);
   },
   data() {
     return {
-      subject:storage.getDaiban().screen_list.subject,
+      tableHeight: 0,
+      subject: storage.getDaiban().screen_list.subject,
       course: storage.getDaiban().screen_list.course_type,
       disabled: true,
       item: {},
@@ -141,7 +134,7 @@ export default {
         },
         {
           title: "课程名称",
-          width:230,
+          width: 230,
           key: "course_name",
           align: "center"
         },
@@ -292,14 +285,6 @@ export default {
       ]
     };
   },
-  computed: {
-    ...mapState({
-      // data: state => state.curriculum.currlList,
-      // currentPage: state => state.curriculum.currentPage,
-      // pageSize: state => state.curriculum.pageSize,
-      // total: state => state.curriculum.total
-    })
-  },
   methods: {
     ...mapActions([
       "putawayData",
@@ -309,6 +294,10 @@ export default {
       "setCurrDownUp"
     ]),
     ...mapMutations(["setCurrerntPage"]),
+    changeFixed() {
+      this.tableHeight =
+        window.innerHeight - this.$refs.table.$el.offsetTop - 48;
+    },
     //上架
     putaway(val) {
       this.$Modal.confirm({
@@ -321,7 +310,7 @@ export default {
               this.$Message.success("上架成功！");
             }
             this.loading(false);
-            this.getCurrList({ form:this.form ,page:this.currentPage});
+            this.getCurrList({ form: this.form, page: this.currentPage });
           });
         }
       });
@@ -329,7 +318,11 @@ export default {
     //排序
     getSelect(val) {
       this.loading(true);
-      this.getCurrList({ sort: val,form:this.form ,page:this.currentPage}).then(() => {
+      this.getCurrList({
+        sort: val,
+        form: this.form,
+        page: this.currentPage
+      }).then(() => {
         this.loading(false);
       });
     },
@@ -337,7 +330,7 @@ export default {
     pageChange(num) {
       this.loading(true);
       this.setCurrerntPage(num);
-      this.getCurrList({ page: num ,form:this.form}).then(() => {
+      this.getCurrList({ page: num, form: this.form }).then(() => {
         this.loading(false);
       });
     },
@@ -364,9 +357,9 @@ export default {
     },
     //是否首页展示
     functionFun(val, params) {
-      console.log(val,params)
+      console.log(val, params);
       this.loading(true);
-      this.setCurrSwitch({params:this.form,form:params}).then(() => {
+      this.setCurrSwitch({ params: this.form, form: params }).then(() => {
         this.loading(false);
       });
     },
@@ -401,7 +394,7 @@ export default {
               this.$Message.success("下架成功！");
             }
             this.loading(false);
-            this.getCurrList({form:this.form,page:this.currentPage});
+            this.getCurrList({ form: this.form, page: this.currentPage });
           });
         }
       });
@@ -438,7 +431,7 @@ export default {
     },
     seek() {
       this.loading(true);
-      this.getCurrList({form:this.form,page:1}).then(res => {
+      this.getCurrList({ form: this.form, page: 1 }).then(res => {
         this.loading(false);
       });
     },
@@ -452,39 +445,3 @@ export default {
   }
 };
 </script>
-<style scoped>
-.ivu-page-options-elevator input {
-  height: 22px;
-}
-.ive-page {
-  float: right;
-  margin: 30px 0;
-}
-form label {
-  margin-right: 30px;
-}
-.ivu-input-wrapper {
-  width: 150px !important;
-}
-.ivu-select.ivu-select-single.ivu-select-default {
-  margin-left: 15px;
-}
-.batch-let {
-  flex: 1;
-}
-.batch {
-  display: flex;
-  margin: 15px 0;
-}
-.btn {
-  width: 100px;
-  height: 30px;
-  color: #fff;
-  font-size: 14px;
-  background: #2d8cf0;
-  outline: none;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-</style>

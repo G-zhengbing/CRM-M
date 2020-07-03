@@ -15,7 +15,6 @@
             <FormItem>
               <Select
                 v-model="form.grade"
-                style="width:150px"
                 @on-change="seekClick"
                 placeholder="年级"
               >
@@ -33,7 +32,6 @@
             <FormItem>
               <Select
                 v-model="form.level"
-                style="width:150px"
                 @on-change="seekClick"
                 placeholder="课时包等级"
               >
@@ -47,7 +45,6 @@
             <FormItem>
               <Select
                 v-model="form.class_hour"
-                style="width:150px"
                 @on-change="seekClick"
                 placeholder="课时数"
               >
@@ -61,7 +58,7 @@
               </Select>
             </FormItem>
           </Col>
-          <Col span="4" style="text-indent: 60px">
+          <Col span="4">
             <Button type="primary" @click="clear">清除</Button>
           </Col>
         </Row>
@@ -71,7 +68,7 @@
           :columns="columns"
           :data="orderList"
           @on-selection-change="selectionChange"
-          height="300"
+          height="350"
         ></Table>
         <Page
           @on-change="pageChange"
@@ -232,9 +229,21 @@
           </Col>
           <Col span="24">
             <FormItem label="老师">
-              <Select v-model="createAuditionForm.coach_id" @on-open-change="getTeachers">
+              <!-- <Select v-model="createAuditionForm.coach_id" @on-open-change="getTeachers">
                 <Option :value="i" v-for="(list,i) in teachersV" :key="i">{{list}}</Option>
-              </Select>
+              </Select>-->
+              <span
+                v-if="selectTeacherList.length == 0"
+                class="select-teacher"
+                @click="getTeachers"
+              >选择老师</span>
+              <Tag
+                v-if="selectTeacherList.length != 0"
+                type="border"
+                closable
+                :color="tagColor"
+                @on-close="closetag"
+              >{{selectTeacherList[0].name}}</Tag>
             </FormItem>
           </Col>
           <Col span="24">
@@ -252,6 +261,30 @@
       <div slot="footer">
         <Button type="text" size="large" @click="clearForm">取消</Button>
         <Button :loading="disableBtn" type="primary" size="large" @click="createAuditionOk">确定</Button>
+      </div>
+    </Modal>
+    <!-- 选择老师 -->
+    <Modal width="1200" v-model="showSelectTeacher" title="选择老师" @on-cancel="closeSelectTeacher">
+      <Form label-position="top" style="height:500px;overflow-y:auto;">
+        <Table
+          border
+          :columns="selectTeacherColumns"
+          :data="teachersV"
+          @on-selection-change="selectTeacherSelectionChange"
+        ></Table>
+        <Page
+          @on-change="selectTeacherPageChange"
+          :total="selectTeacherTotal"
+          :current="selectTeacherCurrentPage"
+          :page-size="selectTeacherPageSize"
+          show-total
+          show-elevator
+          class="ive-page"
+        />
+      </Form>
+      <div slot="footer">
+        <Button type="text" size="large" @click="closeSelectTeacher">取消</Button>
+        <Button type="primary" size="large" @click="selectTeacher">确定</Button>
       </div>
     </Modal>
     <!-- 查看测评 -->
@@ -357,22 +390,22 @@
         style="height:500px;overflow-y:auto;"
       >
         <Row>
-          <Col span="6">
+          <Col span="4">
             <FormItem label="学生姓名" prop="student_name">
-              <Input v-model="connectForm.student_name" placeholder="请输入学生姓名" style="width:200px"></Input>
+              <Input v-model="connectForm.student_name" placeholder="请输入学生姓名" ></Input>
             </FormItem>
           </Col>
-          <Col span="6">
+          <Col span="4">
             <FormItem label="性别" prop="sex">
-              <Select v-model="connectForm.sex" style="width:200px">
+              <Select v-model="connectForm.sex">
                 <Option :value="1">男</Option>
                 <Option :value="2">女</Option>
               </Select>
             </FormItem>
           </Col>
-          <Col span="6">
+          <Col span="4">
             <FormItem label="年级" prop="grade">
-              <Select v-model="connectForm.grade" style="width:200px">
+              <Select v-model="connectForm.grade">
                 <Option :value="1">一年级</Option>
                 <Option :value="2">二年级</Option>
                 <Option :value="3">三年级</Option>
@@ -383,6 +416,52 @@
                 <Option :value="8">八年级</Option>
                 <Option :value="9">九年级</Option>
               </Select>
+            </FormItem>
+          </Col>
+          
+          <Col span="4">
+            <FormItem label="注册手机" prop="mobile">
+              <Input v-model="connectForm.mobile" placeholder="请输入注册手机"></Input>
+            </FormItem>
+          </Col>
+          <Col span="4">
+            <FormItem label="家长联系方式" prop="spare_phone">
+              <Input v-model="connectForm.spare_phone" placeholder="请输入家长联系方式"></Input>
+            </FormItem>
+          </Col>
+          <Col span="4">
+            <FormItem label="微信号" prop="wechat_id">
+              <Input v-model="connectForm.wechat_id" placeholder="请输入微信号"></Input>
+            </FormItem>
+          </Col>
+          <Col span="4">
+            <FormItem label="家长微信号" prop="parent_wechat_id">
+              <Input
+                v-model="connectForm.parent_wechat_id"
+                placeholder="请输入家长微信号"
+               
+              ></Input>
+            </FormItem>
+          </Col>
+          
+          <Col span="4">
+            <FormItem label="教材版本" prop="textbook_version">
+              <Select v-model="connectForm.textbook_version">
+                <Option :value="i" v-for="(list,i) in book_version" :key="i">{{list}}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="4">
+            <FormItem label="是否住校" prop="is_live">
+              <Select v-model="connectForm.is_live">
+                <Option :value="1">是</Option>
+                <Option :value="2">否</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="4">
+            <FormItem label="其他需求" prop="else_note">
+              <Input v-model="connectForm.else_note" placeholder="请输入其他需求"></Input>
             </FormItem>
           </Col>
           <Col span="6">
@@ -400,30 +479,6 @@
             </FormItem>
           </Col>
           <Col span="6">
-            <FormItem label="注册手机" prop="mobile">
-              <Input v-model="connectForm.mobile" placeholder="请输入注册手机" style="width:200px"></Input>
-            </FormItem>
-          </Col>
-          <Col span="6">
-            <FormItem label="家长联系方式" prop="spare_phone">
-              <Input v-model="connectForm.spare_phone" placeholder="请输入家长联系方式" style="width:200px"></Input>
-            </FormItem>
-          </Col>
-          <Col span="6">
-            <FormItem label="微信号" prop="wechat_id">
-              <Input v-model="connectForm.wechat_id" placeholder="请输入微信号" style="width:200px"></Input>
-            </FormItem>
-          </Col>
-          <Col span="6">
-            <FormItem label="家长微信号" prop="parent_wechat_id">
-              <Input
-                v-model="connectForm.parent_wechat_id"
-                placeholder="请输入家长微信号"
-                style="width:200px"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="6">
             <FormItem label="参加高考省份" prop="college_province_id">
               <Select
                 @on-open-change="getProv"
@@ -435,26 +490,6 @@
               <Select v-model="connectForm.college_city_id" style="width:100px">
                 <Option :value="list.Id" v-for="(list,i) in city" :key="i">{{list.Name}}</Option>
               </Select>
-            </FormItem>
-          </Col>
-          <Col span="6">
-            <FormItem label="教材版本" prop="textbook_version">
-              <Select v-model="connectForm.textbook_version" style="width:200px">
-                <Option :value="i" v-for="(list,i) in book_version" :key="i">{{list}}</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span="6">
-            <FormItem label="是否住校" prop="is_live">
-              <Select v-model="connectForm.is_live" style="width:200px">
-                <Option :value="1">是</Option>
-                <Option :value="2">否</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span="6">
-            <FormItem label="其他需求" prop="else_note">
-              <Input v-model="connectForm.else_note" placeholder="请输入其他需求" style="width:200px"></Input>
             </FormItem>
           </Col>
           <Col span="24">
@@ -518,11 +553,10 @@
         style="height:400px;overflow-y:auto;"
       >
         <Row>
-          <Col span="8">
+          <Col span="7">
             <FormItem label="选择课时包">
               <Select
                 v-model="upgradeForm.order_sn"
-                style="width:150px"
                 @on-change="getClass"
                 placeholder="课时包"
               >
@@ -530,23 +564,22 @@
               </Select>
             </FormItem>
           </Col>
-          <Col span="8">
+          <Col span="7">
             <FormItem>
               <img src="../../assets/upgrade.png" alt />
             </FormItem>
           </Col>
-          <Col span="8">
+          <Col span="7">
             <FormItem label="升级至">
               <Select
                 v-if="ordersnList.length != 0"
                 v-model="upgradeForm.product_id"
-                style="width:150px"
                 @on-change="getClassAll"
                 placeholder="课时包"
               >
                 <Option :value="i" v-for="(list,i) in ordersnList" :key="i">{{list.course_name}}</Option>
               </Select>
-              <Select style="width:150px" v-else placeholder="课时包"></Select>
+              <Select v-else placeholder="课时包"></Select>
             </FormItem>
           </Col>
           <Col span="24">
@@ -616,6 +649,7 @@ import Loading from "../../uilt/loading/loading";
 import storage from "../../uilt/storage";
 import axios from "axios";
 import { APPRAISAL } from "../../uilt/url/url";
+import color from "../../uilt/hexadecimalColor/index";
 export default {
   props: ["type"],
   components: {
@@ -709,6 +743,68 @@ export default {
   },
   data() {
     return {
+      // <选择老师>
+      tagColor: "",
+      selectTeacherList: [],
+      selectTeacherPageSize: 10,
+      selectTeacherCurrentPage: 1,
+      selectTeacherTotal: 0,
+      showSelectTeacher: false,
+      selectTeacherColumns: [
+        { type: "selection", width: 60 },
+        { title: "教师姓名", key: "name" },
+        {
+          title: "性别",
+          key: "sex",
+          render: (h, params) => {
+            return h("div", [h("span", params.row.sex == 1 ? "男" : "女")]);
+          }
+        },
+        { title: "教授年级", key: "grade_ch", width: 300 },
+        { title: "教授科目", key: "subject" },
+        { title: "创建时间", key: "create_time", width: 200 },
+        {
+          title: "操作",
+          key: "action",
+          align: "center",
+          width: 200,
+          render: (h, params) => {
+            return h("div", [
+              // h(
+              //   "Button",
+              //   {
+              //     props: {
+              //       type: "text",
+              //       size: "small"
+              //     },
+              //     on: {
+              //       click: () => {
+              //         this.details(params.row);
+              //       }
+              //     }
+              //   },
+              //   "详情"
+              // ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.callOut(params.row);
+                    }
+                  }
+                },
+                "呼出"
+              )
+            ]);
+          }
+        }
+      ],
+      // </选择老师>
       auditionTimes: "",
       isUpdata: false,
       timeNum: [],
@@ -973,6 +1069,7 @@ export default {
       "setOrdersnList"
     ]),
     ...mapActions([
+      "RingUp", //呼出
       "getOrdersnList",
       "createUpOrder",
       "getCity",
@@ -996,6 +1093,63 @@ export default {
       "getTeacherListN",
       "removeMineclient"
     ]),
+    //选择老师/呼出
+    callOut(item) {
+      this.showLoading = true;
+      this.RingUp({ form: { tel: item.mobile } })
+        .then(res => {
+          if (res.data.code == 200) {
+            this.$Message.success("呼出成功");
+          }
+          if (res.data.code == 1000) {
+            this.$Message.error({
+              content: res.data.error,
+              duration: 4
+            });
+          }
+          this.showLoading = false;
+        })
+        .catch(e => {
+          if (e) {
+            this.showLoading = false;
+          }
+        });
+    },
+    //选择老师/详情
+    details() {},
+    //tag删除
+    closetag() {
+      this.selectTeacherList = [];
+      this.randomTag();
+    },
+    //随机tag颜色
+    randomTag() {
+      var index = Math.floor(Math.random() * color.color.length);
+      this.tagColor = color.color[index];
+    },
+    //选择老师
+    selectTeacher() {
+      if (this.selectTeacherList.length == 1) {
+        this.showSelectTeacher = false;
+        this.showCreateAudition = true;
+        this.randomTag();
+      } else {
+        this.$Message.error("只可选择一位老师");
+      }
+    },
+    //选择老师分页
+    selectTeacherPageChange(num) {
+      this.selectTeacherCurrentPage = num;
+    },
+    //选择老师多选框
+    selectTeacherSelectionChange(item) {
+      this.selectTeacherList = item;
+    },
+    //关闭选择老师
+    closeSelectTeacher() {
+      this.showSelectTeacher = false;
+      this.showCreateAudition = true;
+    },
     auditionTime(date) {
       this.auditionTimes = date;
     },
@@ -1042,27 +1196,6 @@ export default {
           }
         });
       }
-      //  if (res.data.data.resources) {
-      //     if (res.data.data.resources.length == 0) return  this.$Message.error("当前订单不可升级");
-      //     if (res.data.data.resources[0].product_level == "中级") {
-      //       res.data.data.resources[0].product_level = 1;
-      //     } else if (res.data.data.resources[0].product_level == "高级") {
-      //       res.data.data.resources[0].product_level = 2;
-      //     } else if (res.data.data.resources[0].product_level == "特级") {
-      //       res.data.data.resources[0].product_level = 3;
-      //     }
-      //     form.grade = res.data.data.resources[0].product_grade;
-      //     form.level = res.data.data.resources[0].product_level;
-      //     form.class_hour = res.data.data.resources[0].total_class_hour;
-      //     form.class_type = 1;
-      //     this.getOrdersnList(form).then(res => {
-      //       if (res.data.data.resources) {
-      //         if (res.data.data.resources.length == 0) {
-      //           this.$Message.error("当前订单不可升级");
-      //         }
-      //       }
-      //     });
-      //   }
       this.classNum = this.accountList[num];
     },
     getClassAll(num) {
@@ -1241,7 +1374,9 @@ export default {
       this.disableBtn = true;
       this.isLoading = true;
       this.createOrderList({
-        aid: this.type.data.account_id ? this.type.data.account_id : this.type.data.id,
+        aid: this.type.data.account_id
+          ? this.type.data.account_id
+          : this.type.data.id,
         pid: this.orderPay[0].id,
         num: this.orderForm.goods_num
       }).then(res => {
@@ -1367,6 +1502,8 @@ export default {
     },
     //获取预约单老师列表
     getTeachers(isShow) {
+      this.showCreateAudition = false;
+      this.showSelectTeacher = true;
       this.teachersV.length = 0;
       var form = {};
       form.subject = this.createAuditionForm.subject;
@@ -1391,7 +1528,10 @@ export default {
               this.$Message.error("暂无老师");
               // this.getUserReservedList({ page: 1, uid: this.type.data.id });
             } else {
-              this.teachersV = res.data.data;
+              this.teachersV = res.data.data.resources;
+              this.selectTeacherPageSize = res.data.data.links.per_page;
+              this.selectTeacherCurrentPage = res.data.data.links.current_page;
+              this.selectTeacherTotal = res.data.data.links.total;
             }
           });
         }
@@ -1471,7 +1611,7 @@ export default {
       } else if (!this.createAuditionForm.time_block) {
         this.$Message.error("试听课时段不能为空");
         return;
-      } else if (!this.createAuditionForm.coach_id) {
+      } else if (!this.selectTeacherList) {
         this.$Message.error("教师选项不能为空");
         return;
       } else if (!this.createAuditionForm.note) {
@@ -1480,7 +1620,8 @@ export default {
       }
       this.showLoading = true;
       this.disableBtn = true;
-      this.createAuditionForm.date_time = this.auditionTimes
+      this.createAuditionForm.date_time = this.auditionTimes;
+      this.createAuditionForm.coach_id = this.selectTeacherList[0].id;
       this.createdReserved({
         form: this.createAuditionForm,
         uid: this.type.data.id
@@ -1494,6 +1635,8 @@ export default {
         }
         this.showLoading = false;
         this.time = "";
+        this.auditionTimes = "";
+        this.selectTeacherList = [];
         this.disableBtn = false;
       });
     },
@@ -1597,6 +1740,15 @@ export default {
 </script>
 
 <style scoped>
+/* 选择老师 */
+.teacher-list {
+  display: flex;
+}
+.select-teacher {
+  cursor: pointer;
+  color: #0095ff;
+}
+/*  */
 .totalprice > div span {
   margin-right: 30px;
 }

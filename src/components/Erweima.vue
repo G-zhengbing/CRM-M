@@ -2,55 +2,49 @@
 <template>
   <div class="box">
     <NewErweima v-if="show" :type="type" />
-    <section class="main-section">
-      <div class="surplus">
-        <div class="main-section-top">
-          <Form :model="form" :label-width="35" >
-            <Row style="margin-top:30px;">
-              <Col span="4">
-                <FormItem style="width:230px;">
+          <Form :model="form">
+            <Row>
+              <Col span="3">
+                <FormItem>
                   <Input v-model="form.title" placeholder="标题"></Input>
                 </FormItem>
               </Col>
-              <Col span="4">
-                <FormItem style="width:230px;">
+              <Col span="3">
+                <FormItem>
                   <Select v-model="form.demand_type" style="width:150px" placeholder="渠道">
                     <Option v-for="(list,i) in refer" :key="i" :value="i">{{list}}</Option>
                   </Select>
                 </FormItem>
               </Col>
-              <Col span="4">
-                <FormItem style="width:230px;">
+              <Col span="3">
+                <FormItem>
                   <Input v-model="form.user_name" placeholder="使用人"></Input>
                 </FormItem>
               </Col>
               <Col span="6">
                 <FormItem>
-                  <div style="display:flex">
+                  <div class="dateplc">
                     <DatePicker
                       type="datetime"
                       placeholder="开始时间"
-                      style="width: 200px"
                       v-model="nextTime"
                       @on-ok="setNextTime"
                     ></DatePicker>
                     <DatePicker
                       type="datetime"
                       placeholder="结束时间"
-                      style="width: 200px"
                       v-model="classTime"
                       @on-ok="setClassTime"
                     ></DatePicker>
                   </div>
                 </FormItem>
               </Col>
-              <Col span="4" style="margin-left:30px">
+              <Col span="2">
                 <Button type="primary" @click="seek">查询</Button>
                 <Button @click="clear">清空</Button>
               </Col>
             </Row>
           </Form>
-        </div>
         <div class="section-bottom">
           <div style="margin: 0 46px;">
             <button class="updata button" @click="addErweima">+ 新建</button>
@@ -71,8 +65,6 @@
             />
           </div>
         </div>
-      </div>
-    </section>
     <Loading v-show="isLoading" />
   </div>
 </template>

@@ -82,7 +82,6 @@ import qs from "qs";
 import NewBook from "./newBook";
 import ViewBook from "./viewBook";
 import AddBook from "./addBook";
-import storage from "@/uilt/storage.js";
 import { mapState, mapActions } from "vuex";
 import {
   GETINBOOKLIST,
@@ -97,12 +96,12 @@ export default {
   },
   computed: {
     ...mapState({
+      subjectList: state => state.screen_list.subject,
+      grade_strList: state => state.screen_list.grade_str
     })
   },
   data() {
     return {
-      subjectList: storage.getDaiban().screen_list.subject,
-      grade_strList: storage.getDaiban().screen_list.grade_str,
       isLoading: false,
       type: "",
       row: "",
@@ -291,9 +290,7 @@ export default {
       this.showMod = val;
       this.row = "";
       this.type = "";
-      if(!index) {
-        this.getInBookList();
-      }
+      this.getInBookList();
     },
     // 转换date
     changeDate(time) {

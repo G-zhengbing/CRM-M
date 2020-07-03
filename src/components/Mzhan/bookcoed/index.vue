@@ -1,119 +1,98 @@
 <template>
   <div class="box">
-    <section class="main-section">
-      <div class="surplus">
-        <div class="main-section-top">
-          <div class="main-section-top-top">
-            <div style="height:10px"></div>
-            <Form :model="form" :label-width="80">
-              <Row>
-                <Col span="5">
-                  <FormItem>
-                    <Input @on-change="seekKuhu" v-model="form.book_name" placeholder="请输入书籍名称"></Input>
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <FormItem>
-                    <Select
-                      @on-change="seekKuhu"
-                      v-model="form.subject"
-                      style="width:200px"
-                      placeholder="请选择科目"
-                    >
-                      <Option :value="1">数学</Option>
-                      <Option :value="2">英语</Option>
-                      <Option :value="3">语文</Option>
-                      <Option :value="4">物理</Option>
-                      <Option :value="5">化学</Option>
-                      <Option :value="6">政治</Option>
-                      <Option :value="7">生物</Option>
-                      <Option :value="8">地理</Option>
-                      <Option :value="9">历史</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="6">
-                  <FormItem>
-                    <Select
-                      @on-change="seekKuhu"
-                      v-model="form.grade"
-                      style="width:200px"
-                      placeholder="请选择年级"
-                    >
-                      <Option :value="1">一年级</Option>
-                      <Option :value="2">二年级</Option>
-                      <Option :value="3">三年级</Option>
-                      <Option :value="4">四年级</Option>
-                      <Option :value="5">五年级</Option>
-                      <Option :value="6">六年级</Option>
-                      <Option :value="7">七年级</Option>
-                      <Option :value="8">八年级</Option>
-                      <Option :value="9">九年级</Option>
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col span="4">
-                  <DatePicker
-                    @on-change="getTime"
-                    v-model="time"
-                    type="daterange"
-                    placement="bottom-end"
-                    format="yyyy-MM-dd"
-                    placeholder="开始时间-结束时间"
-                    style="width: 200px"
-                  ></DatePicker>
-                  <br />
-                </Col>
-                <Col span="5">
-                  <FormItem>
-                    <Button type="primary" style="margin-left: 8px" @click="clear">清空</Button>
-                  </FormItem>
-                </Col>
-              </Row>
-            </Form>
-          </div>
-        </div>
-        <div class="main-section-bottom">
-          <div class="contaner">
-            <div style="height:1px;"></div>
-            <div class="batch">
-              <div class="batch-let">
-                <button class="btn" @click="isDele">批量删除</button>
-              </div>
-              <div class="batch-right">
-                <button class="btn" @click="addAd">新建书籍</button>
-              </div>
-            </div>
-            <Table
-              height="500"
-              border
-              :columns="columns2"
-              :data="data"
-              @on-selection-change="selectionChange"
-            ></Table>
-            <Page
-              @on-change="pageChange"
-              :total="total"
-              :current="spCurrentPage"
-              :page-size="pageSize"
-              show-total
-              show-elevator
-              class="ive-page"
-            />
-          </div>
-        </div>
+    <Form :model="form">
+      <Row>
+        <Col span="3">
+          <FormItem>
+            <Input @on-change="seekKuhu" v-model="form.book_name" placeholder="请输入书籍名称"></Input>
+          </FormItem>
+        </Col>
+        <Col span="3">
+          <FormItem>
+            <Select @on-change="seekKuhu" v-model="form.subject" placeholder="请选择科目">
+              <Option :value="1">数学</Option>
+              <Option :value="2">英语</Option>
+              <Option :value="3">语文</Option>
+              <Option :value="4">物理</Option>
+              <Option :value="5">化学</Option>
+              <Option :value="6">政治</Option>
+              <Option :value="7">生物</Option>
+              <Option :value="8">地理</Option>
+              <Option :value="9">历史</Option>
+            </Select>
+          </FormItem>
+        </Col>
+        <Col span="3">
+          <FormItem>
+            <Select @on-change="seekKuhu" v-model="form.grade" placeholder="请选择年级">
+              <Option :value="1">一年级</Option>
+              <Option :value="2">二年级</Option>
+              <Option :value="3">三年级</Option>
+              <Option :value="4">四年级</Option>
+              <Option :value="5">五年级</Option>
+              <Option :value="6">六年级</Option>
+              <Option :value="7">七年级</Option>
+              <Option :value="8">八年级</Option>
+              <Option :value="9">九年级</Option>
+            </Select>
+          </FormItem>
+        </Col>
+        <Col span="4">
+          <DatePicker
+            @on-change="getTime"
+            v-model="time"
+            type="daterange"
+            placement="bottom-end"
+            format="yyyy-MM-dd"
+            placeholder="开始时间-结束时间"
+            style="width: 200px"
+          ></DatePicker>
+          <br />
+        </Col>
+        <Col span="5">
+          <FormItem>
+            <Button type="primary" style="margin-left: 8px" @click="clear">清空</Button>
+          </FormItem>
+        </Col>
+      </Row>
+    </Form>
+
+    <div class="batch">
+      <div class="batch-let">
+        <button class="btn" @click="isDele">批量删除</button>
       </div>
-    </section>
-    <BookMessage v-if="isBookMessage" :item="item" />
+      <div class="batch-right">
+        <button class="btn" @click="addAd">新建书籍</button>
+      </div>
+    </div>
+    <Table
+      hiheight-row
+      ref="table"
+      :height="tableHeight"
+      border
+      :columns="columns2"
+      :data="data"
+      @on-selection-change="selectionChange"
+    ></Table>
+    <Page
+      @on-change="pageChange"
+      :total="total"
+      :current="spCurrentPage"
+      :page-size="pageSize"
+      show-total
+      show-elevator
+      class="ive-page"
+    />
+    <Message v-if="isBookMessage" :item="item" />
   </div>
 </template>
 
 <script>
-import BookMessage from "../Special/BookMessage";
+import Message from "./Message";
 import { mapActions, mapState, mapMutations } from "vuex";
 export default {
   components: {
-    BookMessage
+    Message
   },
   mounted() {
     this.loading(true);
@@ -121,6 +100,10 @@ export default {
       this.loading(false);
       this.setCurrerntPage(1);
     });
+    window.addEventListener("resize", this.changeFixed);
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.changeFixed);
   },
   computed: {
     ...mapState({
@@ -132,6 +115,7 @@ export default {
   },
   data() {
     return {
+      tableHeight: 550,
       time: "",
       item: {},
       isUpdata: false,
@@ -299,6 +283,10 @@ export default {
   methods: {
     ...mapActions(["getBookList", "deleBookList", "UpExtension"]),
     ...mapMutations(["setCurrerntPage"]),
+    changeFixed() {
+      this.tableHeight =
+        window.innerHeight - this.$refs.table.$el.offsetTop - 15;
+    },
     getTime() {
       this.form.create_start_time = this.time[0];
       this.form.create_end_time = this.time[1];
@@ -412,30 +400,3 @@ export default {
   }
 };
 </script>
-<style scoped>
-.ivu-page-options-elevator input {
-  height: 22px;
-}
-.ive-page {
-  float: right;
-  margin: 30px 0;
-}
-.batch-let {
-  flex: 1;
-}
-.batch {
-  display: flex;
-  margin: 15px 0;
-}
-.btn {
-  width: 100px;
-  height: 30px;
-  color: #fff;
-  font-size: 14px;
-  background: #2d8cf0;
-  outline: none;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-</style>

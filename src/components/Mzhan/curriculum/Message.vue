@@ -18,7 +18,7 @@
                 </Select>
               </FormItem>
             </Col>
-            <Col span="11" offset="2">
+            <Col span="11">
               <FormItem label="年级" prop="grade">
                 <Select v-model="form.grade" placeholder="请选择">
                   <Option :value="1">一年级</Option> 
@@ -38,7 +38,7 @@
                 <Input v-model="form.course_name" placeholder="请输入副标题"></Input>
               </FormItem>
             </Col>
-            <Col span="11" offset="2">
+            <Col span="11">
               <FormItem label="科目" prop="subject">
                 <Select v-model="form.subject" placeholder="请选择">
                   <Option :value="1">数学</Option> 
@@ -60,7 +60,7 @@
                 </Select>
               </FormItem>
             </Col>
-             <Col span="11" offset="2"  v-if="form.type == 1">
+             <Col span="11"  v-if="form.type == 1">
               <FormItem label="班主任" prop="header_id">
                 <Select v-model="form.header_id" placeholder="请选择">
                   <Option :value="list.id" v-for="(list,i) in header_list" :key="i">{{list.login_name}}</Option>
@@ -120,7 +120,7 @@
             </Col>
             <Col span="24">
               <FormItem label="轮播图片" prop="image_1" class="active_span">
-                <span class="active_red">*</span>
+                <span class="required"></span>
                 <template>
                   <div class="demo-upload-list" v-for="(item,i) in uploadList"  :key="i">
                     <img :src="item.url">
@@ -157,7 +157,7 @@
             </Col>
             <Col span="24" >
               <FormItem prop="course_list" label="开课日期"  class="active_span">
-                <span class="active_red">*</span>
+                <span class="required"></span>
                 <div class="boxTime">
                    <div class="cardTime" v-for="(item,i) in timeArr" :key="i">
                     <i @click="deleTime(i)"><Icon type="ios-trash-outline" /></i>
@@ -189,7 +189,7 @@
             </Col>
             <Col span="24">
               <FormItem label="课节目录" prop="course_list" class="active_span">
-                <span class="active_red">*</span>
+                <span class="required"></span>
                  <div class="catalog">
                   <p @click="addLessons">+添加课节</p>
                   <ul>
@@ -213,7 +213,6 @@
                     </li>
                   </ul>
                 </div>
-                <!-- <input type="file" ref="file" @change="uploadMp4($event)"> -->
               </FormItem>
             </Col>
             </template>
@@ -238,11 +237,10 @@
 </template>
 
 <script>
-import Wangeditor from '../../uilt/wangeditor/Wangeditor'
-// import { mapActions,mapState } from 'vuex'
-import storage from '../../uilt/storage'
-import { UPLOADIMAGE } from '../../uilt/url/Murl'
-import { UPDATEPRODUCTS, CREATEPRODUCTS } from '../../uilt/url/url'
+import Wangeditor from '../../../uilt/wangeditor/Wangeditor'
+import storage from '../../../uilt/storage'
+import { UPLOADIMAGE } from '../../../uilt/url/Murl'
+import { UPDATEPRODUCTS, CREATEPRODUCTS } from '../../../uilt/url/url'
 import { createNamespacedHelpers } from 'vuex'
 const  { mapState,mapActions } = createNamespacedHelpers('curriculum')
 import axios from 'axios'

@@ -46,39 +46,6 @@
             </ul>
           </div>
         </FormItem>
-        <!-- <FormItem label="年级" prop="grade">
-					<Select v-model="form.grade" placeholder="请选择">
-						<Option :value="1">一年级</Option> 
-						<Option :value="2">二年级</Option> 
-						<Option :value="3">三年级</Option> 
-						<Option :value="4">四年级</Option> 
-						<Option :value="5">五年级</Option> 
-						<Option :value="6">六年级</Option> 
-						<Option :value="7">七年级</Option> 
-						<Option :value="8">八年级</Option> 
-						<Option :value="9">九年级</Option> 
-					</Select>
-        </FormItem>
-				<FormItem label="科目" prop="subject">
-					<Select v-model="form.subject" placeholder="请选择">
-						<Option :value="1">数学</Option> 
-            <Option :value="2">英语</Option> 
-            <Option :value="3">语文</Option> 
-            <Option :value="4">物理</Option> 
-            <Option :value="5">化学</Option> 
-            <Option :value="6">政治</Option> 
-            <Option :value="7">生物</Option> 
-            <Option :value="8">地理</Option> 
-            <Option :value="9">历史</Option> 
-					</Select>
-        </FormItem>
-        <FormItem label="上传历史文件名称"  v-if="form.file_url">
-          {{form.materials_name}}
-        </FormItem>
-        <FormItem label="上传文件" prop="file_url" class="active_span">
-          <span class="active_red">*</span>
-          <input type="file" ref="file" @change="getFiles($event)" accept=".docx,.doc,.pdf" multiple="multiplt" name="file_url">
-        </FormItem> -->
         <FormItem label="是否首页展示" prop="is_hot" class="label-left">
           <RadioGroup v-model="form.is_hot">
             <Radio label="1">是</Radio>
@@ -97,9 +64,9 @@
 
 <script>
 import { mapActions } from 'vuex'
-import storage from '../../uilt/storage'
-import { UPDATADATA_URL,ADDDATA_URL } from "../../uilt/url/Murl";
-import { MATERIALUPLOAD } from "../../uilt/url/url";
+import storage from '../../../uilt/storage'
+import { UPDATADATA_URL,ADDDATA_URL } from "../../../uilt/url/Murl";
+import { MATERIALUPLOAD } from "../../../uilt/url/url";
 import axios from "axios"
 export default {
   props:["item"],
