@@ -102,6 +102,7 @@
       @changeShowMod="changeShowMod"
     />
     <Loading v-show="isLoading" />
+    <MineclientMessage :type="types" v-if="showMine" />
   </div>
 </template>
 
@@ -109,14 +110,20 @@
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import { VIPUSERLIST } from "@/uilt/url/url";
 import storage from "@/uilt/storage";
+import MineclientMessage from "@/components/minecllient/MineclientMessage";
 import qs from "qs";
 
 export default {
+  components: {
+    MineclientMessage
+  },
   computed: {
     ...mapState({
       refresh: state => state.currentPage.refresh,
-      selectState: state => state.selectState
-    })
+      selectState: state => state.selectState,
+      currentPage: state => state.studentpay.currentPage,
+    }),
+    ...mapGetters(["studentpayTypes"])
   },
   data() {
     return {
@@ -132,7 +139,9 @@ export default {
       formItem: {},
       row: "",
       type: "",
+      types: {},
       showMod: false,
+      showMine: false,
       columns1: [
         {
           type: "selection",
@@ -294,6 +303,21 @@ export default {
               //   },
               //   "转介绍"
               // ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.upgrade(params.row);
+                    }
+                  }
+                },
+                "补款升级"
+              ),
               h(
                 "Button",
                 {
@@ -466,6 +490,21 @@ export default {
                   },
                   on: {
                     click: () => {
+                      this.upgrade(params.row);
+                    }
+                  }
+                },
+                "补款升级"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
                       this.switch("CallOut", params.row);
                     }
                   }
@@ -512,6 +551,28 @@ export default {
     }
   },
   methods: {
+    ...mapMutations([
+      "setCurrentPages",
+      "setSelectState",
+      "setRefresh",
+      "setStudentpayTypes"
+    ]),
+    ...mapActions(["getAccountList"]),
+    //补款升级
+    upgrade(item) {
+      this.getAccountList(item.account_id).then(res => {
+        if (res.data.data.resources) {
+          if (res.data.data.resources.length == 0)
+            return this.$Message.error("当前订单不可升级");
+        }
+      });
+      this.setStudentpayTypes(item);
+      this.showMine = true;
+      this.types.classify = "upgrade";
+      this.types.form = this.form;
+      this.types.page = this.currentPage;
+      this.types.data = { ...this.studentpayTypes };
+    },
     // 每页条数
     pageNums(val) {
       this.formItem.page_num = val;
@@ -535,7 +596,6 @@ export default {
         page_num: "10" // 每页条数
       };
     },
-    ...mapMutations(["setCurrentPages", "setSelectState", "setRefresh"]),
     // 改变页码
     changePages(val) {
       this.formItem.page = val;
