@@ -1070,6 +1070,10 @@ export default {
           }
           this.$parent.show = false;
           this.Loading = false;
+          // 来自公共资源池呼出刷新
+          if(this.type.form == "public") {
+            return this.getPublicList({})
+          }
           this.getKehuList({ status: storage.getTabStatus() });
         });
       }

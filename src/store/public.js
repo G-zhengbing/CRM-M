@@ -30,22 +30,22 @@ export default {
   },
   actions: {
     //领取
-    setGet({state,commit,dispatch},uid){
-      return new Promise((resolve,reject)=>{
+    setGet({ state, commit, dispatch }, uid) {
+      return new Promise((resolve, reject) => {
         axios({
-          method:"put",
-          url:YIRUGONG +'/' + uid,
+          method: "put",
+          url: YIRUGONG + '/' + uid,
           headers: {
             "content-type": "application/x-www-form-urlencoded",
             Authorization: "bearer " + storage.get()
           },
           params: {
-            status:2
+            status: 2
           }
-        }).then(res=>{
+        }).then(res => {
           dispatch("getPublicList")
           resolve()
-        }).catch(e=>{
+        }).catch(e => {
           reject(e)
         })
       })
@@ -71,7 +71,7 @@ export default {
         }).then(res => {
           commit("setPublicList", res.data.data.resources)
           commit("setRefer", res.data.data.links.refer)
-          commit("setCurrentPage",res.data.data.links.current_page)
+          commit("setCurrentPage", res.data.data.links.current_page)
           commit("setTotal", res.data.data.links.total)
           resolve()
         }).catch(e => {
@@ -124,22 +124,22 @@ export default {
       ])
 
       var age = new Map([
-        [5,"5岁"],
-        [6,"6岁"],
-        [7,"7岁"],
-        [8,"8岁"],
-        [9,"9岁"],
-        [10,"10岁"],
-        [11,"11岁"],
-        [12,"12岁"],
-        [13,"13岁"],
-        [14,"14岁"],
-        [15,"15岁"],
-        [16,"16岁"],
-        [17,"17岁"],
-        [18,"18岁"],
-        [19,"19岁"],
-        [20,"20岁"]
+        [5, "5岁"],
+        [6, "6岁"],
+        [7, "7岁"],
+        [8, "8岁"],
+        [9, "9岁"],
+        [10, "10岁"],
+        [11, "11岁"],
+        [12, "12岁"],
+        [13, "13岁"],
+        [14, "14岁"],
+        [15, "15岁"],
+        [16, "16岁"],
+        [17, "17岁"],
+        [18, "18岁"],
+        [19, "19岁"],
+        [20, "20岁"]
       ])
       return data.map(element => {
         var phone = element.mobile.toString()
@@ -149,7 +149,8 @@ export default {
             str[i] = '*'
           }
         }
-        state.refers.map((i => {
+
+        storage.getDaiban().channel.map((i => {
           if (i.id == element.refer) {
             return element.refer = i.channel_title
           }
