@@ -11,5 +11,4 @@ for (var i in ifaces) {
 		}
 	}
 }
-console.log(ifaces)
 module.exports = ip
