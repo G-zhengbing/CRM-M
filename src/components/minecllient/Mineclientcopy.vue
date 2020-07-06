@@ -15,6 +15,7 @@
         <Col span="3">
           <FormItem>
             <Select v-model="form.visit_num" @on-change="seekClick" placeholder="回访次数">
+              <Option :value="0">0次</Option>
               <Option :value="1">1次</Option>
               <Option :value="2">2次</Option>
               <Option :value="3">3次</Option>
@@ -189,13 +190,15 @@ export default {
       },
       isLoading: false,
       form: {
-        visit_num: 0
+        visit_num: ''
       },
       columns: [
         { type: "selection", width: 60, fixed: "left" },
         { title: "学员姓名", key: "student_name", width: 100, fixed: "left" },
         { title: "注册手机", key: "mobile", width: 120, fixed: "left" },
         { title: "地址", key: "area", width: 100 },
+        { title: "年级", key: "grade", width: 80 },
+        { title: "意向科目", key: "subject", width: 100 },
         {
           title: "回访次数",
           key: "visit_num",
@@ -227,9 +230,6 @@ export default {
             ]);
           }
         },
-        { title: "年级", key: "grade", width: 80 },
-        { title: "意向科目", key: "subject", width: 100 },
-        { title: "渠道来源", key: "refer", width: 150 },
         { title: "跟进人", key: "follow_sale_name", width: 100 },
         { title: "跟进状态", key: "follow_status", width: 95 },
         {
@@ -239,11 +239,13 @@ export default {
           align: "center",
           sortable: true
         },
-        { title: "学习阶段", key: "stage", width: 100 },
+                { title: "渠道来源", key: "refer", width: 150 },
         { title: "意向度", key: "intention_option", width: 80 },
         { title: "上次呼出", key: "phone_status", width: 100 },
         { title: "下次跟进", key: "next_follow_time", width: 170 },
         { title: "分配时间", key: "receive_time", width: 170 },
+        { title: "新/老用户", key: "highsea_id", width: 100 },
+        { title: "学习阶段", key: "stage", width: 100 },
         { title: "流转类型", key: "transfer", width: 100 },
         { title: "注册时间", key: "create_time", width: 170 },
         {

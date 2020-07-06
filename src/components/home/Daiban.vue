@@ -227,6 +227,7 @@ import storage from "../../uilt/storage";
 import Loading from "../../uilt/loading/loading";
 export default {
   mounted() {
+    console.log(this.num)
     this.getReferList().then(()=>{
       this.setCurrentPage(1);
     this.setStatus();

@@ -119,7 +119,7 @@ export default {
         { title: "注册手机", key: "mobile", width: 130 },
         { title: "年级", key: "action_grade", width: 100 },
         { title: "科目", key: "action_subject", width: 100 },
-        { title: "具体内容", key: "remarks" },
+        { title: "来源", key: "action_refer" },
         { title: "跟进人", key: "follow_sale_name", width: 100 },
         { title: "操作时间", key: "action_create_time" },
         { title: "注册时间", key: "create_time" },

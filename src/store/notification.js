@@ -188,6 +188,12 @@ export default {
           }
         }
 
+        storage.getDaiban().channel.map((i => {
+          if (i.id == element.refer) {
+            return element.refer = i.channel_title
+          }
+        }))
+
         element.mobile = str.join("")
         element.phone_status = pone.get(element.phone_status);
         element.grade = maps.get(element.grade);

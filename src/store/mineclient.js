@@ -333,7 +333,7 @@ export default {
       state,
       commit,
       dispatch
-    }, form) {
+    }, {form,page}) {
       return new Promise((resolve, reject) => {
         axios({
           method: "get",
@@ -343,7 +343,8 @@ export default {
             Authorization: "bearer " + storage.get()
           },
           params: {
-            ...form
+            ...form,
+            page
           }
         }).then(res => {
           resolve(res)

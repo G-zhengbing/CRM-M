@@ -287,7 +287,12 @@ export default {
               status: 2,
               form: state.forms
             })
-          } else {
+          } else if(status == 4){
+            dispatch("getKehuList", {
+              status: 4,
+              form: state.forms
+            })
+          }else if(status == 1) {
             dispatch("getKehuList", {
               status: 1,
               form: state.forms

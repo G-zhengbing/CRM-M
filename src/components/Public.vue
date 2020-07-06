@@ -162,7 +162,8 @@ export default {
       startTime: "",
       endTime: "",
       type: {
-        page: 1
+        page: 1,
+        status:'public'
       },
       show: false,
       isLoading: false,

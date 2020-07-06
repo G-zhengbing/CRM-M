@@ -173,46 +173,6 @@
             <Option :value="list.id" v-for="(list,i) in teacherList" :key="i">{{list.name}}</Option>
           </Select>
         </FormItem>
-        <!-- <FormItem label="课程封面展示" v-if="this.form.assess_image">
-          <div class="demo-upload-list">
-            <img :src="'http://liveapi.canpoint.net/'+ form.assess_image" />
-            <div class="demo-upload-list-cover">
-              <Icon
-                type="ios-eye-outline"
-                @click.native="handleView('http://liveapi.canpoint.net/'+form.assess_image)"
-              ></Icon>
-            </div>
-          </div>
-          <Modal title="预览图" v-model="visible">
-            <img :src="imgName" style="width: 100%" />
-          </Modal>
-        </FormItem>
-        <FormItem label="课程封面" prop="avatar" class="active_span">
-          <template>
-            <div class="demo-upload-list" v-for="(item,i) in uploadList" :key="i">
-              <img :src="item.url" />
-              <div class="demo-upload-list-cover">
-                <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
-              </div>
-            </div>
-          </template>
-          <Upload
-            ref="upload"
-            :show-upload-list="false"
-            :format="['jpg','gif','png']"
-            :max-size="2048"
-            :before-upload="handleBeforeUpload"
-            :on-format-error="handleFormatError"
-            :on-exceeded-size="handleMaxSize"
-            type="drag"
-            action="http://liveapi.canpoint.net/api/create_products"
-            style="display: inline-block;width:58px;"
-          >
-            <div style="width: 58px;height:58px;line-height: 58px;">
-              <Icon type="ios-camera" size="20"></Icon>
-            </div>
-          </Upload>
-        </FormItem> -->
         <FormItem label="课程简介" prop="course_desc">
           <Input
             style="width:600px"
@@ -227,11 +187,6 @@
             <Option :value="list.id" v-for="(list,i) in header_list" :key="i">{{list.login_name}}</Option>
           </Select>
         </FormItem>
-        <!-- <FormItem label="课程有效期">
-          <FormItem prop="date">
-            <DatePicker type="date" placeholder="请选择" v-model="form.date"></DatePicker>
-          </FormItem>
-        </FormItem>-->
       </Form>
       <div slot="footer">
         <Button type="text" size="large" @click="$parent.show = false">取消</Button>

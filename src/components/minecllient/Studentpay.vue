@@ -174,6 +174,7 @@ export default {
           width: 120,
           fixed: "left"
         },
+        { title: "购买课程", key: "product_name", align: "center" , width: 150 },
         { title: "年级", key: "product_grade", align: "center", width: 80 },
         { title: "科目", key: "product_subject", align: "center", width: 80 },
         {
@@ -195,7 +196,6 @@ export default {
           align: "center",
           width: 170
         },
-        { title: "学习阶段", key: "stage", align: "center", width: 100 },
         {
           title: "上次跟进内容",
           key: "last_visit_content",
@@ -203,12 +203,14 @@ export default {
           width: 150,
           tooltip: true
         },
+        { title: "新/老用户", key: "highsea_id", width: 100 },
         {
           title: "回访时间",
           key: "next_follow_time",
           align: "center",
           width: 170
         },
+        { title: "学习阶段", key: "stage", align: "center", width: 100 },
         { title: "注册时间", key: "create_time", align: "center", width: 170 },
         {
           title: "操作",

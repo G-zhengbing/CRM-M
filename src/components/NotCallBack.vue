@@ -41,7 +41,7 @@
             </Select>
           </FormItem>
         </Col>
-        <Col span="6">
+        <Col span="4">
           <FormItem label="意向度">
             <RadioGroup v-model="form.intention_option" @on-change="seekClick">
               <Radio label="1">高</Radio>
@@ -51,7 +51,7 @@
             </RadioGroup>
           </FormItem>
         </Col>
-        <Col span="4">
+        <Col span="2">
           <Button type="primary" @click="clear">清除</Button>
         </Col>
       </Row>
@@ -122,14 +122,15 @@ export default {
       isLoading: false,
       form: {},
       columns: [
-        { type: "selection", width: 60 },
-        { title: "学员姓名", key: "student_name", align: "center" },
-        { title: "注册手机", key: "mobile", align: "center", width: 120 },
-        { title: "年级", key: "grade", align: "center" },
-        { title: "意向科目", key: "subject", align: "center" },
-        { title: "意向度", key: "intention_option", align: "center" },
-        { title: "学习阶段", key: "stage", align: "center" },
-        { title: "跟进人", key: "follow_sale_name", align: "center" },
+        { type: "selection", width: 60 ,fixed:'left'},
+        { title: "学员姓名", key: "student_name", align: "center" ,fixed:'left', width: 100},
+        { title: "注册手机", key: "mobile", align: "center", width: 120 ,fixed:'left'},
+        { title: "年级", key: "grade", align: "center" , width: 100},
+        { title: "意向科目", key: "subject", align: "center" , width: 100},
+        { title: "意向度", key: "intention_option", align: "center", width: 100 },
+        { title: "跟进人", key: "follow_sale_name", align: "center" , width: 100},
+        { title: "新/老用户", key: "highsea_id", width: 100 },
+        { title: "学习阶段", key: "stage", align: "center", width: 100 },
         {
           title: "上次跟进内容",
           key: "last_visit_content",
@@ -141,16 +142,16 @@ export default {
           title: "上次跟进时间",
           key: "last_follow_time",
           align: "center",
-          width: 140
+          width: 170
         },
-        { title: "回访时间", key: "next_follow_time", align: "center" },
-        { title: "注册时间", key: "create_time", align: "center" },
+        { title: "回访时间", key: "next_follow_time", align: "center" ,width: 170},
+        { title: "注册时间", key: "create_time", align: "center" ,width: 170},
         {
           title: "操作",
           key: "action",
           align: "center",
           align: "center",
-          width: 140,
+          width: 200,
           render: (h, params) => {
             return h("div", [
               h(

@@ -13,11 +13,7 @@
         <Row>
           <Col span="4">
             <FormItem>
-              <Select
-                v-model="form.grade"
-                @on-change="seekClick"
-                placeholder="年级"
-              >
+              <Select v-model="form.grade" @on-change="seekClick" placeholder="年级">
                 <Option :value="6">小学</Option>
                 <Option :value="7">七年级</Option>
                 <Option :value="8">八年级</Option>
@@ -30,11 +26,7 @@
           </Col>
           <Col span="4">
             <FormItem>
-              <Select
-                v-model="form.level"
-                @on-change="seekClick"
-                placeholder="课时包等级"
-              >
+              <Select v-model="form.level" @on-change="seekClick" placeholder="课时包等级">
                 <Option :value="1">中级</Option>
                 <Option :value="2">高级</Option>
                 <Option :value="3">特级</Option>
@@ -43,11 +35,7 @@
           </Col>
           <Col span="4">
             <FormItem>
-              <Select
-                v-model="form.class_hour"
-                @on-change="seekClick"
-                placeholder="课时数"
-              >
+              <Select v-model="form.class_hour" @on-change="seekClick" placeholder="课时数">
                 <Option :value="1">1</Option>
                 <Option :value="10">10</Option>
                 <Option :value="30">30</Option>
@@ -267,6 +255,7 @@
     <Modal width="1200" v-model="showSelectTeacher" title="选择老师" @on-cancel="closeSelectTeacher">
       <Form label-position="top" style="height:500px;overflow-y:auto;">
         <Table
+          :loading="showAuditionloading"
           border
           :columns="selectTeacherColumns"
           :data="teachersV"
@@ -392,7 +381,7 @@
         <Row>
           <Col span="4">
             <FormItem label="学生姓名" prop="student_name">
-              <Input v-model="connectForm.student_name" placeholder="请输入学生姓名" ></Input>
+              <Input v-model="connectForm.student_name" placeholder="请输入学生姓名"></Input>
             </FormItem>
           </Col>
           <Col span="4">
@@ -418,7 +407,7 @@
               </Select>
             </FormItem>
           </Col>
-          
+
           <Col span="4">
             <FormItem label="注册手机" prop="mobile">
               <Input v-model="connectForm.mobile" placeholder="请输入注册手机"></Input>
@@ -436,14 +425,10 @@
           </Col>
           <Col span="4">
             <FormItem label="家长微信号" prop="parent_wechat_id">
-              <Input
-                v-model="connectForm.parent_wechat_id"
-                placeholder="请输入家长微信号"
-               
-              ></Input>
+              <Input v-model="connectForm.parent_wechat_id" placeholder="请输入家长微信号"></Input>
             </FormItem>
           </Col>
-          
+
           <Col span="4">
             <FormItem label="教材版本" prop="textbook_version">
               <Select v-model="connectForm.textbook_version">
@@ -555,11 +540,7 @@
         <Row>
           <Col span="7">
             <FormItem label="选择课时包">
-              <Select
-                v-model="upgradeForm.order_sn"
-                @on-change="getClass"
-                placeholder="课时包"
-              >
+              <Select v-model="upgradeForm.order_sn" @on-change="getClass" placeholder="课时包">
                 <Option :value="i" v-for="(list,i) in accountList" :key="i">{{list.product_name}}</Option>
               </Select>
             </FormItem>
@@ -804,6 +785,7 @@ export default {
           }
         }
       ],
+      showAuditionloading: false,
       // </选择老师>
       auditionTimes: "",
       isUpdata: false,
@@ -1139,7 +1121,20 @@ export default {
     },
     //选择老师分页
     selectTeacherPageChange(num) {
-      this.selectTeacherCurrentPage = num;
+      this.showAuditionloading = true;
+      var form = {};
+      form.subject = this.createAuditionForm.subject;
+      form.grade = this.createAuditionForm.grade;
+      form.time_block = this.createAuditionForm.time_block;
+      form.date_time = this.auditionTimes;
+      form.type = this.createAuditionForm.type;
+      this.getTeacherListN({ form, page: num }).then(res => {
+        this.teachersV = res.data.data.resources;
+        this.selectTeacherPageSize = res.data.data.links.per_page;
+        this.selectTeacherCurrentPage = res.data.data.links.current_page;
+        this.selectTeacherTotal = res.data.data.links.total;
+        this.showAuditionloading = false;
+      });
     },
     //选择老师多选框
     selectTeacherSelectionChange(item) {
@@ -1519,7 +1514,7 @@ export default {
           this.auditionTimes &&
           this.createAuditionForm.type
         ) {
-          this.getTeacherListN(form).then(res => {
+          this.getTeacherListN({ form }).then(res => {
             if (!res.data.ret) {
               this.$Message.error(res.data.error);
               return;

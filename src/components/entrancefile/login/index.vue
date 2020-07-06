@@ -16,7 +16,7 @@
           </li>
           <li class="password">
             <i></i>
-            <input type="password" placeholder="密码/Password" v-model="form.password" />
+            <input type="password" placeholder="密码/Password" v-model="form.password" @keyup.enter="doLogin" />
           </li>
           <li class="login centers" @click="doLogin">登录</li>
         </ul>

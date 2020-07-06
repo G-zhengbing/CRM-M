@@ -114,14 +114,13 @@ export default {
       show: false,
       form: {},
       columns: [
-        { type: "selection", width: 60 },
-        { title: "学员姓名", key: "student_name", align: "center", width: 100 },
-        { title: "注册手机", key: "mobile", align: "center", width: 120 },
-        { title: "年级", key: "grade", align: "center" },
+        { type: "selection", width: 60,fixed:'left' },
+        { title: "学员姓名", key: "student_name", align: "center", width: 150 ,fixed:'left'},
+        { title: "注册手机", key: "mobile", align: "center", width: 120 ,fixed:'left'},
+        { title: "年级", key: "grade", align: "center" , width: 100 },
         { title: "意向科目", key: "subject", align: "center", width: 100 },
-        { title: "意向度", key: "intention_option", align: "center" },
-        { title: "学习阶段", key: "stage", align: "center" },
-        { title: "跟进人", key: "follow_sale_name", align: "center" },
+        { title: "意向度", key: "intention_option", align: "center" , width: 100 },
+        { title: "跟进人", key: "follow_sale_name", align: "center" , width: 100 },
         {
           title: "上次跟进内容",
           key: "last_visit_content",
@@ -129,25 +128,27 @@ export default {
           tooltip: true,
           width: 140
         },
+        { title: "新/老用户", key: "highsea_id", width: 100 },
+        { title: "学习阶段", key: "stage", align: "center" , width: 100 },
         {
           title: "上次跟进时间",
           key: "last_follow_time",
           align: "center",
-          width: 120
+          width: 170
         },
         {
           title: "回访时间",
           key: "next_follow_time",
           align: "center",
-          width: 120
+          width: 170
         },
-        { title: "注册时间", key: "create_time", align: "center", width: 120 },
+        { title: "注册时间", key: "create_time", align: "center", width: 170 },
         {
           title: "操作",
           key: "action",
           align: "center",
-          align: "center",
-          width: 140,
+          width: 200,
+          fixed:'right',
           render: (h, params) => {
             return h("div", [
               h(

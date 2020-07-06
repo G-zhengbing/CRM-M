@@ -840,6 +840,9 @@ export default {
       } else if (this.type.status == "minestudent") {
         this.getmStudent({ page: 1, form: {} });
         this.$parent.show = false;
+      }else if(this.type.status == "public"){
+        this.getPublicList({page:this.type.page,form:this.type.form})
+        this.$parent.show = false;
       } else {
         this.getKehuList({ status: storage.getTabStatus() });
         this.$parent.show = false;
