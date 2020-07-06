@@ -9,7 +9,7 @@
           @refresh="refresh"
           :Items="Items"
           v-if="allocationData == '分配'"
-          class="btn"
+          class="btns"
           :title="'批量分配'"
         />
       </div>
@@ -162,7 +162,7 @@ export default {
   overflow: hidden;
   padding-left: 8px;
 }
-.btn {
+.btns {
   width: 80px;
   height: 30px;
   line-height: 30px;

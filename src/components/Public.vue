@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <DaibanMessage v-if="show" :type="type" />
-    <Form :model="form">
+    <Form :model="form" :label-width="20">
       <Row>
         <Col span="3">
           <FormItem>
@@ -81,8 +81,10 @@
             </div>
           </FormItem>
         </Col>
-        <Col span="4">
-          <FormItem label="意向度">
+        </Row>
+        <Row>
+        <Col span="5">
+          <FormItem label="意向度" :label-width="80">
             <RadioGroup v-model="form.intention_option" @on-change="seekKuhu">
               <Radio label="1">高</Radio>
               <Radio label="2">中</Radio>
@@ -311,6 +313,7 @@ export default {
       this.type.page = this.currentPage;
       this.type.form = this.form;
       this.type.data = { ...this.clientTypes };
+      this.type.form = "public"
       if (
         typeof item.spare_phone == "undefined" ||
         item.spare_phone == "" ||

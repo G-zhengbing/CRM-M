@@ -59,8 +59,8 @@ import { SCREENLIST } from "@/uilt/url/url";
 export default {
   computed: {
     ...mapState({
-      subjectList: state => state.screen_list.subject,
-      grade_strList: state => state.screen_list.grade_str
+      subjectList: state => storage.getDaiban().screen_list.subject,
+      grade_strList: state => storage.getDaiban().screen_list.grade_str
     })
   },
   props: {

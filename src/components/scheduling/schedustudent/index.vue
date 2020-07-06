@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="contaner">
-      <Form :model="form">
+      <Form :model="form" :label-width="20">
         <Row>
           <Col span="3">
             <FormItem>

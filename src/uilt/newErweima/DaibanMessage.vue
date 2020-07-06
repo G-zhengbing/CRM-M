@@ -149,7 +149,7 @@
               </FormItem>
             </Col>
             <Col span="6">
-              <FormItem label="意向度" style="margin-left: 10px">
+              <FormItem label="意向度" style="margin-left: 10px" :label-width="20">
                 <RadioGroup v-model="type.data.intention_option">
                     <Radio label="1">高</Radio>
                     <Radio label="2">中</Radio>
@@ -1073,6 +1073,10 @@ export default {
           }
           this.$parent.show = false;
           this.Loading = false;
+          // 来自公共资源池呼出刷新
+          if(this.type.form == "public") {
+            return this.getPublicList({})
+          }
           this.getKehuList({ status: storage.getTabStatus() });
         });
       }

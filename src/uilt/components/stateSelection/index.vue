@@ -2,7 +2,7 @@
   <div class="stateSelection">
     <div v-if="classify == 2">{{jobValue == '-1' ? '-': ""}}</div>
     <div
-      class="btn"
+      class="btns"
       :class="style[classify == 1 ? value : jobValue]"
       @click="btn = !btn"
     >{{classify == 1 ? monicker[value] : jobMonicker[jobValue]}}</div>
@@ -96,7 +96,7 @@ export default {
 </script>
 
 <style scoped>
-.btn {
+.btns {
   margin-top: 0 !important;
 }
 .allBtn {

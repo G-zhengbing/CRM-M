@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Form :model="form">
+    <Form :model="form" :label-width="20">
       <Row>
         <Col span="4">
           <FormItem>
