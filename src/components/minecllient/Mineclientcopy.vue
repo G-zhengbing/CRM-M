@@ -434,7 +434,7 @@ export default {
     },
     clear() {
       this.form = {};
-      this.form.visit_num = 0;
+      this.form.visit_num = '';
       this.startTime = "";
       this.endTime = "";
       this.startTime2 = "";

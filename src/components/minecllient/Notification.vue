@@ -18,13 +18,13 @@
               <DatePicker
                 v-model="startAccount"
                 type="date"
-                placeholder="操作时间"
+                placeholder="预约时间"
                 @on-change="getTimes2"
               ></DatePicker>
               <DatePicker
                 v-model="endAccount"
                 type="date"
-                placeholder="操作时间"
+                placeholder="预约时间"
                 @on-change="getTimes2"
               ></DatePicker>
             </div>
@@ -121,7 +121,7 @@ export default {
         { title: "科目", key: "action_subject", width: 100 },
         { title: "来源", key: "action_refer" },
         { title: "跟进人", key: "follow_sale_name", width: 100 },
-        { title: "操作时间", key: "action_create_time" },
+        { title: "预约时间", key: "action_create_time" },
         { title: "注册时间", key: "create_time" },
         {
           title: "操作",
