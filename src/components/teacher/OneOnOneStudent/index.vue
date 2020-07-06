@@ -121,7 +121,7 @@ export default {
     ...mapState({
       refresh: state => state.currentPage.refresh,
       selectState: state => state.selectState,
-      currentPage: state => state.studentpay.currentPage,
+      currentPage: state => state.studentpay.currentPage
     }),
     ...mapGetters(["studentpayTypes"])
   },
@@ -179,7 +179,25 @@ export default {
           title: "上次跟进内容",
           key: "visit_content",
           align: "center",
-          width: 200
+          width: 200,
+          render: (h, params) => {
+            return h(
+              "Poptip",
+              {
+                props: {
+                  trigger: "hover",
+                  content: params.row.visit_content,
+                  placement: "bottom",
+                  width: 400,
+                  transfer: true,
+                  'word-wrap': true
+                }
+              },
+              [
+                h("Tag", params.row.visit_content),
+              ]
+            );
+          }
         },
         {
           title: "年级",
