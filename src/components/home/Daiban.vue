@@ -121,6 +121,7 @@
             <Col span="3" v-if="num == 2">
               <FormItem>
                 <Select v-model="form.visit_num" @on-change="seekKuhu" placeholder="回访次数">
+                  <Option :value="0">0次</Option>
                   <Option :value="1">1次</Option>
                   <Option :value="2">2次</Option>
                   <Option :value="3">3次</Option>
@@ -227,7 +228,6 @@ import storage from "../../uilt/storage";
 import Loading from "../../uilt/loading/loading";
 export default {
   mounted() {
-    console.log(this.num)
     this.getReferList().then(()=>{
       this.setCurrentPage(1);
     this.setStatus();

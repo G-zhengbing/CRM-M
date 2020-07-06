@@ -189,8 +189,8 @@ export default {
         }
 
         storage.getDaiban().channel.map((i => {
-          if (i.id == element.refer) {
-            return element.refer = i.channel_title
+          if (i.id == element.action_refer) {
+            return element.action_refer = i.channel_title
           }
         }))
 
