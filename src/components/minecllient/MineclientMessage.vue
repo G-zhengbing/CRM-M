@@ -146,7 +146,7 @@
     </Modal>
     <!-- 新建预约试听 -->
     <Modal width="700" v-model="showCreateAudition" title="新建预约试听" @on-cancel="clearForm">
-      <Form :form="createAuditionForm" label-position="top" style="height:500px;overflow-y:auto;" :label-width="20">
+      <Form :form="createAuditionForm" label-position="top" style="height:500px;overflow-y:auto;" >
         <Row>
           <Col span="24">
             <FormItem label="预约试听类型">
