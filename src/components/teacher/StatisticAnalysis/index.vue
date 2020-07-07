@@ -24,13 +24,13 @@
                 </FormItem>
               </Form>
             </div>
-            <TableBox :columns="columns" :dataList="dataList" />
+            <TableBox :columns="columns1" :dataList="dataList" />
           </TabPane>
           <TabPane label="本周" name="name2">
-            <TableBox :columns="columns" :dataList="dataList" />
+            <TableBox :columns="columns2" :dataList="dataList" />
           </TabPane>
           <TabPane label="本月" name="name3">
-            <TableBox :columns="columns" :dataList="dataList" />
+            <TableBox :columns="columns3" :dataList="dataList" />
           </TabPane>
         </Tabs>
       </div>
@@ -46,7 +46,6 @@ export default {
     return {
       type: 1,
       formItem: {},
-      columns: [],
       dataList: [],
       start_time: "",
       end_time: "",
@@ -300,18 +299,13 @@ export default {
     // 点击选项卡切换触发
     changeTab(value) {
       if (value === "name1") {
-        this.columns = this.columns1;
         this.type = 1;
-        this.getUserData();
       } else if (value == "name2") {
-        this.columns = this.columns2;
         this.type = 2;
-        this.getUserData();
       } else if (value == "name3") {
-        this.columns = this.columns3;
         this.type = 3;
-        this.getUserData();
       }
+      this.getUserData();
     },
     // 转换date
     changeCreateDate(time) {
@@ -336,7 +330,6 @@ export default {
     }
   },
   created() {
-    this.columns = this.columns1;
     this.getUserData();
   }
 };

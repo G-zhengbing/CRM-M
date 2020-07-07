@@ -85,7 +85,7 @@
                 </FormItem>
               </Form>
             </div>
-            <TableBox :columns="columns" :dataList="dataList" />
+            <TableBox :columns="columns1" :dataList="dataList" />
             <PagingBox
               @changePages="changePages"
               :total="total"
@@ -150,7 +150,7 @@
                 </FormItem>
               </Form>
             </div>
-            <TableBox :columns="columns" :dataList="dataList" />
+            <TableBox :columns="columns2" :dataList="dataList" />
             <PagingBox
               @changePages="changePages"
               :total="total"
@@ -215,7 +215,7 @@
                 </FormItem>
               </Form>
             </div>
-            <TableBox :columns="columns" :dataList="dataList" />
+            <TableBox :columns="columns3" :dataList="dataList" />
             <PagingBox
               @changePages="changePages"
               :total="total"
@@ -280,7 +280,7 @@
                 </FormItem>
               </Form>
             </div>
-            <TableBox :columns="columns" :dataList="dataList" />
+            <TableBox :columns="columns4" :dataList="dataList" />
             <PagingBox
               @changePages="changePages"
               :total="total"
@@ -345,7 +345,7 @@
                 </FormItem>
               </Form>
             </div>
-            <TableBox :columns="columns" :dataList="dataList" />
+            <TableBox :columns="columns4" :dataList="dataList" />
             <PagingBox
               @changePages="changePages"
               :total="total"
@@ -410,7 +410,7 @@
                 </FormItem>
               </Form>
             </div>
-            <TableBox :columns="columns" :dataList="dataList" />
+            <TableBox :columns="columns4" :dataList="dataList" />
             <PagingBox
               @changePages="changePages"
               :total="total"
@@ -475,7 +475,7 @@
                 </FormItem>
               </Form>
             </div>
-            <TableBox :columns="columns" :dataList="dataList" />
+            <TableBox :columns="columns4" :dataList="dataList" />
             <PagingBox
               @changePages="changePages"
               :total="total"
@@ -524,9 +524,7 @@ export default {
   data() {
     return {
       isLoading: false, // loading开关
-      columns: "",
       dataList: [],
-      value: "name1", // 判断卡片选择状态
       mode: [], // 存放用户数据
       total: 100,
       per_page: 10,
@@ -730,7 +728,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.LearningReport(params.row);
+                      this.switchMod("LearningReport", params.row);
                     }
                   }
                 },
@@ -745,7 +743,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.StudentsFollowUp(params.row);
+                      this.switchMod("StudentsFollowUp", params.row);
                     }
                   }
                 },
@@ -760,7 +758,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.CallOut(params.row);
+                      this.switchMod("CallOut", params.row);
                     }
                   }
                 },
@@ -958,7 +956,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.LearningReport(params.row);
+                      this.switchMod("LearningReport", params.row);
                     }
                   }
                 },
@@ -973,7 +971,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.StudentsFollowUp(params.row);
+                      this.switchMod("StudentsFollowUp", params.row);
                     }
                   }
                 },
@@ -988,7 +986,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.CallOut(params.row);
+                      this.switchMod("CallOut", params.row);
                     }
                   }
                 },
@@ -1191,7 +1189,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.LearningReport(params.row);
+                      this.switchMod("LearningReport", params.row);
                     }
                   }
                 },
@@ -1206,7 +1204,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.StudentsFollowUp(params.row);
+                      this.switchMod("StudentsFollowUp", params.row);
                     }
                   }
                 },
@@ -1221,7 +1219,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.CallOut(params.row);
+                      this.switchMod("CallOut", params.row);
                     }
                   }
                 },
@@ -1329,7 +1327,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.LearningReport(params.row);
+                      this.switchMod("LearningReport", params.row);
                     }
                   }
                 },
@@ -1344,7 +1342,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.StudentsFollowUp(params.row);
+                      this.switchMod("StudentsFollowUp", params.row);
                     }
                   }
                 },
@@ -1359,7 +1357,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.CallOut(params.row);
+                      this.switchMod("CallOut", params.row);
                     }
                   }
                 },
@@ -1375,7 +1373,6 @@ export default {
     formItem: {
       deep: true,
       handler(newName, oldName) {
-        // this.mode.start_type = this.start_type;
         window.setTimeout(() => {
           this.getUserData();
         }, 200);
@@ -1392,7 +1389,6 @@ export default {
   methods: {
     // 选择本周到课状态
     async ClassState(row, index) {
-      // console.log(row);
       let modeArr = new FormData();
       modeArr.account_work_id = row.account_work_id;
       modeArr.class_attendance = index + 1;
@@ -1407,7 +1403,6 @@ export default {
     },
     // 选择上周交作业情况
     async JobMonicker(row, index) {
-      // console.log(row);
       let modeArr = new FormData();
       modeArr.account_work_id = row.account_work_id;
       modeArr.delivery_of_work = index + 1;
@@ -1425,20 +1420,11 @@ export default {
       this.showMod = val;
       this.type = "";
     },
-    LearningReport(row) {
+    // 开关
+    switchMod(name, row) {
       this.showMod = true;
       this.row = row;
-      this.type = "LearningReport";
-    },
-    CallOut(row) {
-      this.showMod = true;
-      this.row = row;
-      this.type = "CallOut";
-    },
-    StudentsFollowUp(row) {
-      this.showMod = true;
-      this.row = row;
-      this.type = "StudentsFollowUp";
+      this.type = name;
     },
     // 转换date
     changeAllocateTimeDate(time) {
@@ -1469,51 +1455,23 @@ export default {
     },
     // 点击选项卡切换触发
     changeTab(value) {
-      this.value = value;
-      if (this.value === "name1") {
-        this.deleteFormData();
-        this.columns = this.columns1;
-        this.start_type = 1;
-        this.formItem.start_type = this.start_type;
-        this.getUserData();
-      } else if (this.value === "name2") {
-        this.deleteFormData();
-        this.columns = this.columns2;
-        this.start_type = 2;
-        this.formItem.start_type = this.start_type;
-        this.getUserData();
-      } else if (this.value === "name3") {
-        this.deleteFormData();
-        this.columns = this.columns3;
-        this.start_type = 3;
-        this.formItem.start_type = this.start_type;
-        this.getUserData();
-      } else if (this.value === "name4") {
-        this.deleteFormData();
-        this.columns = this.columns4;
-        this.start_type = 4;
-        this.formItem.start_type = this.start_type;
-        this.getUserData();
-      } else if (this.value === "name5") {
-        this.deleteFormData();
+      this.deleteFormData();
+      if (value === "name1") {
+        this.formItem.start_type = 1;
+      } else if (value === "name2") {
+        this.formItem.start_type = 2;
+      } else if (value === "name3") {
+        this.formItem.start_type = 3;
+      } else if (value === "name4") {
+        this.formItem.start_type = 4;
+      } else if (value === "name5") {
         this.formItem.follow_type = 2;
-        this.columns = this.columns4;
-        this.start_type = 5;
-        this.formItem.start_type = this.start_type;
-        this.getUserData();
-      } else if (this.value === "name6") {
-        this.deleteFormData();
-        this.columns = this.columns4;
-        this.start_type = 6;
-        this.formItem.start_type = this.start_type;
-        this.getUserData();
-      } else if (this.value === "name7") {
-        this.deleteFormData();
+        this.formItem.start_type = 5;
+      } else if (value === "name6") {
+        this.formItem.start_type = 6;
+      } else if (value === "name7") {
         this.formItem.follow_type = 2;
-        this.columns = this.columns4;
-        this.start_type = 7;
-        this.formItem.start_type = this.start_type;
-        this.getUserData();
+        this.formItem.start_type = 7;
       }
     },
     // 获取用户信息
@@ -1553,10 +1511,6 @@ export default {
 
       this.isLoading = false;
     }
-  },
-  created() {
-    // this.getUserData();
-    this.columns = this.columns1;
   }
 };
 </script>

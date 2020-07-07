@@ -301,7 +301,10 @@ export default {
       is_distribution: 0,
       num: 0,
       page_num: "10",
-      formItem: {},
+      formItem: {
+        page: 1, // 页码
+        page_num: "10" // 每页条数
+      },
       type: "",
       row: "",
       showMod: false,
@@ -411,7 +414,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.Allocation(params.row);
+                      this.switchMod("Allocation", params.row);
                     }
                   }
                 },
@@ -546,7 +549,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.CallOut(params.row);
+                      this.switchMod("CallOut", params.row);
                     }
                   }
                 },
@@ -561,7 +564,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.Allocation(params.row);
+                      this.switchMod("Allocation", params.row);
                     }
                   }
                 },
@@ -576,7 +579,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.LearningReport(params.row);
+                      this.switchMod("LearningReport", params.row);
                     }
                   }
                 },
@@ -680,7 +683,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.Allocation(params.row);
+                      this.switchMod("Allocation", params.row);
                     }
                   }
                 },
@@ -803,7 +806,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.CallOut(params.row);
+                      this.switchMod("CallOut", params.row);
                     }
                   }
                 },
@@ -818,7 +821,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.Allocation(params.row);
+                      this.switchMod("Allocation", params.row);
                     }
                   }
                 },
@@ -833,7 +836,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.LearningReport(params.row);
+                      this.switchMod("LearningReport", params.row);
                     }
                   }
                 },
@@ -881,23 +884,11 @@ export default {
       this.showMod = val;
       this.type = "";
     },
-    // 呼出
-    CallOut(row) {
+    // 开关
+    switchMod(name, row) {
       this.showMod = true;
       this.row = row;
-      this.type = "CallOut";
-    },
-    // 跟进
-    Allocation(row) {
-      this.showMod = true;
-      this.row = row;
-      this.type = "Allocation";
-    },
-    // 学情报告
-    LearningReport(row) {
-      this.showMod = true;
-      this.row = row;
-      this.type = "LearningReport";
+      this.type = name;
     },
     // 转换date
     changeDate(time) {
@@ -923,13 +914,11 @@ export default {
     // 设置当前页码
     changePages(val) {
       this.formItem.page = val;
-      this.getPayingData();
     },
     // 设置每页显示数量
     pageNums(val) {
       this.page_num = val;
       this.formItem.page_num = val;
-      this.getPayingData();
     },
     // 设置mode搜索词汇
     formData(val) {
@@ -950,44 +939,31 @@ export default {
     // 选中分配状态
     pitchon(index) {
       this.pitchonStyle = index;
-
+      this.deleteFormData();
       if (this.pitchonStyle == 1) {
-        this.deleteFormData();
         this.columns = this.columns1;
         this.is_distribution = 0;
         this.formItem.is_distribution = this.is_distribution;
-        this.formItem.product_type = this.product_type;
-        this.getPayingData();
       } else if (this.pitchonStyle == 2) {
-        this.deleteFormData();
         this.columns = this.columns2;
         this.is_distribution = 1;
         this.formItem.is_distribution = this.is_distribution;
-        this.formItem.product_type = this.product_type;
-        this.getPayingData();
       } else if (this.pitchonStyle == 3) {
-        this.deleteFormData();
         this.columns = this.columns3;
         this.is_distribution = 0;
         this.formItem.is_distribution = this.is_distribution;
-        this.formItem.product_type = this.product_type;
-        this.getPayingData();
       } else if (this.pitchonStyle == 4) {
-        this.deleteFormData();
         this.columns = this.columns4;
         this.is_distribution = 1;
         this.formItem.is_distribution = this.is_distribution;
-        this.formItem.product_type = this.product_type;
-        this.getPayingData();
       }
+      this.formItem.product_type = this.product_type;
     },
     // 获取信息
     async getPayingData() {
-      // 打开弹层
       this.isLoading = true;
       this.formItem.page_num = this.page_num;
       this.num++;
-      // console.log(this.formItem)
       let res = await this.$request({
         method: "post",
         url: PAYINGSTUDENT,
@@ -1002,15 +978,12 @@ export default {
         subject,
         grade,
         class_type
-        // TODO: 等待接口补充放开
-        // dial_up_situation
       } = res.data.data.links;
       // 设置搜索选项
       this.setSelectState({
         subject,
         grade,
         class_type
-        // dial_up_situation
       });
       // 设置user信息
       this.dataList = res.data.data.data;
@@ -1059,7 +1032,6 @@ export default {
   },
   created() {
     this.getClassTeacher();
-    // this.pitchon(1);
     this.columns = this.columns1;
   }
 };

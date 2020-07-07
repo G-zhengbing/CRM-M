@@ -13,7 +13,7 @@
               :firstState="true"
             />
             <TableBox
-              :columns="columns"
+              :columns="columns1"
               :dataList="dataList"
               :selectData="true"
               :page_num="formItem.page_num"
@@ -36,7 +36,7 @@
               :firstState="true"
             />
             <TableBox
-              :columns="columns"
+              :columns="columns2"
               :dataList="dataList"
               :selectData="true"
               :page_num="formItem.page_num"
@@ -59,7 +59,7 @@
               :allocateTime="true"
             />
             <TableBox
-              :columns="columns"
+              :columns="columns2"
               :dataList="dataList"
               :selectData="true"
               :page_num="formItem.page_num"
@@ -121,16 +121,14 @@ export default {
     ...mapState({
       refresh: state => state.currentPage.refresh,
       selectState: state => state.selectState,
-      currentPage: state => state.studentpay.currentPage,
+      currentPage: state => state.studentpay.currentPage
     }),
     ...mapGetters(["studentpayTypes"])
   },
   data() {
     return {
       isLoading: false, // loading开关
-      columns: "",
       dataList: [],
-      value: "name1", // 判断卡片选择状态
       mode: [], // 存放用户数据
       total: 100,
       per_page: 10,
@@ -179,7 +177,23 @@ export default {
           title: "上次跟进内容",
           key: "visit_content",
           align: "center",
-          width: 200
+          width: 200,
+          render: (h, params) => {
+            return h(
+              "Poptip",
+              {
+                props: {
+                  trigger: "hover",
+                  content: params.row.visit_content,
+                  placement: "bottom",
+                  width: 400,
+                  transfer: true,
+                  "word-wrap": true
+                }
+              },
+              [h("Tag", params.row.visit_content || "-")]
+            );
+          }
         },
         {
           title: "年级",
@@ -267,7 +281,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.switch("createdOrder", params.row);
+                      this.switchMod("createdOrder", params.row);
                     }
                   }
                 },
@@ -282,27 +296,12 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.switch("Audition", params.row);
+                      this.switchMod("Audition", params.row);
                     }
                   }
                 },
                 "试听"
               ),
-              // h(
-              //   "Button",
-              //   {
-              //     props: {
-              //       type: "text",
-              //       size: "small"
-              //     },
-              //     on: {
-              //       click: () => {
-              //         this.switch("Referral", params.row);
-              //       }
-              //     }
-              //   },
-              //   "转介绍"
-              // ),
               h(
                 "Button",
                 {
@@ -327,7 +326,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.switch("CallOut", params.row);
+                      this.switchMod("CallOut", params.row);
                     }
                   }
                 },
@@ -342,7 +341,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.switch("StudentsFollowUp", params.row);
+                      this.switchMod("StudentsFollowUp", params.row);
                     }
                   }
                 },
@@ -445,7 +444,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.switch("createdOrder", params.row);
+                      this.switchMod("createdOrder", params.row);
                     }
                   }
                 },
@@ -460,27 +459,12 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.switch("Audition", params.row);
+                      this.switchMod("Audition", params.row);
                     }
                   }
                 },
                 "试听"
               ),
-              // h(
-              //   "Button",
-              //   {
-              //     props: {
-              //       type: "text",
-              //       size: "small"
-              //     },
-              //     on: {
-              //       click: () => {
-              //         this.switch("Referral", params.row);
-              //       }
-              //     }
-              //   },
-              //   "转介绍"
-              // ),
               h(
                 "Button",
                 {
@@ -505,7 +489,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.switch("CallOut", params.row);
+                      this.switchMod("CallOut", params.row);
                     }
                   }
                 },
@@ -520,7 +504,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.switch("StudentsFollowUp", params.row);
+                      this.switchMod("StudentsFollowUp", params.row);
                     }
                   }
                 },
@@ -529,8 +513,7 @@ export default {
             ]);
           }
         }
-      ],
-      teacherList: storage.getDaiban().header_list
+      ]
     };
   },
   watch: {
@@ -584,7 +567,7 @@ export default {
       this.type = "";
     },
     // 开关
-    switch(name, row) {
+    switchMod(name, row) {
       this.showMod = true;
       this.row = row;
       this.type = name;
@@ -609,19 +592,14 @@ export default {
     },
     // 点击选项卡切换触发
     changeTab(value) {
-      this.value = value;
       this.deleteFormData();
-      if (this.value === "name1") {
-        this.columns = this.columns1;
+      if (value === "name1") {
         this.formItem.list_type = 1;
-      } else if (this.value == "name2") {
-        this.columns = this.columns2;
+      } else if (value == "name2") {
         this.formItem.list_type = 2;
-      } else if (this.value == "name3") {
-        this.columns = this.columns2;
+      } else if (value == "name3") {
         this.formItem.list_type = 3;
       }
-      this.getUserData();
     },
     // 获取信息
     async getUserData() {
@@ -676,9 +654,6 @@ export default {
       // loading 关
       this.isLoading = false;
     }
-  },
-  created() {
-    this.columns = this.columns1;
   }
 };
 </script>

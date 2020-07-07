@@ -73,7 +73,7 @@
                 </FormItem>
               </Form>
             </div>
-            <TableBox :columns="columns" :dataList="dataList" />
+            <TableBox :columns="columns1" :dataList="dataList" />
             <PagingBox
               @changePages="changePages"
               :total="total"
@@ -133,7 +133,7 @@
                 </FormItem>
               </Form>
             </div>
-            <TableBox :allocationData="'签到'" :columns="columns" :dataList="dataList" />
+            <TableBox :allocationData="'签到'" :columns="columns1" :dataList="dataList" />
             <PagingBox
               @changePages="changePages"
               :total="total"
@@ -202,7 +202,7 @@
                 </FormItem>
               </Form>
             </div>
-            <TableBox :columns="columns" :dataList="dataList" />
+            <TableBox :columns="columns2" :dataList="dataList" />
             <PagingBox
               @changePages="changePages"
               :total="total"
@@ -251,16 +251,17 @@ export default {
   },
   data() {
     return {
-      columns: "",
       dataList: [],
-      value: "name1", // 判断卡片选择状态
       isLoading: false,
       mode: [], // formData数据
       total: 100,
       per_page: 10,
       current_page: 1,
       last_page: 1,
-      formItem: {},
+      formItem: {
+        page: 1, // 页码
+        page_num: "10" // 每页条数
+      },
       columns1: [
         {
           type: "selection",
@@ -362,7 +363,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.Signin(params.row);
+                      this.switchMod("Signin", params.row);
                     }
                   }
                 },
@@ -377,7 +378,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.Appraisal(params.row);
+                      this.switchMod("Appraisal", params.row);
                     }
                   }
                 },
@@ -392,7 +393,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.Cancelreservation(params.row);
+                      this.switchMod("Cancelreservation", params.row);
                     }
                   }
                 },
@@ -407,7 +408,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.CallOut(params.row);
+                      this.switchMod("CallOut", params.row);
                     }
                   }
                 },
@@ -518,7 +519,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.Appraisal(params.row);
+                      this.switchMod("Appraisal", params.row);
                     }
                   }
                 },
@@ -533,7 +534,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.CallOut(params.row);
+                      this.switchMod("CallOut", params.row);
                     }
                   }
                 },
@@ -571,32 +572,12 @@ export default {
       this.showMod = val;
       this.type = "";
     },
-    // 呼出
-    CallOut(row) {
+    // 开关
+    switchMod(name, row) {
       this.showMod = true;
       this.row = row;
-      this.type = "CallOut";
+      this.type = name;
     },
-    // 签到
-    Signin(row) {
-      this.showMod = true;
-      this.row = row;
-      this.type = "Signin";
-    },
-    // 取消预约
-    Cancelreservation(row) {
-      this.showMod = true;
-      this.row = row;
-      this.type = "Cancelreservation";
-    },
-
-    // 查看测评
-    Appraisal(row) {
-      this.showMod = true;
-      this.row = row;
-      this.type = "Appraisal";
-    },
-
     // 转换date
     changeCourseData(time) {
       this.formItem.date_start_time = time[0];
@@ -617,7 +598,6 @@ export default {
     // 设置当前页码
     changePages(val) {
       this.formItem.page = val;
-      this.getUserData();
     },
     // 设置mode搜索词汇
     formData(val) {
@@ -626,22 +606,13 @@ export default {
     ...mapMutations(["setCurrentPages", "setSelectState", "setRefresh"]),
     // 点击选项卡切换触发
     changeTab(value) {
-      this.value = value;
-      if (this.value === "name3") {
-        this.deleteFormData();
-        this.columns = this.columns2;
+      this.deleteFormData();
+      if (value === "name3") {
         this.formItem.list_type = 3;
-        this.getUserData();
-      } else if (this.value === "name2") {
-        this.deleteFormData();
-        this.columns = this.columns1;
+      } else if (value === "name2") {
         this.formItem.list_type = 2;
-        this.getUserData();
-      } else if (this.value === "name1") {
-        this.deleteFormData();
-        this.columns = this.columns1;
+      } else if (value === "name1") {
         this.formItem.list_type = 1;
-        this.getUserData();
       }
     },
     // 获取用户信息
@@ -686,8 +657,6 @@ export default {
   },
   created() {
     this.getSelectData();
-    // this.getUserData();
-    this.columns = this.columns1;
   }
 };
 </script>
@@ -696,47 +665,5 @@ export default {
 .card {
   margin: 5px;
   overflow: hidden;
-}
-</style>
-<style>
-/* 状态模式 */
-/* 已上课 */
-.state-haveClass {
-  width: 80px;
-  height: 30px;
-  line-height: 30px;
-  color: #fff;
-  border-radius: 15px;
-  margin: 0 auto;
-  background-color: #f19736;
-}
-/* 待上课 */
-.state-forClass {
-  width: 80px;
-  height: 30px;
-  line-height: 30px;
-  color: #fff;
-  border-radius: 15px;
-  margin: 0 auto;
-  background-color: #00cc66;
-}
-/* 缺席 */
-.state-absent {
-  width: 80px;
-  height: 30px;
-  line-height: 30px;
-  color: #fff;
-  border-radius: 15px;
-  margin: 0 auto;
-  background-color: #999900;
-}
-/* 已取消 */
-.state-canceledCanc {
-  width: 80px;
-  height: 30px;
-  line-height: 30px;
-  border: 1px solid #ff0000;
-  color: #ff0000;
-  margin: 0 auto;
 }
 </style>

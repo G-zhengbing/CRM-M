@@ -59,7 +59,7 @@
                 </FormItem>
               </Form>
             </div>
-            <TableBox :columns="columns" :dataList="dataList" />
+            <TableBox :columns="columns1" :dataList="dataList" />
             <PagingBox
               :total="total"
               :per_page="per_page"
@@ -124,7 +124,7 @@
                 </FormItem>
               </Form>
             </div>
-            <TableBox :columns="columns" :dataList="dataList" />
+            <TableBox :columns="columns2" :dataList="dataList" />
             <PagingBox
               :total="total"
               :per_page="per_page"
@@ -200,7 +200,7 @@
                 </FormItem>
               </Form>
             </div>
-            <TableBox :columns="columns" :dataList="dataList" />
+            <TableBox :columns="columns2" :dataList="dataList" />
             <PagingBox
               :total="total"
               :per_page="per_page"
@@ -264,15 +264,16 @@ export default {
     return {
       showMod: false,
       isLoading: false, // loading开关
-      columns: [],
       dataList: [],
-      value: "name1", // 判断卡片选择状态
       total: 100,
       per_page: 10,
       current_page: 1,
       last_page: 1,
       list_type: 1,
-      formItem: {},
+      formItem: {
+        page: 1, // 页码
+        page_num: "10" // 每页条数
+      },
       columns1: [
         {
           type: "selection",
@@ -404,7 +405,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.createdOrder(params.row);
+                      this.switchMod("createdOrder", params.row);
                     }
                   }
                 },
@@ -419,7 +420,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.Audition(params.row);
+                      this.switchMod("Audition", params.row);
                     }
                   }
                 },
@@ -434,7 +435,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.Referral(params.row);
+                      this.switchMod("Referral", params.row);
                     }
                   }
                 },
@@ -449,7 +450,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.StudentsFollowUp(params.row);
+                      this.switchMod("StudentsFollowUp", params.row);
                     }
                   }
                 },
@@ -464,7 +465,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.CallOut(params.row);
+                      this.switchMod("CallOut", params.row);
                     }
                   }
                 },
@@ -569,7 +570,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.StudentsFollowUp(params.row);
+                      this.switchMod("StudentsFollowUp", params.row);
                     }
                   }
                 },
@@ -584,7 +585,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.CallOut(params.row);
+                      this.switchMod("CallOut", params.row);
                     }
                   }
                 },
@@ -616,37 +617,16 @@ export default {
     }
   },
   methods: {
+    // 开关
+    switchMod(name, row) {
+      this.showMod = true;
+      this.row = row;
+      this.type = name;
+    },
     // 关闭窗口状态
     changeShowMod(val) {
       this.showMod = val;
       this.type = "";
-      // this.getUserData();
-    },
-    CallOut(row) {
-      this.showMod = true;
-      this.row = row;
-      this.type = "CallOut";
-    },
-    StudentsFollowUp(row) {
-      this.showMod = true;
-      this.row = row;
-      this.type = "StudentsFollowUp";
-    },
-    Audition(row) {
-      this.showMod = true;
-      this.row = row;
-      this.type = "Audition";
-    },
-    Referral(row) {
-      this.showMod = true;
-      this.row = row;
-      this.type = "Referral";
-    },
-    // 设置订单页面
-    createdOrder(row) {
-      this.showMod = true;
-      this.row = row;
-      this.type = "createdOrder";
     },
     // 点击清除选项
     deleteFormData() {
@@ -668,35 +648,17 @@ export default {
     ...mapMutations(["setCurrentPages", "setSelectState", "setRefresh"]),
     // 改变页码
     changePages(val) {
-      // this.mode.page = val;
       this.formItem.page = val;
-      this.getUserData();
     },
-    // 设置mode搜索词汇
-    // formData(val) {
-    //   this.mode = val;
-    // },
     // 点击选项卡切换触发
     changeTab(value) {
-      this.value = value;
-      if (this.value === "name1") {
-        this.deleteFormData();
-        this.columns = this.columns1;
-        this.list_type = 1;
-        this.formItem.list_type = this.list_type;
-        this.getUserData();
-      } else if (this.value == "name2") {
-        this.deleteFormData();
-        this.columns = this.columns2;
-        this.list_type = 2;
-        this.formItem.list_type = this.list_type;
-        this.getUserData();
-      } else if (this.value == "name3") {
-        this.deleteFormData();
-        this.columns = this.columns2;
-        this.list_type = 3;
-        this.formItem.list_type = this.list_type;
-        this.getUserData();
+      this.deleteFormData();
+      if (value === "name1") {
+        this.formItem.list_type = 1;
+      } else if (value == "name2") {
+        this.formItem.list_type = 2;
+      } else if (value == "name3") {
+        this.formItem.list_type = 3;
       }
     },
     // 获取信息
@@ -761,10 +723,6 @@ export default {
       // loading 关
       this.isLoading = false;
     }
-  },
-  created() {
-    // this.getUserData();
-    this.columns = this.columns1;
   }
 };
 </script>
