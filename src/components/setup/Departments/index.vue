@@ -181,7 +181,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      if (params.row.roles.length) {
+                      if (params.row.is_delete == 0) {
                         this.forbiddenUser(params.row.id);
                         this.getUserList();
                       } else {
@@ -190,7 +190,7 @@ export default {
                     }
                   }
                 },
-                params.row.roles.length ? "禁用" : "已禁用"
+                params.row.is_delete == 0 ? "禁用" : "已禁用"
               )
               // 暂不更新，待需求
               // h(
@@ -329,7 +329,7 @@ export default {
         id.map(item => {
           arrId.push(item.id);
         });
-        id = arrId.join(",");
+        id = arrId.join("，");
       }
       let res = await this.$request({
         method: "POST",
@@ -356,7 +356,7 @@ export default {
       });
       this.dataList = res.data.data.resources;
       this.dataList.map(item => {
-        item.name = item.role_names.join(",");
+        item.name = item.role_names.join("，");
         item.sex = item.sex + "";
         item.mobile = item.mobile + "";
       });
