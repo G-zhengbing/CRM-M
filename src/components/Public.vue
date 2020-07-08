@@ -313,7 +313,7 @@ export default {
       this.type.page = this.currentPage;
       this.type.form = this.form;
       this.type.data = { ...this.clientTypes };
-      this.type.form = "public"
+      this.type.from = "public"
       if (
         typeof item.spare_phone == "undefined" ||
         item.spare_phone == "" ||
