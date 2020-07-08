@@ -210,3 +210,12 @@ html{
   color: #ff0000;
   margin: 0 auto;
 }
+/*  */
+/* <Clickable> */
+.clickable{
+  color: #2d8cf0;
+}
+.clickable:hover{
+  border-bottom: 1px solid;
+}
+/* </Clickable> */

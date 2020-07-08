@@ -168,11 +168,11 @@ export default {
                       }
                     },
                     style: {
-                      width: "100%",
-                      display: "inline-block",
+                      width: "fit-content",
                       cursor: "pointer",
                       color: "#2d8cf0"
-                    }
+                    },
+                    class:'clickable'
                   },
                   "直播/回放"
                 )

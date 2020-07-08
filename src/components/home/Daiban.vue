@@ -522,6 +522,7 @@ export default {
           {
             title: "回访次数",
             key: "visit_num",
+            align:'center',
             width: 95,
             render: (h, params) => {
               return h("div", [
@@ -538,12 +539,11 @@ export default {
                       }
                     },
                     style: {
-                      width: "98px",
-                      display: "inline-block",
-                      marginLeft: "-17px",
+                      width: "fit-content",
                       textAlign: "center",
                       cursor: "pointer"
-                    }
+                    },
+                    class:'clickable'
                   },
                   params.row.visit_num
                 )

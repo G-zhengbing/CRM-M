@@ -7,8 +7,6 @@ import NotVisit from '../components/NotVisit'
 import Public from '../components/Public'
 import FollowUp from '../components/FollowUp'
 import Money from '../components/Money'
-import Number from '../components/Number'
-import Paystudent from '../components/Paystudent'
 import NotCallBack from '../components/NotCallBack'
 import Studentpay from '../components/minecllient/Studentpay.vue'
 import Mineclient from '../components/minecllient/Mineclient.vue'
@@ -96,20 +94,12 @@ const router = new Router({
           component: FollowUp
         },
         {
-          path: '/main/number',
-          component: Number
-        },
-        {
           path: '/main/money',
           component: Money
         },
         {
           path: '/main/notcallback',
           component: NotCallBack
-        },
-        {
-          path: '/main/paystudent',
-          component: Paystudent
         },
         {
           path: '/main/studentpay',

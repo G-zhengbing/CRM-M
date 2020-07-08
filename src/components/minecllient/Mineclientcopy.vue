@@ -190,7 +190,7 @@ export default {
       },
       isLoading: false,
       form: {
-        visit_num: ''
+        visit_num: ""
       },
       columns: [
         { type: "selection", width: 60, fixed: "left" },
@@ -202,6 +202,7 @@ export default {
         {
           title: "回访次数",
           key: "visit_num",
+          align: "center",
           width: 95,
           render: (h, params) => {
             return h("div", [
@@ -218,12 +219,11 @@ export default {
                     }
                   },
                   style: {
-                    width: "98px",
-                    display: "inline-block",
-                    marginLeft: "-17px",
+                    width: "fit-content",
                     textAlign: "center",
                     cursor: "pointer"
-                  }
+                  },
+                  class: "clickable"
                 },
                 params.row.visit_num
               )
@@ -239,7 +239,7 @@ export default {
           align: "center",
           sortable: true
         },
-                { title: "渠道来源", key: "refer", width: 150 },
+        { title: "渠道来源", key: "refer", width: 150 },
         { title: "意向度", key: "intention_option", width: 80 },
         { title: "上次呼出", key: "phone_status", width: 100 },
         { title: "下次跟进", key: "next_follow_time", width: 170 },
@@ -434,7 +434,7 @@ export default {
     },
     clear() {
       this.form = {};
-      this.form.visit_num = '';
+      this.form.visit_num = "";
       this.startTime = "";
       this.endTime = "";
       this.startTime2 = "";

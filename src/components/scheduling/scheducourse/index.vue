@@ -163,7 +163,8 @@ export default {
                   style: {
                     color: "#2d8cf0",
                     cursor: "pointer"
-                  }
+                  },
+                  class:'clickable'
                 },
                 params.row.course_name
               )
