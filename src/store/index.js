@@ -7,18 +7,13 @@ import publics from './public'
 import money from './money'
 import followup from './followup'
 import notcallback from './notcallback'
-import number from './number'
 import notvisit from './notvisit'
 import advertising from './advertising'
 import special from './special'
 import curriculum from './curriculum'
 import databank from './databank'
-import Paystudent from './Paystudent'
-import uplist from './uplist'
 import minestudent from './minestudent'
-import payingstudent from './payingstudent'
 import bookcode from './bookcode'
-import reservation from './advertising'
 import studentpay from './studentpay'
 import mineclient from './mineclient'
 import notification from './notification'
@@ -40,7 +35,6 @@ import currentPage from './currentPage'
 import classStudents from './classstudents'
 import learningReport from './learningReport'
 import {
-  GETUSER,
   GENJIN,
   REFER,
   MEPERMISSION
@@ -52,16 +46,12 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    cId: 0,
     uName: "",
     permission: []
   },
   mutations: {
     setuName(state, payload) {
       state.uName = payload
-    },
-    setCid(state, payload) {
-      state.cId = payload
     },
     setPermission(state, permission) {
       state.permission = permission
@@ -137,7 +127,6 @@ export default new Vuex.Store({
           }
         }).then(res => {
           commit('setuName', res.data.data.user_name)
-          // commit("setCid", res.data.data.role)
           commit("setPermission", res.data.data.permission)
           resolve(res)
         }).catch(e => {
@@ -146,7 +135,6 @@ export default new Vuex.Store({
       })
     }
   },
-  getters: {},
   modules: {
     scheducourse,//课程管理
     schedulessons,//课节统计
@@ -163,21 +151,16 @@ export default new Vuex.Store({
     main, //主页面
     daiban, //资源池
     publics, //公共资源池
-    money, //成单金额
+    money, //订单中心
     followup, //今日回访
     notcallback, //预期未回访
-    number, //成单数
     notvisit, //今日新分
     advertising ,//广告管理,
     special,//专题管理
     curriculum,//课程管理
     databank,//资料管理
-    Paystudent,//付费学员
-    uplist,//上课提醒
     minestudent,//我的学员
-    payingstudent,//付费学员
     bookcode,//一书一码
-    reservation,//我的预约单
     studentpay,//我的客户/付费学员
     mineclient,//我的客户
     notification,//我的客户/消息提醒

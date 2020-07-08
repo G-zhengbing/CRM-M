@@ -217,6 +217,9 @@ li.router-link-exact-active.router-link-active {
 .right i {
   cursor: pointer;
 }
+/* .right i:hover{
+  color: #f3b414;
+} */
 .right span,
 i {
   font-size: 14px;

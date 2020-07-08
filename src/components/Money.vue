@@ -4,6 +4,11 @@
       <Row>
         <Col span="3">
           <FormItem>
+            <Input v-model="form.order_sn" placeholder="订单号" @on-change="seekClick"></Input>
+          </FormItem>
+        </Col>
+        <Col span="3">
+          <FormItem>
             <Input v-model="form.name" placeholder="学员姓名" @on-change="seekClick"></Input>
           </FormItem>
         </Col>
@@ -14,11 +19,7 @@
         </Col>
         <Col span="3">
           <FormItem>
-            <Select
-              v-model="form.market_sale_id"
-              @on-change="seekClick"
-              placeholder="创建人"
-            >
+            <Select v-model="form.market_sale_id" @on-change="seekClick" placeholder="创建人">
               <Option v-for="(list,i) in sale_list" :key="i" :value="list.id">{{list.login_name}}</Option>
             </Select>
           </FormItem>
@@ -93,13 +94,63 @@ export default {
         { title: "支付方式", key: "pay_type", width: 100 },
         { title: "支付时间", key: "pay_time", width: 170 },
         { title: "签约人", key: "sale_name", width: 80 },
-        { title: "创建时间", key: "order_create_time", width: 170 }
+        { title: "创建时间", key: "order_create_time", width: 170 },
+        {
+          title: "操作",
+          key: "action",
+          align: "center",
+          width: 200,
+          fixed: "right",
+          render: (h, params) => {
+            if (params.row.status == "待支付") {
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "text",
+                      size: "small"
+                    },
+                    on: {
+                      click: () => {
+                        this.cancelOrderForm(params.row);
+                      }
+                    }
+                  },
+                  "取消"
+                )
+              ]);
+            }
+          }
+        }
       ]
     };
   },
   methods: {
-    ...mapActions(["getMoneyList"]),
+    ...mapActions(["getMoneyList", "cancelOrder"]),
     ...mapMutations(["setCurrentPage"]),
+    //取消订单
+    cancelOrderForm(item) {
+      this.$Modal.confirm({
+        title: "提示",
+        content: "<p>确定要取消该订单吗？</p>",
+        onOk: () => {
+          this.cancelOrder({ cid: item.order_sn }).then(res => {
+            if (!res.data.ret) {
+              this.$Message.error(res.data.error);
+            } else {
+              this.$Message.success("取消成功");
+            }
+            this.isLoading = true;
+            this.getMoneyList({ form: this.form, page: this.currentPage }).then(
+              () => {
+                this.isLoading = false;
+              }
+            );
+          });
+        }
+      });
+    },
     clear() {
       this.form = {};
       this.seekClick();

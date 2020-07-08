@@ -2,8 +2,7 @@ import axios from "axios";
 import {
   ADVER_URL,
   DELEADVER_URL,
-  ADVEUPDOWN_URL,
-  UPDATAADVER_URL
+  ADVEUPDOWN_URL
 } from "../uilt/url/Murl";
 import storage from '../uilt/storage'
 
