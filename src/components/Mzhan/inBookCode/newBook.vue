@@ -55,7 +55,6 @@
 import qs from "qs";
 import { mapState, mapActions } from "vuex";
 import { UPLOADIMAGE, CREATEINBOOK, UPDATEINBOOK } from "@/uilt/url/Murl";
-import { SCREENLIST } from "@/uilt/url/url";
 export default {
   computed: {
     ...mapState({
