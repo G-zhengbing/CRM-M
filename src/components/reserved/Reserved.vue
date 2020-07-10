@@ -14,38 +14,38 @@
       </ul>
       <Form :model="form" :label-width="20">
         <Row>
-          <Col span="2">
+          <Col span="4">
             <FormItem>
               <Input v-model="form.name" placeholder="学员姓名" @on-change="seekClick"></Input>
             </FormItem>
           </Col>
-          <Col span="3">
+          <Col span="4">
             <FormItem>
               <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekClick"></Input>
             </FormItem>
           </Col>
-          <Col span="2">
+          <Col span="4">
             <FormItem>
               <Select v-model="form.type" @on-change="seekClick" placeholder="试听类型">
                 <Option :value="i" v-for="(list,i) in course" :key="i">{{list}}</Option>
               </Select>
             </FormItem>
           </Col>
-          <Col span="2" v-if="num == 3 || num == 2">
+          <Col span="4" v-if="num == 3 || num == 2">
             <FormItem>
               <Select v-model="form.appoint_status" @on-change="seekClick" placeholder="状态">
                 <Option :value="i" v-for="(list,i) in appoint" :key="i">{{list}}</Option>
               </Select>
             </FormItem>
           </Col>
-          <Col span="2">
+          <Col span="4">
             <FormItem>
               <Select v-model="form.subject" @on-change="seekClick" placeholder="科目">
                 <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
               </Select>
             </FormItem>
           </Col>
-          <Col span="2">
+          <Col span="4">
             <FormItem>
               <Select v-model="form.grade" @on-change="seekClick" placeholder="年级">
                 <Option :value="1">一年级</Option>
@@ -60,14 +60,15 @@
               </Select>
             </FormItem>
           </Col>
-          <Col span="3" v-if="num == 3">
+          <Col span="4" v-if="num == 3">
             <FormItem>
               <Select v-model="form.create_user" @on-change="seekClick" placeholder="创建人">
                 <Option v-for="(list,i) in sale_list" :key="i" :value="list.id">{{list.login_name}}</Option>
+                <Option value="all">全部</Option>
               </Select>
             </FormItem>
           </Col>
-          <Col span="5" v-if="num == 3">
+          <Col span="8" v-if="num == 3">
             <FormItem>
               <div class="dateplc">
                 <DatePicker
@@ -85,7 +86,7 @@
               </div>
             </FormItem>
           </Col>
-          <Col span="5">
+          <Col span="8">
             <FormItem>
               <div class="dateplc">
                 <DatePicker

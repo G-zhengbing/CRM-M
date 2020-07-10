@@ -13,7 +13,6 @@ import Mineclient from '../components/minecllient/Mineclient.vue'
 import Mineclientcopy from '../components/minecllient/Mineclientcopy.vue'
 import Notification from '../components/minecllient/Notification.vue'
 import Reserved from '../components/reserved/Reserved.vue'
-import Allreserved from '../components/reserved/Allreserved.vue'
 import Teacher from '../components/teachering/Teacher.vue'
 import Statistics from '../components/Statistics'
 import Importdata from '../components/minecllient/Importdata.vue'
@@ -124,10 +123,6 @@ const router = new Router({
         {
           path: '/main/teacher',
           component: Teacher
-        },
-        {
-          path: '/main/allreserved',
-          component: Allreserved
         },
         {
           path: '/main/statistics',

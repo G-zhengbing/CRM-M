@@ -55,6 +55,7 @@
           <FormItem>
             <Select v-model="form.sale_id" @on-change="seekKuhu" placeholder="跟进人">
               <Option v-for="(list,i) in sale_list" :key="i" :value="list.id">{{list.login_name}}</Option>
+              <Option value="all">全部</Option>
             </Select>
           </FormItem>
         </Col>
