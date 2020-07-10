@@ -78,7 +78,7 @@
           </Col>
           <Col span="4">
             <FormItem label="教授年级" prop="grade">
-              <Select multiple v-model="form.grade" max-tag-count="1">
+              <Select multiple v-model="form.grade" :max-tag-count="1">
                 <Option :value="1">一年级</Option>
                 <Option :value="2">二年级</Option>
                 <Option :value="3">三年级</Option>
@@ -106,7 +106,11 @@
             </FormItem>
           </Col>
           <Col span="4">
-            <FormItem label="所在地区" prop="address_province_id" style="display:flex;flex-direction:column">
+            <FormItem
+              label="所在地区"
+              prop="address_province_id"
+              style="display:flex;flex-direction:column"
+            >
               <div class="dateplc">
                 <Select
                   @on-open-change="getProv"
@@ -355,6 +359,19 @@
               </Modal>
             </FormItem>
           </Col>
+          <Col span="24">
+            <FormItem label="教师视频简介">
+              <Input v-model="form.teacher_userinfo_video" placeholder="请输入视频链接"></Input>
+            </FormItem>
+            <FormItem label="教师资料简介">
+              <Input
+                v-model="form.teacher_userinfo_desc"
+                type="textarea"
+                :autosize="{minRows: 5,maxRows: 8}"
+                placeholder="请输入..."
+              ></Input>
+            </FormItem>
+          </Col>
           <Col span="24">开放时间信息</Col>
           <Col span="24">
             <div class="content">
@@ -586,7 +603,12 @@ export default {
             message: "联系方式不能为空"
           }
         ],
-        subject: [{ required: true, message: "教授科目是必选的" }],
+        subject: [
+          {
+            required: true,
+            message: "教授科目是必选的"
+          }
+        ],
         grade: [
           {
             required: true,
@@ -765,6 +787,18 @@ export default {
               this.uploadList[0] ? this.uploadList[0] : ""
             );
             formData.append("time_block", this.acArr.join(","));
+            formData.append(
+              "teacher_userinfo_desc",
+              this.form.teacher_userinfo_desc
+                ? this.form.teacher_userinfo_desc
+                : ""
+            );
+            formData.append(
+              "teacher_userinfo_video",
+              this.form.teacher_userinfo_video
+                ? this.form.teacher_userinfo_video
+                : ""
+            );
             let config = {
               headers: {
                 "Content-Type": "multipart/form-data",
@@ -846,6 +880,18 @@ export default {
             formData.append(
               "teacher_nvq_pic",
               this.uploadList7[0] ? this.uploadList7[0] : ""
+            );
+            formData.append(
+              "teacher_userinfo_desc",
+              this.form.teacher_userinfo_desc
+                ? this.form.teacher_userinfo_desc
+                : ""
+            );
+            formData.append(
+              "teacher_userinfo_video",
+              this.form.teacher_userinfo_video
+                ? this.form.teacher_userinfo_video
+                : ""
             );
             let config = {
               headers: {
@@ -1190,6 +1236,7 @@ export default {
       this.setTeacherTypes(item);
       this.isUpdata = true;
       this.showTeacherMessage = true;
+      console.log(this.teacherTypes);
       this.form = { ...this.teacherTypes };
       this.getProv();
     },
@@ -1229,7 +1276,7 @@ export default {
 };
 </script>
 <style scoped>
-.active_span .ivu-form-item-label{
+.active_span .ivu-form-item-label {
   margin-left: 15px;
 }
 .actives > span {
