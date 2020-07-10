@@ -21,6 +21,7 @@
           <FormItem>
             <Select v-model="form.market_sale_id" @on-change="seekClick" placeholder="创建人">
               <Option v-for="(list,i) in sale_list" :key="i" :value="list.id">{{list.login_name}}</Option>
+              <Option value="all">全部</Option>
             </Select>
           </FormItem>
         </Col>

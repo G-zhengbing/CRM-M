@@ -17,18 +17,14 @@
           </Col>
           <Col span="12">
             <FormItem>
-               <Select v-model="form.demand_type">
+               <Select v-model="form.demand_type" placeholder="需求类型">
                 <Option :value="i" v-for="(list,i) in cityRefre" :key="i">{{list}}</Option>
               </Select>
             </FormItem>
           </Col>
           <Col span="4">
             <FormItem>
-              <Select v-model="form.level" @on-change="seekClick" placeholder="课时包等级">
-                <Option :value="1">中级</Option>
-                <Option :value="2">高级</Option>
-                <Option :value="3">特级</Option>
-              </Select>
+              <Input v-model="form.title" placeholder="城市" @keyup.enter="getCity" v-model="city">
             </FormItem>
           </Col>
           <Col span="4">
@@ -55,7 +51,31 @@
 </template>
 
 <script>
-export default {};
+export default {
+    computed: {
+    ...mapState({
+      newForm: state => state.erweima.newForm,
+      cityList: state => state.erweima.cityList,
+      cityRefre: state => state.erweima.cityRefre,
+      cityShool: state => state.erweima.cityShool,
+      qudaoList: state => state.erweima.qudaoList,
+      currentPage: state => state.erweima.tuiCurrent,
+      total: state => state.erweima.tuiTotal,
+      pageSize: state => state.erweima.tuiPageSize
+    })
+  },
+  data(){
+    return {
+      city:'',
+      form:{}
+    }
+  },
+  methods:{
+    getCity(){
+
+    }
+  }
+};
 </script>
 
 <style>
