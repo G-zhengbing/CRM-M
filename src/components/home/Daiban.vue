@@ -18,7 +18,7 @@
           </li>
         </ul>
         <Form :model="form" :label-width="20">
-          <Row>
+          <Row type="flex" justify="start" >
             <Col span="3">
               <FormItem>
                 <Input v-model="form.name" placeholder="学员姓名" @on-change="seekKuhu"></Input>
@@ -40,7 +40,7 @@
                 </Select>
               </FormItem>
             </Col>
-            <Col span="3">
+            <Col span="3" v-if="num == 2">
               <FormItem>
                 <Select
                   v-model="form.sale_id"
@@ -96,8 +96,8 @@
                 </Select>
               </FormItem>
             </Col>
-            <Col span="3">
-              <FormItem v-if="num == 2">
+            <Col span="3" v-if="num == 2">
+              <FormItem>
                 <Select
                   v-model="form.stage"
                   @on-change="seekKuhu"
@@ -107,8 +107,8 @@
                 </Select>
               </FormItem>
             </Col>
-            <Col span="3">
-              <FormItem  v-if="num == 2">
+            <Col span="3" v-if="num == 2">
+              <FormItem>
                 <Select
                   v-model="form.transfer"
                   @on-change="seekKuhu"
@@ -132,7 +132,7 @@
                 </Select>
               </FormItem>
             </Col>
-            <Col span="6">
+            <Col span="5">
               <FormItem>
                 <div class="dateplc">
                   <DatePicker v-model="startTime" type="date" placeholder="注册时间" @on-change="getTimes"></DatePicker>
@@ -143,10 +143,8 @@
             <Col span="2" v-if="!(num == 2)">
               <Button type="primary" @click="clear">清除</Button>
             </Col>
-          </Row>
-          <Row>
-            <Col span="6">
-              <FormItem v-if="num == 2">
+            <Col span="6" v-if="num == 2">
+              <FormItem>
                 <div class="dateplc">
                   <DatePicker v-model="startTime2" type="date" placeholder="分配时间" @on-change="getTimes2"></DatePicker>
                   <DatePicker v-model="endTime2" type="date" placeholder="分配时间" @on-change="getTimes2"></DatePicker>
@@ -713,6 +711,7 @@ export default {
 .selsected {
   width: 100%;
   display: flex;
+  margin-top: 10px;
 }
 .allot > p {
   border-left: 1px solid #fff;

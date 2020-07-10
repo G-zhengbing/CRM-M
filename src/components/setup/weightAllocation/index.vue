@@ -92,16 +92,16 @@ import {
   SALES,
   UPDATESALESWEIGHT,
   UPPERLIMIT,
-  SCREENLIST,
   GETUPPERLIMIT
 } from "@/uilt/url/url";
+import storage from "@/uilt/storage";
 export default {
   data() {
     return {
       isLoading: false,
       whether_or_not: false,
       upper_limit: "",
-      cityList: [],
+      cityList: storage.getDaiban().channel,
       assign_channel_list: [],
       real_time_channel_list: [],
       data1: [],
@@ -169,15 +169,6 @@ export default {
       });
       this.isLoading = false;
     },
-    // 获取 select 数据
-    async getSelectData() {
-      this.isLoading = true;
-      let res = await this.$request({
-        url: SCREENLIST
-      });
-      this.cityList = res.data.data.channel;
-      this.isLoading = false;
-    },
     // 获取列表信息
     async getUserData() {
       this.isLoading = true;
@@ -221,7 +212,6 @@ export default {
   },
   created() {
     this.getUserData();
-    this.getSelectData();
     this.getUserSelect();
   }
 };

@@ -73,7 +73,7 @@
 
 <script>
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
-import { ORDERPRODUCT, SCREENLIST } from "@/uilt/url/url";
+import { ORDERPRODUCT } from "@/uilt/url/url";
 import qs from "qs";
 import NewOrder from "./newOrder";
 export default {

@@ -8,22 +8,28 @@
       width="80"
     >
       <div class="content">
-        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
+        <Form
+          ref="formValidate"
+          :model="formValidate"
+          :rules="ruleValidate"
+          :label-width="100"
+          :show-message="false"
+        >
           <FormItem label="二维码名称" prop="code_name">
             <Input v-model="formValidate.code_name" placeholder="请输入二维码名称"></Input>
           </FormItem>
           <FormItem label="推送类型" prop="code_type">
-            <RadioGroup v-model="formValidate.code_type">
+            <RadioGroup v-model="formValidate.code_type" @on-change="changeCode_type">
               <Radio :label="1">图文推送</Radio>
               <Radio :label="2">文字推送</Radio>
               <Radio :label="3">小程序卡片</Radio>
             </RadioGroup>
           </FormItem>
-          <template v-if="formValidate.code_type == '1'">
-            <FormItem label="图文标题" prop="code_title">
+          <div v-show="formValidate.code_type === 1">
+            <FormItem v-if="formValidate.code_type === 1" label="图文标题" prop="code_title">
               <Input v-model="formValidate.code_title" placeholder="请输入标题"></Input>
             </FormItem>
-            <FormItem label="图文封面">
+            <FormItem v-if="formValidate.code_type === 1" label="图文封面">
               <Input v-model="formValidate.imgUrl" style="width: 500px"></Input>
               <Upload
                 action="//jsonplaceholder.typicode.com/posts/"
@@ -34,22 +40,22 @@
                 <Button type="primary">上传图片</Button>
               </Upload>
             </FormItem>
-            <FormItem label="图文描述" prop="image_desc">
+            <FormItem v-if="formValidate.code_type === 1" label="图文描述" prop="image_desc">
               <Input v-model="formValidate.image_desc" placeholder="请输入图文描述"></Input>
             </FormItem>
-            <FormItem label="图文链接" prop="image_skip_url">
+            <FormItem v-if="formValidate.code_type === 1" label="图文链接" prop="image_skip_url">
               <Input v-model="formValidate.image_skip_url" placeholder="请输入图文链接"></Input>
             </FormItem>
-          </template>
-          <template v-if="formValidate.code_type == '2'">
-            <FormItem label="推送文字">
+          </div>
+          <div v-show="formValidate.code_type === 2">
+            <FormItem v-if="formValidate.code_type === 2" label="推送文字">
               <WangeditorEmoticon
                 v-model="formValidate.text_content"
                 :catchData="catchData"
                 ref="wangditor"
               />
             </FormItem>
-            <FormItem label="推送图片">
+            <FormItem v-if="formValidate.code_type === 2" label="推送图片">
               <Input v-model="formValidate.imgUrl" style="width: 500px"></Input>
               <Upload
                 action="//jsonplaceholder.typicode.com/posts/"
@@ -61,18 +67,22 @@
               </Upload>
               <p style="color:#ccc">扫码关注推送图片，不填写则不推送；</p>
             </FormItem>
-          </template>
-          <template v-if="formValidate.code_type == '3'">
-            <FormItem label="小程序appid" prop="mini_program_appid">
+          </div>
+          <div v-show="formValidate.code_type === 3">
+            <FormItem
+              v-if="formValidate.code_type === 3"
+              label="小程序appid"
+              prop="mini_program_appid"
+            >
               <Input v-model="formValidate.mini_program_appid" placeholder="请输入小程序appid"></Input>
             </FormItem>
-            <FormItem label="小程序路径">
+            <FormItem v-if="formValidate.code_type === 3" label="小程序路径">
               <Input v-model="formValidate.mini_program_path" placeholder="pages/index/index"></Input>
             </FormItem>
-            <FormItem label="小程序简介" prop="mini_program_desc">
+            <FormItem v-if="formValidate.code_type === 3" label="小程序简介" prop="mini_program_desc">
               <Input v-model="formValidate.mini_program_desc" placeholder="请输入小程序简介"></Input>
             </FormItem>
-            <FormItem label="小程序图片">
+            <FormItem v-if="formValidate.code_type === 3" label="小程序图片">
               <Input v-model="formValidate.imgUrl" style="width: 500px"></Input>
               <Upload
                 action="//jsonplaceholder.typicode.com/posts/"
@@ -83,7 +93,7 @@
                 <Button type="primary">上传图片</Button>
               </Upload>
             </FormItem>
-          </template>
+          </div>
           <FormItem label="二维码类型" prop="code_time_type">
             <RadioGroup v-model="formValidate.code_time_type">
               <Radio :label="1" :disabled="row ? true : false">临时二维码</Radio>
@@ -208,6 +218,20 @@ export default {
     };
   },
   methods: {
+    // 编辑情况下切换 code_type 触发获取富文本
+    changeCode_type(e) {
+      if (e === 2) {
+        this.$nextTick(() => {
+          if (this.formValidate.text_content) {
+            this.formValidate.text_content = this.formValidate.text_content.replace(
+              /\n/g,
+              "<br>"
+            );
+            this.$refs.wangditor.text = this.formValidate.text_content;
+          }
+        });
+      }
+    },
     // 选择粉丝标签时触发
     selectFan(item) {
       this.formValidate.fan_label_id = item.id;
@@ -240,19 +264,34 @@ export default {
     // 创建渠道
     async createCode() {
       this.isLoading = true;
-      if (this.formValidate.code_type == "1") {
+      if (this.formValidate.code_type == 1) {
         this.formValidate.code_image = this.formValidate.imgUrl;
-      } else if (this.formValidate.code_type == "2") {
+      } else if (this.formValidate.code_type == 2) {
         this.formValidate.text_image = this.formValidate.imgUrl;
       } else {
         this.formValidate.mini_program_image = this.formValidate.imgUrl;
       }
       if (this.row) {
-        this.formValidate.text_content = this.formValidate.text_content.replace(/target="_blank"/g,"")
-        this.formValidate.text_content = this.formValidate.text_content.replace(/&nbsp;/g," ")
-        this.formValidate.text_content = this.formValidate.text_content.replace(/<br>/g,"\n")
-        this.formValidate.text_content = this.formValidate.text_content.replace(/ style="background-color: rgb(255, 255, 255);"/g,"")
-        this.formValidate.text_content = this.formValidate.text_content.replace(/😀/g,"[微笑]")
+        this.formValidate.text_content = this.formValidate.text_content.replace(
+          /target="_blank"/g,
+          ""
+        );
+        this.formValidate.text_content = this.formValidate.text_content.replace(
+          /&nbsp;/g,
+          " "
+        );
+        this.formValidate.text_content = this.formValidate.text_content.replace(
+          /<br>/g,
+          "\n"
+        );
+        this.formValidate.text_content = this.formValidate.text_content.replace(
+          / style="background-color: rgb(255, 255, 255);"/g,
+          ""
+        );
+        this.formValidate.text_content = this.formValidate.text_content.replace(
+          /😀/g,
+          "[微笑]"
+        );
         this.formValidate.id = this.row.id;
         let res = await this.$request({
           method: "post",
@@ -296,13 +335,13 @@ export default {
             // 永久发0
             this.formValidate.code_end_time = "0";
           }
-          if (this.formValidate.code_type == "2") {
+          if (this.formValidate.code_type == 2) {
             if (!this.formValidate.text_content) {
               this.$Message.error("请输入推送文字");
               val = false;
             }
-          } else if (this.formValidate.code_type == "3") {
-            if (!this.formValidate.mini_program_image) {
+          } else if (this.formValidate.code_type == 3) {
+            if (!this.formValidate.imgUrl) {
               this.$Message.error("请选择图片");
               val = false;
             }
@@ -329,21 +368,23 @@ export default {
         }
       });
       this.formValidate = res.data.data;
-      if (this.formValidate.code_type == "1") {
+      if (this.formValidate.code_type == 1) {
         this.formValidate.imgUrl = this.formValidate.code_image;
-      } else if (this.formValidate.code_type == "2") {
+      } else if (this.formValidate.code_type == 2) {
         this.formValidate.imgUrl = this.formValidate.text_image;
+        this.$nextTick(() => {
+          if (this.formValidate.text_content) {
+            this.formValidate.text_content = this.formValidate.text_content.replace(
+              /\n/g,
+              "<br>"
+            );
+            this.$refs.wangditor.text = this.formValidate.text_content;
+          }
+        });
       } else {
         this.formValidate.imgUrl = this.formValidate.mini_program_image;
       }
       this.formValidate.timeTem = this.formValidate.code_end_time;
-      this.$nextTick(() => {
-        if (this.formValidate.text_content) {
-          this.formValidate.text_content = this.formValidate.text_content.replace(/\n/g,"<br>")
-          this.$refs.wangditor.text = this.formValidate.text_content;
-        }
-      });
-
       this.labelList.forEach(item => {
         if (this.formValidate.fan_label_id == item.id) {
           this.formValidate.fan_label = item;

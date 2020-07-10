@@ -302,8 +302,9 @@
 
 <script>
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
-import { MYRESERVATION, SCREENLIST } from "@/uilt/url/url";
+import { MYRESERVATION } from "@/uilt/url/url";
 import qs from "qs";
+import storage from "@/uilt/storage";
 
 import MyReservation from "@/store/myreservation";
 export default {
@@ -715,16 +716,9 @@ export default {
 
       this.isLoading = false;
     },
-    // 获取select状态栏信息
-    async getSelectData() {
-      let res = await this.$request({
-        url: SCREENLIST
-      });
-      this.setSelectState(res.data.data.screen_list);
-    }
   },
   created() {
-    this.getSelectData();
+    this.setSelectState(storage.getDaiban().screen_list);
   }
 };
 </script>

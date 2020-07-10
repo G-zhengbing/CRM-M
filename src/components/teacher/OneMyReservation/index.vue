@@ -239,8 +239,9 @@
 
 <script>
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
-import { APPOINTMENTVIPCLASSLIST, SCREENLIST } from "@/uilt/url/url";
+import { APPOINTMENTVIPCLASSLIST } from "@/uilt/url/url";
 import qs from "qs";
+import storage from "@/uilt/storage";
 import OneMyReservation from "@/store/onemyreservation";
 export default {
   computed: {
@@ -646,17 +647,10 @@ export default {
       this.last_page = links.last_page;
 
       this.isLoading = false;
-    },
-    // 获取select状态栏信息
-    async getSelectData() {
-      let res = await this.$request({
-        url: SCREENLIST
-      });
-      this.setSelectState(res.data.data.screen_list);
     }
   },
   created() {
-    this.getSelectData();
+    this.setSelectState(storage.getDaiban().screen_list);
   }
 };
 </script>
