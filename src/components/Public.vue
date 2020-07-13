@@ -10,7 +10,7 @@
         </Col>
         <Col span="3">
           <FormItem>
-            <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekKuhu"></Input>
+            <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekMobile"></Input>
           </FormItem>
         </Col>
         <Col span="3">
@@ -256,6 +256,12 @@ export default {
     };
   },
   methods: {
+    //手机号
+    seekMobile() {
+      if (this.form.mobile.length >= 4) {
+        this.seekKuhu();
+      }
+    },
     //回访记录
     visit(item) {
       this.showVisit = true;

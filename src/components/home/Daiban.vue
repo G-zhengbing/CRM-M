@@ -26,7 +26,7 @@
             </Col>
             <Col span="3">
               <FormItem>
-                <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekKuhu"></Input>
+                <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekMobile"></Input>
               </FormItem>
             </Col>
             <Col span="3">
@@ -292,6 +292,12 @@ export default {
       "setForm",
     ]),
     ...mapActions(["getKehuList", "getFenpeiList", "RingUp","getReferList"]),
+    //手机号
+    seekMobile() {
+      if (this.form.mobile.length >= 4) {
+        this.seekKuhu();
+      }
+    },
     //回访记录
     visit(item) {
       this.showVisit = true;
@@ -478,8 +484,8 @@ export default {
           { title: "意向科目",align: "center", key: "subject",width:75 },
           { title: "跟进状态",align: "center", key: "follow_status",width:95, },
           { title: "渠道来源",width:120,align: "center", key: "refer" },
-          { title: "数据来源",align: "center", key: "data_source" },
-          { title: "数据类型",align: "center", key: "data_type" },
+          // { title: "数据来源",align: "center", key: "data_source" },
+          // { title: "数据类型",align: "center", key: "data_type" },
           { title: "注册时间",width:170,align: "center", key: "create_time" },
           {
             title: "操作",align: "center",
@@ -662,8 +668,8 @@ export default {
           { title: "意向科目",align: "center", key: "subject",width:75 },
           { title: "跟进状态",align: "center", key: "follow_status",width:95, },
           { title: "渠道来源",width:120,align: "center", key: "refer" },
-          { title: "数据来源",align: "center", key: "data_source" },
-          { title: "数据类型",align: "center", key: "data_type" },
+          // { title: "数据来源",align: "center", key: "data_source" },
+          // { title: "数据类型",align: "center", key: "data_type" },
           { title: "注册时间",width:170,align: "center", key: "create_time" },
           {
             title: "操作",align: "center",

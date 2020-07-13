@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <Form :model="seekForm">
-      <Row>
+      <Row class-name="exclusive">
         <Col span="3">
           <FormItem>
             <Input v-model="seekForm.name" placeholder="教师姓名" @on-change="seekClick"></Input>
@@ -9,7 +9,7 @@
         </Col>
         <Col span="3">
           <FormItem>
-            <Input v-model="seekForm.mobile" placeholder="联系方式" @on-change="seekClick"></Input>
+            <Input v-model="seekForm.mobile" placeholder="联系方式" @on-change="seekMobile"></Input>
           </FormItem>
         </Col>
         <Col span="3">
@@ -49,7 +49,7 @@
         style="height:500px;overflow-y:auto;"
         :show-message="false"
       >
-        <Row>
+        <Row  class-name="exclusive">
           <Col span="24">教师基本信息</Col>
           <Col span="4">
             <FormItem label="教师姓名" prop="name">
@@ -505,14 +505,12 @@
               </div>
             </div>
           </Col>
-          <Col span="24">
-            <FormItem>
-              <Button type="primary" @click="createdTeacher('form')">确定</Button>
-              <Button @click="handleReset('form')" style="margin-left: 8px">取消</Button>
-            </FormItem>
-          </Col>
         </Row>
       </Form>
+      <div slot="footer">
+        <Button :loading="confirmLoaing" type="primary" @click="createdTeacher('form')">确定</Button>
+        <Button @click="handleReset('form')" style="margin-left: 8px">取消</Button>
+      </div>
       <div slot="footer" style="display:none"></div>
     </Modal>
   </div>
@@ -555,6 +553,7 @@ export default {
   },
   data() {
     return {
+      confirmLoaing: false,
       myreg: /^[1][3,4,5,7,8,6,9][0-9]{9}$/,
       imgName7: "",
       uploadList7: [],
@@ -677,6 +676,12 @@ export default {
       "getCity"
     ]),
     ...mapMutations(["setTeacherTypes", "setCurrentPage"]),
+    //手机号
+    seekMobile() {
+      if (this.seekForm.mobile.length >= 4) {
+        this.seekClick();
+      }
+    },
     timeBlock(value) {
       if (this.setActive.indexOf(value) > -1) {
         return "ok";
@@ -722,6 +727,7 @@ export default {
       this.$refs[name].validate(valid => {
         if (valid) {
           this.isLoading = true;
+          this.confirmLoaing = true;
           if (!this.myreg.test(this.form.mobile)) {
             this.$Message.error("手机号码格式不正确");
             return;
@@ -815,6 +821,7 @@ export default {
                 this.showTeacherMessage = false;
               }
               this.isLoading = false;
+              this.confirmLoaing = false;
               this.uploadList.length = 0;
               this.uploadList2.length = 0;
               this.uploadList3.length = 0;
@@ -909,6 +916,7 @@ export default {
                 this.showTeacherMessage = false;
               }
               this.isLoading = false;
+              this.confirmLoaing = false;
               this.uploadList.length = 0;
               this.uploadList2.length = 0;
               this.uploadList3.length = 0;

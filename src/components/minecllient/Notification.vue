@@ -9,7 +9,7 @@
         </Col>
         <Col span="3">
           <FormItem>
-            <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekClick"></Input>
+            <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekMobile"></Input>
           </FormItem>
         </Col>
         <Col span="6">
@@ -204,6 +204,12 @@ export default {
       "getReferList",
       "getUserReservedList"
     ]),
+    //手机号
+    seekMobile() {
+      if (this.form.mobile.length >= 4) {
+        this.seekClick();
+      }
+    },
     //订单
     order(item) {
       this.setNotifiTypes(item);

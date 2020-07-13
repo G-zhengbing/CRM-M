@@ -13,7 +13,8 @@ import {
   YIRUGONG,
   CREATEORDER,
   HANDOVER,
-  CITY
+  CITY,
+  FENPAIXS
 } from '../uilt/url/url'
 import storage from '../uilt/storage'
 
@@ -93,6 +94,26 @@ export default {
     }
   },
   actions: {
+    //转移
+    shiftSalelist({state,commit,dispatch},{form}){
+      return new Promise((resolve,reject)=>{
+        axios({
+          method:'put',
+          url:FENPAIXS,
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            Authorization: "bearer " + storage.get()
+          },
+          params: {
+            ...form
+          }
+        }).then(res=>{
+          resolve(res)
+        }).catch(e=>{
+          reject(e)
+        })
+      })
+    },
     //移除
     removeMineclient({
       state,

@@ -10,7 +10,7 @@
         </Col>
         <Col span="4">
           <FormItem>
-            <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekKuhu"></Input>
+            <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekMobile"></Input>
           </FormItem>
         </Col>
         <Col span="3">
@@ -72,8 +72,9 @@
         </Col>
       </Row>
     </Form>
+    <Button v-if="showShiftBtn" type="primary" @click="shift">转移</Button>
     <Table
-      height="550"
+      height="530"
       border
       :columns="columns"
       :data="NotdataArr"
@@ -88,7 +89,25 @@
       show-elevator
       class="ive-page"
     />
-
+    <!-- 转移 -->
+    <Modal width="500" v-model="showShift" title="转移" @on-cancel="showShift = false">
+      <Form :model="shiftForm" v-if="showShift">
+        <Select
+          @on-change="addSaleName"
+          v-model="shiftForm.sale_id"
+          placeholder="跟进人"
+          style="margin-bottom:30px"
+        >
+          <Option v-for="(list,i) in sale_list" :key="i" :value="list.id">{{list.login_name}}</Option>
+          <Option value="all">全部</Option>
+        </Select>
+        <Input v-model="shiftForm.assign_note" type="textarea" :rows="4" placeholder="请输入转移说明" />
+      </Form>
+      <div slot="footer">
+        <Button type="text" size="large" @click="showShift = false">取消</Button>
+        <Button :loading="shiftLoading" type="primary" size="large" @click="confirmShift">确定</Button>
+      </div>
+    </Modal>
     <Loading v-show="isLoading" />
     <MineclientMessage :type="type" v-if="showMine" />
   </div>
@@ -115,6 +134,13 @@ export default {
   },
   data() {
     return {
+      // <Shift>
+      shiftLoading: false,
+      shiftForm: {
+        account_ids: []
+      },
+      showShift: false,
+      // </Shift>
       refer: storage.getDaiban().channel,
       sale_list: storage.getDaiban().sale_list,
       showMine: false,
@@ -225,6 +251,45 @@ export default {
     };
   },
   methods: {
+    //手机号
+    seekMobile() {
+      if (this.form.mobile.length >= 4) {
+        this.seekKuhu();
+      }
+    },
+    //添加cc姓名
+    addSaleName(uid) {
+      this.sale_list.map(i => {
+        if (i.id == uid) {
+          this.shiftForm.sale_name = i.login_name;
+        }
+      });
+    },
+    //确定转移
+    confirmShift() {
+      if (!this.shiftForm.sale_id) {
+        this.$Message.error("请先选择转移人员");
+      } else {
+        this.shiftLoading = true;
+        this.shiftSalelist({ form: this.shiftForm }).then(res => {
+          if (!res.data.ret) {
+            this.$Message.error(res.data.error);
+          } else {
+            this.$Message.success("转移成功");
+          }
+          this.shiftLoading = false;
+          this.showShift = false;
+          this.shiftForm = {};
+        });
+      }
+    },
+    //转移
+    shift() {
+      if (this.shiftForm.account_ids.length == 0) {
+        return;
+      }
+      this.showShift = true;
+    },
     //订单
     order(item) {
       this.setNotvisitTypes(item);
@@ -283,10 +348,16 @@ export default {
         this.isLoading = false;
       });
     },
-    ...mapActions(["getXinfenList", "RingUp"]),
+    ...mapActions(["getXinfenList", "RingUp",'shiftSalelist']),
     ...mapMutations(["setCurrentPage", "setNotvisitTypes"]),
     //全选反选
-    selectionChange() {},
+    selectionChange(item) {
+      let arr = [];
+      for (var i = 0; i < item.length; i++) {
+        arr.push(item[i].id);
+      }
+      this.shiftForm.account_ids = arr;
+    },
     //跟进
     getBtnClick3(item) {
       this.setNotvisitTypes(item);
@@ -347,7 +418,15 @@ export default {
       currentPage: state => state.notvisit.currentPage,
       total: state => state.notvisit.total,
       pageSize: state => state.notvisit.pageSize
-    })
+    }),
+    //是否展示转移
+    showShiftBtn() {
+      if (this.sale_list.length >= 2) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 };
 </script>

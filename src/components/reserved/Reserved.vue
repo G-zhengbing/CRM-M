@@ -21,7 +21,7 @@
           </Col>
           <Col span="4">
             <FormItem>
-              <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekClick"></Input>
+              <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekMobile"></Input>
             </FormItem>
           </Col>
           <Col span="4">
@@ -187,6 +187,12 @@ export default {
   methods: {
     ...mapMutations(["setReservedTypes", "setCurrentPage", "setClientTypes"]),
     ...mapActions(["getReservedList", "RingUp", "setSignin"]),
+    //手机号
+    seekMobile() {
+      if (this.form.mobile.length >= 4) {
+        this.seekClick();
+      }
+    },
     //设置展示的操作内容
     setStatus() {
       if (this.num == "2") {

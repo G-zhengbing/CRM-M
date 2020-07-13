@@ -9,7 +9,7 @@
         </Col>
         <Col span="4">
           <FormItem>
-            <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekKuhu"></Input>
+            <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekMobile"></Input>
           </FormItem>
         </Col>
         <Col span="4">
@@ -234,6 +234,12 @@ export default {
     };
   },
   methods: {
+    //手机号
+    seekMobile() {
+      if (this.form.mobile.length >= 4) {
+        this.seekKuhu();
+      }
+    },
     //试听
     audition(item) {
       this.setGenjintypefoll(item);

@@ -9,7 +9,7 @@
         </Col>
         <Col span="4">
           <FormItem>
-            <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekClick"></Input>
+            <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekMobile"></Input>
           </FormItem>
         </Col>
         <Col span="3">
@@ -341,6 +341,12 @@ export default {
       "getAccountList",
       "getOrdersnList"
     ]),
+    //手机号
+    seekMobile() {
+      if (this.form.mobile.length >= 4) {
+        this.seekClick();
+      }
+    },
     //补款升级
     upgrade(item) {
       this.getAccountList(item.id).then(res => {

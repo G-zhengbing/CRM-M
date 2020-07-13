@@ -14,7 +14,7 @@
         </Col>
         <Col span="3">
           <FormItem>
-            <Input v-model="form.mobile" placeholder="学员电话" @on-change="seekClick"></Input>
+            <Input v-model="form.mobile" placeholder="学员电话" @on-change="seekMobile"></Input>
           </FormItem>
         </Col>
         <Col span="3">
@@ -130,6 +130,12 @@ export default {
   methods: {
     ...mapActions(["getMoneyList", "cancelOrder"]),
     ...mapMutations(["setCurrentPage"]),
+    //手机号
+    seekMobile() {
+      if (this.form.mobile.length >= 4) {
+        this.seekClick();
+      }
+    },
     //取消订单
     cancelOrderForm(item) {
       this.$Modal.confirm({

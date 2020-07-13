@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Form :model="form" :label-width="20">
-      <Row>
+    <Form :model="form">
+      <Row class-name="exclusive">
         <Col span="3">
           <FormItem>
             <Input v-model="form.name" placeholder="学员姓名" @on-change="seekClick"></Input>
@@ -9,7 +9,7 @@
         </Col>
         <Col span="3">
           <FormItem>
-            <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekClick"></Input>
+            <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekMobile"></Input>
           </FormItem>
         </Col>
         <Col span="3">
@@ -63,7 +63,7 @@
             </Select>
           </FormItem>
         </Col>
-        <Col span="6">
+        <Col span="4">
           <FormItem>
             <div class="dateplc">
               <DatePicker
@@ -76,7 +76,7 @@
             </div>
           </FormItem>
         </Col>
-        <Col span="6">
+        <Col span="4">
           <FormItem>
             <div class="dateplc">
               <DatePicker v-model="startTime" type="date" placeholder="注册时间" @on-change="getTimes"></DatePicker>
@@ -100,6 +100,7 @@
       </Row>
     </Form>
     <Button type="primary" @click="createUsers">创建用户</Button>
+    <Button v-if="showShiftBtn" type="primary" @click="shift">转移</Button>
     <Table
       border
       :columns="columns"
@@ -117,11 +118,30 @@
       show-elevator
       class="ive-page"
     />
-
+    <!-- 回访记录 -->
     <Modal width="800" v-model="showVisit" title="回访记录" @on-cancel="showVisit = false">
       <Table border :columns="visitColumns" :data="showVisitData" height="500"></Table>
       <div slot="footer">
         <Button type="text" size="large" @click="showVisit = false">取消</Button>
+      </div>
+    </Modal>
+    <!-- 转移 -->
+    <Modal width="500" v-model="showShift" title="转移" @on-cancel="showShift = false">
+      <Form :model="shiftForm" v-if="showShift">
+        <Select
+          @on-change="addSaleName"
+          v-model="shiftForm.sale_id"
+          placeholder="跟进人"
+          style="margin-bottom:30px"
+        >
+          <Option v-for="(list,i) in sale_list" :key="i" :value="list.id">{{list.login_name}}</Option>
+          <Option value="all">全部</Option>
+        </Select>
+        <Input v-model="shiftForm.assign_note" type="textarea" :rows="4" placeholder="请输入转移说明" />
+      </Form>
+      <div slot="footer">
+        <Button type="text" size="large" @click="showShift = false">取消</Button>
+        <Button :loading="shiftLoading" type="primary" size="large" @click="confirmShift">确定</Button>
       </div>
     </Modal>
     <Loading v-show="isLoading" />
@@ -162,14 +182,29 @@ export default {
       currentPage: state => state.mineclient.currentPage,
       total: state => state.mineclient.total,
       pageSize: state => state.mineclient.pageSize
-    })
+    }),
+    //是否展示转移
+    showShiftBtn() {
+      if (this.sale_list.length >= 2) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   },
   data() {
     return {
+      // <Shift>
+      shiftLoading: false,
+      shiftForm: {
+        account_ids: []
+      },
+      showShift: false,
+      // </Shift>
       lastFollowTimeSort: "",
       visitColumns: [
         { title: "回访内容", key: "visit_content" },
-        { title: "跟进人", key: "sale_name", width: 100 },
+        { title: "跟进人", key: "sale_name"},
         { title: "回访时间", key: "time", width: 170 }
       ],
       showVisitData: [],
@@ -231,7 +266,7 @@ export default {
             ]);
           }
         },
-        { title: "跟进人", key: "follow_sale_name", width: 100 },
+        { title: "跟进人", key: "follow_sale_name", width: 120 },
         { title: "跟进状态", key: "follow_status", width: 95 },
         {
           title: "上次跟进时间",
@@ -339,6 +374,51 @@ export default {
     };
   },
   methods: {
+    //手机号
+    seekMobile() {
+      if (this.form.mobile.length >= 4) {
+        this.seekClick();
+      }
+    },
+    //添加cc姓名
+    addSaleName(uid) {
+      this.sale_list.map(i => {
+        if (i.id == uid) {
+          this.shiftForm.sale_name = i.login_name;
+        }
+      });
+    },
+    //确定转移
+    confirmShift() {
+      if (!this.shiftForm.sale_id) {
+        this.$Message.error("请先选择转移人员");
+      } else {
+        this.shiftLoading = true;
+        this.isLoading = true;
+        this.shiftSalelist({ form: this.shiftForm }).then(res => {
+          if (!res.data.ret) {
+            this.$Message.error(res.data.error);
+          } else {
+            this.$Message.success("转移成功");
+          }
+          this.getClientList({
+            form: this.form,
+            sort: this.lastFollowTimeSort
+          });
+          this.isLoading = false;
+          this.shiftLoading = false;
+          this.showShift = false;
+          this.shiftForm = {};
+        });
+      }
+    },
+    //转移
+    shift() {
+      if (this.shiftForm.account_ids.length == 0) {
+        return;
+      }
+      this.showShift = true;
+    },
     // 排序
     sortTable(item) {
       if (item.order == "asc") {
@@ -357,7 +437,7 @@ export default {
       });
     },
     ...mapMutations(["setClientTypes", "setCurrentPage"]),
-    ...mapActions(["getClientList", "RingUp", "getReferList"]),
+    ...mapActions(["getClientList", "RingUp", "getReferList", "shiftSalelist"]),
     //回访记录
     visit(item) {
       this.showVisit = true;
@@ -459,7 +539,13 @@ export default {
         this.setCurrentPage(page);
       });
     },
-    selectionChange() {},
+    selectionChange(item) {
+      let arr = [];
+      for (var i = 0; i < item.length; i++) {
+        arr.push(item[i].id);
+      }
+      this.shiftForm.account_ids = arr;
+    },
     //跟进
     getBtnClick3(item) {
       this.setClientTypes(item);
