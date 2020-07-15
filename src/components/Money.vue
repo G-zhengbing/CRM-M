@@ -94,7 +94,7 @@ export default {
         { title: "实付金额", key: "pay_amount", width: 110 },
         { title: "支付方式", key: "pay_type", width: 100 },
         { title: "支付时间", key: "pay_time", width: 170 },
-        { title: "签约人", key: "sale_name", width: 80 },
+        { title: "签约人", key: "market_sale_name", width: 80 },
         { title: "创建时间", key: "order_create_time", width: 170 },
         {
           title: "操作",
