@@ -49,7 +49,7 @@
         style="height:500px;overflow-y:auto;"
         :show-message="false"
       >
-        <Row  class-name="exclusive">
+        <Row class-name="exclusive">
           <Col span="24">教师基本信息</Col>
           <Col span="4">
             <FormItem label="教师姓名" prop="name">
@@ -661,6 +661,21 @@ export default {
                   }
                 },
                 "编辑"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.delete(params.row);
+                    }
+                  }
+                },
+                "删除"
               )
             ]);
           }
@@ -670,12 +685,33 @@ export default {
   },
   methods: {
     ...mapActions([
+      "deleteTearch",
       "getTeacherList",
       "createdTeachers",
       "getProvince",
       "getCity"
     ]),
     ...mapMutations(["setTeacherTypes", "setCurrentPage"]),
+    //删除教师
+    delete(item) {
+      this.$Modal.confirm({
+        title: "温馨提示",
+        content: "<p>确定要删除吗?</p>",
+        onOk: () => {
+          this.deleteTearch({ uid: item.id }).then(res => {
+            if (!res.data.ret) {
+              this.$Message.error(res.data.error);
+            } else {
+              this.$Message.success("删除成功");
+            }
+            this.isLoading = true;
+            this.getTeacherList({ ...this.seekForm, page:this.currentPage }).then(() => {
+              this.isLoading = false;
+            });
+          });
+        }
+      });
+    },
     //手机号
     seekMobile() {
       if (this.seekForm.mobile.length >= 4) {
@@ -1244,7 +1280,6 @@ export default {
       this.setTeacherTypes(item);
       this.isUpdata = true;
       this.showTeacherMessage = true;
-      console.log(this.teacherTypes);
       this.form = { ...this.teacherTypes };
       this.getProv();
     },

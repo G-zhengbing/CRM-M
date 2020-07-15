@@ -7,7 +7,6 @@ export default {
     url,
     params
   }) {
-    console.log(params)
     return
     return new Promise((resolve, reject) => {
       axios({

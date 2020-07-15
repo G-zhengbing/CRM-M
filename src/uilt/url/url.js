@@ -2,6 +2,7 @@ import { BASEURL } from './env'
 
 const PONESTATUS = "http://liveh5.canpoint.net/send_message" //跟进/发送短信验证码
 
+const DELETETEACHER = BASEURL + 'delete_coach'
 const LOGINURL = BASEURL + "login" //登陆
 const GETUSER = BASEURL + "me" //获取用户信息
 const LOGINOUT = BASEURL + "logout" //退出登录
@@ -124,6 +125,7 @@ const GETUPPERLIMIT = BASEURL + "get_user_assignment_task_channel_list_and_upper
 const SCREENLIST = BASEURL + "screen_list" //教务/ 公共接口，select状态栏
 
 export {
+  DELETETEACHER,
   GETUPPERLIMIT,
   UPPERLIMIT,
   UPDATESALESWEIGHT,

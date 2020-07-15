@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Form :model="form" :label-width="20">
-      <Row>
+    <Form :model="form">
+      <Row class-name="exclusive">
         <Col span="4">
           <FormItem>
             <Input v-model="form.name" placeholder="学员姓名" @on-change="seekClick"></Input>

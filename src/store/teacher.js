@@ -1,6 +1,7 @@
 import axios from 'axios'
 import {
-  TEACHERLIST
+  TEACHERLIST,
+  DELETETEACHER
 } from '../uilt/url/url'
 import storage from '../uilt/storage'
 
@@ -27,6 +28,23 @@ export default {
     }
   },
   actions: {
+    //删除老师
+    deleteTearch({state,commit,dispatch},{uid}){
+      return new Promise((resolve,reject)=>{
+        axios({
+          method:"patch",
+          url:DELETETEACHER + '/' + uid,
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            Authorization: "bearer " + storage.get()
+          }
+        }).then(res=>{
+          resolve(res)
+        }).catch(e=>{
+          reject(e)
+        })
+      })
+    },
     //教师管理列表
     getTeacherList({
       state,

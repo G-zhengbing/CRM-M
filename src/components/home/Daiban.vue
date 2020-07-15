@@ -17,19 +17,19 @@
             <span>已分配</span>
           </li>
         </ul>
-        <Form :model="form" :label-width="20">
-          <Row type="flex" justify="start" >
-            <Col span="3">
+        <Form :model="form">
+          <Row class-name="exclusive">
+            <Col span="2">
               <FormItem>
                 <Input v-model="form.name" placeholder="学员姓名" @on-change="seekKuhu"></Input>
               </FormItem>
             </Col>
-            <Col span="3">
+            <Col span="2">
               <FormItem>
                 <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekMobile"></Input>
               </FormItem>
             </Col>
-            <Col span="3">
+            <Col span="2">
               <FormItem>
                 <Select
                   v-model="form.follow_status"
@@ -40,7 +40,7 @@
                 </Select>
               </FormItem>
             </Col>
-            <Col span="3" v-if="num == 2">
+            <Col span="2" v-if="num == 2">
               <FormItem>
                 <Select
                   v-model="form.sale_id"
@@ -51,7 +51,7 @@
                 </Select>
               </FormItem>
             </Col>
-            <Col span="3">
+            <Col span="2">
               <FormItem>
                 <Select
                   v-model="form.refer"
@@ -62,7 +62,7 @@
                 </Select>
               </FormItem>
             </Col>
-            <Col span="3">
+            <Col span="2">
               <FormItem>
                 <Select
                   v-model="form.grade"
@@ -84,8 +84,7 @@
                 </Select>
               </FormItem>
             </Col>
-            
-            <Col span="3">
+            <Col span="2">
               <FormItem>
                 <Select
                   v-model="form.subject"
@@ -96,7 +95,7 @@
                 </Select>
               </FormItem>
             </Col>
-            <Col span="3" v-if="num == 2">
+            <Col span="2" v-if="num == 2">
               <FormItem>
                 <Select
                   v-model="form.stage"
@@ -107,7 +106,7 @@
                 </Select>
               </FormItem>
             </Col>
-            <Col span="3" v-if="num == 2">
+            <Col span="2" v-if="num == 2">
               <FormItem>
                 <Select
                   v-model="form.transfer"
@@ -118,7 +117,7 @@
                 </Select>
               </FormItem>
             </Col>
-            <Col span="3" v-if="num == 2">
+            <Col span="2" v-if="num == 2">
               <FormItem>
                 <Select v-model="form.visit_num" @on-change="seekKuhu" placeholder="回访次数">
                   <Option :value="0">0次</Option>
@@ -132,16 +131,13 @@
                 </Select>
               </FormItem>
             </Col>
-            <Col span="5">
+            <Col span="6">
               <FormItem>
                 <div class="dateplc">
                   <DatePicker v-model="startTime" type="date" placeholder="注册时间" @on-change="getTimes"></DatePicker>
                   <DatePicker v-model="endTime" type="date" placeholder="注册时间" @on-change="getTimes"></DatePicker>
                 </div>
               </FormItem>
-            </Col>
-            <Col span="2" v-if="!(num == 2)">
-              <Button type="primary" @click="clear">清除</Button>
             </Col>
             <Col span="6" v-if="num == 2">
               <FormItem>
@@ -151,7 +147,6 @@
                 </div>
               </FormItem>
             </Col>
-            
             <Col span="5" v-if="num == 2">
               <FormItem label="意向度" :label-width="80">
                 <RadioGroup v-model="form.intention_option" @on-change="seekKuhu">
@@ -162,7 +157,7 @@
                 </RadioGroup>
               </FormItem>
             </Col>
-            <Col span="2"  v-if="num == 2">
+            <Col span="2">
               <Button type="primary" @click="clear">清除</Button>
             </Col>
           </Row>
@@ -520,7 +515,7 @@ export default {
           { title: "地址", width: 140,align: "center", key: "area" },
           { title: "年级",width: 100,align: "center", key: "grade" },
           { title: "意向科目", width: 100,align: "center", key: "subject" },
-          { title: "渠道来源",width:120,align: "center", key: "refer" },
+          { title: "渠道来源",width:140,align: "center", key: "refer" },
           { title: "跟进人", width: 120,align: "center", key: "follow_sale_name" },
           { title: "跟进状态", width: 100,align: "center", key: "follow_status" },
           {

@@ -75,7 +75,6 @@ export default {
       this.sortAges(this.data, a);
     },
     sortClk(a) {
-      // console.log();
       // this.clicks = true;
       // this.clickss = false;
       this.sortAgess(this.data, a);
@@ -115,7 +114,6 @@ export default {
   computed: {},
   watch: {
     checkedAll(newVle, oldVle) {
-      // console.log(this.data);
       if (this.checkedAll.length == this.data.length) {
         this.selection = true;
       } else {

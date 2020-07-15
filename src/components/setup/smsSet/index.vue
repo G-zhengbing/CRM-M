@@ -113,7 +113,6 @@ export default {
             //       },
             //       on: {
             //         click: () => {
-            //           console.log(params.row);
             //         }
             //       }
             //     },

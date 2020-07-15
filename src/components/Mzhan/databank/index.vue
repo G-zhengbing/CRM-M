@@ -1,13 +1,13 @@
 <template>
   <div class="box">
-    <Form :model="form" :label-width="20">
-      <Row>
+    <Form :model="form">
+      <Row  class-name="exclusive">
         <Col span="3">
           <FormItem prop="materials_name">
             <Input @on-change="seekKuhu" v-model="form.materials_name" placeholder="请输入资料名称" />
           </FormItem>
         </Col>
-        <Col span="4">
+        <Col span="2">
           <FormItem>
             <Button type="primary" @click="clear">清空</Button>
           </FormItem>
@@ -20,10 +20,10 @@
         <button class="btn" @click="isDele">批量删除</button>
       </div>
       <div class="batch-right">
-        <button class="btn" @click="addAd">新建资料</button>
         <Select style="width:100px" placeholder="排序方式">
           <Option value="1">{{ 1 }}</Option>
         </Select>
+        <button class="btn" @click="addAd">新建资料</button>
       </div>
     </div>
     <Table

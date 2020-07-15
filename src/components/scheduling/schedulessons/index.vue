@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="contaner">
-      <Form :model="form" :label-width="20">
-        <Row>
+      <Form :model="form">
+        <Row class-name="exclusive">
           <Col span="3">
             <FormItem>
               <Input v-model="form.course_name" placeholder="课程名称" @on-change="seekClick"></Input>

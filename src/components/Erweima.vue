@@ -3,7 +3,7 @@
   <div class="box">
     <NewErweima v-if="show" :type="type" />
     <Form :model="form">
-      <Row>
+      <Row class-name="exclusive">
         <Col span="3">
           <FormItem>
             <Input v-model="form.title" placeholder="标题"></Input>

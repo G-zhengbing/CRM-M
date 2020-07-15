@@ -1,8 +1,8 @@
 <template>
   <div class="box">
     <DaibanMessage v-if="show" :type="type" />
-    <Form :model="form" :label-width="20">
-      <Row>
+    <Form :model="form">
+      <Row  class-name="exclusive">
         <Col span="3">
           <FormItem>
             <Input v-model="form.name" placeholder="学员姓名" @on-change="seekKuhu"></Input>
@@ -81,8 +81,6 @@
             </div>
           </FormItem>
         </Col>
-        </Row>
-        <Row>
         <Col span="5">
           <FormItem label="意向度" :label-width="80">
             <RadioGroup v-model="form.intention_option" @on-change="seekKuhu">
@@ -120,7 +118,6 @@
       v-model="showVisit"
       title="回访记录"
       @on-cancel="showVisit = false"
-      :styles="{'margin-top' : '-70px'}"
     >
       <Table border :columns="visitColumns" :data="showVisitData" height="500"></Table>
       <div slot="footer">
@@ -185,6 +182,7 @@ export default {
           title: "回访次数",
           key: "visit_num",
           width: 100,
+          align:'center',
           render: (h, params) => {
             return h("div", [
               h(
@@ -200,14 +198,10 @@ export default {
                     }
                   },
                   style: {
-                    width: "98px",
-                    height: "70px",
-                    display: "inline-block",
-                    marginLeft: "-17px",
                     textAlign: "center",
-                    lineHeight: "70px",
                     cursor: "pointer"
-                  }
+                  },
+                  class: "clickable"
                 },
                 params.row.visit_num
               )
@@ -220,7 +214,7 @@ export default {
           align: "center",
           key: "last_follow_time"
         },
-        { title: "说明", key: "assign_note", tooltip: true },
+        { title: "说明", key: "assign_note", tooltip: true ,width:120},
         { title: "注册时间", width: 170, align: "center", key: "create_time" },
         {
           title: "操作",

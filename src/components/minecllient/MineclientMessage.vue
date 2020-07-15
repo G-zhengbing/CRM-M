@@ -261,7 +261,7 @@
             <FormItem>
               <Input
                 v-model="selectTeacherListForm.name"
-                placeholder="学员姓名"
+                placeholder="教师姓名"
                 @on-change="seekSelectForm"
               ></Input>
             </FormItem>
@@ -486,10 +486,11 @@
             </FormItem>
             <FormItem label="教师资料简介">
               <Input
+                readonly
                 v-model="teacherDetailsForm.teacher_userinfo_desc"
                 type="textarea"
                 :autosize="{minRows: 5,maxRows: 8}"
-                placeholder="请输入..."
+                placeholder="暂无..."
               ></Input>
             </FormItem>
           </Col>
@@ -1886,7 +1887,7 @@ export default {
       } else if (!this.createAuditionForm.time_block) {
         this.$Message.error("试听课时段不能为空");
         return;
-      } else if (!this.selectTeacherList) {
+      } else if (this.selectTeacherList.length == 0) {
         this.$Message.error("教师选项不能为空");
         return;
       } else if (!this.createAuditionForm.note) {

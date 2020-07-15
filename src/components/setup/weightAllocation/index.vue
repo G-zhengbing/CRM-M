@@ -188,7 +188,6 @@ export default {
     },
     // 点击选择触发
     async selectUser(name) {
-      // console.log(name);
     },
     async getUserSelect() {
       this.isLoading = true;
@@ -224,7 +223,7 @@ export default {
 }
 .ps {
   font-size: 13px;
-  color: #ccc;
+  color: red;
 }
 .content {
   /* background-color: #000; */

@@ -52,7 +52,6 @@ export default {
             order_report:order_report
           }
         }).then(res=>{
-          console.log(res)
           dispatch("getmStudent",{page:1})
           resolve()
         }).catch(e=>{

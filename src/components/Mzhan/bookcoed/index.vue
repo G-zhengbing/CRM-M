@@ -1,7 +1,7 @@
 <template>
   <div class="box">
-    <Form :model="form" :label-width="20">
-      <Row>
+    <Form :model="form">
+      <Row  class-name="exclusive">
         <Col span="3">
           <FormItem>
             <Input @on-change="seekKuhu" v-model="form.book_name" placeholder="请输入书籍名称"></Input>
@@ -37,7 +37,7 @@
             </Select>
           </FormItem>
         </Col>
-        <Col span="4">
+        <Col span="3">
           <DatePicker
             @on-change="getTime"
             v-model="time"
@@ -49,7 +49,7 @@
           ></DatePicker>
           <br />
         </Col>
-        <Col span="5">
+        <Col span="2">
           <FormItem>
             <Button type="primary" style="margin-left: 8px" @click="clear">清空</Button>
           </FormItem>

@@ -20,9 +20,9 @@
           ></Input>
         </FormItem>
 
-        <FormItem>
+        <FormItem class="colors">
           <div v-if="formValidate.template_type == '1'">
-            <p>说明：</p>
+            <p>注：</p>
             <p>1.模板内容变量用${usermobile}进行表示</p>
             <p>2.模板内容不可含有“加微信”、“加公众号”等内容</p>
             <p>3.模板签名+模板内容最多500字符，70字符为1条短信，超过70字符则按每条短信67字符计算；</p>
@@ -140,4 +140,7 @@ export default {
 </script>
 
 <style scoped>
+.colors p{
+  color: red;
+}
 </style>

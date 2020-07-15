@@ -551,7 +551,6 @@ export default new Vuex.Store({
 								},
 								on: {
 									refresh: function () {
-										console.log(_this)
 										_this.a.commit('setRefreshs', true)
 									}
 								}

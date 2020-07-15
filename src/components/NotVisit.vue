@@ -1,8 +1,8 @@
 <template>
   <div>
     <DaibanMessage v-if="show" :type="type"/>
-    <Form :model="form" :label-width="20">
-      <Row>
+    <Form :model="form">
+      <Row class-name="exclusive">
         <Col span="4">
           <FormItem>
             <Input v-model="form.name" placeholder="学员姓名" @on-change="seekKuhu"></Input>
@@ -49,8 +49,6 @@
             </Select>
           </FormItem>
         </Col>
-      </Row>
-      <Row>
         <Col span="3">
           <FormItem>
             <Select v-model="form.sale_id" @on-change="seekKuhu" placeholder="跟进人">
@@ -59,7 +57,7 @@
             </Select>
           </FormItem>
         </Col>
-        <Col span="8">
+        <Col span="6">
           <FormItem>
             <div class="dateplc">
               <DatePicker v-model="startTime" type="date" placeholder="注册时间" @on-change="getTimes"></DatePicker>
@@ -67,7 +65,7 @@
             </div>
           </FormItem>
         </Col>
-        <Col span="4">
+        <Col span="2">
           <Button type="primary" @click="clear">清除</Button>
         </Col>
       </Row>

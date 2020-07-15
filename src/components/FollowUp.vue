@@ -1,18 +1,18 @@
 <template>
   <div>
-    <Form :model="form" :label-width="20">
-      <Row>
-        <Col span="4">
+    <Form :model="form">
+      <Row class-name="exclusive">
+        <Col span="3">
           <FormItem>
             <Input v-model="form.name" placeholder="学员姓名" @on-change="seekKuhu"></Input>
           </FormItem>
         </Col>
-        <Col span="4">
+        <Col span="3">
           <FormItem>
             <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekMobile"></Input>
           </FormItem>
         </Col>
-        <Col span="4">
+        <Col span="2">
           <FormItem>
             <Select v-model="form.grade" @on-change="seekKuhu" placeholder="年级">
               <Option :value="1">一年级</Option>
@@ -27,14 +27,14 @@
             </Select>
           </FormItem>
         </Col>
-        <Col span="4">
+        <Col span="2">
           <FormItem>
             <Select v-model="form.subject" @on-change="seekKuhu" placeholder="意向科目">
               <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
             </Select>
           </FormItem>
         </Col>
-        <Col span="4">
+        <Col span="2">
           <FormItem>
             <Select v-model="form.sale_id" @on-change="seekKuhu" placeholder="跟进人">
               <Option v-for="(list,i) in sale_list" :key="i" :value="list.id">{{list.login_name}}</Option>
@@ -42,7 +42,7 @@
             </Select>
           </FormItem>
         </Col>
-        <Col span="6">
+        <Col span="5">
           <FormItem label="意向度" :label-width="80">
             <RadioGroup v-model="form.intention_option" @on-change="seekKuhu">
               <Radio label="1">高</Radio>
@@ -52,7 +52,7 @@
             </RadioGroup>
           </FormItem>
         </Col>
-        <Col span="4">
+        <Col span="1">
           <Button type="primary" @click="clear">清除</Button>
         </Col>
       </Row>

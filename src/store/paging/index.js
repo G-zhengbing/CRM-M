@@ -20,7 +20,6 @@ export default new Vuex.Store({
 			state.per_page = data.per_page
 			state.current_page = data.current_page
 			state.last_page = data.last_page
-			// console.log(state,data)
 		}
 	},
 	actions: {

@@ -322,7 +322,6 @@ export default new Vuex.Store({
 		// 写方法
 		// 更改data数据
 		setData(state, val) {
-			// console.log(state,val)
 			state.data = val
 		},
 	},

@@ -24,8 +24,6 @@ export default {
     this.editor.customConfig.onchange = html => {
       this.editorContent = html;
       this.catchData(this.editorContent); // 把这个html通过catchData的方法传入父组件
-      // console.log(this.editorContent);
-      // console.log(this.editor.txt.text());
     };
     this.editor.customConfig.menus = [
       // 菜单配置（因为在最新版的wangeditor中不能让功能图标换行，可以视情况而定删除功能）

@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="contaner">
-      <Form :model="form" :label-width="20">
-        <Row>
+      <Form :model="form">
+        <Row class-name="exclusive">
           <Col span="3">
             <FormItem>
               <Input v-model="form.name" placeholder="学员姓名" @on-change="seekClick"></Input>
@@ -123,36 +123,6 @@ export default {
                 },
                 "排课"
               )
-              // h(
-              //   "Button",
-              //   {
-              //     props: {
-              //       type: "text",
-              //       size: "small"
-              //     },
-              //     on: {
-              //       click: () => {
-              //         this.mathdata(params.row);
-              //       }
-              //     }
-              //   },
-              //   "教学数据"
-              // ),
-              // h(
-              //   "Button",
-              //   {
-              //     props: {
-              //       type: "text",
-              //       size: "small"
-              //     },
-              //     on: {
-              //       click: () => {
-              //         this.endcourse(params.row);
-              //       }
-              //     }
-              //   },
-              //   "结课"
-              // )
             ]);
           }
         }

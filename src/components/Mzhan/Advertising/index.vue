@@ -1,26 +1,24 @@
 <template>
   <div class="box">
-    <Form :model="form" :label-width="20">
-      <Row>
-        <Col span="4">
+    <Form :model="form">
+      <Row class-name="exclusive">
+        <Col span="3">
           <FormItem prop="materials_name">
             <Input @on-change="seekKuhu" v-model="form.title" placeholder="请输入广告名称" />
           </FormItem>
         </Col>
-        <Col span="4">
+        <Col span="2">
           <FormItem>
             <Button type="primary" style="margin-left: 8px" @click="clear">清空</Button>
           </FormItem>
         </Col>
       </Row>
     </Form>
-
     <div class="batch">
       <div class="batch-let">
         <button class="btn" @click="isDele">批量删除</button>
       </div>
       <div class="batch-right">
-        <button class="btn" @click="addAd">新建广告</button>
         <Dropdown style="margin-left: 20px" @on-click="getSelect">
           <Button type="primary">
             排序
@@ -33,6 +31,7 @@
             <DropdownItem name="4">创建时间由远及近</DropdownItem>
           </DropdownMenu>
         </Dropdown>
+        <button class="btn" @click="addAd">新建广告</button>
       </div>
     </div>
     <Table
@@ -54,7 +53,6 @@
       show-elevator
       class="ive-page"
     />
-
     <Message v-if="isAdMessage" :item="item" />
   </div>
 </template>
@@ -89,7 +87,7 @@ export default {
   },
   data() {
     return {
-      tableHeight: 0,
+      tableHeight:0,
       columns2: [
         {
           type: "selection",

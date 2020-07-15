@@ -1,7 +1,7 @@
 <template>
   <div class="box">
-    <Form :model="form" :label-width="20">
-      <Row>
+    <Form :model="form">
+      <Row  class-name="exclusive">
         <Col span="3">
           <FormItem>
             <Input @on-change="seek" v-model="form.course_name" placeholder="课程名称"></Input>
@@ -39,7 +39,7 @@
             </Select>
           </FormItem>
         </Col>
-        <Col span="4">
+        <Col span="2">
           <FormItem>
             <Button type="primary" style="margin-left: 8px" @click="clear">清空</Button>
           </FormItem>
@@ -51,7 +51,6 @@
         <button class="btn" @click="isDele">批量删除</button>
       </div>
       <div class="batch-right">
-        <button class="btn" @click="addAd">新建课程</button>
         <Dropdown style="margin-left: 20px" @on-click="getSelect">
           <Button type="primary">
             排序
@@ -64,6 +63,7 @@
             <DropdownItem name="4">活动价由低到高</DropdownItem>
           </DropdownMenu>
         </Dropdown>
+        <button class="btn" @click="addAd">新建课程</button>
       </div>
     </div>
     <Table
@@ -224,7 +224,8 @@ export default {
                 {
                   props: {
                     type: "text",
-                    size: "small"
+                    size: "small",
+                    disabled:params.row.status == '下架'?false:true
                   },
                   on: {
                     click: () => {
@@ -239,7 +240,8 @@ export default {
                 {
                   props: {
                     type: "text",
-                    size: "small"
+                    size: "small",
+                    disabled:params.row.status == '下架'?true:false
                   },
                   on: {
                     click: () => {
@@ -357,7 +359,6 @@ export default {
     },
     //是否首页展示
     functionFun(val, params) {
-      console.log(val, params);
       this.loading(true);
       this.setCurrSwitch({ params: this.form, form: params }).then(() => {
         this.loading(false);
