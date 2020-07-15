@@ -40,7 +40,7 @@
         ></DatePicker>
       </FormItem>
       <FormItem>
-        <Button @click="deleteFormData" style="margin-left: 8px">清空选项</Button>
+        <Button  type="primary" @click="deleteFormData" style="margin-left: 8px">清空</Button>
       </FormItem>
     </Form>
     <div class="btns">

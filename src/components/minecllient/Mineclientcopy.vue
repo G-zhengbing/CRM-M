@@ -26,6 +26,13 @@
             </Select>
           </FormItem>
         </Col>
+        <Col span="2">
+          <FormItem>
+            <Select v-model="form.transfer" @on-change="seekClick" placeholder="流转类型">
+              <Option v-for="(list,i) in transfer" :key="i" :value="i">{{list}}</Option>
+            </Select>
+          </FormItem>
+        </Col>
         <Col span="3">
           <FormItem>
             <Select v-model="form.follow_status" @on-change="seekClick" placeholder="跟进状态">
@@ -58,7 +65,7 @@
         </Col>
         <Col span="3">
           <FormItem>
-            <Select v-model="form.refer" @on-change="seekClick" placeholder="渠道类型">
+            <Select v-model="form.refer" @on-change="seekClick" placeholder="渠道">
               <Option :value="list.id" v-for="(list,i) in channel" :key="i">{{list.channel_title}}</Option>
             </Select>
           </FormItem>
@@ -204,7 +211,7 @@ export default {
       lastFollowTimeSort: "",
       visitColumns: [
         { title: "回访内容", key: "visit_content" },
-        { title: "跟进人", key: "sale_name"},
+        { title: "跟进人", key: "sale_name" },
         { title: "回访时间", key: "time", width: 170 }
       ],
       showVisitData: [],

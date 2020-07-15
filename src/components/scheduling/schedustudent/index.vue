@@ -100,8 +100,9 @@ export default {
         { title: "已排课节数", key: "have_num" },
         { title: "取消课节数", key: "cancel_num" },
         { title: "上课中", key: "lesson_num" },
-        { title: "推送Classin", key: "classin_id" },
+        { title: "推送Classin", key: "classin_id" ,width:120},
         { title: "最新付费时间", key: "paytime", width: "200" },
+        { title: "注册时间", key: "create_time", width: "200" },
         {
           title: "操作",
           key: "action",

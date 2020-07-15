@@ -1,14 +1,20 @@
 <template>
   <div class="box">
     <Modal
-    width="1200"
+      width="1200"
       v-model="type.classify == 'createdCourse'"
       title="添加课节"
       @on-ok="createdCourse"
       @on-cancel="$parent.show = false"
       class-name="vertical-center-modal"
     >
-      <Form ref="formValidate" :model="form" :rules="ruleValidate" :label-width="80" style="maxHeight:500px;overflow-y:auto">
+      <Form
+        ref="formValidate"
+        :model="form"
+        :rules="ruleValidate"
+        :label-width="80"
+        style="maxHeight:500px;overflow-y:auto"
+      >
         <FormItem label="课程卡" prop="card_id">
           <Select v-model="form.card_id" placeholder="请选择" style="width:350px">
             <Option :value="list.id" v-for="(list,i) in courseCard" :key="i">{{list.card_name}}</Option>
@@ -78,14 +84,14 @@
                   <li
                     v-for="(k,i) in num"
                     :key="i"
-                    :class="{active:timeBlock(k-1) == 'ok'}"
+                    :class="{active:timeBlock(k-1) == 'ok',disabled:setDate(k)}"
                     @click="getNum(i,$event)"
                     v-if="k> 14"
                   ></li>
                 </ul>
                 <ul>
                   <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<63}"
+                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<63,disabled:setDate(k)}"
                     @click="getNum(i,$event)"
                     v-for="(k,i) in num*2"
                     v-if=" k > num"
@@ -94,7 +100,7 @@
                 </ul>
                 <ul>
                   <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<111}"
+                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<111,disabled:setDate(k)}"
                     @click="getNum(i,$event)"
                     v-for="(k,i) in num*3"
                     v-if=" k > num*2"
@@ -103,7 +109,7 @@
                 </ul>
                 <ul>
                   <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<159}"
+                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<159,disabled:setDate(k)}"
                     @click="getNum(i,$event)"
                     v-for="(k,i) in num*4"
                     v-if=" k > num*3"
@@ -112,7 +118,7 @@
                 </ul>
                 <ul>
                   <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<207}"
+                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<207,disabled:setDate(k)}"
                     @click="getNum(i,$event)"
                     v-for="(k,i) in num*5"
                     v-if=" k > num*4"
@@ -121,7 +127,7 @@
                 </ul>
                 <ul>
                   <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<255}"
+                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<255,disabled:setDate(k)}"
                     @click="getNum(i,$event)"
                     v-for="(k,i) in num*6"
                     v-if=" k > num*5"
@@ -130,7 +136,7 @@
                 </ul>
                 <ul>
                   <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<303}"
+                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<303,disabled:setDate(k)}"
                     @click="getNum(i,$event)"
                     v-for="(k,i) in num*7"
                     v-if=" k > num*6"
@@ -210,7 +216,84 @@ const { mapState, mapActions } = createNamespacedHelpers("schedustudent");
 export default {
   props: ["type"],
   computed: {
-    ...mapState(["teacherList", "courseCard"])
+    ...mapState(["teacherList", "courseCard"]),
+    setDate() {
+      return function(timeBlock) {
+        // var date = new Date();
+        // var day = date.getDay();
+        // var shi = date.getHours();
+        // var block = (day - 1) * 48 + (shi + 1) * 2;
+        // if (timeBlock >= 15 && timeBlock <= 48) {
+        //   if (day > 1) {
+        //     return true;
+        //   } else if (day == 1) {
+        //     if (block == timeBlock) {
+        //       if (block > timeBlock) {
+        //         return true;
+        //       }
+        //     }
+        //   }
+        // } else if (timeBlock >= 63 && timeBlock <= 96) {
+        //   if (day > 2) {
+        //     return true;
+        //   } else if (day == 2) {
+        //     if (block == timeBlock) {
+        //       if (block > timeBlock) {
+        //         return true;
+        //       }
+        //     }
+        //   }
+        // } else if (timeBlock >= 111 && timeBlock <= 144) {
+        //   if (day > 3) {
+        //     return true;
+        //   } else if (day == 3) {
+        //     if (block >= timeBlock) {
+        //       return true;
+        //     }
+        //   }
+        // } else if (timeBlock >= 159 && timeBlock <= 192) {
+        //   if (day > 4) {
+        //     return true;
+        //   } else if (day == 4) {
+        //     if (block == timeBlock) {
+        //       if (block > timeBlock) {
+        //         return true;
+        //       }
+        //     }
+        //   }
+        // } else if (timeBlock >= 207 && timeBlock <= 240) {
+        //   if (day > 5) {
+        //     return true;
+        //   } else if (day == 5) {
+        //     if (block == timeBlock) {
+        //       if (block > timeBlock) {
+        //         return true;
+        //       }
+        //     }
+        //   }
+        // } else if (timeBlock >= 255 && timeBlock <= 288) {
+        //   if (day > 6) {
+        //     return true;
+        //   } else if (day == 6) {
+        //     if (block == timeBlock) {
+        //       if (block > timeBlock) {
+        //         return true;
+        //       }
+        //     }
+        //   }
+        // } else if (timeBlock >= 303 && timeBlock <= 336) {
+        //   if (day > 7) {
+        //     return true;
+        //   } else if (day == 7) {
+        //     if (block == timeBlock) {
+        //       if (block > timeBlock) {
+        //         return true;
+        //       }
+        //     }
+        //   }
+        // }
+      };
+    }
   },
   mounted() {
     this.getCoursecard(this.type.obj.id);
@@ -283,8 +366,8 @@ export default {
             type: 4,
             form: { grade: this.form.grade, subject: this.form.subject }
           });
-        }else{
-          this.$Message.error('请先选择年级和科目')
+        } else {
+          this.$Message.error("请先选择年级和科目");
         }
       }
     },
@@ -468,6 +551,13 @@ export default {
 </script>
 
 <style scoped>
+/* 当前时间块 */
+.disabled {
+  background: #dfdddd;
+  cursor: no-drop;
+  pointer-events: none;
+}
+/* 当前时间块 */
 .required::after {
   content: "*";
   display: inline-block;

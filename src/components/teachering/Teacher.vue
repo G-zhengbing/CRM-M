@@ -14,7 +14,7 @@
         </Col>
         <Col span="3">
           <FormItem>
-            <Select v-model="seekForm.subject" @on-change="seekClick" placeholder="意向科目">
+            <Select v-model="seekForm.subject" @on-change="seekClick" placeholder="科目">
               <Option :value="i" v-for="(list,i) in subject" :key="i">{{list}}</Option>
             </Select>
           </FormItem>

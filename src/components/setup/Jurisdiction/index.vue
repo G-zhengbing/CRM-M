@@ -21,7 +21,9 @@
               <div class="li-title">{{item.display_name}}</div>
               <CheckboxGroup v-model="JurisdictionData" @on-change="getSelectData">
                 <template v-for="i in item.childrens">
-                  <Checkbox :label="i.id" class="item" style="padding-left:20px">{{i.display_name}}</Checkbox>
+                  <Checkbox :label="i.id" class="item" style="padding-left:20px">
+                    <Tooltip :content="i.name" placement="top">{{i.display_name}}</Tooltip>
+                  </Checkbox>
                   <Checkbox
                     v-if="i.childrens"
                     :disabled="selectSwitch"
@@ -30,7 +32,9 @@
                     v-for="ite in i.childrens"
                     :key="ite.id"
                     style="padding-left:20px"
-                  >{{ite.display_name}}</Checkbox>
+                  >
+                    <Tooltip :content="ite.name" placement="top">{{ite.display_name}}</Tooltip>
+                  </Checkbox>
                 </template>
               </CheckboxGroup>
             </li>
@@ -96,11 +100,11 @@ export default {
           role_id: this.userId,
           permission_ids: this.JurisdictionData.join(",")
         })
-      })
-      if(res.data.code == 200) {
-        this.$Message.success('修改成功')
+      });
+      if (res.data.code == 200) {
+        this.$Message.success("修改成功");
       } else {
-        this.$Message.error('修改失败')
+        this.$Message.error("修改失败");
       }
     },
     // 专题管理是否开放，每次点击会判断
@@ -120,7 +124,7 @@ export default {
         }
       });
       if (res.data.data.permission_ids == false) {
-        this.JurisdictionData = []
+        this.JurisdictionData = [];
       } else {
         this.JurisdictionData = res.data.data.permission_ids
           .split(",")

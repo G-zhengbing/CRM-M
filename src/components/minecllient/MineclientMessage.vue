@@ -888,36 +888,36 @@ export default {
     }),
     setSelectDate: function() {
       return function(item) {
-        var date = new Date();
-        if (
-          this.datePicker(date).split("-")[1] +
-            "-" +
-            this.datePicker(date).split("-")[2] ==
-          this.datePicker(this.createAuditionForm.date_time).split("-")[1] +
-            "-" +
-            this.datePicker(this.createAuditionForm.date_time).split("-")[2]
-        ) {
-          if (
-            this.datePickers(date).split(":")[0] * 1 >
-            item.split(":")[0] * 1
-          ) {
-            return true;
-          } else if (
-            this.datePickers(date).split(":")[0] * 1 ==
-            item.split(":")[0] * 1
-          ) {
-            if (
-              this.datePickers(date).split(":")[1] * 1 >
-                item.split(":")[1] * 1 ||
-              this.datePickers(date).split(":")[1] * 1 + 15 >
-                item.split(":")[1] * 1
-            ) {
-              return true;
-            }
-          } else {
-            return false;
-          }
-        }
+        // var date = new Date();
+        // if (
+        //   this.datePickers(date).split("-")[1] +
+        //     "-" +
+        //     this.datePickers(date).split("-")[2] ==
+        //   this.datePickers(this.createAuditionForm.date_time).split("-")[1] +
+        //     "-" +
+        //     this.datePickers(this.createAuditionForm.date_time).split("-")[2]
+        // ) {
+        //   if (
+        //     this.datePickers(date).split(":")[0] * 1 >
+        //     item.split(":")[0] * 1
+        //   ) {
+        //     return true;
+        //   } else if (
+        //     this.datePickers(date).split(":")[0] * 1 ==
+        //     item.split(":")[0] * 1
+        //   ) {
+        //     if (
+        //       this.datePickers(date).split(":")[1] * 1 >
+        //         item.split(":")[1] * 1 ||
+        //       this.datePickers(date).split(":")[1] * 1 + 15 >
+        //         item.split(":")[1] * 1
+        //     ) {
+        //       return true;
+        //     }
+        //   } else {
+        //     return false;
+        //   }
+        // }
       };
     }
   },

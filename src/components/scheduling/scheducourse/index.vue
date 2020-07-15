@@ -10,17 +10,17 @@
           </Col>
           <Col span="3">
             <FormItem>
-              <Input v-model="form.student_name" @on-change="seekClick" placeholder="请输入学员名称"></Input>
+              <Input v-model="form.student_name" @on-change="seekClick" placeholder="学员名称"></Input>
             </FormItem>
           </Col>
           <Col span="3">
             <FormItem>
-              <Input v-model="form.mobile" @on-change="seekMobile" placeholder="请输入学员手机号"></Input>
+              <Input v-model="form.mobile" @on-change="seekMobile" placeholder="学员手机号"></Input>
             </FormItem>
           </Col>
           <Col span="3">
             <FormItem>
-              <Select @on-change="seekClick" v-model="form.grade" placeholder="请选择年级">
+              <Select @on-change="seekClick" v-model="form.grade" placeholder="年级">
                 <Option :value="1">一年级</Option>
                 <Option :value="2">二年级</Option>
                 <Option :value="3">三年级</Option>
@@ -38,7 +38,7 @@
           </Col>
           <Col span="3">
             <FormItem>
-              <Select v-model="form.subject" @on-change="seekClick" placeholder="请选择科目">
+              <Select v-model="form.subject" @on-change="seekClick" placeholder="科目">
                 <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
               </Select>
             </FormItem>
@@ -64,13 +64,13 @@
                 <DatePicker
                   v-model="startAccount"
                   type="date"
-                  placeholder="首次课日期"
+                  placeholder="首节课日期"
                   @on-change="getTimes"
                 ></DatePicker>
                 <DatePicker
                   v-model="endAccount"
                   type="date"
-                  placeholder="首次课日期"
+                  placeholder="首节课日期"
                   @on-change="getTimes"
                 ></DatePicker>
               </div>

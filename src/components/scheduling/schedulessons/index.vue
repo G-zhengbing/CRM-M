@@ -5,22 +5,22 @@
         <Row class-name="exclusive">
           <Col span="3">
             <FormItem>
-              <Input v-model="form.course_name" placeholder="课程名称" @on-change="seekClick"></Input>
+              <Input v-model="form.lesson_name" placeholder="课节名称" @on-change="seekClick"></Input>
             </FormItem>
           </Col>
           <Col span="3">
             <FormItem>
-              <Input v-model="form.student_name" @on-change="seekClick" placeholder="请输入学员名称"></Input>
+              <Input v-model="form.student_name" @on-change="seekClick" placeholder="学员名称"></Input>
             </FormItem>
           </Col>
           <Col span="3">
             <FormItem>
-              <Input v-model="form.mobile" @on-change="seekMobile" placeholder="请输入学员手机号"></Input>
+              <Input v-model="form.mobile" @on-change="seekMobile" placeholder="学员手机号"></Input>
             </FormItem>
           </Col>
           <Col span="3">
             <FormItem>
-              <Select @on-change="seekClick" v-model="form.grade" placeholder="请选择年级">
+              <Select @on-change="seekClick" v-model="form.grade" placeholder="年级">
                 <Option :value="1">一年级</Option>
                 <Option :value="2">二年级</Option>
                 <Option :value="3">三年级</Option>
@@ -38,7 +38,7 @@
           </Col>
           <Col span="3">
             <FormItem>
-              <Select v-model="form.subject" @on-change="seekClick" placeholder="请选择科目">
+              <Select v-model="form.subject" @on-change="seekClick" placeholder="科目">
                 <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
               </Select>
             </FormItem>
@@ -52,7 +52,7 @@
           </Col>
           <Col span="3">
             <FormItem>
-              <Select v-model="form.status" @on-change="seekClick" placeholder="课程状态">
+              <Select v-model="form.status" @on-change="seekClick" placeholder="课状态">
                 <Option :value="1">待上课</Option>
                 <Option :value="2">上课中</Option>
                 <Option :value="3">已结束</Option>
@@ -145,8 +145,8 @@ export default {
         { title: "年级", key: "grade", width: "80" },
         { title: "科目", key: "subject", width: "80" },
         { title: "状态", key: "status", width: "80" },
-        { title: "开课日期", key: "lesson_date", width: "110" },
-        { title: "开课时间", key: "lesson_time", width: "160" },
+        { title: "上课日期", key: "lesson_date", width: "110" },
+        { title: "上课时间", key: "lesson_time", width: "160" },
         { title: "授课教师", key: "coach_name", width: "185" },
         {
           title: "回放地址",

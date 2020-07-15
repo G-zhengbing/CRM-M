@@ -95,7 +95,7 @@
                 </Select>
               </FormItem>
             </Col>
-            <Col span="2" v-if="num == 2">
+            <!-- <Col span="2" v-if="num == 2">
               <FormItem>
                 <Select
                   v-model="form.stage"
@@ -105,7 +105,7 @@
                   <Option v-for="(list,i) in stage" :key="i" :value="i">{{list}}</Option>
                 </Select>
               </FormItem>
-            </Col>
+            </Col> -->
             <Col span="2" v-if="num == 2">
               <FormItem>
                 <Select

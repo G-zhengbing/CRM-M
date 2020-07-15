@@ -1,23 +1,43 @@
 <template>
   <div class="box">
-    <Form :model="form" :label-width="20">
-      <Row>
-        <Col span="3">
+    <Form :model="form">
+      <Row  class-name="exclusive">
+        <Col span="2">
           <FormItem>
             <Input v-model="form.order_sn" placeholder="订单号" @on-change="seekClick"></Input>
           </FormItem>
         </Col>
-        <Col span="3">
+        <Col span="2">
+          <FormItem>
+            <Select v-model="form.status" @on-change="seekClick" placeholder="订单状态">
+              <Option :value="i" v-for="(list,i) in order_status" :key="i">{{list}}</Option>
+            </Select>
+          </FormItem>
+        </Col>
+        <Col span="6">
+          <FormItem>
+            <div class="dateplc">
+              <DatePicker
+                v-model="startDate"
+                type="date"
+                placeholder="订单创建时间"
+                @on-change="getTimes"
+              ></DatePicker>
+              <DatePicker v-model="endDate" type="date" placeholder="订单创建时间" @on-change="getTimes"></DatePicker>
+            </div>
+          </FormItem>
+        </Col>
+        <Col span="2">
           <FormItem>
             <Input v-model="form.name" placeholder="学员姓名" @on-change="seekClick"></Input>
           </FormItem>
         </Col>
-        <Col span="3">
+        <Col span="2">
           <FormItem>
             <Input v-model="form.mobile" placeholder="学员电话" @on-change="seekMobile"></Input>
           </FormItem>
         </Col>
-        <Col span="3">
+        <Col span="2">
           <FormItem>
             <Select v-model="form.market_sale_id" @on-change="seekClick" placeholder="创建人">
               <Option v-for="(list,i) in sale_list" :key="i" :value="list.id">{{list.login_name}}</Option>
@@ -25,7 +45,7 @@
             </Select>
           </FormItem>
         </Col>
-        <Col span="2">
+        <Col span="1">
           <Button type="primary" @click="clear">清除</Button>
         </Col>
       </Row>
@@ -75,6 +95,9 @@ export default {
   },
   data() {
     return {
+      startDate: "",
+      endDate: "",
+      order_status: storage.getDaiban().screen_list.order_status,
       sale_list: storage.getDaiban().sale_list,
       form: {},
       type: {},
@@ -130,6 +153,26 @@ export default {
   methods: {
     ...mapActions(["getMoneyList", "cancelOrder"]),
     ...mapMutations(["setCurrentPage"]),
+    //设置返回的时间
+    datePicker(time) {
+      var d = new Date(time);
+      let shi = d.getHours();
+      let fen = d.getMinutes();
+      let miao = d.getSeconds();
+      if (shi < 10) shi = "0" + shi;
+      if (fen < 10) fen = "0" + fen;
+      if (miao < 10) miao = "0" + miao;
+      d = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+      return d;
+    },
+    //订单创建时间
+    getTimes() {
+      if (this.startDate && this.endDate) {
+        this.form.start_date = this.datePicker(this.startDate);
+        this.form.end_date = this.datePicker(this.endDate);
+        this.seekClick();
+      }
+    },
     //手机号
     seekMobile() {
       if (this.form.mobile.length >= 4) {
@@ -160,6 +203,8 @@ export default {
     },
     clear() {
       this.form = {};
+      this.startDate = ""
+      this.endDate = ""
       this.seekClick();
     },
     //查询

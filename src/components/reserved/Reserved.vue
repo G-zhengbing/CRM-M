@@ -92,10 +92,10 @@
                 <DatePicker
                   v-model="startTime"
                   type="date"
-                  placeholder="提交时间"
+                  placeholder="创建时间"
                   @on-change="getTimes"
                 ></DatePicker>
-                <DatePicker v-model="endTime" type="date" placeholder="提交时间" @on-change="getTimes"></DatePicker>
+                <DatePicker v-model="endTime" type="date" placeholder="创建时间" @on-change="getTimes"></DatePicker>
               </div>
             </FormItem>
           </Col>
@@ -208,14 +208,21 @@ export default {
           { title: "上课日期", width: 120, key: "date_time" },
           { title: "上课时段", key: "time_block", width: 100 },
           { title: "状态", key: "appoint_status", width: 100 },
-          { title: "预约提交时间", key: "create_time", width: 200 },
-          { title: "备注", key: "note", tooltip: true, ellipsis: true },
+          {
+            title: "备注",
+            key: "note",
+            align: "center",
+            width: 120,
+            tooltip: true,
+            ellipsis: true
+          },
+          { title: "提交时间", key: "create_time", width: 200 },
           {
             title: "操作",
             key: "action",
             align: "center",
-            width:200,
-            fixed:'right',
+            width: 200,
+            fixed: "right",
             render: (h, params) => {
               return h("div", [
                 h(
@@ -280,13 +287,20 @@ export default {
           { title: "上课日期", width: 120, key: "date_time" },
           { title: "上课时段", key: "time_block", width: 100 },
           { title: "状态", key: "appoint_status", width: 100 },
-          { title: "预约提交时间", key: "create_time", width: 200 },
-          { title: "备注", key: "note", tooltip: true, ellipsis: true },
+          {
+            title: "备注",
+            key: "note",
+            align: "center",
+            width: 120,
+            tooltip: true,
+            ellipsis: true
+          },
+          { title: "提交时间", key: "create_time", width: 200 },
           {
             title: "操作",
             key: "action",
             align: "center",
-            fixed:'right',
+            fixed: "right",
             width: 200,
             render: (h, params) => {
               return h("div", [
@@ -370,13 +384,6 @@ export default {
           { title: "上课日期", width: 120, key: "date_time", align: "center" },
           { title: "上课时段", key: "time_block", width: 100, align: "center" },
           { title: "状态", key: "appoint_status", width: 100, align: "center" },
-          { title: "创建人", key: "create_user", width: 120, align: "center" },
-          {
-            title: "预约提交时间",
-            key: "create_time",
-            align: "center",
-            width: 200
-          },
           {
             title: "备注",
             key: "note",
@@ -384,6 +391,13 @@ export default {
             width: 120,
             tooltip: true,
             ellipsis: true
+          },
+          { title: "创建人", key: "create_user", width: 120, align: "center" },
+          {
+            title: "提交时间",
+            key: "create_time",
+            align: "center",
+            width: 200
           },
           {
             title: "操作",
