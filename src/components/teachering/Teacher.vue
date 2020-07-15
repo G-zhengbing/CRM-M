@@ -168,7 +168,7 @@
                 :on-format-error="handleFormatError"
                 :on-exceeded-size="handleMaxSize"
                 type="drag"
-                action="http://liveapi.canpoint.net/api/create_products"
+                action="//jsonplaceholder.typicode.com/posts/"
                 style="display: inline-block;width:58px;"
               >
                 <div style="width: 58px;height:58px;line-height: 58px;">
@@ -210,7 +210,7 @@
                 :on-format-error="handleFormatError2"
                 :on-exceeded-size="handleMaxSize2"
                 type="drag"
-                action="http://liveapi.canpoint.net/api/create_products"
+                action="//jsonplaceholder.typicode.com/posts/"
                 style="display: inline-block;width:58px;"
               >
                 <div style="width: 58px;height:58px;line-height: 58px;">
@@ -252,7 +252,7 @@
                 :on-format-error="handleFormatError4"
                 :on-exceeded-size="handleMaxSize4"
                 type="drag"
-                action="http://liveapi.canpoint.net/api/create_products"
+                action="//jsonplaceholder.typicode.com/posts/"
                 style="display: inline-block;width:58px;"
               >
                 <div style="width: 58px;height:58px;line-height: 58px;">
@@ -294,7 +294,7 @@
                 :on-format-error="handleFormatError5"
                 :on-exceeded-size="handleMaxSize5"
                 type="drag"
-                action="http://liveapi.canpoint.net/api/create_products"
+                action="//jsonplaceholder.typicode.com/posts/"
                 style="display: inline-block;width:58px;"
               >
                 <div style="width: 58px;height:58px;line-height: 58px;">
@@ -336,7 +336,7 @@
                 :on-format-error="handleFormatError7"
                 :on-exceeded-size="handleMaxSize7"
                 type="drag"
-                action="http://liveapi.canpoint.net/api/create_products"
+                action="//jsonplaceholder.typicode.com/posts/"
                 style="display: inline-block;width:58px;"
               >
                 <div style="width: 58px;height:58px;line-height: 58px;">
@@ -372,7 +372,7 @@
               ></Input>
             </FormItem>
           </Col>
-          <Col span="24">开放时间信息</Col>
+          <!-- <Col span="24">开放时间信息</Col>
           <Col span="24">
             <div class="content">
               <div class="content-left">
@@ -504,11 +504,11 @@
                 </div>
               </div>
             </div>
-          </Col>
+          </Col> -->
         </Row>
       </Form>
       <div slot="footer">
-        <Button :loading="confirmLoaing" type="primary" @click="createdTeacher('form')">确定</Button>
+        <Button type="primary" @click="createdTeacher('form')">确定</Button>
         <Button @click="handleReset('form')" style="margin-left: 8px">取消</Button>
       </div>
       <div slot="footer" style="display:none"></div>
@@ -828,7 +828,7 @@ export default {
               "avatar",
               this.uploadList[0] ? this.uploadList[0] : ""
             );
-            formData.append("time_block", this.acArr.join(","));
+            // formData.append("time_block", this.acArr.join(","));
             formData.append(
               "teacher_userinfo_desc",
               this.form.teacher_userinfo_desc
@@ -870,10 +870,11 @@ export default {
             if (this.uploadList.length == 0) {
               this.$Message.error("老师头像是必填的");
               return;
-            } else if (this.acArr.length == 0) {
-              this.$Message.error("开放时间是必选的");
-              return;
-            }
+            } 
+            // else if (this.acArr.length == 0) {
+            //   this.$Message.error("开放时间是必选的");
+            //   return;
+            // }
             var formData = new FormData();
             formData.append("name", this.form.name);
             formData.append("level", this.form.level);
@@ -883,7 +884,7 @@ export default {
             formData.append("subject", this.form.subject);
             formData.append("grade", this.form.grade.join(","));
             formData.append("avatar", this.uploadList[0]);
-            formData.append("time_block", this.acArr.join(","));
+            // formData.append("time_block", this.acArr.join(","));
             formData.append(
               "address_province_id",
               this.form.address_province_id

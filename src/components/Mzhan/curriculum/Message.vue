@@ -1,5 +1,4 @@
 <template>
-<!-- amend: 2020.04.30 LC 限制课程简介长度 -->
   <div class="shade">
     <Card>
       <p slot="title" v-if="$parent.isUpdata">编辑课程</p>
