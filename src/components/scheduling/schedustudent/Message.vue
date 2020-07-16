@@ -25,7 +25,7 @@
         </FormItem>
         <FormItem label="开课日期" prop="start_date">
           <span class="required"></span>
-          <DatePicker :options="optionsDate" type="date" placeholder="请选择" @on-change="getTimes"></DatePicker>
+          <DatePicker v-model="form.start_date" :options="optionsDate" type="date" placeholder="请选择" @on-change="getTimes"></DatePicker>
         </FormItem>
         <FormItem label="每周规律">
           <span class="required"></span>
@@ -301,10 +301,11 @@ export default {
   data() {
     return {
       optionsDate: {
-        disabledDate: date => {
-          return date && date.valueOf() < Date.now() - 86400000;
-        }
+        disabledDate: function(date) {
+          return date < new Date(this.start_time.getTime() + 60000);
+        }.bind(this)
       },
+      start_time:new Date(),
       setActive: [],
       acArr: [],
       showTimeBlock: false,
@@ -314,7 +315,9 @@ export default {
       uploadList: [],
       disableBtn: false,
       subject: storage.getDaiban().screen_list.subject,
-      form: {},
+      form: {
+        start_date: this.datePickerDate()
+      },
       ruleValidate: {
         card_id: [
           {
@@ -374,15 +377,15 @@ export default {
     getTimes(value) {
       this.form.start_date = this.datePicker(value);
     },
+    //设置当前的后一天
+    datePickerDate() {
+      var d = new Date();
+      d = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + (d.getDate() +1);
+      return d;
+    },
     //设置返回的时间
     datePicker(time) {
       var d = new Date(time);
-      let shi = d.getHours();
-      let fen = d.getMinutes();
-      let miao = d.getSeconds();
-      if (shi < 10) shi = "0" + shi;
-      if (fen < 10) fen = "0" + fen;
-      if (miao < 10) miao = "0" + miao;
       d = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
       return d;
     },

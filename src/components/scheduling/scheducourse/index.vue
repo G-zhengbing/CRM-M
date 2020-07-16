@@ -113,7 +113,7 @@ export default {
   },
   mounted() {
     this.isLoading = true;
-    this.getCourseList({}).then(() => {
+    this.getCourseList({page:1}).then(() => {
       this.isLoading = false;
     });
   },

@@ -263,6 +263,7 @@ export default {
           }
         }).then(res => {
           commit('setCourselist', res.data.data.resources)
+          commit('setCurrentpage',res.data.data.links.current_page)
           commit('setPagesize', res.data.data.links.per_page)
           commit('setTotal', res.data.data.links.total)
           resolve()

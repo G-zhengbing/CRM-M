@@ -118,7 +118,8 @@ export default {
       form: {
         lesson_time_start: this.datePicker(this.startAccount),
         lesson_time_end: this.datePicker(this.endAccount)
-      }
+      },
+      page:1
     }).then(() => {
       this.isLoading = false;
     });

@@ -49,17 +49,14 @@ export default {
           }
         }).then(res => {
           commit("setLessonsList", res.data.data.resources)
+          commit('setCurrentPage',res.data.data.links.current_page)
           commit('setPageSize',res.data.data.links.per_page)
           commit('setTotal',res.data.data.links.total)
-          commit('setCurrentPage',res.data.data.links.current_page)
           resolve()
         }).catch(e => {
           reject(e)
         })
       })
     }
-  },
-  getters: {
-
   }
 }
