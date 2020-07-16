@@ -297,6 +297,7 @@ export default {
   },
   mounted() {
     this.getCoursecard(this.type.obj.id);
+    this.form.start_date = this.datePickerDate(this.form.start_date)
   },
   data() {
     return {
@@ -380,8 +381,7 @@ export default {
     //设置当前的后一天
     datePickerDate() {
       var d = new Date();
-      d = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + (d.getDate() +1);
-      return d;
+      return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + (d.getDate() +1);
     },
     //设置返回的时间
     datePicker(time) {
