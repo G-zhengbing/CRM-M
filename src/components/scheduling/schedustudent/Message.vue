@@ -317,7 +317,8 @@ export default {
       disableBtn: false,
       subject: storage.getDaiban().screen_list.subject,
       form: {
-        start_date: this.datePickerDate()
+        start_date: this.datePickerDate(),
+        student_name:this.type.obj.student_name
       },
       ruleValidate: {
         card_id: [
@@ -514,6 +515,7 @@ export default {
           );
           formData.append("header_id", this.form.header_id);
           formData.append("times_block", arr);
+          formData.append("student_name", this.form.student_name);
           // formData.append(
           //   "uploadList",
           //   this.uploadList[0] ? this.uploadList[0] : ""

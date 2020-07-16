@@ -19,12 +19,7 @@
         </div>
       </div>
     </section>
-    <Modal
-      width="600"
-      v-model="showMessage"
-      title="批量导入线索"
-      @on-cancel="showMessage =false"
-    >
+    <Modal width="600" v-model="showMessage" title="批量导入线索" @on-cancel="showMessage =false">
       <div class="steps">
         <ul>
           <li>
@@ -80,15 +75,10 @@
       </Form>
       <div slot="footer">
         <Button type="text" size="large" @click="showMessage = false">取消</Button>
-        <Button type="primary" size="large" @click="importOk">确定</Button>
+        <Button :loading="loadingBtn" type="primary" size="large" @click="importOk">确定</Button>
       </div>
     </Modal>
-    <Modal
-      width="600"
-      v-model="showLook"
-      title="批量导入线索"
-      @on-cancel="showLook =false"
-    >
+    <Modal width="600" v-model="showLook" title="批量导入线索" @on-cancel="showLook =false">
       <List header="Header" footer="Footer" border>
         <ListItem v-for="(list,i) in item" :key="i">{{list?list:'暂无'}}</ListItem>
       </List>
@@ -120,6 +110,7 @@ export default {
   },
   data() {
     return {
+      loadingBtn: false,
       item: [],
       showLook: false,
       isLoading: false,
@@ -186,6 +177,7 @@ export default {
         return;
       }
       this.isLoading = true;
+      this.loadingBtn = true;
       var formData = new FormData();
       formData.append("file", this.uploadList[0]);
       formData.append("option", this.form.option);
@@ -210,6 +202,7 @@ export default {
           this.form = {};
         }
         this.isLoading = false;
+        this.loadingBtn = false;
       });
     },
     //查看失败数据
