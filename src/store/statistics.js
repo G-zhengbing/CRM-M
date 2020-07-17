@@ -42,5 +42,13 @@ export default {
     }
   },
   getters: {
+    // statisticsData(state){
+    //   var item = state.statisticsList
+
+    //   return item.map(i=>{
+    //     console.log(i.call_time)
+
+    //   })
+    // }
   }
 }

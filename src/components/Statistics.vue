@@ -16,6 +16,12 @@
               </li>
             </ul>
             <div class="dateplc" v-if="num == 'day'">
+              <Input
+                style="width: 200px"
+                v-model="form.call_name"
+                placeholder="销售"
+                @on-change="seekClick"
+              ></Input>
               <DatePicker
                 format="yyyy-MM-dd HH:mm"
                 v-model="startTime"
@@ -64,7 +70,8 @@ export default {
   computed: {
     ...mapState({
       data: state => state.statistics.statisticsList
-    })
+    }),
+    ...mapGetters(['statisticsData'])
   },
   data() {
     return {
@@ -79,6 +86,7 @@ export default {
   methods: {
     ...mapActions(["getsSatisticsList"]),
     clear() {
+      console.log(this.statisticsData)
       this.isLoading = true;
       this.endTime = "";
       this.startTime = "";
@@ -120,9 +128,9 @@ export default {
     setStatus() {
       if (this.num == "day") {
         this.columns = [
-          { title: "销售", key: "call_name" },
+          { title: "销售", key: "call_name"},
           { title: "库存", key: "clue_num" },
-          { title: "呼出总数", key: "call_second" },
+          { title: "呼出总数", key: "call_second",sortable: true ,width:115},
           { title: "呼出电话总量", key: "call_num" },
           { title: "有效呼出时长", key: "call_time" },
           { title: "接通电话数量", key: "valid_num" },
@@ -138,7 +146,7 @@ export default {
         this.columns = [
           { title: "销售", key: "call_name" },
           { title: "库存", key: "clue_num" },
-          { title: "呼出总数", key: "call_second" },
+          { title: "呼出总数", key: "call_second" ,sortable: true,width:115 },
           { title: "呼出电话总量", key: "call_num" },
           { title: "有效呼出时长", key: "call_time" },
           { title: "接通电话数量", key: "valid_num" },
@@ -155,7 +163,7 @@ export default {
         this.columns = [
           { title: "销售", key: "call_name" },
           { title: "库存", key: "clue_num" },
-          { title: "呼出总数", key: "call_second" },
+          { title: "呼出总数", key: "call_second" ,sortable: true ,width:115},
           { title: "呼出电话总量", key: "call_num" },
           { title: "有效呼出时长", key: "call_time" },
           { title: "接通电话数量", key: "valid_num" },

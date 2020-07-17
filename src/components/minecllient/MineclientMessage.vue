@@ -478,11 +478,12 @@
                 <img :src="imgName" style="width: 100%" />
               </Modal>
             </FormItem>
-          </Col> -->
-           <Col span="24">
+          </Col>-->
+          <Col span="24">
             <FormItem label="教师视频简介">
               <!-- <Input v-model="teacherDetailsForm.teacher_userinfo_video" placeholder="请输入视频链接"></Input> -->
-              <video class="video" controls="controls" :src="teacherDetailsForm.teacher_userinfo_video"></video>
+              <!-- <video class="video" controls="controls" :src="teacherDetailsForm.teacher_userinfo_video"></video> -->
+              <Button type="text" @click="goTeacherVideo">查看视频</Button>
             </FormItem>
             <FormItem label="教师资料简介">
               <Input
@@ -981,7 +982,13 @@ export default {
         },
         { title: "教授年级", key: "grade_ch", width: 300 },
         { title: "教授科目", key: "subject" },
-        { title: "创建时间", key: "create_time", width: 200 },
+        {
+          title: "教师简介",
+          key: "teacher_userinfo_desc",
+          width: 200,
+          tooltip: true,
+          ellipsis: true
+        },
         {
           title: "操作",
           key: "action",
@@ -994,7 +1001,8 @@ export default {
                 {
                   props: {
                     type: "text",
-                    size: "small"
+                    size: "small",
+                    disabled:params.row.teacher_userinfo_video?false:true
                   },
                   on: {
                     click: () => {
@@ -1002,7 +1010,7 @@ export default {
                     }
                   }
                 },
-                "详情"
+                "视频简介"
               ),
               h(
                 "Button",
@@ -1313,6 +1321,11 @@ export default {
       "getTeacherListN",
       "removeMineclient"
     ]),
+    //查看教师简介视频
+    goTeacherVideo() {
+      window.location.replace = this.teacherDetailsForm.teacher_userinfo_video;
+      // console.log(this.teacherDetailsForm.teacher_userinfo_video)
+    },
     //预览图片
     handleTeacherView(item) {
       this.imgName = item;
@@ -1320,8 +1333,9 @@ export default {
     },
     //教师详情
     teacherDetails(item) {
-      this.showTeacherDetails = true;
-      this.teacherDetailsForm = item;
+      if(item.teacher_userinfo_video){
+        window.open(item.teacher_userinfo_video)
+      }
     },
     //选择老师 查询
     seekSelectForm() {
