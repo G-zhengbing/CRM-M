@@ -419,12 +419,6 @@
         </div>
       </Modal>
     </template>
-    <SendSMS
-      v-if="MODtype=='SendSMS'"
-      :followForm="followForm"
-      :showMod="sms"
-      @changeShowMod="changeShowMod"
-    />
     <!--  -->
     <template>
       <Modal
@@ -634,7 +628,6 @@
         </div>
       </div>
     </div>
-    </Modal>-->
     <Loading v-show="Loading" />
   </div>
 </template>
@@ -689,14 +682,9 @@ export default {
     })
   },
   methods: {
-    // 关闭窗口状态
-    changeShowMod(val) {
-      this.sms = val;
-      this.MODtype = ""
-    },
     openSms() {
-      this.sms = true
-      this.MODtype = 'SendSMS'
+      this.$parent.MODtype = true
+      this.$parent.followForm = this.followForm
     },
     //跟进/订单
     createOrder() {
@@ -1204,7 +1192,6 @@ export default {
       time: null,
       isItem: false,
       sms: false,
-      MODtype: ""
     };
   }
 };
