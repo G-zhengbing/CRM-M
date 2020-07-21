@@ -124,6 +124,15 @@ export default {
       return data.map(element => {
         element.sex = gender.get(element.sex);
         element.level = level.get(element.level);
+        var phone = element.mobile.toString()
+        var str = phone.split('')
+        for (let i = 0; i < str.length; i++) {
+          if (i === 3 | i === 4 | i === 5 | i === 6) {
+            str[i] = '*'
+          }
+        }
+        element.mobile = str.join("")
+
         return element;
       });
     }

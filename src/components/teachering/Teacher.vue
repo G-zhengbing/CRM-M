@@ -504,7 +504,7 @@
                 </div>
               </div>
             </div>
-          </Col> -->
+          </Col>-->
         </Row>
       </Form>
       <div slot="footer">
@@ -656,6 +656,21 @@ export default {
                   },
                   on: {
                     click: () => {
+                      this.callOut(params.row);
+                    }
+                  }
+                },
+                "呼出"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
                       this.update(params.row);
                     }
                   }
@@ -689,9 +704,33 @@ export default {
       "getTeacherList",
       "createdTeachers",
       "getProvince",
-      "getCity"
+      "getCity",
+      "RingUp"
     ]),
     ...mapMutations(["setTeacherTypes", "setCurrentPage"]),
+    //呼出
+    callOut(item) {
+      this.update(item);
+      this.isLoading = true;
+      this.RingUp({ form: item })
+        .then(res => {
+          if (res.data.code == 200) {
+            this.$Message.success("呼出成功");
+          }
+          if (res.data.code == 1000) {
+            this.$Message.error({
+              content: res.data.error,
+              duration: 4
+            });
+          }
+          this.isLoading = false;
+        })
+        .catch(e => {
+          if (e) {
+            this.isLoading = false;
+          }
+        });
+    },
     //删除教师
     delete(item) {
       this.$Modal.confirm({
@@ -705,7 +744,10 @@ export default {
               this.$Message.success("删除成功");
             }
             this.isLoading = true;
-            this.getTeacherList({ ...this.seekForm, page:this.currentPage }).then(() => {
+            this.getTeacherList({
+              ...this.seekForm,
+              page: this.currentPage
+            }).then(() => {
               this.isLoading = false;
             });
           });
@@ -870,7 +912,7 @@ export default {
             if (this.uploadList.length == 0) {
               this.$Message.error("老师头像是必填的");
               return;
-            } 
+            }
             // else if (this.acArr.length == 0) {
             //   this.$Message.error("开放时间是必选的");
             //   return;

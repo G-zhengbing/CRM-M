@@ -1,7 +1,6 @@
 <template>
   <div>
     <DaibanMessage v-if="show" :type="type" ref="message" />
-  
       <div class="contaner">
         <ul class="tabs">
           <li @click="tab(1)" :class="[num == 1? 'active' : '']">
@@ -198,7 +197,6 @@
           class="ive-page"
         />
       </div>
- 
     <Loading v-show="isLoading" />
     <Modal
       width="800"

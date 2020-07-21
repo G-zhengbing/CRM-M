@@ -182,7 +182,8 @@ export default {
           method: "post",
           url: HUCHU,
           params: {
-            mobile: tel
+            mobile: tel,
+            id:form.id
           },
           headers: {
             "content-type": "application/x-www-form-urlencoded",

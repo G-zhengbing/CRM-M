@@ -358,7 +358,7 @@
             </Col>
             <Col span="24">
               <FormItem label="回访内容">
-                <Input @on-change="getShowStatus" v-model="vist_content" type="textarea" :rows="4" placeholder="请输入回访内容" />
+                <Input v-model="vist_content" type="textarea" :rows="4" placeholder="请输入回访内容" />
               </FormItem>
             </Col>
             <Col span="24">

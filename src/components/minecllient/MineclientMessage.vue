@@ -143,7 +143,6 @@
       </Form>
       <div slot="footer">
         <Button type="text" size="large" @click="colseReserved">取消</Button>
-        <!-- <Button type="primary" size="large" @click="audition">确定</Button> -->
       </div>
     </Modal>
     <!-- 新建预约试听 -->
@@ -307,179 +306,8 @@
     >
       <Form :form="teacherDetailsForm" label-position="top" style="height:520px;overflow-y:auto;">
         <Row class-name="exclusive">
-          <!-- <Col span="4">
-            <FormItem label="教师姓名" prop="name">
-              <Input v-model="teacherDetailsForm.name" placeholder="请输入教师姓名"></Input>
-            </FormItem>
-          </Col>
-          <Col span="4">
-            <FormItem label="性别" prop="sex">
-              <Select v-model="teacherDetailsForm.sex">
-                <Option :value="1">男</Option>
-                <Option :value="2">女</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span="4">
-            <FormItem label="联系方式" prop="mobile">
-              <Input v-model="teacherDetailsForm.mobile" placeholder="请输入联系方式"></Input>
-            </FormItem>
-          </Col>
-          <Col span="4">
-            <FormItem label="教授科目" prop="subject">
-              <Select v-model="teacherDetailsForm.subject">
-                <Option :value="i*1" v-for="(list,i) in subject" :key="i">{{list}}</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span="4">
-            <FormItem label="教授年级" prop="grade">
-              <Select multiple v-model="teacherDetailsForm.grade" :max-tag-count="1">
-                <Option :value="1">一年级</Option>
-                <Option :value="2">二年级</Option>
-                <Option :value="3">三年级</Option>
-                <Option :value="4">四年级</Option>
-                <Option :value="5">五年级</Option>
-                <Option :value="6">六年级</Option>
-                <Option :value="7">七年级</Option>
-                <Option :value="8">八年级</Option>
-                <Option :value="9">九年级</Option>
-                <Option :value="10">高一</Option>
-                <Option :value="11">高二</Option>
-                <Option :value="12">高三</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span="4">
-            <FormItem label="教师等级" prop="level">
-              <Select v-model="teacherDetailsForm.level">
-                <Option :value="1">中级</Option>
-                <Option :value="2">高级</Option>
-                <Option :value="3">特一级</Option>
-                <Option :value="4">特二级</Option>
-                <Option :value="5">特三级</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span="4">
-            <FormItem label="所在地区" prop="address_province_id">
-              <div class="dateplc">
-                <Select v-model="teacherDetailsForm.address_province_id" style="width:100px">
-                  <Option :value="list.Id" v-for="(list,i) in provinceList" :key="i">{{list.Name}}</Option>
-                </Select>
-                <Select v-model="teacherDetailsForm.address_city_id" style="width:100px">
-                  <Option :value="list.Id" v-for="(list,i) in city" :key="i">{{list.Name}}</Option>
-                </Select>
-              </div>
-            </FormItem>
-          </Col>
-          <Col span="4">
-            <FormItem label="classin账号" prop="classin_user">
-              <Input v-model="teacherDetailsForm.classin_user" placeholder="请输入classin账号"></Input>
-            </FormItem>
-          </Col>
-          <Col span="4">
-            <FormItem label="招商银行卡号" prop="bank_card_id">
-              <Input v-model="teacherDetailsForm.bank_card_id" placeholder="请输入16位招商银行卡号"></Input>
-            </FormItem>
-          </Col>
-          <Col span="4">
-            <FormItem label="招商银行开户行" prop="bank_card_open">
-              <Input v-model="teacherDetailsForm.bank_card_open" placeholder="请输入招商银行开户行"></Input>
-            </FormItem>
-          </Col>
-          <Col span="24">
-            <FormItem label="教授类型">
-              <RadioGroup v-model="teacherDetailsForm.type">
-                <Radio :label="1">班课</Radio>
-                <Radio :label="4">一对一</Radio>
-              </RadioGroup>
-            </FormItem>
-          </Col>
-          <Col span="4" style="display:flex" v-if="teacherDetailsForm.avatar">
-            <FormItem label="老师头像展示">
-              <div class="demo-upload-list">
-                <img :src="'http://liveapi.canpoint.net/'+teacherDetailsForm.avatar" />
-                <div class="demo-upload-list-cover">
-                  <Icon
-                    type="ios-eye-outline"
-                    @click.native="handleTeacherView('http://liveapi.canpoint.net/'+teacherDetailsForm.avatar)"
-                  ></Icon>
-                </div>
-              </div>
-              <Modal title="预览图" v-model="visible">
-                <img :src="imgName" style="width: 100%" />
-              </Modal>
-            </FormItem>
-          </Col>
-          <Col span="4" style="display:flex" v-if="teacherDetailsForm.bank_card_pic">
-            <FormItem label="招商银行卡展示">
-              <div class="demo-upload-list">
-                <img :src="'http://liveapi.canpoint.net/'+teacherDetailsForm.bank_card_pic" />
-                <div class="demo-upload-list-cover">
-                  <Icon
-                    type="ios-eye-outline"
-                    @click.native="handleTeacherView('http://liveapi.canpoint.net/'+teacherDetailsForm.bank_card_pic)"
-                  ></Icon>
-                </div>
-              </div>
-              <Modal title="预览图" v-model="visible">
-                <img :src="imgName" style="width: 100%" />
-              </Modal>
-            </FormItem>
-          </Col>
-           <Col span="4" style="display:flex" v-if="teacherDetailsForm.identity_id_pic1">
-            <FormItem label="身份证正面照展示">
-              <div class="demo-upload-list">
-                <img :src="'http://liveapi.canpoint.net/'+teacherDetailsForm.identity_id_pic1" />
-                <div class="demo-upload-list-cover">
-                  <Icon
-                    type="ios-eye-outline"
-                    @click.native="handleTeacherView('http://liveapi.canpoint.net/'+teacherDetailsForm.identity_id_pic1)"
-                  ></Icon>
-                </div>
-              </div>
-              <Modal title="预览图" v-model="visible">
-                <img :src="imgName" style="width: 100%" />
-              </Modal>
-            </FormItem>
-          </Col>
-          <Col span="4" style="display:flex" v-if="teacherDetailsForm.identity_id_pic2">
-            <FormItem label="身份证背面照展示">
-              <div class="demo-upload-list">
-                <img :src="'http://liveapi.canpoint.net/'+teacherDetailsForm.identity_id_pic2" />
-                <div class="demo-upload-list-cover">
-                  <Icon
-                    type="ios-eye-outline"
-                    @click.native="handleTeacherView('http://liveapi.canpoint.net/'+teacherDetailsForm.identity_id_pic2)"
-                  ></Icon>
-                </div>
-              </div>
-              <Modal title="预览图" v-model="visible">
-                <img :src="imgName" style="width: 100%" />
-              </Modal>
-            </FormItem>
-          </Col>
-         <Col span="4" style="display:flex"  v-if="teacherDetailsForm.teacher_nvq_pic">
-            <FormItem label="教师资格证展示">
-              <div class="demo-upload-list">
-                <img :src="'http://liveapi.canpoint.net/'+teacherDetailsForm.teacher_nvq_pic" />
-                <div class="demo-upload-list-cover">
-                  <Icon
-                    type="ios-eye-outline"
-                    @click.native="handleTeacherView('http://liveapi.canpoint.net/'+teacherDetailsForm.teacher_nvq_pic)"
-                  ></Icon>
-                </div>
-              </div>
-              <Modal title="预览图" v-model="visible">
-                <img :src="imgName" style="width: 100%" />
-              </Modal>
-            </FormItem>
-          </Col>-->
           <Col span="24">
             <FormItem label="教师视频简介">
-              <!-- <Input v-model="teacherDetailsForm.teacher_userinfo_video" placeholder="请输入视频链接"></Input> -->
-              <!-- <video class="video" controls="controls" :src="teacherDetailsForm.teacher_userinfo_video"></video> -->
               <Button type="text" @click="goTeacherVideo">查看视频</Button>
             </FormItem>
             <FormItem label="教师资料简介">
@@ -732,8 +560,6 @@
         </Row>
       </Form>
       <div slot="footer">
-        <!-- <Button type="text" size="large" @click="colseReserved">取消</Button>
-        <Button type="primary" size="large" @click="createConnect">确定</Button>-->
       </div>
     </Modal>
     <!-- 移出 -->
@@ -1055,7 +881,6 @@ export default {
         },
         {
           title: "收费形式",
-          // key: "wechat_nick_name",
           render: (h, params) => {
             return h(
               "span",
@@ -1068,10 +893,8 @@ export default {
             );
           }
         },
-        // { title: "收费模式", key: "class_hour" },
         {
           title: "科目",
-          // key: "give_class_hour",
           render: (h, params) => {
             return h(
               "span",
@@ -1132,7 +955,6 @@ export default {
         },
         {
           title: "收费形式",
-          // key: "wechat_nick_name",
           render: (h, params) => {
             return h(
               "span",
@@ -1145,10 +967,8 @@ export default {
             );
           }
         },
-        // { title: "收费模式", key: "class_hour" },
         {
           title: "科目",
-          // key: "give_class_hour",
           render: (h, params) => {
             return h(
               "span",
@@ -1324,7 +1144,6 @@ export default {
     //查看教师简介视频
     goTeacherVideo() {
       window.location.replace = this.teacherDetailsForm.teacher_userinfo_video;
-      // console.log(this.teacherDetailsForm.teacher_userinfo_video)
     },
     //预览图片
     handleTeacherView(item) {
@@ -1372,7 +1191,7 @@ export default {
     //选择老师/呼出
     callOut(item) {
       this.showLoading = true;
-      this.RingUp({ form: { tel: item.mobile } })
+      this.RingUp({ form: item })
         .then(res => {
           if (res.data.code == 200) {
             this.$Message.success("呼出成功");
@@ -1534,7 +1353,6 @@ export default {
     //重置交接单form表单
     handleReset(name) {
       this.$refs[name].resetFields();
-      // this.colseReserved();
     },
     //转介绍/移入
     immigration() {
@@ -2015,14 +1833,7 @@ export default {
       if (shi < 10) shi = "0" + shi;
       if (fen < 10) fen = "0" + fen;
       if (miao < 10) miao = "0" + miao;
-      d =
-        // d.getFullYear() +
-        // "-" +
-        // (d.getMonth() + 1) +
-        // "-" +
-        // d.getDate() +
-        // "-" +
-        shi + ":" + fen;
+      d = shi + ":" + fen;
       return d;
     }
   }
