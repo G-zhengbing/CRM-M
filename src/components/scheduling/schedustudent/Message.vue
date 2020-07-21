@@ -16,16 +16,75 @@
         style="maxHeight:500px;overflow-y:auto"
       >
         <FormItem label="课程卡" prop="card_id">
-          <Select v-model="form.card_id" placeholder="请选择" style="width:350px">
+          <Select v-model="form.card_id" placeholder="请选择" style="width:225px">
             <Option :value="list.id" v-for="(list,i) in courseCard" :key="i">{{list.card_name}}</Option>
           </Select>
         </FormItem>
-        <FormItem label="周数量" prop="times">
-          <Input v-model="form.times" placeholder="请输入课节数" style="width:200px"></Input>
+        <Row>
+          <Col span="3">
+            <FormItem label="年级" prop="grade">
+              <Select v-model="form.grade" placeholder="请选择" style="width:80px">
+                <Option :value="1">一年级</Option>
+                <Option :value="2">二年级</Option>
+                <Option :value="3">三年级</Option>
+                <Option :value="4">四年级</Option>
+                <Option :value="5">五年级</Option>
+                <Option :value="6">六年级</Option>
+                <Option :value="7">七年级</Option>
+                <Option :value="8">八年级</Option>
+                <Option :value="9">九年级</Option>
+                <Option :value="10">高一</Option>
+                <Option :value="11">高二</Option>
+                <Option :value="12">高三</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="3">
+            <FormItem label="科目" prop="subject">
+              <Select v-model="form.subject" placeholder="请选择" style="width:80px">
+                <Option :value="i" v-for="(list,i) in subject" :key="i">{{list}}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+        </Row>
+        <FormItem label="授课教师" prop="coach_id">
+          <Select
+            v-model="form.coach_id"
+            placeholder="请选择"
+            filterable
+            style="width:225px"
+            @on-open-change="getTeacherData"
+          >
+            <Option :value="list.id" v-for="(list,i) in teacherList" :key="i">{{list.name}}</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="班主任" prop="header_id">
+          <Select v-model="form.header_id" placeholder="请选择" style="width:225px">
+            <Option :value="list.id" v-for="(list,i) in header_list" :key="i">{{list.login_name}}</Option>
+          </Select>
         </FormItem>
         <FormItem label="开课日期" prop="start_date">
           <span class="required"></span>
-          <DatePicker v-model="form.start_date" :options="optionsDate" type="date" placeholder="请选择" @on-change="getTimes"></DatePicker>
+          <DatePicker
+           style="width:225px"
+            v-model="form.start_date"
+            :options="optionsDate"
+            type="date"
+            placeholder="请选择"
+            @on-change="getTimes"
+          ></DatePicker>
+        </FormItem>
+        <FormItem label="周数量" prop="times">
+          <Input v-model="form.times" placeholder="请输入课节数" style="width:225px"></Input>
+        </FormItem>
+        <FormItem label="课程简介" prop="course_desc">
+          <Input
+            style="width:600px"
+            v-model="form.course_desc"
+            type="textarea"
+            :autosize="{minRows: 3,maxRows: 5}"
+            placeholder="请输入课程简介"
+          ></Input>
         </FormItem>
         <FormItem label="每周规律">
           <span class="required"></span>
@@ -147,52 +206,6 @@
             </div>
           </div>
         </FormItem>
-        <FormItem label="年级" prop="grade">
-          <Select v-model="form.grade" placeholder="请选择" style="width:200px">
-            <Option :value="1">一年级</Option>
-            <Option :value="2">二年级</Option>
-            <Option :value="3">三年级</Option>
-            <Option :value="4">四年级</Option>
-            <Option :value="5">五年级</Option>
-            <Option :value="6">六年级</Option>
-            <Option :value="7">七年级</Option>
-            <Option :value="8">八年级</Option>
-            <Option :value="9">九年级</Option>
-            <Option :value="10">高一</Option>
-            <Option :value="11">高二</Option>
-            <Option :value="12">高三</Option>
-          </Select>
-        </FormItem>
-        <FormItem label="科目" prop="subject">
-          <Select v-model="form.subject" placeholder="请选择" style="width:200px">
-            <Option :value="i" v-for="(list,i) in subject" :key="i">{{list}}</Option>
-          </Select>
-        </FormItem>
-        <FormItem label="授课教师" prop="coach_id">
-          <Select
-            v-model="form.coach_id"
-            placeholder="请选择"
-            filterable
-            style="width:200px"
-            @on-open-change="getTeacherData"
-          >
-            <Option :value="list.id" v-for="(list,i) in teacherList" :key="i">{{list.name}}</Option>
-          </Select>
-        </FormItem>
-        <FormItem label="课程简介" prop="course_desc">
-          <Input
-            style="width:600px"
-            v-model="form.course_desc"
-            type="textarea"
-            :autosize="{minRows: 3,maxRows: 5}"
-            placeholder="请输入课程简介"
-          ></Input>
-        </FormItem>
-        <FormItem label="班主任" prop="header_id">
-          <Select v-model="form.header_id" placeholder="请选择" style="width:200px">
-            <Option :value="list.id" v-for="(list,i) in header_list" :key="i">{{list.login_name}}</Option>
-          </Select>
-        </FormItem>
       </Form>
       <div slot="footer">
         <Button type="text" size="large" @click="$parent.show = false">取消</Button>
@@ -297,7 +310,7 @@ export default {
   },
   mounted() {
     this.getCoursecard(this.type.obj.id);
-    this.form.start_date = this.datePickerDate(this.form.start_date)
+    this.form.start_date = this.datePickerDate(this.form.start_date);
   },
   data() {
     return {
@@ -306,7 +319,7 @@ export default {
           return date < new Date(this.start_time.getTime() + 60000);
         }.bind(this)
       },
-      start_time:new Date(),
+      start_time: new Date(),
       setActive: [],
       acArr: [],
       showTimeBlock: false,
@@ -318,7 +331,7 @@ export default {
       subject: storage.getDaiban().screen_list.subject,
       form: {
         start_date: this.datePickerDate(),
-        student_name:this.type.obj.student_name
+        student_name: this.type.obj.student_name
       },
       ruleValidate: {
         card_id: [
@@ -382,7 +395,9 @@ export default {
     //设置当前的后一天
     datePickerDate() {
       var d = new Date();
-      return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + (d.getDate() +1);
+      return (
+        d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + (d.getDate() + 1)
+      );
     },
     //设置返回的时间
     datePicker(time) {
@@ -516,6 +531,10 @@ export default {
           formData.append("header_id", this.form.header_id);
           formData.append("times_block", arr);
           formData.append("student_name", this.form.student_name);
+          formData.append(
+            "mobile",
+            JSON.stringify(this.type.obj.mobile).substr(-4)
+          );
           // formData.append(
           //   "uploadList",
           //   this.uploadList[0] ? this.uploadList[0] : ""

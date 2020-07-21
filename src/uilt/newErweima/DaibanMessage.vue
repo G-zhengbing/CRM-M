@@ -358,7 +358,7 @@
             </Col>
             <Col span="24">
               <FormItem label="回访内容">
-                <Input v-model="vist_content" type="textarea" :rows="4" placeholder="请输入回访内容" />
+                <Input @on-change="getShowStatus" v-model="vist_content" type="textarea" :rows="4" placeholder="请输入回访内容" />
               </FormItem>
             </Col>
             <Col span="24">
@@ -689,6 +689,11 @@ export default {
     })
   },
   methods: {
+    getShowStatus(){
+      console.log(this.type.classify)
+      console.log(this.$parent.show)
+      console.log(this.vist_content)
+    },
     // 关闭窗口状态
     changeShowMod(val) {
       this.sms = val;
@@ -705,7 +710,7 @@ export default {
     },
     //跟进/移出
     followUpRemoveOk() {
-      if (this.vist_content == "") {
+      if (!this.vist_content) {
         this.$Message.error("请先填写回访内容");
         return;
       }
@@ -716,7 +721,6 @@ export default {
             this.$Message.success("移出成功");
           }
           this.isLoading = false;
-          this.showRemove = false;
           this.$parent.show = false;
           this.followUpColse();
         }

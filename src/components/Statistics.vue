@@ -12,12 +12,10 @@
       </li>
     </ul>
     <div class="dateplc" v-if="num == 'day'">
-      <!-- <Input
-                style="width: 200px"
-                v-model="form.call_name"
-                placeholder="销售"
-                @on-change="seekClick"
-      ></Input>-->
+      <Select v-model="form.sale_id" @on-change="seekClick" placeholder="销售" style="width:200px">
+        <Option v-for="(list,i) in sale_list" :key="i" :value="list.id">{{list.login_name}}</Option>
+        <Option value="all">全部</Option>
+      </Select>
       <DatePicker
         format="yyyy-MM-dd HH:mm"
         v-model="startTime"
@@ -67,6 +65,7 @@ export default {
   },
   data() {
     return {
+      sale_list: storage.getDaiban().sale_list,
       form: {},
       endTime: "",
       startTime: "",
@@ -81,6 +80,7 @@ export default {
       this.isLoading = true;
       this.endTime = "";
       this.startTime = "";
+      this.form = {}
       this.getsSatisticsList({ status: this.num }).then(res => {
         this.isLoading = false;
       });
@@ -124,88 +124,118 @@ export default {
     setStatus() {
       if (this.num == "day") {
         this.columns = [
-          { title: "销售", key: "call_name",fixed:'left',width:100 },
-          { title: "库存", key: "clue_num" ,fixed:'left',width:100},
-          { title: "呼出总数", key: "call_second", sortable: true, width: 115 ,fixed:'left'},
-          { title: "呼出电话总量", key: "call_num" ,fixed:'left',width:130},
+          { title: "销售", key: "call_name", fixed: "left", width: 100 },
+          { title: "库存", key: "clue_num", fixed: "left", width: 100 },
+          {
+            title: "呼出总数",
+            key: "call_second",
+            sortable: true,
+            width: 115,
+            fixed: "left"
+          },
+          { title: "呼出电话总量", key: "call_num", fixed: "left", width: 130 },
           {
             title: "有效呼出时长",
             key: "call_time",
             sortable: true,
             width: 140
           },
-          { title: "接通电话数量", key: "valid_num",width:130 },
+          { title: "接通电话数量", key: "valid_num", width: 130 },
           {
             title: "平均通话时长",
             key: "avg_time",
             sortable: true,
             width: 140
           },
-          { title: "接通率", key: "call_rate",width:80},
-          { title: "今日新分总量", key: "assign_num",width:130 },
-          { title: "今日新分呼出电话总量", key: "assign_call_num" ,width:180},
-          { title: "今日新分接通电话总量", key: "assin_valid_call" ,width:180},
-          { title: "今日新分接通率", key: "assign_rate" ,width:150},
-          { title: "新增一对一预约量", key: "appoint_num" ,width:150}
+          { title: "接通率", key: "call_rate", width: 80 },
+          { title: "今日新分总量", key: "assign_num", width: 130 },
+          { title: "今日新分呼出电话总量", key: "assign_call_num", width: 180 },
+          {
+            title: "今日新分接通电话总量",
+            key: "assin_valid_call",
+            width: 180
+          },
+          { title: "今日新分接通率", key: "assign_rate", width: 150 },
+          { title: "新增一对一预约量", key: "appoint_num", width: 150 }
         ];
       } else if (this.num == "week") {
         this.columns = [
-          { title: "销售", key: "call_name" ,fixed:'left',width:100},
-          { title: "库存", key: "clue_num" ,fixed:'left',width:100},
-          { title: "呼出总数", key: "call_second", sortable: true, width: 115 ,fixed:'left'},
-          { title: "呼出电话总量", key: "call_num",fixed:'left',width:130 },
+          { title: "销售", key: "call_name", fixed: "left", width: 100 },
+          { title: "库存", key: "clue_num", fixed: "left", width: 100 },
+          {
+            title: "呼出总数",
+            key: "call_second",
+            sortable: true,
+            width: 115,
+            fixed: "left"
+          },
+          { title: "呼出电话总量", key: "call_num", fixed: "left", width: 130 },
           {
             title: "有效呼出时长",
             key: "call_time",
             sortable: true,
             width: 140
           },
-          { title: "接通电话数量", key: "valid_num",width:130 },
+          { title: "接通电话数量", key: "valid_num", width: 130 },
           {
             title: "平均通话时长",
             key: "avg_time",
             sortable: true,
             width: 160
           },
-          { title: "接通率", key: "call_rate",width:80 },
-          { title: "本周新分总量", key: "assign_num" ,width:130},
-          { title: "本周新分呼出电话总量", key: "assign_call_num" ,width:180},
-          { title: "本周新分接通电话总量", key: "assin_valid_call" ,width:180},
-          { title: "本周新分接通率", key: "assign_rate" ,width:150},
-          { title: "新增一对一预约量", key: "appoint_num" ,width:150},
-          { title: "本周新增取消一对一预约量", key: "cancel_num" ,width:210}
+          { title: "接通率", key: "call_rate", width: 80 },
+          { title: "本周新分总量", key: "assign_num", width: 130 },
+          { title: "本周新分呼出电话总量", key: "assign_call_num", width: 180 },
+          {
+            title: "本周新分接通电话总量",
+            key: "assin_valid_call",
+            width: 180
+          },
+          { title: "本周新分接通率", key: "assign_rate", width: 150 },
+          { title: "新增一对一预约量", key: "appoint_num", width: 150 },
+          { title: "本周新增取消一对一预约量", key: "cancel_num", width: 210 }
         ];
       } else {
         this.columns = [
-          { title: "销售", key: "call_name" ,fixed:'left',width:100},
-          { title: "库存", key: "clue_num" ,fixed:'left',width:100},
-          { title: "呼出总数", key: "call_second", sortable: true, width: 115 ,fixed:'left'},
-          { title: "呼出电话总量", key: "call_num" ,fixed:'left',width:130},
+          { title: "销售", key: "call_name", fixed: "left", width: 100 },
+          { title: "库存", key: "clue_num", fixed: "left", width: 100 },
+          {
+            title: "呼出总数",
+            key: "call_second",
+            sortable: true,
+            width: 115,
+            fixed: "left"
+          },
+          { title: "呼出电话总量", key: "call_num", fixed: "left", width: 130 },
           {
             title: "有效呼出时长",
             key: "call_time",
             sortable: true,
             width: 140
           },
-          { title: "接通电话数量", key: "valid_num" ,width:130},
+          { title: "接通电话数量", key: "valid_num", width: 130 },
           {
             title: "平均通话时长",
             key: "avg_time",
             sortable: true,
             width: 140
           },
-          { title: "接通率", key: "call_rate" ,width:80},
-          { title: "本月新分总量", key: "assign_num" ,width:130},
-          { title: "本月新分呼出电话总量", key: "assign_call_num" ,width:180},
-          { title: "本月新分接通电话总量", key: "assin_valid_call" ,width:180},
-          { title: "本月新分接通率", key: "assign_rate" ,width:150},
+          { title: "接通率", key: "call_rate", width: 80 },
+          { title: "本月新分总量", key: "assign_num", width: 130 },
+          { title: "本月新分呼出电话总量", key: "assign_call_num", width: 180 },
+          {
+            title: "本月新分接通电话总量",
+            key: "assin_valid_call",
+            width: 180
+          },
+          { title: "本月新分接通率", key: "assign_rate", width: 150 },
           {
             title: "本月累计新增一对一预约量（取消的不计）",
             key: "appoint_num",
-            width:220
+            width: 220
           },
-          { title: "累计有效试听数量", key: "be_appoint_num",width:150 },
-          { title: "累计取消试听数量", key: "cancel_appoint_num" ,width:150}
+          { title: "累计有效试听数量", key: "be_appoint_num", width: 150 },
+          { title: "累计取消试听数量", key: "cancel_appoint_num", width: 150 }
         ];
       }
     },

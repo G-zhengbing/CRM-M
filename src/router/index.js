@@ -44,7 +44,12 @@ const router = new Router({
     {
       path: '/main',
       component: ()=>import('../components/entrancefile/main/index.vue'),
-      children: [{
+      children: [
+        {
+          path: '/main/template',
+          component: ()=>import('../components/template/index.vue')
+        },
+        {
           path: '/main/bookcode',
           component: ()=>import('../components/Mzhan/bookcoed/index.vue')
         },

@@ -1178,6 +1178,8 @@ export default {
           }
           this.addLessonsForm.schedule_id = this.type.obj.id;
           this.addLessonsForm.times_block = arr.join(",");
+          this.addLessonsForm.student_name = this.type.obj.student_name
+          this.addLessonsForm.student_name = JSON.stringify(this.type.obj.mobile).substr(-4)
           this.setCreatedlessons({ form: this.addLessonsForm }).then(res => {
             this.lessonsDisableBtn = false;
             if (!res.data.ret) {
