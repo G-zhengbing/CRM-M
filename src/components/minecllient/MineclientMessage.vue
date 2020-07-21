@@ -79,7 +79,6 @@
         :form="orderForm"
         label-position="left"
         style="height:450px;overflow-y:auto;"
-        :label-width="20"
       >
         <FormItem label="基本信息"></FormItem>
         <div class="procude">
@@ -110,9 +109,7 @@
           </div>
         </div>
         <FormItem label="支付信息"></FormItem>
-        <FormItem>
-          <Table border :columns="orderColumns" :data="orderPay" height="100"></Table>
-        </FormItem>
+        <Table border :columns="orderColumns" :data="orderPay" height="100"></Table>
       </Form>
       <div slot="footer">
         <Button type="text" size="large" @click="showOrder = false">取消</Button>
@@ -953,6 +950,9 @@ export default {
       });
     }
   },
+  destroyed() {
+    this.$parent.type.classify = 'followUp'
+  },
   data() {
     return {
       // 教师详情
@@ -1002,7 +1002,7 @@ export default {
                   props: {
                     type: "text",
                     size: "small",
-                    disabled:params.row.teacher_userinfo_video?false:true
+                    disabled: params.row.teacher_userinfo_video ? false : true
                   },
                   on: {
                     click: () => {
@@ -1333,8 +1333,8 @@ export default {
     },
     //教师详情
     teacherDetails(item) {
-      if(item.teacher_userinfo_video){
-        window.open(item.teacher_userinfo_video)
+      if (item.teacher_userinfo_video) {
+        window.open(item.teacher_userinfo_video);
       }
     },
     //选择老师 查询

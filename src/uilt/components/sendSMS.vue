@@ -4,7 +4,7 @@
     <Modal
       class="modal"
       width="40"
-      v-model="sms"
+      v-model="$parent.MODtype"
       title="发送信息"
       :closable="false"
       :mask-closable="false"
@@ -95,7 +95,8 @@ export default {
 					});
 					if (res.data.code == 200) {
 						this.$Message.success("操作成功");
-						this.$emit("changeShowMod", false);
+            // this.$emit("changeShowMod", false);
+            this.$parent.MODtype = false
 					} else if (res.data.code == 100001) {
 						this.$Message.error(res.data.error);
 					}
@@ -107,11 +108,12 @@ export default {
     // 关闭短信弹窗
     closeSms() {
 			this.$refs["formValidate"].resetFields();
-      this.$emit("changeShowMod", false);
+      // this.$emit("changeShowMod", false);
+      this.$parent.MODtype = false
     }
 	},
 	created() {
-		this.getSMSTem()
+    this.getSMSTem()
 	}
 };
 </script>

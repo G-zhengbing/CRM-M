@@ -152,6 +152,7 @@
       </div>
     </Modal>
     <Loading v-show="isLoading" />
+    <SendSMS v-if="MODtype" :followForm="followForm" />
     <MineclientMessage :type="type" v-if="showMine" />
     <DaibanMessage :type="type" v-if="show" />
   </div>
@@ -201,6 +202,8 @@ export default {
   },
   data() {
     return {
+      MODtype: false,
+      followForm: {},
       // <Shift>
       shiftLoading: false,
       shiftForm: {
