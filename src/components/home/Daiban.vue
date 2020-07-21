@@ -200,6 +200,8 @@
       </div>
  
     <Loading v-show="isLoading" />
+    <SendSMS v-if="MODtype" :followForm="followForm" />
+    <MineclientMessage :type="type" v-if="showMine" />
     <Modal
       width="800"
       v-model="showVisit"
@@ -219,6 +221,7 @@ import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import DaibanMessage from "../../uilt/newErweima/DaibanMessage";
 import storage from "../../uilt/storage";
 import Loading from "../../uilt/loading/loading";
+import MineclientMessage from "../minecllient/MineclientMessage";
 export default {
   mounted() {
     this.getReferList().then(()=>{
@@ -239,10 +242,13 @@ export default {
   },
   components: {
     DaibanMessage,
+    MineclientMessage,
     Loading
   },
   data() {
     return {
+      showMine: false,
+      MODtype: false,
       showVisitData:[],
       visitColumns: [
         { title: "回访内容", key: "visit_content" },

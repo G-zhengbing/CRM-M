@@ -124,6 +124,8 @@
         <Button type="text" size="large" @click="showVisit = false">取消</Button>
       </div>
     </Modal>
+    <SendSMS v-if="MODtype" :followForm="followForm" />
+    <MineclientMessage :type="type" v-if="showMine" />
     <Loading v-show="isLoading" />
   </div>
 </template>
@@ -133,10 +135,12 @@ import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import Loading from "../uilt/loading/loading";
 import storage from "../uilt/storage";
 import DaibanMessage from "../uilt/newErweima/DaibanMessage";
+import MineclientMessage from "./minecllient/MineclientMessage";
 export default {
   components: {
     Loading,
-    DaibanMessage
+    DaibanMessage,
+    MineclientMessage
   },
   mounted() {
     this.setCurrentPage(1);
@@ -147,6 +151,8 @@ export default {
   },
   data() {
     return {
+      showMine: false,
+      MODtype: false,
       // 回访次数弹窗数据
       showVisit: false,
       visitColumns: [
