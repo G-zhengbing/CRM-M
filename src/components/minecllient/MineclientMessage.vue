@@ -79,7 +79,6 @@
         :form="orderForm"
         label-position="left"
         style="height:450px;overflow-y:auto;"
-        :label-width="80"
       >
         <FormItem label="基本信息"></FormItem>
         <div class="procude">
@@ -950,6 +949,9 @@ export default {
         this.showLoading = false;
       });
     }
+  },
+  destroyed() {
+    this.$parent.type.classify = 'followUp'
   },
   data() {
     return {
