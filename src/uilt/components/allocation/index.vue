@@ -18,8 +18,6 @@
 import { mapState, mapMutations } from "vuex";
 import qs from "qs";
 import { MASSDISTRIBUTION,CLASSTEACH } from "@/uilt/url/url";
-import PayingStudent from "@/store/payingstudent/index";
-// 这里需要用户具体信息，然后通过userIndex传来的选中的哪个数据，配合接口做分配，等.jpg
 export default {
 	props: {
 		title: {

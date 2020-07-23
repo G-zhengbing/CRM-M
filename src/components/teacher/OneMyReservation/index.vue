@@ -242,7 +242,6 @@ import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import { APPOINTMENTVIPCLASSLIST } from "@/uilt/url/url";
 import qs from "qs";
 import storage from "@/uilt/storage";
-import OneMyReservation from "@/store/onemyreservation";
 export default {
   computed: {
     ...mapState({

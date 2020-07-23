@@ -306,7 +306,6 @@ import { MYRESERVATION } from "@/uilt/url/url";
 import qs from "qs";
 import storage from "@/uilt/storage";
 
-import MyReservation from "@/store/myreservation";
 export default {
   computed: {
     ...mapState({

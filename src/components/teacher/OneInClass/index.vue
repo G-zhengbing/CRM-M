@@ -112,7 +112,6 @@ import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import { INCLASS } from "@/uilt/url/url";
 import qs from "qs";
 
-import OneInClass from "@/store/oneinclass";
 export default {
   computed: {
     ...mapState({
@@ -122,8 +121,8 @@ export default {
   data() {
     return {
       isLoading: false, // loading开关
-      columns: OneInClass.state.columns1,
-      dataList: OneInClass.state.data,
+      columns: [],
+      dataList: [],
       value: "name1", // 判断卡片选择状态
       mode: [], // 存放用户数据
       total: 100,
@@ -156,42 +155,42 @@ export default {
     // 点击选项卡切换触发
     changeTab(value) {
       this.value = value;
-      if (this.value === "name1") {
-        this.columns = OneInClass.state.columns1;
-        this.start_type = 1;
-        this.mode.start_type = this.start_type;
-        this.getUserData();
-      } else if (this.value === "name2") {
-        this.columns = OneInClass.state.columns2;
-        this.start_type = 2;
-        this.mode.start_type = this.start_type;
-        this.getUserData();
-      } else if (this.value === "name3") {
-        this.columns = OneInClass.state.columns3;
-        this.start_type = 3;
-        this.mode.start_type = this.start_type;
-        this.getUserData();
-      } else if (this.value === "name4") {
-        this.columns = OneInClass.state.columns4;
-        this.start_type = 4;
-        this.mode.start_type = this.start_type;
-        this.getUserData();
-      } else if (this.value === "name5") {
-        this.columns = OneInClass.state.columns4;
-        this.start_type = 5;
-        this.mode.start_type = this.start_type;
-        this.getUserData();
-      } else if (this.value === "name6") {
-        this.columns = OneInClass.state.columns4;
-        this.start_type = 6;
-        this.mode.start_type = this.start_type;
-        this.getUserData();
-      } else if (this.value === "name7") {
-        this.columns = OneInClass.state.columns4;
-        this.start_type = 7;
-        this.mode.start_type = this.start_type;
-        this.getUserData();
-      }
+      // if (this.value === "name1") {
+      //   this.columns = OneInClass.state.columns1;
+      //   this.start_type = 1;
+      //   this.mode.start_type = this.start_type;
+      //   this.getUserData();
+      // } else if (this.value === "name2") {
+      //   this.columns = OneInClass.state.columns2;
+      //   this.start_type = 2;
+      //   this.mode.start_type = this.start_type;
+      //   this.getUserData();
+      // } else if (this.value === "name3") {
+      //   this.columns = OneInClass.state.columns3;
+      //   this.start_type = 3;
+      //   this.mode.start_type = this.start_type;
+      //   this.getUserData();
+      // } else if (this.value === "name4") {
+      //   this.columns = OneInClass.state.columns4;
+      //   this.start_type = 4;
+      //   this.mode.start_type = this.start_type;
+      //   this.getUserData();
+      // } else if (this.value === "name5") {
+      //   this.columns = OneInClass.state.columns4;
+      //   this.start_type = 5;
+      //   this.mode.start_type = this.start_type;
+      //   this.getUserData();
+      // } else if (this.value === "name6") {
+      //   this.columns = OneInClass.state.columns4;
+      //   this.start_type = 6;
+      //   this.mode.start_type = this.start_type;
+      //   this.getUserData();
+      // } else if (this.value === "name7") {
+      //   this.columns = OneInClass.state.columns4;
+      //   this.start_type = 7;
+      //   this.mode.start_type = this.start_type;
+      //   this.getUserData();
+      // }
     },
     async getUserData() {
       this.isLoading = true;

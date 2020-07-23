@@ -158,9 +158,6 @@
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import { CALLOUT, USERTRACK, GETACCOUNTSFOLLOW } from "@/uilt/url/url";
 import qs from "qs";
-
-import PayingStudent from "@/store/payingstudent/index";
-
 export default {
   props: {
     row: {

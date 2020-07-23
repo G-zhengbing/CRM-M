@@ -31,7 +31,6 @@ import axios from "axios";
 import Payingstudent from './payingstudent/index'
 import selectState from './selectState'
 import currentPage from './currentPage'
-import classStudents from './classstudents'
 import learningReport from './learningReport'
 import {
   GENJIN,
@@ -141,7 +140,6 @@ export default new Vuex.Store({
     scheduteachers,//学员管理
     importorder,//导入订单
     learningReport, // 学情报告
-    classStudents, // 班课学员
     currentPage, // 储存当前页面信息
     selectState, // 教务/搜索信息
     Payingstudent, // 教务/付费学员

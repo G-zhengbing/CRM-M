@@ -28,13 +28,11 @@
 </template>
 
 <script>
-import Course from "@/store/course";
-
 export default {
   data() {
     return {
-      columns: Course.state.columns1,
-      dataList: Course.state.data1
+      columns: [],
+      dataList: []
     };
   }
 };
