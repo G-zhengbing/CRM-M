@@ -230,6 +230,10 @@ const router = new Router({
           component: () => import('@/components/Marketing/PublicMark/ChannelCode')
         },
         {
+          path: '/main/smsrecord', // 营销,短信记录
+          component: () => import('@/components/Marketing/sms-record')
+        },
+        {
           path: '/main/pageanalysis', // 数据，流量分析，页面分析
           component: () => import('@/components/data/flowAnalysis/pageAnalysis')
         },
