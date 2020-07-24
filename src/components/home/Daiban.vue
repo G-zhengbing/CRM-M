@@ -130,7 +130,7 @@
                 </Select>
               </FormItem>
             </Col>
-            <Col span="6">
+            <Col span="5">
               <FormItem>
                 <div class="dateplc">
                   <DatePicker v-model="startTime" type="date" placeholder="注册时间" @on-change="getTimes"></DatePicker>
@@ -138,7 +138,7 @@
                 </div>
               </FormItem>
             </Col>
-            <Col span="6" v-if="num == 2">
+            <Col span="5" v-if="num == 2">
               <FormItem>
                 <div class="dateplc">
                   <DatePicker v-model="startTime2" type="date" placeholder="分配时间" @on-change="getTimes2"></DatePicker>

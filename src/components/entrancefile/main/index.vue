@@ -146,7 +146,7 @@ export default {
   margin-left: 40px;
 }
 .cms_special {
-  height: 130px !important;
+  height: auto !important;
 }
 .teacheing li :hover {
   color: #2d8cf0;

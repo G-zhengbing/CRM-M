@@ -132,8 +132,8 @@ export default {
             "content-type": "application/x-www-form-urlencoded",
             Authorization: "bearer " + storage.get()
           },
-          params:{
-            page:state.tuiCurrent
+          params: {
+            page: state.tuiCurrent
           }
         }).then(res => {
           commit("setTuiCurrent", res.data.data.links.current_page)
@@ -214,7 +214,7 @@ export default {
           params: {
             ...form,
             city: cityId,
-            channels_id:channels_id? channels_id :""
+            channels_id: channels_id ? channels_id : ""
           },
           headers: {
             "content-type": "application/x-www-form-urlencoded",
@@ -262,6 +262,12 @@ export default {
       ])
       return data.map(item => {
         item.status = maps.get(item.status);
+        return item
+      })
+    },
+    qudaoData(state) {
+      return state.qudaoList.map(item => {
+        item.mobile = item.mobile.toString().substr(0, 3) + '****' + item.mobile.toString().substr(7)
         return item
       })
     }

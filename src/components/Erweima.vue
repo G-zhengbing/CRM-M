@@ -39,7 +39,7 @@
             </div>
           </FormItem>
         </Col>
-        <Col span="2">
+        <Col span="4">
           <Button type="primary" @click="seek">查询</Button>
           <Button @click="clear">清空</Button>
         </Col>

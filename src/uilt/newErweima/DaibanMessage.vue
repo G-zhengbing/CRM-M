@@ -149,7 +149,7 @@
               </FormItem>
             </Col>
             <Col span="6">
-              <FormItem label="意向度" style="margin-left: 10px" :label-width="20">
+              <FormItem label="意向度" style="margin-left: 10px" >
                 <RadioGroup v-model="type.data.intention_option">
                     <Radio label="1">高</Radio>
                     <Radio label="2">中</Radio>
