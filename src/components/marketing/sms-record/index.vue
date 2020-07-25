@@ -1,6 +1,7 @@
 <template>
   <div class="sms-record">
     <header>
+      <Button type="primary" style="margin-bottom: 20px;" @click="showModel=true">群发短信</Button>
       <Form ref="formItem" :model="formItem" inline>
         <FormItem prop="name">
           <Input v-model="formItem.name" placeholder="模板名称"></Input>
@@ -30,58 +31,108 @@
         @changePages="changePages"
       />
     </main>
+    <Send-SMS v-if="showModel"></Send-SMS>
+     <Loading v-show="isLoading" />
   </div>
 </template>
 
 <script>
+import sendSMS from './send-SMS'
 export default {
+  components: {
+    'Send-SMS': sendSMS
+  },
   data() {
     return {
+      isLoading: false,
+      showModel: false,
       formItem: {},
       columns: [
         {
           type: "selection",
           width: 60,
+          fixed: "left",
           align: "center",
         },
         {
           title: "发送者",
           key: "student_name",
+          width: 100,
           align: "center",
+          fixed: "left",
         },
         {
           title: "发送时间",
           key: "student_name",
+          width: 100,
           align: "center",
+          fixed: "left",
         },
         {
           title: "模板名称",
           key: "student_name",
+          width: 120,
+          align: "center",
+          fixed: "left",
+        },
+        {
+          title: "模板类型",
+          key: "student_name",
+          width: 100,
+          align: "center",
+        },
+        {
+          title: "模板内容",
+          key: "student_name",
+          width: 220,
+          align: "center",
+        },
+        {
+          title: "发送渠道",
+          key: "student_name",
+          width: 100,
+          align: "center",
+        },
+        {
+          title: "渠道范围",
+          key: "student_name",
+          width: 100,
+          align: "center",
+        },
+        {
+          title: "发送条件",
+          key: "student_name",
+          width: 120,
           align: "center",
         },
         {
           title: "发送数量",
           key: "student_name",
+          width: 100,
           align: "center",
         },
         {
           title: "接收数量",
           key: "student_name",
+          width: 100,
           align: "center",
         },
         {
           title: "点击链接数",
           key: "student_name",
+          width: 100,
           align: "center",
         },
         {
           title: "预约成功数",
           key: "student_name",
+          width: 100,
           align: "center",
         },
         {
           title: "购课数",
           key: "student_name",
+          width: 100,
           align: "center",
         },
       ],

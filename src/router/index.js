@@ -223,6 +223,10 @@ const router = new Router({
           path: '/main/smsallot', // 信息分配
           component: () => import('@/components/setup/smsAllot')
         },
+        {
+          path: '/main/smsMarketing', // 信息分配
+          component: () => import('@/components/setup/SMS-Marketing')
+        },
 
         // 营销
         {
