@@ -249,10 +249,8 @@
 <script>
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import { CLASSSTUDENTS } from "@/uilt/url/url";
-
 import qs from "qs";
 
-import classstudents from "@/store/classstudents";
 export default {
   computed: {
     ...mapState({

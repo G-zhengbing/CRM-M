@@ -280,10 +280,7 @@
 <script>
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import { PAYINGSTUDENT, CLASSTEACH } from "@/uilt/url/url";
-
 import qs from "qs";
-
-import PayingStudent from "@/store/payingstudent/index";
 export default {
   data() {
     return {

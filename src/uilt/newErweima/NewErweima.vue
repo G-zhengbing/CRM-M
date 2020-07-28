@@ -196,7 +196,7 @@
             <div>
               <TablePlus
                 :columns="columns"
-                :data="qudaoList"
+                :data="qudaoData"
                 :total="total"
                 :currentPage="currentPage"
                 :pageSize="pageSize"
@@ -216,7 +216,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
+import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import Loading from "../loading/loading";
 import TablePlus from "../table/TablePlus";
 import storage from "../storage";
@@ -231,6 +231,7 @@ export default {
     TablePlus
   },
   computed: {
+    ...mapGetters(['qudaoData']),
     ...mapState({
       newForm: state => state.erweima.newForm,
       cityList: state => state.erweima.cityList,

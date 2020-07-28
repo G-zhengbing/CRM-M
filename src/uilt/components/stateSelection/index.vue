@@ -29,9 +29,6 @@
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import { UPDATELEARNINGSTATE } from "@/uilt/url/url";
 import qs from "qs";
-
-// import inclass from "@/store/inclass";
-
 export default {
   props: {
     classify: {
