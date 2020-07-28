@@ -954,7 +954,7 @@ export default {
         this.$Message.error("时间块是必填的");
       } else {
         for (var i = 0; i < this.dataArr.length; i++) {
-          if (!this.dataArr[i].week) {
+          if (this.dataArr[i].week.toString() == '') {
             this.$Message.error("周不能为空");
           } else if (!this.dataArr[i].start_time) {
             this.$Message.error("开始时间不能为空");
