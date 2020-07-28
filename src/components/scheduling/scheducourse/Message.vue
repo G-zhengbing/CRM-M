@@ -122,9 +122,9 @@
         <FormItem class="keep-left">
           <span style="color:red">您当前可用课时为 : {{lessonsCourseCard}}</span>
         </FormItem>
-        <FormItem label="课节名称" prop="lesson_name">
+        <!-- <FormItem label="课节名称" prop="lesson_name">
           <Input v-model="addLessonsForm.lesson_name" placeholder="课节名称" style="width:200px"></Input>
-        </FormItem>
+        </FormItem> -->
         <FormItem label="周数量" prop="times">
           <Input v-model="addLessonsForm.times" placeholder="请输入课节数" style="width:200px"></Input>
         </FormItem>
