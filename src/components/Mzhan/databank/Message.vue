@@ -40,7 +40,7 @@
                 <input v-model="item.file_url" type="hidden">
                 <span style="width:150px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" v-show="item.file_name" :title="item.file_name">{{"已上传:"+item.file_name}}</span>
                 <div style="width:30px;">
-                  <i><Icon type="ios-trash-outline" @click="deleData(i)"/></i>
+                  <i class="delete-icon"><Icon type="ios-trash-outline" @click="deleData(i)"/></i>
                 </div>
               </li>
             </ul>
@@ -205,65 +205,6 @@ export default {
 .box-form{
   height: 468px;
   overflow-y: auto;
-}
-.catalog ul li i{
-  font-size: 20px;
-  height: 100%;
-  line-height: 40px;
-  cursor: pointer;
-  display: none;
-  position: relative;
-}
-.catalog ul li span.filevideo input{
-  position: absolute;
-  opacity: 0;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-}
-.catalog ul li:hover i{
-  display: block;
-}
-.catalog ul li span.filevideo{
-  position: relative;
-  margin: 0 10px;
-  height: 30px;
-  border: 1px solid #ccc;
-  width: 230px;
-  text-align: center;
-}
-.catalog ul li span.filetitle{
-  margin: 0 10px;
-}
-.catalog ul li span.filename{
-  width: 200px;
-  color: #aaa5a5;
-}
-.catalog ul li{
-  width: 100%;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  margin-top:5px;
-}
-.catalog ul{
-  display: flex;
-  flex-direction: column;
-}
-.catalog p{
-  width: 100%;
-  height: 40px;
-  border: 1px solid #ccc;
-  color:#6699ff;
-  line-height: 40px;
-  text-align: center;
-  cursor: pointer;
-}
-.catalog{
-  display: flex;
-  flex-direction: column;
 }
 .demo-upload-list{
   display: inline-block;

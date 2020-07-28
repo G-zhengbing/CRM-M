@@ -1,5 +1,5 @@
 <template>
-  <div class="box" ref="box">
+  <div class="box">
     <ul class="tabs">
       <li @click="tab('day')" :class="[num == 'day'? 'active' : '']">
         <span>今日</span>
@@ -11,26 +11,26 @@
         <span>本月</span>
       </li>
     </ul>
-    <div class="dateplc" v-if="num == 'day'">
+    <div class="dateplc" v-if="num == 'day'" style="margin-bottom:20px">
       <Select v-model="form.sale_id" @on-change="seekClick" placeholder="销售" style="width:200px">
         <Option v-for="(list,i) in sale_list" :key="i" :value="list.id">{{list.login_name}}</Option>
         <Option value="all">全部</Option>
       </Select>
       <DatePicker
-        format="yyyy-MM-dd HH:mm"
+        format="yyyy-MM-dd"
         v-model="startTime"
-        type="datetime"
+        type="date"
         placeholder="分配时间"
         style="width: 200px"
-        @on-ok="getTimes"
+        @on-change="getTimes"
       ></DatePicker>
       <DatePicker
-        format="yyyy-MM-dd HH:mm"
+        format="yyyy-MM-dd"
         v-model="endTime"
-        type="datetime"
+        type="date"
         placeholder="分配时间"
         style="width: 200px"
-        @on-ok="getTimes"
+        @on-change="getTimes"
       ></DatePicker>
       <Button style="margin-left:20px" type="primary" @click="clear">清除</Button>
     </div>
@@ -80,7 +80,7 @@ export default {
       this.isLoading = true;
       this.endTime = "";
       this.startTime = "";
-      this.form = {}
+      this.form = {};
       this.getsSatisticsList({ status: this.num }).then(res => {
         this.isLoading = false;
       });
@@ -156,7 +156,9 @@ export default {
             width: 180
           },
           { title: "今日新分接通率", key: "assign_rate", width: 150 },
-          { title: "新增一对一预约量", key: "appoint_num", width: 150 }
+          { title: "新增一对一预约量", key: "appoint_num", width: 150 },
+          { title: "有效试听量", key: "be_appoint_num", width: 150 },
+          { title: "取消试听数量", key: "cancel_num", width: 150 }
         ];
       } else if (this.num == "week") {
         this.columns = [
@@ -192,7 +194,8 @@ export default {
             width: 180
           },
           { title: "本周新分接通率", key: "assign_rate", width: 150 },
-          { title: "新增一对一预约量", key: "appoint_num", width: 150 },
+          { title: "本周新增一对一预约量", key: "appoint_num", width: 180 },
+          { title: "本周有效试听量", key: "be_appoint_num", width: 150 },
           { title: "本周新增取消一对一预约量", key: "cancel_num", width: 210 }
         ];
       } else {
@@ -235,7 +238,7 @@ export default {
             width: 220
           },
           { title: "累计有效试听数量", key: "be_appoint_num", width: 150 },
-          { title: "累计取消试听数量", key: "cancel_appoint_num", width: 150 }
+          { title: "累计取消试听数量", key: "cancel_num", width: 150 }
         ];
       }
     },
@@ -253,39 +256,3 @@ export default {
   }
 };
 </script>
-<style scoped>
-/* tabs */
-.tabs li.active span {
-  color: #2d8cf0;
-}
-.tabs li.active {
-  border: 1px solid #ccc;
-  border-bottom: 1px solid #fff;
-}
-.main-section .main-section-bottom {
-  margin-top: 0px !important;
-}
-.tabs li {
-  height: 100%;
-  line-height: 35px;
-  margin-right: 30px;
-  width: 100px;
-  text-align: center;
-  margin-top: 1px;
-  cursor: pointer;
-  box-sizing: border-box;
-}
-.tabs {
-  width: 100%;
-  height: 35px;
-  display: flex;
-  border-bottom: 1px solid #ccc;
-  margin-bottom: 20px;
-  margin-top: 10px;
-}
-/* tabs */
-.dateplc {
-  display: flex;
-  margin: 10px 0;
-}
-</style>

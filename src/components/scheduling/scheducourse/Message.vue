@@ -1,135 +1,27 @@
 <template>
   <div class="box">
-    <!-- <Modal
-      class="aaa"
-      width="800"
-      v-model="type.classify == 'addcourse'"
-      :title="$parent.isUpdate? '编辑课程':'新增课程'"
-      scrollable
-      @on-ok="createdCourse"
-      @on-cancel="$parent.show = false"
-    >
-      <Form :model="addcourseForm" :rules="ruleValidate" :label-width="80">
-        <FormItem label="授课类型" prop="gender">
-          <RadioGroup v-model="addcourseForm.gender">
-            <Radio :label="1">班课</Radio>
-            <Radio :label="2">一对一</Radio>
-            <Radio :label="3">试听课</Radio>
-          </RadioGroup>
-        </FormItem>
-        <FormItem label="课程类型" prop="gender">
-          <RadioGroup v-model="addcourseForm.gender">
-            <Radio :label="1">标准课</Radio>
-            <Radio :label="2">公开课</Radio>
-          </RadioGroup>
-        </FormItem>
-        <FormItem label="课程名称" prop="name">
-          <Input v-model="addcourseForm.name" placeholder="请输入课程名称"></Input>
-        </FormItem>
-        <FormItem label="年级" prop="city">
-          <Select v-model="addcourseForm.city" placeholder="请选择">
-            <Option :value="1">一年级</Option>
-            <Option :value="2">二年级</Option>
-            <Option :value="3">三年级</Option>
-            <Option :value="4">四年级</Option>
-            <Option :value="5">五年级</Option>
-            <Option :value="6">六年级</Option>
-            <Option :value="7">七年级</Option>
-            <Option :value="8">八年级</Option>
-            <Option :value="9">九年级</Option>
-            <Option :value="10">高一</Option>
-            <Option :value="11">高二</Option>
-            <Option :value="12">高三</Option>
-          </Select>
-        </FormItem>
-        <FormItem label="科目" prop="city">
-          <Select v-model="addcourseForm.city" placeholder="请选择">
-            <Option :value="i" v-for="(list,i) in subject" :key="i">{{list}}</Option>
-          </Select>
-        </FormItem>
-        <FormItem label="课程封面展示" v-if="this.addcourseForm.assess_image">
-          <div class="demo-upload-list">
-            <img :src="'http://liveapi.canpoint.net/'+ addcourseForm.assess_image" />
-            <div class="demo-upload-list-cover">
-              <Icon
-                type="ios-eye-outline"
-                @click.native="handleView('http://liveapi.canpoint.net/'+addcourseForm.assess_image)"
-              ></Icon>
-            </div>
-          </div>
-          <Modal title="预览图" v-model="visible">
-            <img :src="imgName" style="width: 100%" />
-          </Modal>
-        </FormItem>
-        <FormItem label="课程封面" prop="avatar" class="active_span">
-          <template>
-            <div class="demo-upload-list" v-for="(item,i) in uploadList" :key="i">
-              <img :src="item.url" />
-              <div class="demo-upload-list-cover">
-                <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
-              </div>
-            </div>
-          </template>
-          <Upload
-            ref="upload"
-            :show-upload-list="false"
-            :format="['jpg','gif','png']"
-            :max-size="2048"
-            :before-upload="handleBeforeUpload"
-            :on-format-error="handleFormatError"
-            :on-exceeded-size="handleMaxSize"
-            type="drag"
-            action="http://liveapi.canpoint.net/api/create_products"
-            style="display: inline-block;width:58px;"
-          >
-            <div style="width: 58px;height:58px;line-height: 58px;">
-              <Icon type="ios-camera" size="20"></Icon>
-            </div>
-          </Upload>
-        </FormItem>
-        <FormItem label="课程简介" prop="desc">
-          <Input
-            v-model="addcourseForm.desc"
-            type="textarea"
-            :autosize="{minRows: 3,maxRows: 5}"
-            placeholder="请输入课程简介"
-          ></Input>
-        </FormItem>
-        <FormItem label="班主任" prop="city">
-          <Select v-model="addcourseForm.city" placeholder="请选择">
-            <Option value="beijing">New York</Option>
-            <Option value="shanghai">London</Option>
-            <Option value="shenzhen">Sydney</Option>
-          </Select>
-        </FormItem>
-        <FormItem label="课程有效期">
-          <FormItem prop="date">
-            <DatePicker type="date" placeholder="请选择" v-model="addcourseForm.date"></DatePicker>
-          </FormItem>
-        </FormItem>
-      </Form>
-      <div slot="footer">
-        <Button type="text" size="large" @click="$parent.show = false">取消</Button>
-        <Button :loading="disableBtn" type="primary" size="large" @click="handleSubmit">确定</Button>
-      </div>
-    </Modal>--
     <!-- 一对一编辑-->
     <Modal width="900" v-model="updateLessons" @on-cancel="updateLessons = false" title="编辑">
       <Form v-if="updateLessons" :model="updateLessonsForm" :label-width="80">
         <FormItem label="时间">
           <span class="required" style="margin-left:30px;"></span>
-          <Select v-model="updateLessonsForm.start_time" style="width:150px">
-            <Option :value="list" v-for="(list,i) in timeNum" :key="i">{{list}}</Option>
-          </Select>
+          <TimePicker
+            @on-change="setEndTime()"
+            v-model="updateLessonsForm.start_time"
+            format="HH:mm"
+            placeholder="开始时间"
+            style="width: 112px;margin-right:15px"
+          ></TimePicker>
+          <TimePicker
+            v-model="lessonsForm_end_time"
+            format="HH:mm"
+            placeholder="结束时间"
+            style="width: 112px"
+          ></TimePicker>
         </FormItem>
         <FormItem label="日期">
           <span class="required" style="margin-left:30px;"></span>
-          <DatePicker
-            v-model="updateLessonsForm.lesson_date"
-            type="date"
-            placeholder="请选择"
-            @on-change="setDate"
-          ></DatePicker>
+          <DatePicker v-model="updateLessonsForm.lesson_date" type="date" placeholder="请选择"></DatePicker>
         </FormItem>
         <FormItem label="授课教师">
           <span class="required"></span>
@@ -227,17 +119,11 @@
         :rules="lessonsRuleValidate"
         :label-width="80"
       >
+        <FormItem class="keep-left">
+          <span style="color:red">您当前可用课时为 : {{lessonsCourseCard}}</span>
+        </FormItem>
         <FormItem label="课节名称" prop="lesson_name">
           <Input v-model="addLessonsForm.lesson_name" placeholder="课节名称" style="width:200px"></Input>
-        </FormItem>
-        <FormItem label="课程卡" prop="card_id" style="width:400px">
-          <Select v-model="addLessonsForm.card_id" placeholder="请选择">
-            <Option
-              :value="list.id"
-              v-for="(list,i) in lessonsCourseCard"
-              :key="i"
-            >{{list.card_name}}</Option>
-          </Select>
         </FormItem>
         <FormItem label="周数量" prop="times">
           <Input v-model="addLessonsForm.times" placeholder="请输入课节数" style="width:200px"></Input>
@@ -247,127 +133,55 @@
           <DatePicker type="date" placeholder="请选择" @on-change="getTimes"></DatePicker>
         </FormItem>
         <FormItem label="授课教师" prop="coach_id">
-          <Select v-model="addLessonsForm.coach_id" placeholder="请选择" style="width:200px">
+          <Select
+            filterable
+            v-model="addLessonsForm.coach_id"
+            placeholder="请选择"
+            style="width:200px"
+          >
             <Option :value="list.id" v-for="(list,i) in lessonsTeacherList" :key="i">{{list.name}}</Option>
           </Select>
         </FormItem>
-        <FormItem label="每周规律">
-          <span class="required"></span>
-          <div class="content">
-            <div class="content-left">
-              <ul>
-                <li>-</li>
-                <li>07:00 - 07:30</li>
-                <li>07:30 - 08:00</li>
-                <li>08:00 - 08:30</li>
-                <li>08:30 - 09:00</li>
-                <li>09:00 - 09:30</li>
-                <li>09:30 - 10:00</li>
-                <li>10:00 - 10:30</li>
-                <li>10:30 - 11:00</li>
-                <li>11:00 - 11:30</li>
-                <li>11:30 - 12:00</li>
-                <li>12:00 - 12:30</li>
-                <li>12:30 - 13:00</li>
-                <li>13:00 - 13:30</li>
-                <li>13:30 - 14:00</li>
-                <li>14:00 - 14:30</li>
-                <li>14:30 - 15:00</li>
-                <li>15:00 - 15:30</li>
-                <li>15:30 - 16:00</li>
-                <li>16:00 - 16:30</li>
-                <li>16:30 - 17:00</li>
-                <li>17:00 - 17:30</li>
-                <li>17:30 - 18:00</li>
-                <li>18:00 - 18:30</li>
-                <li>18:30 - 19:00</li>
-                <li>19:00 - 19:30</li>
-                <li>19:30 - 20:00</li>
-                <li>20:00 - 20:30</li>
-                <li>20:30 - 21:00</li>
-                <li>21:00 - 21:30</li>
-                <li>21:30 - 22:00</li>
-                <li>22:00 - 22:30</li>
-                <li>22:30 - 23:00</li>
-                <li>23:00 - 23:30</li>
-              </ul>
-            </div>
-            <div class="content-right">
-              <ul class="content-right-header">
-                <li>一</li>
-                <li>二</li>
-                <li>三</li>
-                <li>四</li>
-                <li>五</li>
-                <li>六</li>
-                <li>日</li>
-              </ul>
-              <div class="content-right-footer">
-                <ul>
-                  <li
-                    v-for="(k,i) in num"
-                    :key="i"
-                    :class="{active:timeBlock(k-1) == 'ok'}"
-                    @click="getNum(i,$event)"
-                    v-if="k> 14 && k < 48"
-                  ></li>
-                </ul>
-                <ul>
-                  <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<63 || k>95}"
-                    @click="getNum(i,$event)"
-                    v-for="(k,i) in num*2"
-                    v-if=" k > num"
-                    :key="i"
-                  ></li>
-                </ul>
-                <ul>
-                  <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<111 || k>143}"
-                    @click="getNum(i,$event)"
-                    v-for="(k,i) in num*3"
-                    v-if=" k > num*2"
-                    :key="i"
-                  ></li>
-                </ul>
-                <ul>
-                  <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<159 || k > 191}"
-                    @click="getNum(i,$event)"
-                    v-for="(k,i) in num*4"
-                    v-if=" k > num*3"
-                    :key="i"
-                  ></li>
-                </ul>
-                <ul>
-                  <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<207 || k > 239}"
-                    @click="getNum(i,$event)"
-                    v-for="(k,i) in num*5"
-                    v-if=" k > num*4"
-                    :key="i"
-                  ></li>
-                </ul>
-                <ul>
-                  <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<255 || k > 287}"
-                    @click="getNum(i,$event)"
-                    v-for="(k,i) in num*6"
-                    v-if=" k > num*5"
-                    :key="i"
-                  ></li>
-                </ul>
-                <ul>
-                  <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<303  || k > 335}"
-                    @click="getNum(i,$event)"
-                    v-for="(k,i) in num*7"
-                    v-if=" k > num*6"
-                    :key="i"
-                  ></li>
-                </ul>
-              </div>
-            </div>
+        <FormItem>
+          <span class="required" style="left:-20px"></span>
+          <div class="catalog">
+            <p @click="addTimeBlock" style="width:360px;">+添加时间块</p>
+            <ul>
+              <li v-for="(item,i) in dataArr" :key="i">
+                <Select
+                  v-model="item.week"
+                  placeholder="请选择"
+                  style="width:100px;margin-right:20px;"
+                >
+                  <Option :value="0">周一</Option>
+                  <Option :value="1">周二</Option>
+                  <Option :value="2">周三</Option>
+                  <Option :value="3">周四</Option>
+                  <Option :value="4">周五</Option>
+                  <Option :value="5">周六</Option>
+                  <Option :value="6">周七</Option>
+                </Select>
+                <TimePicker
+                  @on-change="getStartTime(i)"
+                  v-model="item.start_time"
+                  format="HH:mm"
+                  placeholder="开始时间"
+                  style="width: 112px;margin-right:15px"
+                ></TimePicker>
+                <TimePicker
+                  readonly
+                  v-model="item.end_time"
+                  format="HH:mm"
+                  placeholder="结束时间"
+                  style="width: 112px"
+                ></TimePicker>
+                <div style="width:30px;">
+                  <i class="delete-icon">
+                    <Icon type="ios-trash-outline" @click="deleData(i)" />
+                  </i>
+                </div>
+              </li>
+            </ul>
           </div>
         </FormItem>
       </Form>
@@ -435,28 +249,6 @@
             <Option :value="i*1" v-for="(list,i) in subject" :key="i">{{list}}</Option>
           </Select>
         </FormItem>
-        <!-- <FormItem label="课程封面展示" v-if="this.type.obj.course_pic">
-          <div class="demo-upload-list">
-            <img :src="'http://liveapi.canpoint.net/'+ type.obj.course_pic" />
-            <div class="demo-upload-list-cover">
-              <Icon
-                type="ios-eye-outline"
-                @click.native="handleView('http://liveapi.canpoint.net/'+type.obj.course_pic)"
-              ></Icon>
-            </div>
-          </div>
-          <Modal title="预览图" v-model="visible">
-            <img :src="type.obj.course_pic" style="width: 100%" />
-          </Modal>
-        </FormItem>
-        <FormItem label="课程封面" class="active_span">
-          <template>
-            <img :src="type.obj.course_pic" />
-            <div class="demo-upload-list-cover">
-              <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
-            </div>
-          </template>
-        </FormItem>-->
         <FormItem label="课程简介">
           <Input
             v-model="type.obj.course_desc"
@@ -590,8 +382,9 @@ export default {
   },
   data() {
     return {
+      lessonsForm_end_time: "",
+      dataArr: [],
       updateLessonsLoading: false,
-      timeNum: [],
       updateLessons: false,
       updateLessonsForm: {},
       lessonsStudentLoading: false,
@@ -628,7 +421,6 @@ export default {
           }
         ]
       },
-      num: 48,
       setActive: [],
       showLessons: false,
       showTimeBlock: false,
@@ -717,8 +509,8 @@ export default {
         ]
       },
       columns: [
-        { type: "index", width: 60 ,fixed:'left'},
-        { title: "课节名称", key: "lesson_name", width: "170",fixed:'left' },
+        { type: "index", width: 60, fixed: "left" },
+        { title: "课节名称", key: "lesson_name", width: "170", fixed: "left" },
         { title: "授课类型", key: "course_type", width: "95" },
         {
           title: "学员姓名",
@@ -726,8 +518,8 @@ export default {
           width: "95"
         },
         { title: "学员手机号", key: "student_mobile", width: "130" },
-        { title: "年级", key: "grade", width: "100" },
-        { title: "科目", key: "subject", width: "70" },
+        { title: "年级/科目", key: "grade_subject", width: "150" },
+        // { title: "科目", key: "subject", width: "70" },
         { title: "状态", key: "status", width: "80" },
         { title: "上课日期", key: "lesson_date", width: "110" },
         { title: "上课时间", key: "lesson_time", width: "150" },
@@ -736,35 +528,6 @@ export default {
           key: "student_num",
           className: "selects",
           width: "95",
-          // render: (h, params) => {
-          //   if (params.row.student_list.length != 0) {
-          //     return h("div", [
-          //       h(
-          //         "ul",
-          //         { props: { trigger: "hover", placement: "right-start" } },
-          //         [
-          //           params.row.student_list.map(i => {
-          //             return h("li", i.student_name + "/" + i.mobile);
-          //           })
-          //         ]
-          //       ),
-          //       params.row.student_num
-          //     ]);
-          //   } else {
-          //     return h("div", [
-          //       h(
-          //         "ul",
-          //         { props: { trigger: "hover", placement: "right-start" } }
-          //         // [
-          //         //   params.row.student_list.map(i => {
-          //         //     return h("li", i.student_name + "/" + i.mobile);
-          //         //   })
-          //         // ]
-          //       ),
-          //       params.row.student_num
-          //     ]);
-          //   }
-          // }
           render: (h, params) => {
             return h("div", [
               h(
@@ -820,7 +583,7 @@ export default {
                       color: "#2d8cf0"
                     }
                   },
-                 '直播/回放'
+                  "直播/回放"
                 )
               ]);
             } else {
@@ -841,7 +604,7 @@ export default {
                       color: "#ccc"
                     }
                   },
-                  '直播/回放'
+                  "直播/回放"
                 )
               ]);
             }
@@ -853,7 +616,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-          width:'100',
+          width: "100",
           render: (h, params) => {
             if (this.type.obj.course_type == 1) {
               return h("div", [
@@ -953,9 +716,63 @@ export default {
       "getlessonsStudent",
       "addCourseStudents"
     ]),
+    //获取时间块的第一个时间,设置第二个时间/编辑课节
+    setEndTime() {
+      let startNum = this.updateLessonsForm.start_time.split(":")[0];
+      let endNum = this.updateLessonsForm.start_time.split(":")[1];
+      var start = "";
+      var end = "";
+      if (endNum * 1 < 60) {
+        if (endNum * 1 + 50 >= 60) {
+          end = endNum * 1 + 50 - 60;
+          start = startNum * 1 + 1;
+          if (end < 10) {
+            end = "0" + end;
+          }
+          if (start < 10) {
+            start = "0" + start;
+          }
+        } else {
+          start = startNum;
+          end = endNum * 1 + 50;
+        }
+        this.lessonsForm_end_time = start + ":" + end;
+      }
+    },
+    //获取时间块的第一个时间,设置第二个时间/添加课节
+    getStartTime(i) {
+      let startNum = this.dataArr[i].start_time.split(":")[0];
+      let endNum = this.dataArr[i].start_time.split(":")[1];
+      var start = "";
+      var end = "";
+      if (endNum * 1 < 60) {
+        if (endNum * 1 + 50 >= 60) {
+          end = endNum * 1 + 50 - 60;
+          start = startNum * 1 + 1;
+          if (end < 10) {
+            end = "0" + end;
+          }
+          if (start < 10) {
+            start = "0" + start;
+          }
+        } else {
+          start = startNum;
+          end = endNum * 1 + 50;
+        }
+        this.dataArr[i].end_time = start + ":" + end;
+      }
+    },
+    //添加时间块
+    addTimeBlock() {
+      this.dataArr.push({ week: "", start_time: "", end_time: "" });
+    },
+    //删除课节
+    deleData(num) {
+      this.dataArr.splice(num, 1);
+    },
     //回放地址
     goBank(item) {
-      window.open(item.web_cast)
+      window.open(item.web_cast);
     },
     //预约课取消
     cancelAudition(item) {
@@ -1005,10 +822,13 @@ export default {
     },
     //修改一对一课节
     updateLessonsList() {
-      if (!this.updateLessonsForm.lesson_date) {
-        this.$Message.error("时间是必选的");
+      if (!this.updateLessonsForm.start_time) {
+        this.$Message.error("开始时间是必选的");
         return;
-      } else if (!this.updateLessonsForm.start_time) {
+      } else if (!this.lessonsForm_end_time) {
+        this.$Message.error("结束时间是必选的");
+        return;
+      } else if (!this.updateLessonsForm.lesson_date) {
         this.$Message.error("日期是必选的");
         return;
       } else if (!this.updateLessonsForm.coach_id) {
@@ -1016,6 +836,10 @@ export default {
         return;
       }
       this.updateLessonsLoading = true;
+      this.updateLessonsForm.end_time = this.lessonsForm_end_time;
+      this.updateLessonsForm.lesson_date = this.datePicker(
+        this.updateLessonsForm.lesson_date
+      );
       this.updateLesson({ form: this.updateLessonsForm }).then(res => {
         if (res.data.ret) {
           this.$Message.success("修改成功");
@@ -1031,39 +855,11 @@ export default {
         this.updateLessonsLoading = false;
       });
     },
-    //设置年月日
-    setDate(date) {
-      this.updateLessonsForm.lesson_date = date;
-    },
-    //计算时间段
-    getTimeBlock() {
-      var start = "";
-      var end = "";
-      var b = 7;
-      for (var i = 1; i < 35; i++) {
-        if (i % 2 == 0) {
-          start = b + ":" + "30";
-          b++;
-          end = b + ":" + "00";
-          this.timeNum.push(start);
-        } else {
-          start = b + ":" + "00";
-          end = b + ":" + "30";
-          this.timeNum.push(start);
-        }
-      }
-    },
     //一对一修改课节
     update(item) {
-      this.getTimeBlock();
-      if (item.start_time.split(":")[0].split("")[0] == "0") {
-        this.updateLessonsForm.start_time =
-          item.start_time.split(":")[0].split("")[1] +
-          ":" +
-          item.start_time.split(":")[1];
-      } else {
-        this.updateLessonsForm.start_time = item.start_time;
-      }
+      this.updateLessonsForm.start_time = item.start_time;
+      this.lessonsForm_end_time = item.end_time;
+      // this.updateLessonsForm.end_time = item.end_time;
       this.updateLessonsForm.uid = item.id;
       this.updateLessonsForm.coach_id = item.coach_id;
       this.updateLessonsForm.lesson_date = item.lesson_date;
@@ -1148,38 +944,36 @@ export default {
         });
       }
     },
-    timeBlock(value) {
-      if (this.setActive.indexOf(value) > -1) {
-        return "ok";
-      } else {
-        return "no";
-      }
-    },
     //一对一添加课程
     addLessonsList() {
       this.showLessons = true;
     },
     //一对一添加课节
     addLessons(name) {
-      var arr = [];
-      for (var i = 0; i < this.acArr.length; i++) {
-        arr.push(this.acArr[i] + "/" + (this.acArr[i] + 1));
+      if (this.dataArr.length == 0) {
+        this.$Message.error("时间块是必填的");
+      } else {
+        for (var i = 0; i < this.dataArr.length; i++) {
+          if (!this.dataArr[i].week) {
+            this.$Message.error("周不能为空");
+          } else if (!this.dataArr[i].start_time) {
+            this.$Message.error("开始时间不能为空");
+          }
+        }
       }
       this.$refs[name].validate(valid => {
         if (valid) {
           this.lessonsDisableBtn = true;
-          if (arr.length == 0) {
-            this.$Message.error("每周规律是必选的");
-            return;
-          }
           if (!this.addLessonsForm.start_date) {
             this.$Message.error("开课日期不能为空");
             return;
           }
           this.addLessonsForm.schedule_id = this.type.obj.id;
-          this.addLessonsForm.times_block = arr.join(",");
-          this.addLessonsForm.student_name = this.type.obj.student_name
-          this.addLessonsForm.student_name = JSON.stringify(this.type.obj.mobile).substr(-4)
+          this.addLessonsForm.times_block = JSON.stringify(this.dataArr);
+          this.addLessonsForm.student_name = this.type.obj.student_name;
+          this.addLessonsForm.student_name = JSON.stringify(
+            this.type.obj.mobile
+          ).substr(-4);
           this.setCreatedlessons({ form: this.addLessonsForm }).then(res => {
             this.lessonsDisableBtn = false;
             if (!res.data.ret) {
@@ -1207,58 +1001,12 @@ export default {
         }
       });
     },
-    //点击时间块失去光标
-    loseFocus() {
-      this.showTimeBlock = false;
-      this.addLessonsForm.times_block = this.acArr;
-    },
-    //点击时间块获取焦点
-    getFocus() {
-      this.showTimeBlock = true;
-    },
-    //获取当前时间块
-    getNum(num, e) {
-      var arr = this.acArr;
-      e.path[0].className = "active";
-      if (e.target.nextSibling == null) {
-        this.$Message.error("当前时间块不可选");
-        e.path[0].className = " ";
-        return;
-      } else {
-        if (e.target.nextSibling.className == "active") {
-          this.$Message.error("当前时间块不可重叠");
-          e.path[0].className = " ";
-          return;
-        }
-      }
-      if (e.target.nextSibling) {
-        e.target.nextSibling.className = "actives";
-      } else {
-        this.$Message.error("当前时间块不可选");
-        e.path[0].className = " ";
-        return;
-      }
-      if (arr.indexOf(num) > -1) {
-        arr.splice(arr.indexOf(num), 1);
-        e.path[0].className = " ";
-        // e.target.previousSibling.className = " ";
-        e.target.nextSibling.className = " ";
-      } else {
-        arr.push(num);
-      }
-    },
     getTimes(value) {
       this.addLessonsForm.start_date = this.datePicker(value);
     },
     //设置返回的时间
     datePicker(time) {
       var d = new Date(time);
-      let shi = d.getHours();
-      let fen = d.getMinutes();
-      let miao = d.getSeconds();
-      if (shi < 10) shi = "0" + shi;
-      if (fen < 10) fen = "0" + fen;
-      if (miao < 10) miao = "0" + miao;
       d = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
       return d;
     },

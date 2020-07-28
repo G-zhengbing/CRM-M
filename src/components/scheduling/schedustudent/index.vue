@@ -94,7 +94,7 @@ export default {
       columns: [
         { type: "selection", width: 60 },
         { title: "学员姓名", key: "student_name" },
-        { title: "注册手机", key: "mobile" },
+        { title: "注册手机", key: "mobile" ,width:130},
         { title: "可用课时", key: "card_num" },
         { title: "待上课节数", key: "wait_num" },
         { title: "已排课节数", key: "have_num" },

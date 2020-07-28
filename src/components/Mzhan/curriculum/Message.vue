@@ -598,9 +598,6 @@ export default {
 </script>
 
 <style scoped>
-.catalog ul li:hover >i{
-  display: block;
-}
 .video-icon{
   font-size: 20px;
   position: absolute;
@@ -611,44 +608,6 @@ export default {
   width: 168px;
   margin: 10px 0;
 }
-.catalog ul li span.filevideo input{
-  position: absolute;
-  opacity: 0;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-}
-.catalog ul li span.filevideo{
-  position: relative;
-  margin: 0 10px;
-  height: 30px;
-  border: 1px solid #ccc;
-  width: 200px;
-  text-align: center;
-}
-.catalog ul li span.filetitle{
-  margin: 0 10px;
-}
-.catalog ul li span.filename{
-  width: 200px;
-  color: #aaa5a5;
-  padding: 0 5px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
-.catalog ul li{
-  width: 100%;
-  /* height: 40px; */
-  border: 1px solid #ccc;
-  /* display: flex; */
-  /* justify-content: center;
-  align-items: center; */
-  margin-top:5px;
-  position: relative;
-}
 .oneLine {
   display: flex;
   margin-top: 5px;
@@ -658,23 +617,6 @@ export default {
   padding-left: 55px;
   box-sizing: border-box;
   margin-bottom: 5px;
-}
-.catalog ul{
-  display: flex;
-  flex-direction: column;
-}
-.catalog p{
-  width: 100%;
-  height: 40px;
-  border: 1px solid #ccc;
-  color:#6699ff;
-  line-height: 40px;
-  text-align: center;
-  cursor: pointer;
-}
-.catalog{
-  display: flex;
-  flex-direction: column;
 }
 .cardTime:hover i{
   display: block;

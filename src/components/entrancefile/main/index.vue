@@ -16,9 +16,9 @@
             </ul>
           </div>
           <div class="right">
-            <img src="../../../assets/img/xiaoxitongzhi/png24.png" alt class="lin" v-if="num >0" />
-            <img src="../../../assets/img/xiaoxitongzhi/not/png24.png" alt class="lin" v-if="num== 0" />
-            <img src="../../../assets/img/touxiang/png24.png" alt class="txiang" />
+            <!-- <img src="../../../assets/img/xiaoxitongzhi/png24.png" class="lin" @click="goNotive"/> -->
+            <img src="../../../assets/img/xiaoxitongzhi/not/png24.png" alt class="lin"/>
+            <img src="../../../assets/img/touxiang/png24.png" class="txiang" />
             <span>{{uName}}</span>
             <div>|</div>
             <i @click="back">退出</i>
@@ -94,6 +94,11 @@ export default {
   },
   methods: {
     ...mapActions(["getUser", "loginOut", "getReferList"]),
+    //消息通知
+    goNotive(){
+      this.$router.push('/main/mineclient')
+      storeage.savaMineclientTab(6)
+    },
     //tabar
     setActive(num) {
       this.tabNum = num;

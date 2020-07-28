@@ -50,14 +50,14 @@
               </Select>
             </FormItem>
           </Col>
-          <Col span="3">
+          <!-- <Col span="3">
             <FormItem>
               <Select v-model="form.class_type" @on-change="seekClick" placeholder="课程类型">
                 <Option :value="1">标准课</Option>
                 <Option :value="2">公开课</Option>
               </Select>
             </FormItem>
-          </Col>
+          </Col> -->
           <Col span="6">
             <FormItem>
               <div class="dateplc">
@@ -141,7 +141,6 @@ export default {
       form: {},
       columns: [
         { type: "selection", width: 60 },
-        { title: "授课类型", key: "course_type_str", className: "activeTh" },
         {
           title: "课程名称",
           key: "course_name",
@@ -171,11 +170,12 @@ export default {
             ]);
           }
         },
-        { title: "课程类型", key: "class_type_str" },
+        { title: "授课类型", key: "course_type_str", className: "activeTh" },
+        // { title: "课程类型", key: "class_type_str" },
         { title: "学员姓名", key: "student_name" },
         { title: "手机号", key: "mobile", width: "125" },
-        { title: "年级", key: "grade_str" },
-        { title: "科目", key: "subject_str" },
+        { title: "年级/科目", key: "grade_subject" },
+        // { title: "科目", key: "subject_str" },
         { title: "班主任", key: "header_name", width: "180" },
         { title: "首节课日期", key: "start_date", width: "120" },
         { title: "创建时间", key: "created_at", width: "170" },

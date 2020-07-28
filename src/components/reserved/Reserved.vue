@@ -60,7 +60,7 @@
               </Select>
             </FormItem>
           </Col>
-          <Col span="3" v-if="num == 3">
+          <Col span="3">
             <FormItem>
               <Select v-model="form.create_user" @on-change="seekClick" placeholder="创建人">
                 <Option v-for="(list,i) in sale_list" :key="i" :value="list.id">{{list.login_name}}</Option>
@@ -200,13 +200,69 @@ export default {
           { type: "selection", width: 60, fixed: "left" },
           { title: "学员姓名", key: "student_name", width: 100, fixed: "left" },
           { title: "注册手机", key: "mobile", width: 130, fixed: "left" },
-          { title: "试听类型", key: "type", width: 100 },
+          // { title: "试听类型", key: "type", width: 100 },
           { title: "试听课程", key: "course_name", width: 160 },
-          { title: "年级", width: 80, key: "grade", width: 80 },
-          { title: "科目", width: 80, key: "subject", width: 80 },
+          { title: "年级/科目",key: "grade_subject", width: 150 },
+          // { title: "科目", width: 80, key: "subject", width: 80 },
           { title: "教师", key: "coach_id", width: 200 },
+          {
+            title: "回放地址",
+            key: "coach_name",
+            width: "100",
+            render: (h, params) => {
+              if (
+                params.row.appoint_status == "上课中" ||
+                params.row.appoint_status == "已结束"
+              ) {
+                return h("div", [
+                  h(
+                    "span",
+                    {
+                      on: {
+                        props: {
+                          type: "text",
+                          size: "small"
+                        },
+                        click: () => {
+                          this.goBank(params.row);
+                        }
+                      },
+                      style: {
+                        width: "fit-content",
+                        cursor: "pointer",
+                        color: "#2d8cf0"
+                      },
+                      class: "clickable"
+                    },
+                    "直播/回放"
+                  )
+                ]);
+              } else {
+                return h("div", [
+                  h(
+                    "span",
+                    {
+                      on: {
+                        props: {
+                          type: "text",
+                          size: "small"
+                        }
+                      },
+                      style: {
+                        width: "100%",
+                        display: "inline-block",
+                        cursor: "pointer",
+                        color: "#ccc"
+                      }
+                    },
+                    "直播/回放"
+                  )
+                ]);
+              }
+            }
+          },
           { title: "上课日期", width: 120, key: "date_time" },
-          { title: "上课时段", key: "time_block", width: 100 },
+          // { title: "上课时段", key: "time_block", width: 100 },
           { title: "状态", key: "appoint_status", width: 100 },
           {
             title: "备注",
@@ -216,7 +272,8 @@ export default {
             tooltip: true,
             ellipsis: true
           },
-          { title: "提交时间", key: "create_time", width: 200 },
+          { title: "创建人", key: "create_user", width: 120, align: "center" },
+          { title: "创建时间", key: "create_time", width: 200 },
           {
             title: "操作",
             key: "action",
@@ -279,13 +336,69 @@ export default {
           { type: "selection", width: 60, fixed: "left" },
           { title: "学员姓名", key: "student_name", width: 100, fixed: "left" },
           { title: "注册手机", key: "mobile", width: 130, fixed: "left" },
-          { title: "试听类型", key: "type", width: 100 },
+          // { title: "试听类型", key: "type", width: 100 },
           { title: "试听课程", key: "course_name", width: 160 },
-          { title: "年级", width: 80, key: "grade", width: 80 },
-          { title: "科目", width: 80, key: "subject", width: 80 },
+          { title: "年级/科目", width: 80, key: "grade_subject", width: 150 },
+          // { title: "科目", width: 80, key: "subject", width: 80 },
           { title: "教师", key: "coach_id", width: 200 },
+          {
+            title: "回放地址",
+            key: "coach_name",
+            width: "100",
+            render: (h, params) => {
+              if (
+                params.row.appoint_status == "上课中" ||
+                params.row.appoint_status == "已结束"
+              ) {
+                return h("div", [
+                  h(
+                    "span",
+                    {
+                      on: {
+                        props: {
+                          type: "text",
+                          size: "small"
+                        },
+                        click: () => {
+                          this.goBank(params.row);
+                        }
+                      },
+                      style: {
+                        width: "fit-content",
+                        cursor: "pointer",
+                        color: "#2d8cf0"
+                      },
+                      class: "clickable"
+                    },
+                    "直播/回放"
+                  )
+                ]);
+              } else {
+                return h("div", [
+                  h(
+                    "span",
+                    {
+                      on: {
+                        props: {
+                          type: "text",
+                          size: "small"
+                        }
+                      },
+                      style: {
+                        width: "100%",
+                        display: "inline-block",
+                        cursor: "pointer",
+                        color: "#ccc"
+                      }
+                    },
+                    "直播/回放"
+                  )
+                ]);
+              }
+            }
+          },
           { title: "上课日期", width: 120, key: "date_time" },
-          { title: "上课时段", key: "time_block", width: 100 },
+          // { title: "上课时段", key: "time_block", width: 100 },
           { title: "状态", key: "appoint_status", width: 100 },
           {
             title: "备注",
@@ -295,7 +408,8 @@ export default {
             tooltip: true,
             ellipsis: true
           },
-          { title: "提交时间", key: "create_time", width: 200 },
+          { title: "创建人", key: "create_user", width: 120, align: "center" },
+          { title: "创建时间", key: "create_time", width: 200 },
           {
             title: "操作",
             key: "action",
@@ -360,7 +474,7 @@ export default {
             title: "学员姓名",
             key: "student_name",
             align: "center",
-            width: 100,
+            width: 120,
             fixed: "left"
           },
           {
@@ -370,19 +484,19 @@ export default {
             width: 130,
             fixed: "left"
           },
-          { title: "试听类型", key: "type", width: 100, align: "center" },
+          // { title: "试听类型", key: "type", width: 100, align: "center" },
           {
             title: "试听课程",
             key: "course_name",
-            width: 160,
+            width: 180,
             align: "center"
           },
 
-          { title: "年级", width: 80, key: "grade", align: "center" },
-          { title: "科目", width: 80, key: "subject", align: "center" },
+          { title: "年级/科目", width: 150, key: "grade_subject", align: "center" },
+          // { title: "科目", width: 80, key: "subject", align: "center" },
+          { title: "上课日期", width: 150, key: "date_time", align: "center" },
           { title: "教师", key: "coach_id", width: 200, align: "center" },
-          { title: "上课日期", width: 120, key: "date_time", align: "center" },
-          { title: "上课时段", key: "time_block", width: 100, align: "center" },
+          // { title: "上课时段", key: "time_block", width: 100, align: "center" },
           { title: "状态", key: "appoint_status", width: 100, align: "center" },
           {
             title: "备注",
@@ -392,9 +506,65 @@ export default {
             tooltip: true,
             ellipsis: true
           },
+          {
+            title: "回放地址",
+            key: "coach_name",
+            width: "100",
+            render: (h, params) => {
+              if (
+                params.row.appoint_status == "上课中" ||
+                params.row.appoint_status == "已结束"
+              ) {
+                return h("div", [
+                  h(
+                    "span",
+                    {
+                      on: {
+                        props: {
+                          type: "text",
+                          size: "small"
+                        },
+                        click: () => {
+                          this.goBank(params.row);
+                        }
+                      },
+                      style: {
+                        width: "fit-content",
+                        cursor: "pointer",
+                        color: "#2d8cf0"
+                      },
+                      class: "clickable"
+                    },
+                    "直播/回放"
+                  )
+                ]);
+              } else {
+                return h("div", [
+                  h(
+                    "span",
+                    {
+                      on: {
+                        props: {
+                          type: "text",
+                          size: "small"
+                        }
+                      },
+                      style: {
+                        width: "100%",
+                        display: "inline-block",
+                        cursor: "pointer",
+                        color: "#ccc"
+                      }
+                    },
+                    "直播/回放"
+                  )
+                ]);
+              }
+            }
+          },
           { title: "创建人", key: "create_user", width: 120, align: "center" },
           {
-            title: "提交时间",
+            title: "创建时间",
             key: "create_time",
             align: "center",
             width: 200
@@ -463,6 +633,10 @@ export default {
           }
         ];
       }
+    },
+    //回放地址
+    goBank(item) {
+      window.open(item.web_cast);
     },
     //tabs
     tab(num) {
@@ -594,7 +768,7 @@ export default {
     pageChange(num) {
       this.isLoading = true;
       this.setCurrentPage(num);
-      this.getReservedList({ ...this.form }).then(res => {
+      this.getReservedList({ form:this.form,tab_type: this.num,page: this.currentPage }).then(res => {
         this.isLoading = false;
         this.setCurrentPage(num);
       });

@@ -143,10 +143,10 @@ export default {
         { title: "授课类型", key: "course_type", width: "100" },
         { title: "学员名称", key: "student_name", width: "100" },
         { title: "学员电话", key: "student_mobile", width: "130" },
-        { title: "年级", key: "grade", width: "80" },
-        { title: "科目", key: "subject", width: "80" },
+        { title: "年级/科目", key: "grade_subject", width: "150" },
+        // { title: "科目", key: "subject", width: "80" },
         { title: "状态", key: "status", width: "80" },
-        { title: "上课日期", key: "lesson_date", width: "110" },
+        { title: "上课日期", key: "lesson_date", width: "160" },
         { title: "上课时间", key: "lesson_time", width: "160" },
         { title: "授课教师", key: "coach_name", width: "185" },
         {

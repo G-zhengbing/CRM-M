@@ -90,17 +90,6 @@ export default {
   getters: {
     reservedTypes(state) {
       let type = state.reservedTypesList
-      var maps = new Map([
-        ["一年级", 1],
-        ["二年级", 2],
-        ["三年级", 3],
-        ["四年级", 4],
-        ["五年级", 5],
-        ["六年级", 6],
-        ["七年级", 7],
-        ["八年级", 8],
-        ["九年级", 9],
-      ])
       var subjects = new Map([
         ["数学", 1],
         ["英语", 2],
@@ -112,19 +101,6 @@ export default {
         ["地理", 8],
         ["历史", 9]
       ])
-
-      // var version = new Map([
-      //   ["人教版",1],
-      //   ["北师大版",2],
-      //   ["华师大版",3],
-      //   ["苏教版",4],
-      //   ["鄂教版",5],
-      //   ["鲁教版",6],
-      //   ["沪教版",7],
-      //   ["冀教版",8],
-      //   ["浙教版",9],
-      //   ["河大版",10],
-      // ])
 
       var intention = new Map([
         ["高", 1],
@@ -166,7 +142,6 @@ export default {
         ["20岁", 20],
       ])
 
-      // type.textbook_version = version.get(type.textbook_version)
       type.grade = maps.get(type.grade)
       type.sex = gender.get(type.sex)
       type.age = age.get(type.age)
@@ -177,49 +152,12 @@ export default {
     },
     reservedData(state) {
       let data = state.reserved
-      var maps = new Map([
-        [1, '一年级'],
-        [2, '二年级'],
-        [3, '三年级'],
-        [4, '四年级'],
-        [5, '五年级'],
-        [6, '六年级'],
-        [7, '七年级'],
-        [8, '八年级'],
-        [9, '九年级']
-      ]);
-      // var subjects = new Map(...state.subject)
-      // var subjects = new Map([
-      //   [1, '数学'],
-      //   [2, "英语"],
-      //   [3, "语文"],
-      //   [4, "物理"],
-      //   [5, "化学"],
-      //   [6, "政治"],
-      //   [7, "生物"],
-      //   [8, "地理"],
-      //   [9, "历史"]
-      // ])
       var intention = new Map([
         [1, "高"],
         [2, "中"],
         [3, "低"],
         [4, "无"]
       ])
-      // var version = new Map([
-      //   [1,"人教版"],
-      //   ["北师大版"],
-      //   ["华师大版",3],
-      //   ["苏教版",4],
-      //   ["鄂教版",5],
-      //   ["鲁教版",6],
-      //   ["沪教版",7],
-      //   ["冀教版",8],
-      //   ["浙教版",9],
-      //   ["河大版",10],
-      // ])
-
-      // var follow = new Map(state.follow_status)
 
       var pone = new Map([
         [1, "班课"],
@@ -264,13 +202,9 @@ export default {
 
         element.mobile = str.join("")
         element.type = pone.get(element.type);
-        element.grade = maps.get(element.grade);
         element.sex = gender.get(element.sex);
         element.age = age.get(element.age);
         element.is_schedule = is_schedule.get(element.is_schedule);
-        // element.follow_status = follow.get(element.follow_status);
-        // element.subject = subjects.get(element.subject);
-        // element.is_course = course.get(element.is_course);
         element.intention_option = intention.get(element.intention_option);
         return element;
       });

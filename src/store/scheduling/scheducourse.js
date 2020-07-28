@@ -105,7 +105,8 @@ export default {
           params:{
             lesson_date:form.lesson_date,
             start_time:form.start_time,
-            coach_id:form.coach_id
+            coach_id:form.coach_id,
+            end_time:form.end_time
           }
         }).then(res=>{
           resolve(res)

@@ -3,7 +3,7 @@
     <Modal
       width="1200"
       v-model="type.classify == 'createdCourse'"
-      title="添加课节"
+      title="排课"
       @on-ok="createdCourse"
       @on-cancel="$parent.show = false"
       class-name="vertical-center-modal"
@@ -13,12 +13,9 @@
         :model="form"
         :rules="ruleValidate"
         :label-width="80"
-        style="maxHeight:500px;overflow-y:auto"
       >
-        <FormItem label="课程卡" prop="card_id">
-          <Select v-model="form.card_id" placeholder="请选择" style="width:225px">
-            <Option :value="list.id" v-for="(list,i) in courseCard" :key="i">{{list.card_name}}</Option>
-          </Select>
+        <FormItem class="keep-left">
+          <span style="color:red">您当前可用课时为 : {{courseCard}}</span>
         </FormItem>
         <Row>
           <Col span="3">
@@ -66,7 +63,7 @@
         <FormItem label="开课日期" prop="start_date">
           <span class="required"></span>
           <DatePicker
-           style="width:225px"
+            style="width:225px"
             v-model="form.start_date"
             :options="optionsDate"
             type="date"
@@ -86,124 +83,46 @@
             placeholder="请输入课程简介"
           ></Input>
         </FormItem>
-        <FormItem label="每周规律">
-          <span class="required"></span>
-          <div class="content">
-            <div class="content-left">
-              <ul>
-                <li>-</li>
-                <li>07:00 - 07:30</li>
-                <li>07:30 - 08:00</li>
-                <li>08:00 - 08:30</li>
-                <li>08:30 - 09:00</li>
-                <li>09:00 - 09:30</li>
-                <li>09:30 - 10:00</li>
-                <li>10:00 - 10:30</li>
-                <li>10:30 - 11:00</li>
-                <li>11:00 - 11:30</li>
-                <li>11:30 - 12:00</li>
-                <li>12:00 - 12:30</li>
-                <li>12:30 - 13:00</li>
-                <li>13:00 - 13:30</li>
-                <li>13:30 - 14:00</li>
-                <li>14:00 - 14:30</li>
-                <li>14:30 - 15:00</li>
-                <li>15:00 - 15:30</li>
-                <li>15:30 - 16:00</li>
-                <li>16:00 - 16:30</li>
-                <li>16:30 - 17:00</li>
-                <li>17:00 - 17:30</li>
-                <li>17:30 - 18:00</li>
-                <li>18:00 - 18:30</li>
-                <li>18:30 - 19:00</li>
-                <li>19:00 - 19:30</li>
-                <li>19:30 - 20:00</li>
-                <li>20:00 - 20:30</li>
-                <li>20:30 - 21:00</li>
-                <li>21:00 - 21:30</li>
-                <li>21:30 - 22:00</li>
-                <li>22:00 - 22:30</li>
-                <li>22:30 - 23:00</li>
-                <li>23:00 - 23:30</li>
-                <li>23:30 - 24:00</li>
-              </ul>
-            </div>
-            <div class="content-right">
-              <ul class="content-right-header">
-                <li>一</li>
-                <li>二</li>
-                <li>三</li>
-                <li>四</li>
-                <li>五</li>
-                <li>六</li>
-                <li>日</li>
-              </ul>
-              <div class="content-right-footer">
-                <ul>
-                  <li
-                    v-for="(k,i) in num"
-                    :key="i"
-                    :class="{active:timeBlock(k-1) == 'ok',disabled:setDate(k)}"
-                    @click="getNum(i,$event)"
-                    v-if="k> 14"
-                  ></li>
-                </ul>
-                <ul>
-                  <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<63,disabled:setDate(k)}"
-                    @click="getNum(i,$event)"
-                    v-for="(k,i) in num*2"
-                    v-if=" k > num"
-                    :key="i"
-                  ></li>
-                </ul>
-                <ul>
-                  <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<111,disabled:setDate(k)}"
-                    @click="getNum(i,$event)"
-                    v-for="(k,i) in num*3"
-                    v-if=" k > num*2"
-                    :key="i"
-                  ></li>
-                </ul>
-                <ul>
-                  <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<159,disabled:setDate(k)}"
-                    @click="getNum(i,$event)"
-                    v-for="(k,i) in num*4"
-                    v-if=" k > num*3"
-                    :key="i"
-                  ></li>
-                </ul>
-                <ul>
-                  <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<207,disabled:setDate(k)}"
-                    @click="getNum(i,$event)"
-                    v-for="(k,i) in num*5"
-                    v-if=" k > num*4"
-                    :key="i"
-                  ></li>
-                </ul>
-                <ul>
-                  <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<255,disabled:setDate(k)}"
-                    @click="getNum(i,$event)"
-                    v-for="(k,i) in num*6"
-                    v-if=" k > num*5"
-                    :key="i"
-                  ></li>
-                </ul>
-                <ul>
-                  <li
-                    :class="{active:timeBlock(k-1) == 'ok',hidden:k<303,disabled:setDate(k)}"
-                    @click="getNum(i,$event)"
-                    v-for="(k,i) in num*7"
-                    v-if=" k > num*6"
-                    :key="i"
-                  ></li>
-                </ul>
-              </div>
-            </div>
+        <FormItem>
+          <span class="required" style="left:-20px"></span>
+          <div class="catalog">
+            <p @click="addLessons">+添加时间块</p>
+            <ul>
+              <li v-for="(item,i) in dataArr" :key="i">
+                <Select
+                  v-model="item.week"
+                  placeholder="请选择"
+                  style="width:100px;margin-right:20px;"
+                >
+                  <Option :value="0">周一</Option>
+                  <Option :value="1">周二</Option>
+                  <Option :value="2">周三</Option>
+                  <Option :value="3">周四</Option>
+                  <Option :value="4">周五</Option>
+                  <Option :value="5">周六</Option>
+                  <Option :value="6">周七</Option>
+                </Select>
+                <TimePicker
+                  @on-change="getStartTime(i)"
+                  v-model="item.start_time"
+                  format="HH:mm"
+                  placeholder="开始时间"
+                  style="width: 112px;margin-right:15px"
+                ></TimePicker>
+                <TimePicker
+                  readonly
+                  v-model="item.end_time"
+                  format="HH:mm"
+                  placeholder="结束时间"
+                  style="width: 112px"
+                ></TimePicker>
+                <div style="width:30px;">
+                  <i class="delete-icon">
+                    <Icon type="ios-trash-outline" @click="deleData(i)" />
+                  </i>
+                </div>
+              </li>
+            </ul>
           </div>
         </FormItem>
       </Form>
@@ -229,84 +148,7 @@ const { mapState, mapActions } = createNamespacedHelpers("schedustudent");
 export default {
   props: ["type"],
   computed: {
-    ...mapState(["teacherList", "courseCard"]),
-    setDate() {
-      return function(timeBlock) {
-        // var date = new Date();
-        // var day = date.getDay();
-        // var shi = date.getHours();
-        // var block = (day - 1) * 48 + (shi + 1) * 2;
-        // if (timeBlock >= 15 && timeBlock <= 48) {
-        //   if (day > 1) {
-        //     return true;
-        //   } else if (day == 1) {
-        //     if (block == timeBlock) {
-        //       if (block > timeBlock) {
-        //         return true;
-        //       }
-        //     }
-        //   }
-        // } else if (timeBlock >= 63 && timeBlock <= 96) {
-        //   if (day > 2) {
-        //     return true;
-        //   } else if (day == 2) {
-        //     if (block == timeBlock) {
-        //       if (block > timeBlock) {
-        //         return true;
-        //       }
-        //     }
-        //   }
-        // } else if (timeBlock >= 111 && timeBlock <= 144) {
-        //   if (day > 3) {
-        //     return true;
-        //   } else if (day == 3) {
-        //     if (block >= timeBlock) {
-        //       return true;
-        //     }
-        //   }
-        // } else if (timeBlock >= 159 && timeBlock <= 192) {
-        //   if (day > 4) {
-        //     return true;
-        //   } else if (day == 4) {
-        //     if (block == timeBlock) {
-        //       if (block > timeBlock) {
-        //         return true;
-        //       }
-        //     }
-        //   }
-        // } else if (timeBlock >= 207 && timeBlock <= 240) {
-        //   if (day > 5) {
-        //     return true;
-        //   } else if (day == 5) {
-        //     if (block == timeBlock) {
-        //       if (block > timeBlock) {
-        //         return true;
-        //       }
-        //     }
-        //   }
-        // } else if (timeBlock >= 255 && timeBlock <= 288) {
-        //   if (day > 6) {
-        //     return true;
-        //   } else if (day == 6) {
-        //     if (block == timeBlock) {
-        //       if (block > timeBlock) {
-        //         return true;
-        //       }
-        //     }
-        //   }
-        // } else if (timeBlock >= 303 && timeBlock <= 336) {
-        //   if (day > 7) {
-        //     return true;
-        //   } else if (day == 7) {
-        //     if (block == timeBlock) {
-        //       if (block > timeBlock) {
-        //         return true;
-        //       }
-        //     }
-        //   }
-        // }
-      };
-    }
+    ...mapState(["teacherList", "courseCard"])
   },
   mounted() {
     this.getCoursecard(this.type.obj.id);
@@ -314,6 +156,7 @@ export default {
   },
   data() {
     return {
+      dataArr: [],
       optionsDate: {
         disabledDate: function(date) {
           return date < new Date(this.start_time.getTime() + 60000);
@@ -376,6 +219,37 @@ export default {
   },
   methods: {
     ...mapActions(["getTeacherList", "getCoursecard"]),
+    //获取时间块的第一个时间,设置第二个时间
+    getStartTime(i) {
+      let startNum = this.dataArr[i].start_time.split(":")[0];
+      let endNum = this.dataArr[i].start_time.split(":")[1];
+      var start = "";
+      var end = "";
+      if (endNum * 1 < 60) {
+        if (endNum * 1 + 50 >= 60) {
+          end = endNum * 1 + 50 - 60;
+          start = startNum * 1 + 1;
+          if (end < 10) {
+            end = "0" + end;
+          }
+          if (start < 10) {
+            start = "0" + start;
+          }
+        } else {
+          start = startNum;
+          end = endNum * 1 + 50;
+        }
+        this.dataArr[i].end_time = start + ":" + end;
+      }
+    },
+    //新增时间块
+    addLessons() {
+      this.dataArr.push({ week: "", start_time: "", end_time: "" });
+    },
+    //删除时间块
+    deleData(num) {
+      this.dataArr.splice(num, 1);
+    },
     //获取老师列表
     getTeacherData(item) {
       if (item) {
@@ -405,13 +279,6 @@ export default {
       d = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
       return d;
     },
-    timeBlock(value) {
-      if (this.setActive.indexOf(value) > -1) {
-        return "ok";
-      } else {
-        return "no";
-      }
-    },
     //点击时间块失去光标
     loseFocus() {
       this.showTimeBlock = false;
@@ -420,36 +287,6 @@ export default {
     //点击时间块获取焦点
     getFocus() {
       this.showTimeBlock = true;
-    },
-    //获取当前时间块
-    getNum(num, e) {
-      var arr = this.acArr;
-      e.path[0].className = "active";
-      if (JSON.stringify(e.target.nextSibling) == "null") {
-        this.$Message.error("当前时间块不可选");
-        e.path[0].className = " ";
-        return;
-      } else if (e.target.nextSibling.className == "active") {
-        this.$Message.error("当前时间块不可重叠");
-        e.path[0].className = " ";
-        return;
-      }
-
-      if (e.target.nextSibling) {
-        e.target.nextSibling.className = "actives";
-      } else {
-        this.$Message.error("当前时间块不可选");
-        e.path[0].className = " ";
-        return;
-      }
-      if (arr.indexOf(num) > -1) {
-        arr.splice(arr.indexOf(num), 1);
-        e.path[0].className = " ";
-        // e.target.previousSibling.className = " ";
-        e.target.nextSibling.className = " ";
-      } else {
-        arr.push(num);
-      }
     },
     //预览图片
     handleView(item) {
@@ -495,14 +332,21 @@ export default {
     },
     //创建课程
     handleSubmit(name) {
-      var arr = [];
-      for (var i = 0; i < this.acArr.length; i++) {
-        arr.push([this.acArr[i] + "/" + (this.acArr[i] + 1)]);
+      if (this.dataArr.length == 0) {
+        this.$Message.error("时间块是必填的");
+      } else {
+        for (var i = 0; i < this.dataArr.length; i++) {
+          if (!this.dataArr[i].week) {
+            this.$Message.error("周不能为空");
+          } else if (!this.dataArr[i].start_time) {
+            this.$Message.error("开始时间不能为空");
+          }
+        }
       }
       this.$refs[name].validate(valid => {
         if (valid) {
-          if (arr.length == 0) {
-            this.$Message.error("每周规律是必选的");
+          if (this.dataArr.length == 0) {
+            this.$Message.error("时间块是必填的");
             return;
           }
           if (!this.form.start_date) {
@@ -518,10 +362,10 @@ export default {
             "coach_id",
             this.form.coach_id ? this.form.coach_id : ""
           );
-          formData.append(
-            "card_id",
-            this.form.card_id ? this.form.card_id : ""
-          );
+          // formData.append(
+          //   "card_id",
+          //   this.form.card_id ? this.form.card_id : ""
+          // );
           formData.append("grade", this.form.grade);
           formData.append("subject", this.form.subject);
           formData.append(
@@ -529,16 +373,12 @@ export default {
             this.form.course_desc ? this.form.course_desc : ""
           );
           formData.append("header_id", this.form.header_id);
-          formData.append("times_block", arr);
+          formData.append("times_block", JSON.stringify(this.dataArr));
           formData.append("student_name", this.form.student_name);
           formData.append(
             "mobile",
             JSON.stringify(this.type.obj.mobile).substr(-4)
           );
-          // formData.append(
-          //   "uploadList",
-          //   this.uploadList[0] ? this.uploadList[0] : ""
-          // );
           let config = {
             headers: {
               "Content-Type": "multipart/form-data",

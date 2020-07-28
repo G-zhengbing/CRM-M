@@ -65,8 +65,8 @@
             </FormItem>
           </Col>
           <Col span="4">
-            <FormItem label="联系方式" prop="mobile">
-              <Input v-model="form.mobile" placeholder="请输入联系方式"></Input>
+            <FormItem label="联系方式" prop="tel">
+              <Input v-model="form.tel" placeholder="请输入联系方式"></Input>
             </FormItem>
           </Col>
           <Col span="4">
@@ -798,7 +798,6 @@ export default {
     //重置form表单
     handleReset(name) {
       this.showTeacherMessage = false;
-      // this.$refs[name].resetFields();
     },
     //创建教师
     createdTeacher(name) {
@@ -806,7 +805,7 @@ export default {
         if (valid) {
           this.isLoading = true;
           this.confirmLoaing = true;
-          if (!this.myreg.test(this.form.mobile)) {
+          if (!this.myreg.test(this.form.tel)) {
             this.$Message.error("手机号码格式不正确");
             return;
           }
@@ -823,7 +822,7 @@ export default {
             formData.append("level", this.form.level);
             formData.append("sex", this.form.sex);
             formData.append("type", this.form.type);
-            formData.append("mobile", this.form.mobile);
+            formData.append("mobile", this.form.tel);
             formData.append("subject", this.form.subject);
             formData.append(
               "address_province_id",

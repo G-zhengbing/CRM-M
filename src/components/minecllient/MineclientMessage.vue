@@ -75,11 +75,7 @@
     </Modal>
     <!-- 创建订单 -->
     <Modal width="700" v-model="showOrder" title="创建订单" @on-cancel="showOrder = false">
-      <Form
-        :form="orderForm"
-        label-position="left"
-        style="height:450px;overflow-y:auto;"
-      >
+      <Form :form="orderForm" label-position="left" style="height:450px;overflow-y:auto;">
         <FormItem label="基本信息"></FormItem>
         <div class="procude">
           <div class="procude-top">
@@ -206,14 +202,19 @@
           </Col>
           <Col span="24">
             <FormItem label="试听课时段">
-              <Select v-model="createAuditionForm.time_block">
-                <Option
-                  :disabled="setSelectDate(list.split('-')[0])"
-                  :value="list.split('-')[0]"
-                  v-for="(list,i) in timeNum"
-                  :key="i"
-                >{{list}}</Option>
-              </Select>
+              <TimePicker
+                @on-change="getStartTime()"
+                v-model="createAuditionForm.start_time"
+                format="HH:mm"
+                placeholder="开始时间"
+                style="width: 112px;margin-right:15px"
+              ></TimePicker>
+              <TimePicker
+                v-model="createAuditionForm.end_time"
+                format="HH:mm"
+                placeholder="结束时间"
+                style="width: 112px"
+              ></TimePicker>
             </FormItem>
           </Col>
           <Col span="24">
@@ -329,12 +330,7 @@
     <!--  -->
     <!-- 查看测评 -->
     <Modal width="500" v-model="showAppraisal" title="查看测评" @on-cancel="showAppraisal = false">
-      <Form
-        :form="appraisalForm"
-        label-position="top"
-        style="height:300px;overflow-y:auto;"
-        :label-width="20"
-      >
+      <Form :form="appraisalForm" label-position="top" style="height:300px;overflow-y:auto;">
         <FormItem label="测评图片展示" v-if="this.appraisalForm.assess_image">
           <div class="demo-upload-list">
             <img :src="'http://liveapi.canpoint.net/'+ appraisalForm.assess_image" />
@@ -559,8 +555,7 @@
           </Col>
         </Row>
       </Form>
-      <div slot="footer">
-      </div>
+      <div slot="footer"></div>
     </Modal>
     <!-- 移出 -->
     <Modal
@@ -592,19 +587,19 @@
         style="height:400px;overflow-y:auto;"
       >
         <Row class-name="exclusive">
-          <Col span="7">
+          <Col span="6">
             <FormItem label="选择课时包">
               <Select v-model="upgradeForm.order_sn" @on-change="getClass" placeholder="课时包">
                 <Option :value="i" v-for="(list,i) in accountList" :key="i">{{list.product_name}}</Option>
               </Select>
             </FormItem>
           </Col>
-          <Col span="7">
+          <Col span="5">
             <FormItem>
               <img src="../../assets/upgrade.png" alt />
             </FormItem>
           </Col>
-          <Col span="7">
+          <Col span="10">
             <FormItem label="升级至">
               <Select
                 v-if="ordersnList.length != 0"
@@ -612,7 +607,7 @@
                 @on-change="getClassAll"
                 placeholder="课时包"
               >
-                <Option :value="i" v-for="(list,i) in ordersnList" :key="i">{{list.course_name}}</Option>
+                <Option :value="i" v-for="(list,i) in ordersnList" :key="i">{{list.level}} - {{list.course_name}}  ( ￥{{list.total_price}} )</Option>
               </Select>
               <Select v-else placeholder="课时包"></Select>
             </FormItem>
@@ -709,41 +704,7 @@ export default {
       city: state => state.mineclient.city,
       accountList: state => state.studentpay.accountList,
       ordersnList: state => state.studentpay.ordersnList
-    }),
-    setSelectDate: function() {
-      return function(item) {
-        // var date = new Date();
-        // if (
-        //   this.datePickers(date).split("-")[1] +
-        //     "-" +
-        //     this.datePickers(date).split("-")[2] ==
-        //   this.datePickers(this.createAuditionForm.date_time).split("-")[1] +
-        //     "-" +
-        //     this.datePickers(this.createAuditionForm.date_time).split("-")[2]
-        // ) {
-        //   if (
-        //     this.datePickers(date).split(":")[0] * 1 >
-        //     item.split(":")[0] * 1
-        //   ) {
-        //     return true;
-        //   } else if (
-        //     this.datePickers(date).split(":")[0] * 1 ==
-        //     item.split(":")[0] * 1
-        //   ) {
-        //     if (
-        //       this.datePickers(date).split(":")[1] * 1 >
-        //         item.split(":")[1] * 1 ||
-        //       this.datePickers(date).split(":")[1] * 1 + 15 >
-        //         item.split(":")[1] * 1
-        //     ) {
-        //       return true;
-        //     }
-        //   } else {
-        //     return false;
-        //   }
-        // }
-      };
-    }
+    })
   },
   mounted() {
     if (this.type.classify == "connect") {
@@ -769,7 +730,6 @@ export default {
         this.showLoading = false;
       });
     } else if (this.type.classify == "audition") {
-      this.getTimeBlock();
       this.showLoading = true;
       this.getUserReservedList({ page: 1, uid: this.type.data.id }).then(() => {
         this.showLoading = false;
@@ -777,7 +737,7 @@ export default {
     }
   },
   destroyed() {
-    this.$parent.type.classify = 'followUp'
+    this.$parent.type.classify = "followUp";
   },
   data() {
     return {
@@ -797,8 +757,15 @@ export default {
       showSelectTeacher: false,
       selectTeacherColumns: [
         { type: "selection", width: 60 },
-        { title: "教师姓名", key: "name" },
-        { title: "手机号", key: "mobile" },
+        { title: "教师姓名", key: "name", width: 100 },
+        {
+          title: "手机号",
+          key: "mobile",
+          width: 130,
+          render: (h, params) => {
+            return h("div", [h("span", this.setMobile(params.row.mobile))]);
+          }
+        },
         {
           title: "性别",
           key: "sex",
@@ -807,7 +774,7 @@ export default {
           }
         },
         { title: "教授年级", key: "grade_ch", width: 300 },
-        { title: "教授科目", key: "subject" },
+        { title: "教授科目", key: "subject", width: 100 },
         {
           title: "教师简介",
           key: "teacher_userinfo_desc",
@@ -861,7 +828,6 @@ export default {
       // </选择老师>
       auditionTimes: "",
       isUpdata: false,
-      timeNum: [],
       vaersion: storage.getDaiban().screen_list.book_version,
       upgradeColumns: [
         { title: "购买课程名称", key: "course_name", width: 200 },
@@ -1006,22 +972,82 @@ export default {
       setActive: 0,
       num: 48,
       subject: storage.getDaiban().screen_list.subject,
-      createAuditionForm: {},
+      createAuditionForm: {
+        type:4
+      },
       showCreateAudition: false,
       Acolumns: [
-        { title: "试听类型", key: "type" },
-        { title: "试听课程", key: "course_name" },
-        { title: "教师", key: "coach_id" },
-        { title: "试听课日期", key: "date_time" },
-        { title: "试听课时段", key: "time_block" },
-        { title: "状态", key: "appoint_status" },
-        { title: "创建人", key: "create_user" },
-        { title: "创建时间", key: "create_time" },
-        { title: "备注", key: "note", tooltip: true, ellipsis: true },
+        { title: "试听课程", key: "course_name", width: 160 ,fixed:'left'},
+        { title: "年级/科目", key: "grade_subject", width: 160 ,fixed:'left'},
+        { title: "上课日期", key: "date_time", width: 160 },
+        { title: "教师", key: "coach_id", width: 160 },
+        { title: "状态", key: "appoint_status" , width: 160 },
+        { title: "创建人", key: "create_user"  , width: 160},
+        { title: "创建时间", key: "create_time", width: 200 },
+        { title: "备注", key: "note", tooltip: true, ellipsis: true  , width: 160},
+        {
+          title: "回放地址",
+          key: "coach_name",
+          width: 150,
+          fixed:'right',
+          render: (h, params) => {
+            if (
+              params.row.appoint_status == "上课中" ||
+              params.row.appoint_status == "已结束"
+            ) {
+              return h("div", [
+                h(
+                  "span",
+                  {
+                    on: {
+                      props: {
+                        type: "text",
+                        size: "small"
+                      },
+                      click: () => {
+                        this.goBank(params.row);
+                      }
+                    },
+                    style: {
+                      width: "fit-content",
+                      cursor: "pointer",
+                      color: "#2d8cf0"
+                    },
+                    class: "clickable"
+                  },
+                  "直播/回放"
+                )
+              ]);
+            } else {
+              return h("div", [
+                h(
+                  "span",
+                  {
+                    on: {
+                      props: {
+                        type: "text",
+                        size: "small"
+                      }
+                    },
+                    style: {
+                      width: "100%",
+                      display: "inline-block",
+                      cursor: "pointer",
+                      color: "#ccc"
+                    }
+                  },
+                  "直播/回放"
+                )
+              ]);
+            }
+          }
+        },
         {
           title: "操作",
           key: "action",
           align: "center",
+          width:100,
+          fixed:'right',
           render: (h, params) => {
             return h("div", [
               h(
@@ -1141,6 +1167,44 @@ export default {
       "getTeacherListN",
       "removeMineclient"
     ]),
+    //隐藏手机号中间的几位
+    setMobile(val) {
+      var phone = val.toString();
+      var str = phone.split("");
+      for (var i = 0; i < str.length; i++) {
+        if (i === 3 || i === 4 || i === 5 || i === 6) {
+          str[i] = "*";
+        }
+      }
+      return str.join("");
+    },
+    //获取时间块的第一个时间,设置第二个时间
+    getStartTime() {
+      let startNum = this.createAuditionForm.start_time.split(":")[0];
+      let endNum = this.createAuditionForm.start_time.split(":")[1];
+      var start = "";
+      var end = "";
+      if (endNum * 1 < 60) {
+        if (endNum * 1 + 50 >= 60) {
+          end = endNum * 1 + 50 - 60;
+          start = startNum * 1 + 1;
+          if (end < 10) {
+            end = "0" + end;
+          }
+          if (start < 10) {
+            start = "0" + start;
+          }
+        } else {
+          start = startNum;
+          end = endNum * 1 + 50;
+        }
+        this.createAuditionForm.end_time = start + ":" + end;
+      }
+    },
+    //回放地址
+    goBank(item) {
+      window.open(item.web_cast);
+    },
     //查看教师简介视频
     goTeacherVideo() {
       window.location.replace = this.teacherDetailsForm.teacher_userinfo_video;
@@ -1162,7 +1226,8 @@ export default {
       var form = {};
       form.subject = this.createAuditionForm.subject;
       form.grade = this.createAuditionForm.grade;
-      form.time_block = this.createAuditionForm.time_block;
+      form.start_time = this.createAuditionForm.start_time;
+      form.end_time = this.createAuditionForm.end_time;
       form.date_time = this.auditionTimes;
       form.type = this.createAuditionForm.type;
       form.name = this.selectTeacherListForm.name;
@@ -1238,7 +1303,8 @@ export default {
       var form = {};
       form.subject = this.createAuditionForm.subject;
       form.grade = this.createAuditionForm.grade;
-      form.time_block = this.createAuditionForm.time_block;
+      form.start_time = this.createAuditionForm.start_time;
+      form.end_time = this.createAuditionForm.end_time;
       form.date_time = this.auditionTimes;
       form.type = this.createAuditionForm.type;
       this.getTeacherListN({ form, page: num }).then(res => {
@@ -1260,24 +1326,6 @@ export default {
     },
     auditionTime(date) {
       this.auditionTimes = date;
-    },
-    //计算时间段
-    getTimeBlock() {
-      var start = "";
-      var end = "";
-      var b = 7;
-      for (var i = 1; i < 34; i++) {
-        if (i % 2 == 0) {
-          start = b + ":" + "30";
-          b++;
-          end = b + ":" + "00";
-          this.timeNum.push(start + "-" + end);
-        } else {
-          start = b + ":" + "00";
-          end = b + ":" + "30";
-          this.timeNum.push(start + "-" + end);
-        }
-      }
     },
     getClass(num) {
       this.classAll = [];
@@ -1616,14 +1664,16 @@ export default {
       var form = {};
       form.subject = this.createAuditionForm.subject;
       form.grade = this.createAuditionForm.grade;
-      form.time_block = this.createAuditionForm.time_block;
+      form.start_time = this.createAuditionForm.start_time;
+      form.end_time = this.createAuditionForm.end_time;
       form.date_time = this.auditionTimes;
       form.type = this.createAuditionForm.type;
       if (isShow) {
         if (
           this.createAuditionForm.subject &&
           this.createAuditionForm.grade &&
-          this.createAuditionForm.time_block &&
+          this.createAuditionForm.start_time &&
+          this.createAuditionForm.end_time &&
           this.auditionTimes &&
           this.createAuditionForm.type
         ) {
@@ -1716,8 +1766,11 @@ export default {
       } else if (!this.auditionTimes) {
         this.$Message.error("试听课日期不能为空");
         return;
-      } else if (!this.createAuditionForm.time_block) {
-        this.$Message.error("试听课时段不能为空");
+      } else if (!this.createAuditionForm.start_time) {
+        this.$Message.error("开始时间不能为空");
+        return;
+      } else if (!this.createAuditionForm.end_time) {
+        this.$Message.error("结束时间不能为空");
         return;
       } else if (this.selectTeacherList.length == 0) {
         this.$Message.error("教师选项不能为空");
@@ -1738,13 +1791,13 @@ export default {
           this.$Message.success("新建预约成功");
           this.getUserReservedList({ page: 1, uid: this.type.data.id });
           this.clearForm();
+          this.showLoading = false;
+          this.time = "";
+          this.auditionTimes = "";
+          this.selectTeacherList = [];
         } else {
           this.$Message.error(res.data.error);
         }
-        this.showLoading = false;
-        this.time = "";
-        this.auditionTimes = "";
-        this.selectTeacherList = [];
         this.disableBtn = false;
       });
     },

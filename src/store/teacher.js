@@ -97,7 +97,9 @@ export default {
       var level = new Map([
         ['中级',1],
         ['高级',2],
-        ['特级',3]
+        ['特一级',3],
+        ['特二级',4],
+        ['特三级',5]
       ])
 
       type.subject = subjects.get(type.subject)
