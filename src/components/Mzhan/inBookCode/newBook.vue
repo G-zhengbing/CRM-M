@@ -55,63 +55,60 @@
 import qs from "qs";
 import { mapState, mapActions } from "vuex";
 import { UPLOADIMAGE, CREATEINBOOK, UPDATEINBOOK } from "@/uilt/url/Murl";
+import storage from "@/uilt/storage.js";
 export default {
-  computed: {
-    ...mapState({
-      subjectList: state => storage.getDaiban().screen_list.subject,
-      grade_strList: state => storage.getDaiban().screen_list.grade_str
-    })
-  },
   props: {
     row: {
       type: [Object, String],
-      required: false
+      required: false,
     },
     showMod: {
       type: [Boolean, String],
-      required: true
-    }
+      required: true,
+    },
   },
   watch: {
     showMod(val) {
       this.modal1 = val;
-    }
+    },
   },
   data() {
     return {
+      subjectList: storage.getDaiban().screen_list.subject,
+      grade_strList: storage.getDaiban().screen_list.grade_str,
       modal1: "",
       formValidate: {
         title_image: "",
-        bottom_image: ""
+        bottom_image: "",
       },
       ruleValidate: {
         book_name: [
-          { required: true, message: "请输入书籍名称", trigger: "blur" }
+          { required: true, message: "请输入书籍名称", trigger: "blur" },
         ],
         title_action_url: [
-          { required: true, message: "请输入跳转地址", trigger: "blur" }
+          { required: true, message: "请输入跳转地址", trigger: "blur" },
         ],
         title_image: [
-          { required: true, message: "请选择顶部图片", trigger: "change" }
+          { required: true, message: "请选择顶部图片", trigger: "change" },
         ],
         bottom_image: [
-          { required: true, message: "请选择底部图片", trigger: "change" }
+          { required: true, message: "请选择底部图片", trigger: "change" },
         ],
         grade: [
           {
             required: true,
             message: "请选择年级",
-            trigger: "change"
-          }
+            trigger: "change",
+          },
         ],
         subject: [
           {
             required: true,
             message: "请选择科目",
-            trigger: "change"
-          }
-        ]
-      }
+            trigger: "change",
+          },
+        ],
+      },
     };
   },
   created() {
@@ -120,13 +117,13 @@ export default {
       this.formValidate = this.row;
       this.formValidate.subject =
         Object.keys(this.subjectList)
-          .map(item => this.subjectList[item])
+          .map((item) => this.subjectList[item])
           .indexOf(this.row.subject) +
         1 +
         "";
       this.formValidate.grade =
         Object.keys(this.grade_strList)
-          .map(item => this.grade_strList[item])
+          .map((item) => this.grade_strList[item])
           .indexOf(this.row.grade) +
         1 +
         "";
@@ -138,7 +135,7 @@ export default {
       let res = await this.$request({
         method: "POST",
         url: UPDATEINBOOK,
-        data: qs.stringify(this.formValidate)
+        data: qs.stringify(this.formValidate),
       });
       return res;
     },
@@ -147,7 +144,7 @@ export default {
       let res = await this.$request({
         method: "POST",
         url: CREATEINBOOK,
-        data: qs.stringify(this.formValidate)
+        data: qs.stringify(this.formValidate),
       });
       return res;
     },
@@ -162,8 +159,8 @@ export default {
         this.$request({
           method: "post",
           url: UPLOADIMAGE,
-          data: formData
-        }).then(res => {
+          data: formData,
+        }).then((res) => {
           this.formValidate.title_image =
             "http://liveapi.canpoint.net" + res.data.data.value;
         });
@@ -180,8 +177,8 @@ export default {
         this.$request({
           method: "post",
           url: UPLOADIMAGE,
-          data: formData
-        }).then(res => {
+          data: formData,
+        }).then((res) => {
           this.formValidate.bottom_image =
             "http://liveapi.canpoint.net" + res.data.data.value;
         });
@@ -190,8 +187,8 @@ export default {
     },
     ok() {
       this.$refs["formValidate"]
-        .validate(valid => {})
-        .then(val => {
+        .validate((valid) => {})
+        .then((val) => {
           if (val) {
             if (
               this.formValidate.title_image &&
@@ -199,7 +196,7 @@ export default {
             ) {
               // 这里发送操作请求
               this.row
-                ? this.editBook().then(res => {
+                ? this.editBook().then((res) => {
                     if (res.data.code == 100001) {
                       this.$Message.error(res.data.error);
                       this.modal1 = true;
@@ -208,7 +205,7 @@ export default {
                       this.$emit("changeShowMod", false);
                     }
                   })
-                : this.createInBook().then(res => {
+                : this.createInBook().then((res) => {
                     if (res.data.code == 100001) {
                       this.$Message.error(res.data.error);
                       this.modal1 = true;
@@ -227,8 +224,8 @@ export default {
     },
     cancel() {
       this.$emit("changeShowMod", false);
-    }
-  }
+    },
+  },
 };
 </script>
 

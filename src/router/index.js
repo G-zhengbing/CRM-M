@@ -223,11 +223,19 @@ const router = new Router({
           path: '/main/smsallot', // 信息分配
           component: () => import('@/components/setup/smsAllot')
         },
+        {
+          path: '/main/smsMarketing', // 信息分配
+          component: () => import('@/components/setup/SMS-Marketing')
+        },
 
         // 营销
         {
           path: '/main/channelcode', // 营销,公众号,渠道码
           component: () => import('@/components/Marketing/PublicMark/ChannelCode')
+        },
+        {
+          path: '/main/smsrecord', // 营销,短信记录
+          component: () => import('@/components/Marketing/sms-record')
         },
         {
           path: '/main/pageanalysis', // 数据，流量分析，页面分析
