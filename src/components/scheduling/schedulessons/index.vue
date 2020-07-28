@@ -64,13 +64,13 @@
             <FormItem>
               <div class="dateplc">
                 <DatePicker
-                  v-model="startAccount"
+                  v-model="form.lesson_time_start"
                   type="date"
                   placeholder="上课日期"
                   @on-change="getTimes"
                 ></DatePicker>
                 <DatePicker
-                  v-model="endAccount"
+                  v-model="form.lesson_time_end"
                   type="date"
                   placeholder="上课日期"
                   @on-change="getTimes"
@@ -113,12 +113,12 @@ export default {
     Message
   },
   mounted() {
+    this.form.lesson_time_start = this.datePicker(new Date())
+    this.form.lesson_time_end = this.datePicker(new Date(new Date().getTime() + 24 * 60 * 60 * 1000))
+    // console.log(this.form)
     this.isLoading = true;
     this.getLessonsList({
-      form: {
-        lesson_time_start: this.datePicker(this.startAccount),
-        lesson_time_end: this.datePicker(this.endAccount)
-      },
+      form: this.form,
       page:1
     }).then(() => {
       this.isLoading = false;
@@ -131,12 +131,15 @@ export default {
     return {
       subjectList: storage.getDaiban().screen_list.subject,
       courseType: storage.getDaiban().screen_list.course_type,
-      startAccount: new Date(),
-      endAccount: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
+      // startAccount: new Date(),
+      // endAccount: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
       show: false,
       type: {},
       isLoading: false,
-      form: {},
+      form: {
+        lesson_time_start:this.datePicker(new Date()),
+        lesson_time_end:this.datePicker(new Date(new Date().getTime() + 24 * 60 * 60 * 1000))
+      },
       columns: [
         { type: "selection", width: 60, fixed: "left" },
         { title: "课节名称", key: "lesson_name", width: "200", fixed: "left" },
@@ -230,8 +233,8 @@ export default {
     //清空选线
     clear() {
       this.form = {};
-      this.startAccount = "";
-      this.endAccount = "";
+      // this.startAccount = "";
+      // this.endAccount = "";
       this.seekClick();
     },
     //查询
@@ -259,20 +262,16 @@ export default {
     //设置返回的时间
     datePicker(time) {
       var d = new Date(time);
-      let shi = d.getHours();
-      let fen = d.getMinutes();
-      let miao = d.getSeconds();
-      if (shi < 10) shi = "0" + shi;
-      if (fen < 10) fen = "0" + fen;
-      if (miao < 10) miao = "0" + miao;
       d = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
       return d;
     },
     //操作日期
     getTimes() {
-      if (this.startAccount && this.endAccount) {
-        this.form.lesson_time_start = this.datePicker(this.startAccount);
-        this.form.lesson_time_end = this.datePicker(this.endAccount);
+      if (this.form.lesson_time_start && this.form.lesson_time_end) {
+        this.form.lesson_time_start = this.datePicker(this.form.lesson_time_start);
+        this.form.lesson_time_end = this.datePicker(this.form.lesson_time_end);
+        this.seekClick();
+      }else if(!this.form.lesson_time_start && !this.form.lesson_time_end){
         this.seekClick();
       }
     }
