@@ -21,3 +21,8 @@ export const SENDMESSAGE = BASEURL + "send_message" // 发送短信
 // 营销短信配置
 export const SMSCONFIGURATIONINFO = BASEURL + "sms_configuration_info" // 获取营销短信设置
 export const UPDATESMSCONFIGURATION = BASEURL + "update_sms_configuration" // 修改营销短信设置
+
+// 营销 / 短信营销
+// export const MESSAGELIST = BASEURL + "message_list" // 获取审核通过的短信模板列表
+export const MASSTEXTINGRANGE = BASEURL + "mass_texting_range" // 营销短信群发范围数量
+export const MASSTEXTINGRESIDUE = BASEURL + "mass_texting_residue" // 营销短信群发剩余数量
