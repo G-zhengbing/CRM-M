@@ -21,8 +21,8 @@
               <Option :value="item.id" v-for="item in channel" :key="item.id">{{item.channel_title}}</Option>
             </Select>
           </FormItem>
-          <FormItem label="短信模板" prop="a">
-            <Select v-model="formValidate.a" placeholder="请选择">
+          <FormItem label="短信模板" prop="sms_template_id">
+            <Select v-model="formValidate.sms_template_id" placeholder="请选择" @on-change="changeChannel">
               <Option
                 :value="item.id"
                 v-for="item in chooseChannel"
@@ -35,19 +35,19 @@
               <div>
                 <Radio label="3">
                   公共资源池
-                  <span>{{`${SMSResidueSum.public || 0}/${resourceSum.public||0}`}}</span>
+                  <span>{{`${resourceSum.public_surplus || 0}/${resourceSum.public||0}`}}</span>
                 </Radio>
               </div>
               <div>
                 <Radio label="1">
                   资源池待分配
-                  <span>{{`${SMSResidueSum.resource || 0}/${resourceSum.resource||0}`}}</span>
+                  <span>{{`${resourceSum.resource_surplus || 0}/${resourceSum.resource||0}`}}</span>
                 </Radio>
               </div>
               <div>
                 <Radio label="2">
                   已分配
-                  <span>{{`${SMSResidueSum.allocated || 0}/${resourceSum.allocated||0}`}}</span>
+                  <span>{{`${resourceSum.allocated_surplus || 0}/${resourceSum.allocated||0}`}}</span>
                 </Radio>
               </div>
             </RadioGroup>
@@ -78,11 +78,11 @@
               <Button type="primary" @click="clearState">清空</Button>
             </div>
           </FormItem>
-          <FormItem label="本次发送" prop="code_name">
+          <FormItem label="本次发送" prop="send_count">
             <InputNumber
               :max="number"
               :min="0"
-              v-model="formValidate.code_name"
+              v-model="formValidate.send_count"
               style="width: 60%;"
             ></InputNumber>
             <span style="padding-left: 10px;">/{{number}}</span>
@@ -99,8 +99,10 @@ import {
   MESSAGELIST,
   MASSTEXTINGRANGE,
   MASSTEXTINGRESIDUE,
+  SENDMASSTEXTING,
 } from "@/uilt/url/setup";
 import storage from "@/uilt/storage";
+import qs from "qs";
 export default {
   data() {
     return {
@@ -108,10 +110,10 @@ export default {
       loading: true,
       formValidate: {
         // 组件默认值是 1，修改默认值
-        code_name: 0
+        code_name: 0,
       },
       ruleValidate: {
-        a: [
+        sms_template_id: [
           {
             required: true,
             type: "number",
@@ -137,7 +139,7 @@ export default {
             trigger: "blur",
           },
         ],
-        code_name: [
+        send_count: [
           {
             required: true,
             type: "number",
@@ -148,7 +150,6 @@ export default {
       chooseChannel: [],
       channel: storage.getDaiban().channel,
       resourceSum: {},
-      SMSResidueSum: {},
       number: 0,
     };
   },
@@ -156,7 +157,10 @@ export default {
     ok() {
       this.$refs["formValidate"].validate((val) => {
         if (val) {
-          this.$parent.showModel = false;
+          this.sendSMS().then(() => {
+            this.$Message.success('发送成功')
+            this.$parent.showModel = false;
+          });
         } else {
           this.$Message.error("请填写必选项");
           // 不让表单关闭
@@ -168,9 +172,18 @@ export default {
       });
     },
     cancel() {
-      console.log(this.$parent.showModel);
+      // console.log(this.$parent.showModel);
     },
-    // 清空发送条件
+    async sendSMS() {
+      this.isLoading = true
+      let res = await this.$request({
+        method: "POST",
+        url: SENDMASSTEXTING,
+        data: qs.stringify(this.formValidate),
+      });
+      this.isLoading = false
+    },
+    // 空发送条件
     clearState() {
       this.formValidate.register_time_where = "";
       this.formValidate.login_time_where = "";
@@ -192,6 +205,7 @@ export default {
           url: MASSTEXTINGRANGE,
           params: {
             channel_id: this.formValidate.channel_id,
+            sms_template_id: this.formValidate.sms_template_id,
           },
         });
         this.resourceSum = res.data.data;
@@ -212,6 +226,7 @@ export default {
             send_scope: this.formValidate.send_scope,
             register_time_where: this.formValidate.register_time_where,
             login_time_where: this.formValidate.login_time_where,
+            sms_template_id: this.formValidate.sms_template_id,
           },
         });
         this.number = res.data.data.number;
