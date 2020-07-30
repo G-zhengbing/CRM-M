@@ -127,6 +127,12 @@ export default {
           align: "center"
         },
         {
+          title: "帐号",
+          key: "login_name",
+          width: 120,
+          align: "center"
+        },
+        {
           title: "手机号",
           key: "mobile",
           width: 130,
@@ -140,7 +146,7 @@ export default {
         {
           title: "部门",
           key: "department_name",
-          width: 110,
+          width: 120,
           align: "center"
         },
         {
