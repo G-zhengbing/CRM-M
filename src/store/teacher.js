@@ -134,7 +134,6 @@ export default {
           }
         }
         element.mobile = str.join("")
-
         return element;
       });
     }

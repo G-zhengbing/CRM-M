@@ -26,6 +26,7 @@ import scheducourse from './scheduling/scheducourse'
 import schedulessons from './scheduling/schedulessons'
 import schedustudent from './scheduling/schedustudent'
 import scheduteachers from './scheduteachers'
+import ranking from './statistics/ranking'
 import axios from "axios";
 
 import Payingstudent from './payingstudent/index'
@@ -134,6 +135,7 @@ export default new Vuex.Store({
     }
   },
   modules: {
+    ranking,//统计分析/教师排名
     scheducourse,//课程管理
     schedulessons,//课节统计
     schedustudent,//教师管理

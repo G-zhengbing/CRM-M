@@ -124,7 +124,7 @@
         </FormItem>
         <!-- <FormItem label="课节名称" prop="lesson_name">
           <Input v-model="addLessonsForm.lesson_name" placeholder="课节名称" style="width:200px"></Input>
-        </FormItem> -->
+        </FormItem>-->
         <FormItem label="周数量" prop="times">
           <Input v-model="addLessonsForm.times" placeholder="请输入课节数" style="width:200px"></Input>
         </FormItem>
@@ -954,7 +954,7 @@ export default {
         this.$Message.error("时间块是必填的");
       } else {
         for (var i = 0; i < this.dataArr.length; i++) {
-          if (this.dataArr[i].week.toString() == '') {
+          if (this.dataArr[i].week.toString() == "") {
             this.$Message.error("周不能为空");
           } else if (!this.dataArr[i].start_time) {
             this.$Message.error("开始时间不能为空");
@@ -971,24 +971,47 @@ export default {
           this.addLessonsForm.schedule_id = this.type.obj.id;
           this.addLessonsForm.times_block = JSON.stringify(this.dataArr);
           this.addLessonsForm.student_name = this.type.obj.student_name;
+          this.addLessonsForm.grader = this.type.obj.grader;
+          this.addLessonsForm.subject = this.type.obj.subject;
           this.addLessonsForm.student_name = JSON.stringify(
             this.type.obj.mobile
           ).substr(-4);
+          // console.log(this.addLessonsForm);
+          // return;
           this.setCreatedlessons({ form: this.addLessonsForm }).then(res => {
             this.lessonsDisableBtn = false;
             if (!res.data.ret) {
               this.$Message.error(res.data.error);
               return;
             } else if (res.data.data.lesson.class) {
-              this.$Message.error(res.data.data.lesson.class + " 课程时间冲突");
+              this.$Message.warning({
+                content:
+                  "成功" +
+                  res.data.data.lesson.lesson.length +
+                  "节，失败：" +
+                  res.data.data.lesson.class +
+                  " 课程时间冲突",
+                duration: 10,
+                closable: true
+              });
               return;
             } else if (res.data.data.lesson.coach) {
-              this.$Message.error(res.data.data.lesson.coach + " 老师时间冲突");
+              this.$Message.warning({
+                content:
+                  "成功" +
+                  res.data.data.lesson.lesson.length +
+                  "节，失败：" +
+                  res.data.data.lesson.coach +
+                  " 老师时间冲突",
+                duration: 10,
+                closable: true
+              });
               return;
             } else {
               this.$Message.success("添加课节成功");
               this.showLessons = false;
               this.lessonsLoading = true;
+              this.dataArr = [];
               this.getLessonsList({
                 uid: this.type.obj.id,
                 page: this.lessonsCurrentpage,

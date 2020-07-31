@@ -1185,8 +1185,8 @@ export default {
       var start = "";
       var end = "";
       if (endNum * 1 < 60) {
-        if (endNum * 1 + 50 >= 60) {
-          end = endNum * 1 + 50 - 60;
+        if (endNum * 1 + 30 >= 60) {
+          end = endNum * 1 + 30 - 60;
           start = startNum * 1 + 1;
           if (end < 10) {
             end = "0" + end;
@@ -1196,7 +1196,7 @@ export default {
           }
         } else {
           start = startNum;
-          end = endNum * 1 + 50;
+          end = endNum * 1 + 30;
         }
         this.createAuditionForm.end_time = start + ":" + end;
       }
