@@ -66,7 +66,7 @@
           </Col>
           <Col span="4">
             <FormItem label="联系方式" prop="tel">
-              <Input v-model="form.tel" placeholder="请输入联系方式"></Input>
+              <Input v-model="form.tel" :disabled="text === '编辑'" placeholder="请输入联系方式"></Input>
             </FormItem>
           </Col>
           <Col span="4">
@@ -584,6 +584,13 @@ export default {
             trigger: "blur"
           }
         ],
+        tel: [
+          {
+            required: true,
+            message: "联系方式不能为空",
+            trigger: "blur"
+          }
+        ],
         sex: [
           {
             required: true,
@@ -921,7 +928,7 @@ export default {
             formData.append("level", this.form.level);
             formData.append("sex", this.form.sex);
             formData.append("type", this.form.type);
-            formData.append("mobile", this.form.mobile);
+            formData.append("mobile", this.form.tel);
             formData.append("subject", this.form.subject);
             formData.append("grade", this.form.grade.join(","));
             formData.append("avatar", this.uploadList[0]);

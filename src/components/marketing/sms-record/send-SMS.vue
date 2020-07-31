@@ -16,84 +16,118 @@
           :label-width="100"
           :show-message="false"
         >
-          <FormItem label="选择渠道" prop="city">
-            <Select v-model="formValidate.city" placeholder="请选择">
-              <Option value="beijing">New York</Option>
+          <FormItem label="选择渠道" prop="channel_id">
+            <Select v-model="formValidate.channel_id" placeholder="请选择" @on-change="changeChannel">
+              <Option :value="item.id" v-for="item in channel" :key="item.id">{{item.channel_title}}</Option>
             </Select>
           </FormItem>
-          <FormItem label="短信模板" prop="a">
-            <Select v-model="formValidate.a" placeholder="请选择">
-              <Option value="beijing">New York</Option>
+          <FormItem label="短信模板" prop="sms_template_id">
+            <Select v-model="formValidate.sms_template_id" placeholder="请选择" @on-change="changeChannel">
+              <Option
+                :value="item.id"
+                v-for="item in chooseChannel"
+                :key="item.id"
+              >{{item.template_name}}</Option>
             </Select>
           </FormItem>
-          <FormItem label="发送范围" prop="gender">
-            <RadioGroup v-model="formValidate.gender">
+          <FormItem label="发送范围" prop="send_scope">
+            <RadioGroup v-model="formValidate.send_scope" @on-change="getSMSResidueSum">
               <div>
-                <Radio label="male">
+                <Radio label="3">
                   公共资源池
-                  <span>80000/1000</span>
+                  <span>{{`${resourceSum.public_surplus || 0}/${resourceSum.public||0}`}}</span>
                 </Radio>
               </div>
               <div>
-                <Radio label="female">
+                <Radio label="1">
                   资源池待分配
-                  <span>80000/1000</span>
+                  <span>{{`${resourceSum.resource_surplus || 0}/${resourceSum.resource||0}`}}</span>
                 </Radio>
               </div>
               <div>
-                <Radio label="female">
+                <Radio label="2">
                   已分配
-                  <span>80000/1000</span>
+                  <span>{{`${resourceSum.allocated_surplus || 0}/${resourceSum.allocated||0}`}}</span>
                 </Radio>
               </div>
             </RadioGroup>
           </FormItem>
-          <FormItem label="发送条件">
-            <RadioGroup
-              v-model="formValidate.b"
-              type="button"
-              style="display: block;margin-bottom: 5px;"
-            >
-              <Radio label="1">公共资源池</Radio>
-              <Radio label="2">资源池待分配</Radio>
-              <Radio label="3">已分配</Radio>
-            </RadioGroup>
-            <RadioGroup v-model="formValidate.c" type="button">
-              <Radio label="1">公共资源池</Radio>
-              <Radio label="2">资源池待分配</Radio>
-              <Radio label="3">已分配</Radio>
-            </RadioGroup>
+          <FormItem label="发送条件" class="send">
+            <div class="left">
+              <RadioGroup
+                v-model="formValidate.register_time_where"
+                type="button"
+                @on-change="getSMSResidueSum"
+                style="display: block;margin-bottom: 5px;"
+              >
+                <Radio label="1">近7天注册</Radio>
+                <Radio label="2">近一个月注册</Radio>
+                <Radio label="3">近两个月注册</Radio>
+              </RadioGroup>
+              <RadioGroup
+                v-model="formValidate.login_time_where"
+                type="button"
+                @on-change="getSMSResidueSum"
+              >
+                <Radio label="4">近7天活跃</Radio>
+                <Radio label="5">近一个月活跃</Radio>
+                <Radio label="6">近两个月活跃</Radio>
+              </RadioGroup>
+            </div>
+            <div class="right">
+              <Button type="primary" @click="clearState">清空</Button>
+            </div>
           </FormItem>
-          <FormItem label="本次发送" prop="code_name">
-            <Input v-model="formValidate.code_name" placeholder="请输入二维码名称" style="width: 60%;;"></Input>
-            <span style="padding-left: 10px;">/1000</span>
+          <FormItem label="本次发送" prop="send_count">
+            <InputNumber
+              :max="number"
+              :min="0"
+              v-model="formValidate.send_count"
+              style="width: 60%;"
+            ></InputNumber>
+            <span style="padding-left: 10px;">/{{number}}</span>
           </FormItem>
         </Form>
       </div>
+      <Loading v-show="isLoading" />
     </Modal>
   </div>
 </template>
 
 <script>
+import {
+  MESSAGELIST,
+  MASSTEXTINGRANGE,
+  MASSTEXTINGRESIDUE,
+  SENDMASSTEXTING,
+} from "@/uilt/url/setup";
+import storage from "@/uilt/storage";
+import qs from "qs";
 export default {
   data() {
     return {
+      isLoading: false,
       loading: true,
-      formValidate: {},
+      formValidate: {
+        // 组件默认值是 1，修改默认值
+        code_name: 0,
+      },
       ruleValidate: {
-        a: [
+        sms_template_id: [
           {
             required: true,
+            type: "number",
             trigger: "change",
           },
         ],
-        city: [
+        channel_id: [
           {
             required: true,
+            type: "number",
             trigger: "change",
           },
         ],
-        gender: [
+        send_scope: [
           {
             required: true,
             trigger: "change",
@@ -105,20 +139,28 @@ export default {
             trigger: "blur",
           },
         ],
-        code_name: [
+        send_count: [
           {
             required: true,
+            type: "number",
             trigger: "blur",
           },
         ],
       },
+      chooseChannel: [],
+      channel: storage.getDaiban().channel,
+      resourceSum: {},
+      number: 0,
     };
   },
   methods: {
     ok() {
       this.$refs["formValidate"].validate((val) => {
         if (val) {
-          this.$parent.showModel = false;
+          this.sendSMS().then(() => {
+            this.$Message.success('发送成功')
+            this.$parent.showModel = false;
+          });
         } else {
           this.$Message.error("请填写必选项");
           // 不让表单关闭
@@ -130,11 +172,80 @@ export default {
       });
     },
     cancel() {
-      console.log(this.$parent.showModel);
+      // console.log(this.$parent.showModel);
     },
+    async sendSMS() {
+      this.isLoading = true
+      let res = await this.$request({
+        method: "POST",
+        url: SENDMASSTEXTING,
+        data: qs.stringify(this.formValidate),
+      });
+      this.isLoading = false
+    },
+    // 空发送条件
+    clearState() {
+      this.formValidate.register_time_where = "";
+      this.formValidate.login_time_where = "";
+      this.getSMSResidueSum();
+    },
+    async getSMSTemplate() {
+      this.isLoading = true;
+      let res = await this.$request({
+        method: "POST",
+        url: MESSAGELIST,
+      });
+      this.chooseChannel = res.data.data.data;
+      this.isLoading = false;
+    },
+    async changeChannel() {
+      if (this.formValidate.channel_id) {
+        this.isLoading = true;
+        let res = await this.$request({
+          url: MASSTEXTINGRANGE,
+          params: {
+            channel_id: this.formValidate.channel_id,
+            sms_template_id: this.formValidate.sms_template_id,
+          },
+        });
+        this.resourceSum = res.data.data;
+        this.isLoading = false;
+        if (this.formValidate.send_scope) {
+          this.getSMSResidueSum();
+        }
+      }
+    },
+    async getSMSResidueSum() {
+      // 满足条件才能发送
+      if (this.formValidate.send_scope && this.formValidate.channel_id) {
+        this.isLoading = true;
+        let res = await this.$request({
+          url: MASSTEXTINGRESIDUE,
+          params: {
+            channel_id: this.formValidate.channel_id,
+            send_scope: this.formValidate.send_scope,
+            register_time_where: this.formValidate.register_time_where,
+            login_time_where: this.formValidate.login_time_where,
+            sms_template_id: this.formValidate.sms_template_id,
+          },
+        });
+        this.number = res.data.data.number;
+        this.isLoading = false;
+      }
+    },
+  },
+  created() {
+    this.getSMSTemplate();
   },
 };
 </script>
 
 <style scoped>
+.left {
+  display: inline-block;
+}
+.right {
+  display: inline-block;
+  margin-left: 20px;
+}
 </style>
