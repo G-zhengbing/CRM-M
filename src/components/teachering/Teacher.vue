@@ -66,7 +66,7 @@
           </Col>
           <Col span="4">
             <FormItem label="联系方式" prop="tel">
-              <Input v-model="form.tel" :disabled="text === '编辑'" placeholder="请输入联系方式"></Input>
+              <Input v-model="form.tel" placeholder="请输入联系方式"></Input>
             </FormItem>
           </Col>
           <Col span="4">
@@ -141,7 +141,7 @@
             </FormItem>
           </Col>
           <Col span="24">
-            <FormItem label="教授类型">
+            <FormItem label="教授类型" prop="type">
               <RadioGroup v-model="form.type">
                 <Radio :label="1">班课</Radio>
                 <Radio :label="4">一对一</Radio>
@@ -372,139 +372,6 @@
               ></Input>
             </FormItem>
           </Col>
-          <!-- <Col span="24">开放时间信息</Col>
-          <Col span="24">
-            <div class="content">
-              <div class="content-left">
-                <ul>
-                  <li>-</li>
-                  <li>00:00 - 00:30</li>
-                  <li>00:30 - 01:00</li>
-                  <li>01:00 - 01:30</li>
-                  <li>01:30 - 02:00</li>
-                  <li>02:00 - 02:30</li>
-                  <li>02:30 - 03:00</li>
-                  <li>03:00 - 03:30</li>
-                  <li>03:30 - 04:00</li>
-                  <li>04:00 - 04:30</li>
-                  <li>04:30 - 05:00</li>
-                  <li>05:00 - 05:30</li>
-                  <li>05:30 - 06:00</li>
-                  <li>06:00 - 06:30</li>
-                  <li>06:30 - 07:00</li>
-                  <li>07:00 - 07:30</li>
-                  <li>07:30 - 08:00</li>
-                  <li>08:00 - 08:30</li>
-                  <li>08:30 - 09:00</li>
-                  <li>09:00 - 09:30</li>
-                  <li>09:30 - 10:00</li>
-                  <li>10:00 - 10:30</li>
-                  <li>10:30 - 11:00</li>
-                  <li>11:00 - 11:30</li>
-                  <li>11:30 - 12:00</li>
-                  <li>12:00 - 12:30</li>
-                  <li>12:30 - 13:00</li>
-                  <li>13:00 - 13:30</li>
-                  <li>13:30 - 14:00</li>
-                  <li>14:00 - 14:30</li>
-                  <li>14:30 - 15:00</li>
-                  <li>15:00 - 15:30</li>
-                  <li>15:30 - 16:00</li>
-                  <li>16:00 - 16:30</li>
-                  <li>16:30 - 17:00</li>
-                  <li>17:00 - 17:30</li>
-                  <li>17:30 - 18:00</li>
-                  <li>18:00 - 18:30</li>
-                  <li>18:30 - 19:00</li>
-                  <li>19:00 - 19:30</li>
-                  <li>19:30 - 20:00</li>
-                  <li>20:00 - 20:30</li>
-                  <li>20:30 - 21:00</li>
-                  <li>21:00 - 21:30</li>
-                  <li>21:30 - 22:00</li>
-                  <li>22:00 - 22:30</li>
-                  <li>22:30 - 23:00</li>
-                  <li>23:00 - 23:30</li>
-                  <li>23:30 - 24:00</li>
-                </ul>
-              </div>
-              <div class="content-right">
-                <ul class="content-right-header">
-                  <li>一</li>
-                  <li>二</li>
-                  <li>三</li>
-                  <li>四</li>
-                  <li>五</li>
-                  <li>六</li>
-                  <li>日</li>
-                </ul>
-                <div class="content-right-footer">
-                  <ul>
-                    <li
-                      v-for="(k,i) in num"
-                      :key="i"
-                      :class="{active:timeBlock(k-1) == 'ok'}"
-                      @click="getNum(i,$event)"
-                    ></li>
-                  </ul>
-                  <ul>
-                    <li
-                      :class="{active:timeBlock(k-1) == 'ok'}"
-                      @click="getNum(i,$event)"
-                      v-for="(k,i) in num*2"
-                      v-if=" k > num"
-                      :key="i"
-                    ></li>
-                  </ul>
-                  <ul>
-                    <li
-                      :class="{active:timeBlock(k-1) == 'ok'}"
-                      @click="getNum(i,$event)"
-                      v-for="(k,i) in num*3"
-                      v-if=" k > num*2"
-                      :key="i"
-                    ></li>
-                  </ul>
-                  <ul>
-                    <li
-                      :class="{active:timeBlock(k-1) == 'ok'}"
-                      @click="getNum(i,$event)"
-                      v-for="(k,i) in num*4"
-                      v-if=" k > num*3"
-                      :key="i"
-                    ></li>
-                  </ul>
-                  <ul>
-                    <li
-                      :class="{active:timeBlock(k-1) == 'ok'}"
-                      @click="getNum(i,$event)"
-                      v-for="(k,i) in num*5"
-                      v-if=" k > num*4"
-                      :key="i"
-                    ></li>
-                  </ul>
-                  <ul>
-                    <li
-                      :class="{active:timeBlock(k-1) == 'ok'}"
-                      @click="getNum(i,$event)"
-                      v-for="(k,i) in num*6"
-                      v-if=" k > num*5"
-                      :key="i"
-                    ></li>
-                  </ul>
-                  <ul>
-                    <li
-                      :class="{active:timeBlock(k-1) == 'ok'}"
-                      @click="getNum(i,$event)"
-                      v-for="(k,i) in num*7"
-                      v-if=" k > num*6"
-                      :key="i"
-                    ></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </Col>-->
         </Row>
       </Form>
       <div slot="footer">
@@ -587,8 +454,7 @@ export default {
         tel: [
           {
             required: true,
-            message: "联系方式不能为空",
-            trigger: "blur"
+            message: "联系方式不能为空"
           }
         ],
         sex: [
@@ -828,7 +694,7 @@ export default {
             formData.append("name", this.form.name);
             formData.append("level", this.form.level);
             formData.append("sex", this.form.sex);
-            formData.append("type", this.form.type);
+            formData.append("type", this.form.type ? this.form.type : "");
             formData.append("mobile", this.form.tel);
             formData.append("subject", this.form.subject);
             formData.append(
@@ -898,6 +764,7 @@ export default {
             axios.post(UPDATATEACHERS, formData, config).then(response => {
               if (response.data.code == 100000 && response.data.error) {
                 this.$Message.error(response.data.error);
+                return;
               }
               if (response.data.code == 200 && response.data.ret == true) {
                 this.$Message.success("修改成功");
@@ -927,7 +794,7 @@ export default {
             formData.append("name", this.form.name);
             formData.append("level", this.form.level);
             formData.append("sex", this.form.sex);
-            formData.append("type", this.form.type);
+            formData.append("type", this.form.type ? this.form.type : "");
             formData.append("mobile", this.form.tel);
             formData.append("subject", this.form.subject);
             formData.append("grade", this.form.grade.join(","));
@@ -935,7 +802,7 @@ export default {
             // formData.append("time_block", this.acArr.join(","));
             formData.append(
               "address_province_id",
-              this.form.address_province_id
+              this.form.address_province_id ? this.form.address_province_id : ""
             );
             formData.append(
               "address_city_id",
@@ -994,6 +861,7 @@ export default {
             axios.post(CREATEDTEACHERS, formData, config).then(response => {
               if (response.data.code == 100000 && response.data.error) {
                 this.$Message.error(response.data.error);
+                return;
               }
               if (response.data.code == 200 && response.data.ret == true) {
                 this.$Message.success("新增成功");

@@ -1,8 +1,8 @@
 <template>
   <div class="box">
     <Row class-name="exclusive" style="margin:15px 0">
-      <Col span="4">
-        <Select v-model="form.grade" placeholder="阶段">
+      <Col span="3">
+        <Select v-model="form.grade" placeholder="年级" @on-change="seek">
           <Option :value="1">一年级</Option>
           <Option :value="2">二年级</Option>
           <Option :value="3">三年级</Option>
@@ -17,8 +17,8 @@
           <Option :value="12">高三</Option>
         </Select>
       </Col>
-      <Col span="4">
-        <Select v-model="form.subject" placeholder="科目">
+      <Col span="3">
+        <Select v-model="form.subject" placeholder="科目" @on-change="seek">
           <Option :value="i*1" v-for="(list,i) in subject" :key="i">{{list}}</Option>
         </Select>
       </Col>
@@ -26,7 +26,7 @@
         <Button type="primary" @click="clear">清除</Button>
       </Col>
     </Row>
-    <Table border :columns="columns" :data="data" height="550"></Table>
+    <Table border :columns="columns" :data="data"></Table>
     <Loading v-show="isLoading" />
   </div>
 </template>
@@ -53,10 +53,31 @@ export default {
   data() {
     return {
       columns: [
-        { title: "排序", key: "sort" },
+        {
+          type: "index",
+          width: 60,
+          align: "center"
+        },
         { title: "教师", key: "coach_name" },
-        { title: "阶段", key: "sort" },
-        { title: "科目", key: "sort" },
+        {
+          title: "阶段",
+          key: "level",
+          render: (h, params) => {
+            if (params.row.level == 1) {
+              return h("span", "中级");
+            } else if (params.row.level == 2) {
+              return h("span", "高级");
+            } else if (params.row.level == 3) {
+              return h("span", "特一级");
+            } else if (params.row.level == 4) {
+              return h("span", "特二级");
+            } else if (params.row.level == 5) {
+              return h("span", "特三级");
+            }
+          }
+        },
+        { title: "年级", key: "grade" },
+        { title: "科目", key: "subject" },
         { title: "有效试听", key: "appoint_num" },
         { title: "签单量", key: "order_num" },
         { title: "转化率", key: "order_rate" }
@@ -68,6 +89,13 @@ export default {
   },
   methods: {
     ...mapActions(["getTeacherRanking"]),
+    //筛选
+    seek() {
+      this.isLoading = true;
+      this.getTeacherRanking({ form: this.form }).then(() => {
+        this.isLoading = false;
+      });
+    },
     //清除筛选条件
     clear() {
       this.form = {};

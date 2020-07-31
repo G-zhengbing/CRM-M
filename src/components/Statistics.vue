@@ -73,11 +73,11 @@
       <Col span="24">
         <ul class="datalis">
           <li>
-            <span>{{collect.appoint_num}}</span>
+            <span>{{collect.assign_num}}</span>
             <p>分配量</p>
           </li>
           <li>
-            <span>{{collect.assign_num}}</span>
+            <span>{{collect.appoint_num}}</span>
             <p>邀约量</p>
           </li>
           <li>

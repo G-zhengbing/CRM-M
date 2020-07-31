@@ -27,7 +27,6 @@ export default {
 						...form
 					}
 				}).then(res=>{
-					console.log(res)
 					commit('setRanking',res.data.data)
 					resolve()
 				}).catch(e=>{
