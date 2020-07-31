@@ -3,8 +3,8 @@
     <header>
       <Button type="primary" style="margin-bottom: 20px;" @click="showModel=true">群发短信</Button>
       <Form ref="formItem" :model="formItem" inline>
-        <FormItem prop="name">
-          <Input v-model="formItem.name" placeholder="模板名称"></Input>
+        <FormItem>
+          <Input v-model="formItem.sms_template_name" placeholder="模板名称" @on-change="getSMSList"></Input>
         </FormItem>
         <FormItem>
           <DatePicker
@@ -32,15 +32,17 @@
       />
     </main>
     <Send-SMS v-if="showModel"></Send-SMS>
-     <Loading v-show="isLoading" />
+    <Loading v-show="isLoading" />
   </div>
 </template>
 
 <script>
-import sendSMS from './send-SMS'
+import { MARKETINGSMSBATCHLIST } from "@/uilt/url/setup";
+import qs from "qs";
+import sendSMS from "./send-SMS";
 export default {
   components: {
-    'Send-SMS': sendSMS
+    "Send-SMS": sendSMS,
   },
   data() {
     return {
@@ -56,107 +58,139 @@ export default {
         },
         {
           title: "发送者",
-          key: "student_name",
-          width: 100,
+          key: "send_user",
+          width: 120,
           align: "center",
           fixed: "left",
         },
         {
           title: "发送时间",
-          key: "student_name",
-          width: 100,
+          key: "send_time",
+          width: 120,
           align: "center",
           fixed: "left",
         },
         {
           title: "模板名称",
-          key: "student_name",
+          key: "template_name",
           width: 120,
           align: "center",
           fixed: "left",
         },
         {
           title: "模板类型",
-          key: "student_name",
+          key: "template_type",
           width: 100,
           align: "center",
         },
         {
           title: "模板内容",
-          key: "student_name",
+          key: "template_contents",
+          tooltip: true,
           width: 220,
           align: "center",
         },
         {
           title: "发送渠道",
-          key: "student_name",
+          key: "channel_name",
           width: 100,
           align: "center",
         },
         {
           title: "渠道范围",
-          key: "student_name",
+          key: "send_scope",
           width: 100,
           align: "center",
         },
         {
           title: "发送条件",
-          key: "student_name",
+          key: "send_where",
           width: 120,
           align: "center",
         },
         {
           title: "发送数量",
-          key: "student_name",
+          key: "send_count",
           width: 100,
           align: "center",
         },
         {
           title: "接收数量",
-          key: "student_name",
+          key: "receive_count",
           width: 100,
           align: "center",
         },
         {
           title: "点击链接数",
-          key: "student_name",
+          key: "click_link_count",
           width: 100,
           align: "center",
         },
         {
           title: "预约成功数",
-          key: "student_name",
+          key: "about_course_count",
           width: 100,
           align: "center",
         },
         {
           title: "购课数",
-          key: "student_name",
+          key: "buy_course_count",
           width: 100,
           align: "center",
         },
       ],
-      data: [
-        {
-          student_name: 123,
-        },
-      ],
+      data: [],
       total: 1,
       per_page: 10,
       current_page: 1,
       last_page: 1,
+      tamType: {
+        1: "通知短信",
+        2: "营销短信",
+      },
+      channel: {
+        1: "待分配",
+        2: "已分配",
+        3: "公共",
+      },
     };
+  },
+  created() {
+    this.getSMSList();
   },
   methods: {
     changeCreateDate(e) {
-      console.log(e);
+      this.formItem.send_srart_time = e[0];
+      this.formItem.send_end_time = e[1];
+      // this.$set(this.formItem.send_srart_time, e[0]);
+      // this.$set(this.formItem.send_end_time, e[1]);
+      this.getSMSList();
+    },
+    async getSMSList() {
+      this.isLoading = true;
+      let res = await this.$request({
+        url: MARKETINGSMSBATCHLIST,
+        params: {
+          sms_template_name: this.formItem.sms_template_name,
+          send_srart_time: this.formItem.send_srart_time,
+          send_end_time: this.formItem.send_end_time,
+        },
+      });
+      this.data = res.data.data.data;
+      this.data.map((item) => {
+        item.template_type = this.tamType[item.template_type];
+        item.send_scope = this.channel[item.send_scope];
+        item.send_where = item.send_where.slice(0, item.send_where.length - 1);
+      });
+      this.isLoading = false;
     },
     // 改变页码
     changePages(val) {
       this.formItem.page = val;
     },
     clear() {
-			this.formItem = {}
+      this.formItem = {};
+      this.getSMSList();
     },
   },
 };

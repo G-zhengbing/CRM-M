@@ -27,3 +27,4 @@ export const UPDATESMSCONFIGURATION = BASEURL + "update_sms_configuration" // �
 export const MASSTEXTINGRANGE = BASEURL + "mass_texting_range" // 营销短信群发范围数量
 export const MASSTEXTINGRESIDUE = BASEURL + "mass_texting_residue" // 营销短信群发剩余数量
 export const SENDMASSTEXTING = BASEURL + "send_mass_texting" // 发送批次短信
+export const MARKETINGSMSBATCHLIST = BASEURL + "marketing_sms_batch_list" // 短信发送批次列表
