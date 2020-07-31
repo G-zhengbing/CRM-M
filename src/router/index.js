@@ -157,7 +157,11 @@ const router = new Router({
           path: '/main/scheduteachers',
           component: Scheduteachers
         },
-
+        ,
+        {
+          path: '/main/ranking',//统计分析教师排名
+          component: ()=>import('../components/statistics/ranking/index.vue')
+        },
         // M站管理
         {
           path: '/main/inbookcode', // 书内一书一码

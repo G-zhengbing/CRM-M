@@ -1,4 +1,6 @@
-import { BASEURL } from './env'
+import {
+  BASEURL
+} from './env'
 
 const PONESTATUS = "http://liveh5.canpoint.net/send_message" //跟进/发送短信验证码
 
@@ -28,12 +30,12 @@ const TYPESHOOL = BASEURL + "type_school" //类型/学校
 const QUDAO = BASEURL + "channel_account" //渠道转介绍
 const DINGDAN = BASEURL + "add_order" //创建订单
 const DAORU = BASEURL + "export" //导入
-const HUCHU = BASEURL + "callcellphone"//呼出
+const HUCHU = BASEURL + "callcellphone" //呼出
 const PAYSTUDENT = BASEURL + "paid_account" //我的付费学员
 const UPLIST = BASEURL + "attend_class" //上可列表
 const TECHSTU = BASEURL + "head_clue" // 教务/我的学员
 const TECPAY = BASEURL + "order_clue" //教务/付费学员
-const TEPAYSTU = BASEURL + "batch_assign"//教务/付费学员/分配
+const TEPAYSTU = BASEURL + "batch_assign" //教务/付费学员/分配
 const TEPAYLIST = BASEURL + "head_master" //教务/付费学员/班主任列表
 const TEPCHE = BASEURL + "order_update" //班主任跟进
 const TEPREPORT = BASEURL + "learn_report" //学情报告
@@ -41,8 +43,8 @@ const TEPADDREPORT = BASEURL + "order_report" //新增学情报告
 // const REFER = "http://192.168.1.181:3000/api/" + 'screen_list' //渠道来源列表
 const REFER = BASEURL + 'screen_list' //渠道来源列表
 const SALES = BASEURL + 'sales' //渠道来源列表
-const MINECLIENT = BASEURL + "mine_clues"//我的客户
-const NOTIFICATION = BASEURL + "action_list"//我的客户/消息提醒
+const MINECLIENT = BASEURL + "mine_clues" //我的客户
+const NOTIFICATION = BASEURL + "action_list" //我的客户/消息提醒
 const CLIENTTYPE = BASEURL + "order_product" //创建订单/选择课程
 const RESERVED = BASEURL + "mine_appoint_list" //预约单/
 const RESERVEDAll = BASEURL + "system_appoint_list" //全部预约单/
@@ -53,29 +55,29 @@ const CREATEDTEACHERS = BASEURL + "coach_store" //新建教师
 const UPDATATEACHERS = BASEURL + "modify_coach" //修改教师
 const CLICKTEACHER = BASEURL + "available_coach_list" //预约选老师
 const QIANDAO = BASEURL + "batch_stage" //签到/缺席/预约批量
-const APPRAISAL = BASEURL + "appiont_modify"//查看测评
-const GETTIMEBLOCK = BASEURL + "timeblock"//时间块转换时间段
+const APPRAISAL = BASEURL + "appiont_modify" //查看测评
+const GETTIMEBLOCK = BASEURL + "timeblock" //时间块转换时间段
 const STATISTICS = BASEURL + "call_phone" //统计分析
 const PROVINCE = BASEURL + "province" //省
-const CITY = BASEURL + "p_city"//市
-const CREATEINTRODUCE = BASEURL + "clue_regist"//转介绍/创建转介绍
-const INTRODUCE = BASEURL + "get_mobile"//检测手机号
-const IMPORTDATA = BASEURL + "upload_csv"//线索导入
-const CREATEORDER = BASEURL + "create_order"//创建订单
-const HANDOVER = BASEURL + "handover"//交接单
-const IMPORTANT = BASEURL + 'import_order_list'//导入订单列表
-const IMPORTCLUELIST = BASEURL + 'import_clue_list'//导入线索
-const IMPORTLIST = BASEURL + "upload_csv"//导入线索
-const ACCOUNTORDER = BASEURL + "account_order"//升级订单列表
-const CREATEUPGRADE = BASEURL + "create_upgrade_order"//创建升级订单
-const UPLOADORDER = BASEURL + "upload_order"//导入订单1
-const UPLOADPRODUCTR = BASEURL + "upload_product"//导入订单2
-const UPLOADCSVORDER = BASEURL + "upload_csv_order"//导入订单3
+const CITY = BASEURL + "p_city" //市
+const CREATEINTRODUCE = BASEURL + "clue_regist" //转介绍/创建转介绍
+const INTRODUCE = BASEURL + "get_mobile" //检测手机号
+const IMPORTDATA = BASEURL + "upload_csv" //线索导入
+const CREATEORDER = BASEURL + "create_order" //创建订单
+const HANDOVER = BASEURL + "handover" //交接单
+const IMPORTANT = BASEURL + 'import_order_list' //导入订单列表
+const IMPORTCLUELIST = BASEURL + 'import_clue_list' //导入线索
+const IMPORTLIST = BASEURL + "upload_csv" //导入线索
+const ACCOUNTORDER = BASEURL + "account_order" //升级订单列表
+const CREATEUPGRADE = BASEURL + "create_upgrade_order" //创建升级订单
+const UPLOADORDER = BASEURL + "upload_order" //导入订单1
+const UPLOADPRODUCTR = BASEURL + "upload_product" //导入订单2
+const UPLOADCSVORDER = BASEURL + "upload_csv_order" //导入订单3
 
-const MATERIALUPLOAD = BASEURL + "material_upload"//资料上传
-const PRODUCTINFOFILE = BASEURL + "product_info_file"//课程简介图片上传
-const UPDATEPRODUCTS = BASEURL + "update_products"//课程修改
-const CREATEPRODUCTS = BASEURL + "create_products"//新建课程
+const MATERIALUPLOAD = BASEURL + "material_upload" //资料上传
+const PRODUCTINFOFILE = BASEURL + "product_info_file" //课程简介图片上传
+const UPDATEPRODUCTS = BASEURL + "update_products" //课程修改
+const CREATEPRODUCTS = BASEURL + "create_products" //新建课程
 
 const PAYINGSTUDENT = BASEURL + "paying_student" //教务/付费学员
 const CLASSTEACH = BASEURL + "teacher_list" //教务/select/班主任列表
@@ -123,7 +125,14 @@ const GETUPPERLIMIT = BASEURL + "get_user_assignment_task_channel_list_and_upper
 
 const SCREENLIST = BASEURL + "screen_list" //教务/ 公共接口，select状态栏
 
+const ANALYZE_STATISTICS = BASEURL + "appoint_assign" //统计分析/业绩分析
+const PERSON_STATISTICS = BASEURL + "order_sale" //统计分析/个人业绩分布
+const TEACHER_RANKING = BASEURL + 'coach_appoint'//教师排名
+
 export {
+  TEACHER_RANKING,
+  PERSON_STATISTICS,
+  ANALYZE_STATISTICS,
   DELETETEACHER,
   GETUPPERLIMIT,
   UPPERLIMIT,

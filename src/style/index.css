@@ -25,6 +25,37 @@ html{
 .box{
 	margin: 0 25px;
 }
+/* <Span_title> */
+.span_title{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+}
+/* </Span_title> */
+/* <Select_tab> */
+.select_tab{
+  width: 100%;
+  height: 35px;
+  display: flex;
+  border: 1px solid #ccc;
+}
+.select_tab li{
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.select_tab li:nth-child(2){
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+}
+.select_tab li.active{
+  background-color: #515a6e;
+  color: #fff;
+}
+/* </Select_tab> */
 /* <Catalog> */
 .catalog ul li i.delete-icon{
   font-size: 20px;
@@ -164,6 +195,9 @@ html{
 /* <Row> */
 .ivu-row.exclusive .ivu-col{
   margin-right: 30px;
+}
+.ivu-row.exclusive .ivu-col.not_right{
+  margin-right: 0;
 }
 /* </Row> */
 /* <Button> */
