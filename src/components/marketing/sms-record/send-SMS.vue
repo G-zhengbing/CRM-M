@@ -22,7 +22,11 @@
             </Select>
           </FormItem>
           <FormItem label="短信模板" prop="sms_template_id">
-            <Select v-model="formValidate.sms_template_id" placeholder="请选择" @on-change="changeChannel">
+            <Select
+              v-model="formValidate.sms_template_id"
+              placeholder="请选择"
+              @on-change="changeChannel"
+            >
               <Option
                 :value="item.id"
                 v-for="item in chooseChannel"
@@ -32,19 +36,19 @@
           </FormItem>
           <FormItem label="发送范围" prop="send_scope">
             <RadioGroup v-model="formValidate.send_scope" @on-change="getSMSResidueSum">
-              <div>
+              <div v-if="showScope[2] !== -1">
                 <Radio label="3">
                   公共资源池
                   <span>{{`${resourceSum.public_surplus || 0}/${resourceSum.public||0}`}}</span>
                 </Radio>
               </div>
-              <div>
+              <div v-if="showScope[0] !== -1">
                 <Radio label="1">
                   资源池待分配
                   <span>{{`${resourceSum.resource_surplus || 0}/${resourceSum.resource||0}`}}</span>
                 </Radio>
               </div>
-              <div>
+              <div v-if="showScope[1] !== -1">
                 <Radio label="2">
                   已分配
                   <span>{{`${resourceSum.allocated_surplus || 0}/${resourceSum.allocated||0}`}}</span>
@@ -100,6 +104,7 @@ import {
   MASSTEXTINGRANGE,
   MASSTEXTINGRESIDUE,
   SENDMASSTEXTING,
+  SMSCONFIGURATIONINFO,
 } from "@/uilt/url/setup";
 import storage from "@/uilt/storage";
 import qs from "qs";
@@ -151,6 +156,9 @@ export default {
       channel: storage.getDaiban().channel,
       resourceSum: {},
       number: 0,
+      selectChannel: "",
+      send_the_scope: "",
+      showScope: [],
     };
   },
   methods: {
@@ -158,7 +166,7 @@ export default {
       this.$refs["formValidate"].validate((val) => {
         if (val) {
           this.sendSMS().then(() => {
-            this.$Message.success('发送成功')
+            this.$Message.success("发送成功");
             this.$parent.showModel = false;
           });
         } else {
@@ -175,19 +183,37 @@ export default {
       // console.log(this.$parent.showModel);
     },
     async sendSMS() {
-      this.isLoading = true
+      this.isLoading = true;
       let res = await this.$request({
         method: "POST",
         url: SENDMASSTEXTING,
         data: qs.stringify(this.formValidate),
       });
-      this.isLoading = false
+      this.isLoading = false;
     },
     // 空发送条件
     clearState() {
       this.formValidate.register_time_where = "";
       this.formValidate.login_time_where = "";
       this.getSMSResidueSum();
+    },
+    async getChannel() {
+      let res = await this.$request({
+        url: SMSCONFIGURATIONINFO,
+      });
+      this.send_the_scope = res.data.data.send_the_scope.split(",");
+      for (let a = 1; a <= 3; a++) {
+        this.showScope.push(this.send_the_scope.indexOf(a.toString()));
+      }
+      this.selectChannel = res.data.data.the_specified_channel.split(",");
+      let arr = this.selectChannel.map((item) => {
+        return this.channel.filter((i) => {
+          if (i.id == item) {
+            return i;
+          }
+        });
+      });
+      this.channel = arr.flat(1);
     },
     async getSMSTemplate() {
       this.isLoading = true;
@@ -235,6 +261,7 @@ export default {
     },
   },
   created() {
+    this.getChannel();
     this.getSMSTemplate();
   },
 };

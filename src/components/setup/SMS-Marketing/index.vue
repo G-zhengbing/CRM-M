@@ -27,7 +27,7 @@
           <Option value="2">已分配</Option>
         </Select>
       </FormItem>
-      <FormItem label="发送范围">
+      <FormItem label="每月上限">
         <RadioGroup v-model="formItem.the_monthly_limit_type">
           <div>
             <Radio :label="1">无上限</Radio>
