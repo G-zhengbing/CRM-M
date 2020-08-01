@@ -1,38 +1,65 @@
 import axios from 'axios'
 import {
-  TEACHER_RANKING
+  TEACHER_RANKING,
+  MAKE_RANKING
 } from '../../uilt/url/url'
 import storage from '../../uilt/storage'
 
 export default {
   state: {
-		rankingList:[]
-	},
+    rankingList: [],
+    makeList: []
+  },
   mutations: {
-		setRanking(state,payload){
-			state.rankingList = payload
-		}
-	},
+    setMake(state, payload) {
+      state.makeList = payload
+    },
+    setRanking(state, payload) {
+      state.rankingList = payload
+    }
+  },
   actions: {
-		//教师排名列表
-		getTeacherRanking({state,commit},{form}){
-			return new Promise((resolve,reject)=>{
-				axios({
-					method:"get",
-					url:TEACHER_RANKING,
-					headers: {
+    //成交周期
+    getMake({state,commit}) {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'get',
+          url: MAKE_RANKING,
+          headers: {
             Authorization: "bearer " + storage.get()
-					},
-					params:{
-						...form
-					}
-				}).then(res=>{
-					commit('setRanking',res.data.data)
-					resolve()
-				}).catch(e=>{
-					reject(e)
-				})
-			})
-		}
+          }
+        }).then(res => {
+					commit('setMake',res.data.data)
+          resolve()
+        }).catch(e => {
+          reject(e)
+        })
+      })
+    },
+    //教师排名列表
+    getTeacherRanking({
+      state,
+      commit
+    }, {
+      form
+    }) {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "get",
+          url: TEACHER_RANKING,
+          headers: {
+            Authorization: "bearer " + storage.get()
+          },
+          params: {
+            ...form
+          }
+        }).then(res => {
+          commit('setRanking', res.data.data)
+          resolve()
+        }).catch(e => {
+          reject(e)
+        })
+      })
+    }
   }
 }

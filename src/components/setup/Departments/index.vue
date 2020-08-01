@@ -121,13 +121,13 @@ export default {
           align: "center"
         },
         {
-          title: "姓名",
-          key: "login_name",
+          title: "登录名",
+          key: "user_name",
           width: 120,
           align: "center"
         },
         {
-          title: "帐号",
+          title: "用户名",
           key: "login_name",
           width: 120,
           align: "center"
@@ -139,14 +139,14 @@ export default {
           align: "center"
         },
         {
-          title: "角色",
-          key: "name",
-          align: "center"
-        },
-        {
           title: "部门",
           key: "department_name",
           width: 120,
+          align: "center"
+        },
+        {
+          title: "角色",
+          key: "name",
           align: "center"
         },
         {

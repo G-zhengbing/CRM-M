@@ -128,8 +128,10 @@ const SCREENLIST = BASEURL + "screen_list" //教务/ 公共接口，select状态
 const ANALYZE_STATISTICS = BASEURL + "appoint_assign" //统计分析/业绩分析
 const PERSON_STATISTICS = BASEURL + "order_sale" //统计分析/个人业绩分布
 const TEACHER_RANKING = BASEURL + 'coach_appoint'//教师排名
+const MAKE_RANKING = BASEURL + 'appoint_order' //成交周期
 
 export {
+  MAKE_RANKING,
   TEACHER_RANKING,
   PERSON_STATISTICS,
   ANALYZE_STATISTICS,
