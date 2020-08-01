@@ -83,10 +83,10 @@ export default {
         url: SMSCONFIGURATIONINFO,
       });
       this.formItem = res.data.data;
-      this.formItem.the_specified_channel = this.formItem.the_specified_channel.split(
+      this.formItem.the_specified_channel = this.formItem.the_specified_channel && this.formItem.the_specified_channel.split(
         ","
       );
-      this.formItem.send_the_scope = this.formItem.send_the_scope.split(",");
+      this.formItem.send_the_scope = this.formItem.send_the_scope && this.formItem.send_the_scope.split(",");
       this.formItem.the_monthly_user_limit_type =
         this.formItem.the_monthly_user_limit_type === 1;
 
