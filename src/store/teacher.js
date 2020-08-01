@@ -76,7 +76,7 @@ export default {
   getters: {
     teacherTypes(state) {
       let type = state.teacherTypesList
-			
+      
 			var subjects = new Map([
         ["数学", 1],
         ["英语", 2],
@@ -86,7 +86,9 @@ export default {
         ["政治", 6],
         ["生物", 7],
         ["地理", 8],
-        ["历史", 9]
+        ["历史", 9],
+        ['科学',10],
+        ['全科',-1]
 			])
 			
       var gender = new Map([

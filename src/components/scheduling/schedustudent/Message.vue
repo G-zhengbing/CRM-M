@@ -332,6 +332,8 @@ export default {
     },
     //创建课程
     handleSubmit(name) {
+      console.log(this.form)
+      return
       if (this.dataArr.length == 0) {
         this.$Message.error("时间块是必填的");
       } else {

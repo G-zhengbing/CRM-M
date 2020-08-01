@@ -93,20 +93,22 @@ export default {
       form: {},
       columns: [
         { type: "selection", width: 60 },
-        { title: "学员姓名", key: "student_name" },
+        { title: "姓名", key: "student_name" ,width:130},
         { title: "注册手机", key: "mobile" ,width:130},
-        { title: "可用课时", key: "card_num" },
-        { title: "待上课节数", key: "wait_num" },
-        { title: "已排课节数", key: "have_num" },
-        { title: "取消课节数", key: "cancel_num" },
-        { title: "上课中", key: "lesson_num" },
+        { title: "购买课时", key: "card_num" ,width:130},
+        { title: "赠送课时", key: "give_card_num" ,width:130},
+        { title: "待上课节数", key: "wait_num" ,width:130},
+        { title: "已上课节数", key: "have_num" ,width:130},
+        { title: "取消课节数", key: "cancel_num" ,width:130},
+        // { title: "上课中", key: "lesson_num" ,width:130},
         { title: "推送Classin", key: "classin_id" ,width:120},
-        { title: "最新付费时间", key: "paytime", width: "200" },
-        { title: "注册时间", key: "create_time", width: "200" },
+        { title: "最新付费时间", key: "paytime", width: 200 },
+        { title: "注册时间", key: "create_time", width: 200 },
         {
           title: "操作",
           key: "action",
           align: "center",
+          width:130,
           render: (h, params) => {
             return h("div", [
               h(
