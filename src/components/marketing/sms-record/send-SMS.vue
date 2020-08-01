@@ -220,6 +220,7 @@ export default {
       let res = await this.$request({
         method: "POST",
         url: MESSAGELIST,
+        data: qs.stringify({status:2})
       });
       this.chooseChannel = res.data.data.data;
       this.isLoading = false;
