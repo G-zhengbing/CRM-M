@@ -95,8 +95,8 @@ export default {
         { type: "selection", width: 60 },
         { title: "姓名", key: "student_name" ,width:130},
         { title: "注册手机", key: "mobile" ,width:130},
-        { title: "购买课时", key: "card_num" ,width:130},
-        { title: "赠送课时", key: "give_card_num" ,width:130},
+        { title: "购买课时(剩余)", key: "card_num" ,width:130},
+        { title: "赠送课时(剩余)", key: "give_card_num" ,width:130},
         { title: "待上课节数", key: "wait_num" ,width:130},
         { title: "已上课节数", key: "have_num" ,width:130},
         { title: "取消课节数", key: "cancel_num" ,width:130},
@@ -108,6 +108,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
+          fixed:'right',
           width:130,
           render: (h, params) => {
             return h("div", [

@@ -215,7 +215,7 @@ export default {
       var date = new Date();
       var f = date.getFullYear();
       for (var i = 0; i < 12; i++) {
-        arr.push(f + "-" + ((i + 1) < 10 ? "0" + (i + 1 ): (i + 1)));
+        arr.push(f + "-" + (i + 1 < 10 ? "0" + (i + 1) : i + 1));
       }
       return arr;
     }
@@ -257,15 +257,17 @@ export default {
     getFullYear(val) {
       var d, month;
       this.isLoading = true;
-      this.personForm.date = val;
       this.personColumns = [
-        { title: "销售", key: "sale_name", fixed: "left", width: 100 }
+        { title: "销售", key: "sale_name", fixed: "left", width: 100 },
+        { title: "核计", key: "total_amount", fixed: "right", width: 100 }
       ];
       this.setPerson([]);
       if (val) {
+        this.personForm.date = val;
         d = this.setDatePicker(new Date(val));
         month = val.toString().split("-")[1];
       } else {
+        this.personForm.date = this.setDatePicker(new Date());
         d = this.setDatePicker(new Date());
         month = new Date().getMonth() + 1;
       }

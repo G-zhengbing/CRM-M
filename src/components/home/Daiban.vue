@@ -68,18 +68,7 @@
                   @on-change="seekKuhu"
                   placeholder="年级"
                 >
-                  <Option :value="1">一年级</Option>
-                  <Option :value="2">二年级</Option>
-                  <Option :value="3">三年级</Option>
-                  <Option :value="4">四年级</Option>
-                  <Option :value="5">五年级</Option>
-                  <Option :value="6">六年级</Option>
-                  <Option :value="7">七年级</Option>
-                  <Option :value="8">八年级</Option>
-                  <Option :value="9">九年级</Option>
-                  <Option :value="10">高一</Option>
-                  <Option :value="11">高二</Option>
-                  <Option :value="12">高三</Option>
+                  <Option :value="list.id" v-for="(list,i) in contant.GRADE" :key="i">{{list.title}}</Option>
                 </Select>
               </FormItem>
             </Col>
@@ -94,17 +83,6 @@
                 </Select>
               </FormItem>
             </Col>
-            <!-- <Col span="2" v-if="num == 2">
-              <FormItem>
-                <Select
-                  v-model="form.stage"
-                  @on-change="seekKuhu"
-                  placeholder="学习阶段"
-                >
-                  <Option v-for="(list,i) in stage" :key="i" :value="i">{{list}}</Option>
-                </Select>
-              </FormItem>
-            </Col> -->
             <Col span="2" v-if="num == 2">
               <FormItem>
                 <Select
@@ -119,14 +97,7 @@
             <Col span="2" v-if="num == 2">
               <FormItem>
                 <Select v-model="form.visit_num" @on-change="seekKuhu" placeholder="回访次数">
-                  <Option :value="0">0次</Option>
-                  <Option :value="1">1次</Option>
-                  <Option :value="2">2次</Option>
-                  <Option :value="3">3次</Option>
-                  <Option :value="4">4次</Option>
-                  <Option :value="5">5次</Option>
-                  <Option :value="6">6次</Option>
-                  <Option :value="7">6次以上</Option>
+                  <Option :value="list.id" v-for="(list,i) in contant.VISIT_NUMBER" :key="i">{{list.title}}</Option>
                 </Select>
               </FormItem>
             </Col>
@@ -149,10 +120,7 @@
             <Col span="5" v-if="num == 2">
               <FormItem label="意向度" :label-width="80">
                 <RadioGroup v-model="form.intention_option" @on-change="seekKuhu">
-                  <Radio label="1">高</Radio>
-                  <Radio label="2">中</Radio>
-                  <Radio label="3">低</Radio>
-                  <Radio label="4">无</Radio>
+                  <Radio :label="list.id" v-for="(list,i) in contant.INTENTION_OPTION" :key="i">{{list.title}}</Radio>
                 </RadioGroup>
               </FormItem>
             </Col>
@@ -173,9 +141,7 @@
               placeholder="选择显示条数"
               @on-change="selectedChange"
             >
-              <Option :value="20">每页显示20条</Option>
-              <Option :value="50">每页显示50条</Option>
-              <Option :value="100">每页显示100条</Option>
+              <Option :value="list.id" v-for="(list,i) in contant.PAGE_NUMBER" :key="i">{{list.title}}</Option>
             </Option>
             </Select>
           </div>

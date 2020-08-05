@@ -30,7 +30,11 @@ export default {
   },
   actions: {
     //领取
-    setGet({ state, commit, dispatch }, uid) {
+    setGet({
+      state,
+      commit,
+      dispatch
+    }, uid) {
       return new Promise((resolve, reject) => {
         axios({
           method: "put",
@@ -81,6 +85,80 @@ export default {
     }
   },
   getters: {
+    puliceTypes(state) {
+      let data = state.publicList
+
+      var maps = new Map([
+        ['一年级', 1],
+        ['二年级', 2],
+        ['三年级', 3],
+        ['四年级', 4],
+        ['五年级', 5],
+        ['六年级', 6],
+        ['七年级', 7],
+        ['八年级', 8],
+        ['九年级', 9],
+        ['高一', 10],
+        ['高二', 11],
+        ['高三', 12]
+      ]);
+      var subjects = new Map([
+        ["数学", 1],
+        ["英语", 2],
+        ["语文", 3],
+        ["物理", 4],
+        ["化学", 5],
+        ["政治", 6],
+        ["生物", 7],
+        ["地理", 8],
+        ["历史", 9],
+        ["科学", 10],
+        ["全科", -1]
+      ])
+
+      var gender = new Map([
+        ["男", 1],
+        ["女", 2]
+      ])
+
+      var age = new Map([
+        ["5岁", 5],
+        ["6岁", 6],
+        ["7岁", 7],
+        ["8岁", 8],
+        ["9岁", 9],
+        ["10岁", 10],
+        ["11岁", 11],
+        ["12岁", 12],
+        ["13岁", 13],
+        ["14岁", 14],
+        ["15岁", 15],
+        ["16岁", 16],
+        ["17岁", 17],
+        ["18岁", 18],
+        ["19岁", 19],
+        ["20岁", 20]
+      ])
+
+      var intention = new Map([
+        ["高", 1],
+        ["中", 2],
+        ["低", 3],
+        ["无", 4],
+        ["E", 5]
+      ])
+
+      return data.map(element => {
+
+        element.grade = maps.get(element.grade);
+        element.sex = gender.get(element.sex);
+        element.age = age.get(element.age);
+        element.subject = subjects.get(element.subject);
+        element.intention_option = intention.get(element.intention_option);
+        return element;
+      });
+
+    },
     puliceData(state) {
       let data = state.publicList
       var maps = new Map([
@@ -92,16 +170,11 @@ export default {
         [6, '六年级'],
         [7, '七年级'],
         [8, '八年级'],
-        [9, '九年级']
+        [9, '九年级'],
+        [10, '高一'],
+        [11, '高二'],
+        [12, '高三'],
       ]);
-      var subjects = new Map([
-        [1, '英语'],
-        [2, "数学"]
-      ])
-      var course = new Map([
-        [1, '未约课'],
-        [2, "已约课"]
-      ])
       var intention = new Map([
         [1, "高"],
         [2, "中"],
@@ -116,30 +189,6 @@ export default {
         [3, "跟进中"],
         [4, "已调库"],
         [5, "已移出"],
-      ])
-
-      var gender = new Map([
-        [1, "男"],
-        [2, "女"]
-      ])
-
-      var age = new Map([
-        [5, "5岁"],
-        [6, "6岁"],
-        [7, "7岁"],
-        [8, "8岁"],
-        [9, "9岁"],
-        [10, "10岁"],
-        [11, "11岁"],
-        [12, "12岁"],
-        [13, "13岁"],
-        [14, "14岁"],
-        [15, "15岁"],
-        [16, "16岁"],
-        [17, "17岁"],
-        [18, "18岁"],
-        [19, "19岁"],
-        [20, "20岁"]
       ])
       return data.map(element => {
         var phone = element.mobile.toString()
@@ -157,11 +206,7 @@ export default {
         }))
         element.mobile = str.join("")
         element.grade = maps.get(element.grade);
-        element.sex = gender.get(element.sex);
-        element.age = age.get(element.age);
         element.follow_status = follow.get(element.follow_status);
-        element.subject = subjects.get(element.subject);
-        element.is_course = course.get(element.is_course);
         element.intention_option = intention.get(element.intention_option);
         return element;
       });

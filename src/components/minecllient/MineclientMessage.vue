@@ -14,35 +14,21 @@
           <Col span="4">
             <FormItem>
               <Select v-model="form.grade" @on-change="seekClick" placeholder="年级">
-                <Option :value="6">小学</Option>
-                <Option :value="7">七年级</Option>
-                <Option :value="8">八年级</Option>
-                <Option :value="9">九年级</Option>
-                <Option :value="10">高一</Option>
-                <Option :value="11">高二</Option>
-                <Option :value="12">高三</Option>
+                <Option :value="list.id" v-for="(list,i) in contant.SMALL_GRADE" :key="i">{{list.title}}</Option>
               </Select>
             </FormItem>
           </Col>
           <Col span="4">
             <FormItem>
               <Select v-model="form.level" @on-change="seekClick" placeholder="课时包等级">
-                <Option :value="1">中级</Option>
-                <Option :value="2">高级</Option>
-                <Option :value="3">特级</Option>
+                <Option :value="list.id" v-for="(list,i) in contant.CLASS" :key="i">{{list.title}}</Option>
               </Select>
             </FormItem>
           </Col>
           <Col span="4">
             <FormItem>
               <Select v-model="form.class_hour" @on-change="seekClick" placeholder="课时数">
-                <Option :value="1">1</Option>
-                <Option :value="10">10</Option>
-                <Option :value="30">30</Option>
-                <Option :value="50">50</Option>
-                <Option :value="100">100</Option>
-                <Option :value="150">150</Option>
-                <Option :value="200">200</Option>
+                <Option :value="list.id" v-for="(list,i) in contant.COURSE_NUMBER" :key="i">{{list.title}}</Option>
               </Select>
             </FormItem>
           </Col>
@@ -160,18 +146,7 @@
           <Col span="24">
             <FormItem label="年级">
               <Select v-model="createAuditionForm.grade">
-                <Option :value="1">一年级</Option>
-                <Option :value="2">二年级</Option>
-                <Option :value="3">三年级</Option>
-                <Option :value="4">四年级</Option>
-                <Option :value="5">五年级</Option>
-                <Option :value="6">六年级</Option>
-                <Option :value="7">七年级</Option>
-                <Option :value="8">八年级</Option>
-                <Option :value="9">九年级</Option>
-                <Option :value="10">高一</Option>
-                <Option :value="11">高二</Option>
-                <Option :value="12">高三</Option>
+                <Option :value="list.id" v-for="(list,i) in contant.GRADE" :key="i">{{list.title}}</Option>
               </Select>
             </FormItem>
           </Col>
@@ -439,23 +414,14 @@
           <Col span="4">
             <FormItem label="性别" prop="sex">
               <Select v-model="connectForm.sex">
-                <Option :value="1">男</Option>
-                <Option :value="2">女</Option>
+                <Option :value="list.id" v-for="(list,i) in contant.GENDER" :key="i">{{list.title}}</Option>
               </Select>
             </FormItem>
           </Col>
           <Col span="4">
             <FormItem label="年级" prop="grade">
               <Select v-model="connectForm.grade">
-                <Option :value="1">一年级</Option>
-                <Option :value="2">二年级</Option>
-                <Option :value="3">三年级</Option>
-                <Option :value="4">四年级</Option>
-                <Option :value="5">五年级</Option>
-                <Option :value="6">六年级</Option>
-                <Option :value="7">七年级</Option>
-                <Option :value="8">八年级</Option>
-                <Option :value="9">九年级</Option>
+                <Option :value="list.id" v-for="(list,i) in contant.GRADE" :key="i">{{list.title}}</Option>
               </Select>
             </FormItem>
           </Col>
@@ -491,8 +457,7 @@
           <Col span="4">
             <FormItem label="是否住校" prop="is_live">
               <Select v-model="connectForm.is_live">
-                <Option :value="1">是</Option>
-                <Option :value="2">否</Option>
+                <Option :value="list.id" v-for="(list,i) in contant.IS_LIVE" :key="i">{{list.title}}</Option>
               </Select>
             </FormItem>
           </Col>

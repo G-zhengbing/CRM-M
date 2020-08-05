@@ -2,7 +2,7 @@
   <div class="box">
     <DaibanMessage v-if="show" :type="type" />
     <Form :model="form">
-      <Row  class-name="exclusive">
+      <Row class-name="exclusive">
         <Col span="3">
           <FormItem>
             <Input v-model="form.name" placeholder="学员姓名" @on-change="seekKuhu"></Input>
@@ -16,43 +16,25 @@
         <Col span="3">
           <FormItem>
             <Select v-model="form.grade" @on-change="seekKuhu" placeholder="年级">
-              <Option :value="1">一年级</Option>
-              <Option :value="2">二年级</Option>
-              <Option :value="3">三年级</Option>
-              <Option :value="4">四年级</Option>
-              <Option :value="5">五年级</Option>
-              <Option :value="6">六年级</Option>
-              <Option :value="7">七年级</Option>
-              <Option :value="8">八年级</Option>
-              <Option :value="9">九年级</Option>
+              <Option :value="list.id" v-for="(list,i) in contant.GRADE" :key="i">{{list.title}}</Option>
             </Select>
           </FormItem>
         </Col>
         <Col span="3">
           <FormItem>
-            <Select
-              v-model="form.subject"
-              @on-change="seekKuhu"
-              placeholder="意向科目"
-            >
+            <Select v-model="form.subject" @on-change="seekKuhu" placeholder="意向科目">
               <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
             </Select>
           </FormItem>
         </Col>
         <Col span="3">
           <FormItem>
-            <Select
-              v-model="form.visit_num"
-              @on-change="seekKuhu"
-              placeholder="回访次数"
-            >
-              <Option :value="1">1次</Option>
-              <Option :value="2">2次</Option>
-              <Option :value="3">3次</Option>
-              <Option :value="4">4次</Option>
-              <Option :value="5">5次</Option>
-              <Option :value="6">6次</Option>
-              <Option :value="7">6次以上</Option>
+            <Select v-model="form.visit_num" @on-change="seekKuhu" placeholder="回访次数">
+              <Option
+                :value="list.id"
+                v-for="(list,i) in contant.VISIT_NUMBER"
+                :key="i"
+              >{{list.title}}</Option>
             </Select>
           </FormItem>
         </Col>
@@ -66,28 +48,19 @@
         <Col span="6">
           <FormItem>
             <div class="dateplc">
-              <DatePicker
-                v-model="startTime"
-                type="date"
-                placeholder="注册时间"
-                @on-change="getTimes"
-              ></DatePicker>
-              <DatePicker
-                v-model="endTime"
-                type="date"
-                placeholder="注册时间"
-                @on-change="getTimes"
-              ></DatePicker>
+              <DatePicker v-model="startTime" type="date" placeholder="注册时间" @on-change="getTimes"></DatePicker>
+              <DatePicker v-model="endTime" type="date" placeholder="注册时间" @on-change="getTimes"></DatePicker>
             </div>
           </FormItem>
         </Col>
         <Col span="5">
           <FormItem label="意向度" :label-width="80">
             <RadioGroup v-model="form.intention_option" @on-change="seekKuhu">
-              <Radio label="1">高</Radio>
-              <Radio label="2">中</Radio>
-              <Radio label="3">低</Radio>
-              <Radio label="4">无</Radio>
+              <Radio
+                :label="list.id"
+                v-for="(list,i) in contant.INTENTION_OPTION"
+                :key="i"
+              >{{list.title}}</Radio>
             </RadioGroup>
           </FormItem>
         </Col>
@@ -113,12 +86,7 @@
       class="ive-page"
     />
 
-    <Modal
-      width="800"
-      v-model="showVisit"
-      title="回访记录"
-      @on-cancel="showVisit = false"
-    >
+    <Modal width="800" v-model="showVisit" title="回访记录" @on-cancel="showVisit = false">
       <Table border :columns="visitColumns" :data="showVisitData" height="500"></Table>
       <div slot="footer">
         <Button type="text" size="large" @click="showVisit = false">取消</Button>
@@ -168,7 +136,7 @@ export default {
       endTime: "",
       type: {
         page: 1,
-        status:'public'
+        status: "public"
       },
       show: false,
       isLoading: false,
@@ -177,18 +145,18 @@ export default {
         { type: "selection", width: 60, fixed: "left" },
         { title: "学员姓名", key: "student_name", fixed: "left", width: 100 },
         { title: "注册手机", key: "mobile", fixed: "left", width: 120 },
-        { title: "地区", width: 100, key: "area" },
+        { title: "城市", width: 100, key: "area" },
         { title: "年级", width: 100, key: "grade" },
         { title: "科目", width: 100, key: "subject" },
         { title: "上个跟进人", width: 110, key: "last_sale_name" },
-        { title: "渠道来源", width: 110, key: "refer" },
+        { title: "渠道来源", width: 130, key: "refer" },
         { title: "意向度", width: 100, key: "intention_option" },
         // { title: "上次回访内容", key: "last_visit_content" ,tooltip:true},
         {
           title: "回访次数",
           key: "visit_num",
           width: 100,
-          align:'center',
+          align: "center",
           render: (h, params) => {
             return h("div", [
               h(
@@ -220,7 +188,7 @@ export default {
           align: "center",
           key: "last_follow_time"
         },
-        { title: "说明", key: "assign_note", tooltip: true ,width:120},
+        { title: "说明", key: "assign_note", tooltip: true, width: 120 },
         { title: "注册时间", width: 170, align: "center", key: "create_time" },
         {
           title: "操作",
@@ -319,7 +287,7 @@ export default {
       this.type.page = this.currentPage;
       this.type.form = this.form;
       this.type.data = { ...this.clientTypes };
-      this.type.from = "public"
+      this.type.from = "public";
       if (
         typeof item.spare_phone == "undefined" ||
         item.spare_phone == "" ||

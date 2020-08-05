@@ -23,15 +23,7 @@
         <Col span="3">
           <FormItem>
             <Select v-model="form.grade" @on-change="seekKuhu" placeholder="年级">
-              <Option :value="1">一年级</Option>
-              <Option :value="2">二年级</Option>
-              <Option :value="3">三年级</Option>
-              <Option :value="4">四年级</Option>
-              <Option :value="5">五年级</Option>
-              <Option :value="6">六年级</Option>
-              <Option :value="7">七年级</Option>
-              <Option :value="8">八年级</Option>
-              <Option :value="9">九年级</Option>
+              <Option :value="list.id" v-for="(list,i) in contant.GRADE" :key="i">{{list.title}}</Option>
             </Select>
           </FormItem>
         </Col>

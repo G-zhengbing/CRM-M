@@ -30,18 +30,7 @@
               @on-change="seekClick"
               placeholder="年级"
             >
-              <Option :value="1">一年级</Option>
-              <Option :value="2">二年级</Option>
-              <Option :value="3">三年级</Option>
-              <Option :value="4">四年级</Option>
-              <Option :value="5">五年级</Option>
-              <Option :value="6">六年级</Option>
-              <Option :value="7">七年级</Option>
-              <Option :value="8">八年级</Option>
-              <Option :value="9">九年级</Option>
-              <Option :value="10">高一</Option>
-              <Option :value="11">高二</Option>
-              <Option :value="12">高三</Option>
+              <Option :value="list.id" v-for="(list,i) in contant.GRADE" :key="i">{{list.title}}</Option>
             </Select>
           </FormItem>
         </Col>
@@ -206,6 +195,7 @@ export default {
         },
         { title: "新/老用户", key: "highsea_id", width: 100 },
         {
+          
           title: "回访时间",
           key: "next_follow_time",
           align: "center",

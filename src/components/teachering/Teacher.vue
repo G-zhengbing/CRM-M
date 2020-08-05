@@ -107,7 +107,7 @@
           </Col>
           <Col span="4">
             <FormItem
-              label="所在地区"
+              label="所在城市"
               prop="address_province_id"
               style="display:flex;flex-direction:column"
             >
@@ -737,7 +737,7 @@ export default {
               "teacher_nvq_pic",
               this.uploadList7[0] ? this.uploadList7[0] : ""
             );
-            formData.append("grade", this.form.grade.join(","));
+            formData.append("grade", `,${this.form.grade.join(",")},`);
             formData.append(
               "avatar",
               this.uploadList[0] ? this.uploadList[0] : ""
@@ -797,7 +797,7 @@ export default {
             formData.append("type", this.form.type ? this.form.type : "");
             formData.append("mobile", this.form.tel);
             formData.append("subject", this.form.subject);
-            formData.append("grade", this.form.grade.join(","));
+            formData.append("grade", `,${this.form.grade.join(",")},`);
             formData.append("avatar", this.uploadList[0]);
             // formData.append("time_block", this.acArr.join(","));
             formData.append(

@@ -120,8 +120,8 @@
               </FormItem>
             </Col>
             <Col span="4">
-              <FormItem style="width:150px;" label="学员地区">
-                <Input readonly v-model="type.data.area" placeholder="请输入学员地区"></Input>
+              <FormItem style="width:150px;" label="城市">
+                <Input readonly v-model="type.data.area" placeholder="请输入城市"></Input>
               </FormItem>
             </Col>
             <Col span="4">
@@ -301,8 +301,8 @@
               </FormItem>
             </Col>
             <Col span="4">
-              <FormItem style="width:150px;" label="学员地区">
-                <Input v-model="followForm.area" placeholder="请输入学员地区"></Input>
+              <FormItem style="width:150px;" label="城市">
+                <Input v-model="followForm.area" placeholder="请输入城市"></Input>
               </FormItem>
             </Col>
             <Col span="4">

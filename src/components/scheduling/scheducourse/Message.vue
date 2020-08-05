@@ -616,6 +616,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
+          fixed:'right',
           width: "100",
           render: (h, params) => {
             if (this.type.obj.course_type == 1) {

@@ -15,14 +15,11 @@
         <Col span="3">
           <FormItem>
             <Select v-model="form.visit_num" @on-change="seekClick" placeholder="回访次数">
-              <Option :value="0">0次</Option>
-              <Option :value="1">1次</Option>
-              <Option :value="2">2次</Option>
-              <Option :value="3">3次</Option>
-              <Option :value="4">4次</Option>
-              <Option :value="5">5次</Option>
-              <Option :value="6">6次</Option>
-              <Option :value="7">6次以上</Option>
+              <Option
+                :value="list.id"
+                v-for="(list,i) in contant.VISIT_NUMBER"
+                :key="i"
+              >{{list.title}}</Option>
             </Select>
           </FormItem>
         </Col>
@@ -51,15 +48,7 @@
         <Col span="3">
           <FormItem>
             <Select v-model="form.grade" @on-change="seekClick" placeholder="年级">
-              <Option :value="1">一年级</Option>
-              <Option :value="2">二年级</Option>
-              <Option :value="3">三年级</Option>
-              <Option :value="4">四年级</Option>
-              <Option :value="5">五年级</Option>
-              <Option :value="6">六年级</Option>
-              <Option :value="7">七年级</Option>
-              <Option :value="8">八年级</Option>
-              <Option :value="9">九年级</Option>
+              <Option :value="list.id" v-for="(list,i) in contant.GRADE" :key="i">{{list.title}}</Option>
             </Select>
           </FormItem>
         </Col>
@@ -94,10 +83,11 @@
         <Col span="5">
           <FormItem label="意向度" :label-width="80">
             <RadioGroup v-model="form.intention_option" @on-change="seekClick">
-              <Radio label="1">高</Radio>
-              <Radio label="2">中</Radio>
-              <Radio label="3">低</Radio>
-              <Radio label="4">无</Radio>
+              <Radio
+                :label="list.id"
+                v-for="(list,i) in contant.INTENTION_OPTION"
+                :key="i"
+              >{{list.title}}</Radio>
             </RadioGroup>
           </FormItem>
         </Col>

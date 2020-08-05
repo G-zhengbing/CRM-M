@@ -35,7 +35,7 @@
           <Button type="primary" @click="clear">清除</Button>
         </Col>
       </Row>
-      <Table border :columns="columns" :data="data"></Table>
+      <Table :height="600" border :columns="columns" :data="data"></Table>
     </template>
     <template v-if="num ==2">
       <div class="period" id="period" ref="period" style="width:100%;height:500px"></div>

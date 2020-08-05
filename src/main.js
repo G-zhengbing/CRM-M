@@ -16,6 +16,9 @@ Vue.use(Component)
 import request from './uilt/ajax/ajax' // 引入自己的axios
 Vue.prototype.$request = request
 
+import contant from './uilt/contant/index'
+Vue.prototype.contant = contant //数据集
+
 Vue.use(ViewUI)
 Vue.prototype.$echarts = echarts
 Vue.config.productionTip = false
