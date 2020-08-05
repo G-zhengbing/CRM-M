@@ -168,6 +168,7 @@ export default {
           this.sendSMS().then(() => {
             this.$Message.success("发送成功");
             this.$parent.showModel = false;
+            this.$parent.getSMSList()
           });
         } else {
           this.$Message.error("请填写必选项");
