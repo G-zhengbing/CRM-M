@@ -151,10 +151,10 @@
             <Col span="6">
               <FormItem label="意向度" style="margin-left: 10px">
                 <RadioGroup v-model="type.data.intention_option">
-                    <Radio label="1">高</Radio>
-                    <Radio label="2">中</Radio>
-                    <Radio label="3">低</Radio>
-                    <Radio label="4">无</Radio>
+                  <Radio label="1">高</Radio>
+                  <Radio label="2">中</Radio>
+                  <Radio label="3">低</Radio>
+                  <Radio label="4">无</Radio>
                 </RadioGroup>
               </FormItem>
             </Col>
@@ -329,14 +329,14 @@
               </FormItem>
             </Col>
             <Col span="6">
-               <FormItem label="意向度" style="margin-left: 10px">
-                    <RadioGroup v-model="followForm.intention_option">
-                        <Radio :label="1">高</Radio>
-                        <Radio :label="2">中</Radio>
-                        <Radio :label="3">低</Radio>
-                        <Radio :label="4">无</Radio>
-                    </RadioGroup>
-                  </FormItem>
+              <FormItem label="意向度" style="margin-left: 10px">
+                <RadioGroup v-model="followForm.intention_option">
+                  <Radio :label="1">高</Radio>
+                  <Radio :label="2">中</Radio>
+                  <Radio :label="3">低</Radio>
+                  <Radio :label="4">无</Radio>
+                </RadioGroup>
+              </FormItem>
             </Col>
             <Col span="24">
               <FormItem label="呼出请况">
@@ -683,8 +683,8 @@ export default {
   },
   methods: {
     openSms() {
-      this.$parent.MODtype = true
-      this.$parent.followForm = this.followForm
+      this.$parent.MODtype = true;
+      this.$parent.followForm = this.followForm;
     },
     //跟进/订单
     createOrder() {
@@ -784,13 +784,6 @@ export default {
         this.$parent.show = false;
         this.getReservedList({ form: this.type.form, page: this.type.page });
         return;
-      } else if (this.type.status == "reservedall") {
-        this.$parent.show = false;
-        this.getReservedAllList({
-          form: this.type.form,
-          page: this.type.page
-        });
-        return;
       } else if (this.type.status == "studentpay") {
         this.getStudentList({ form: this.type.form, page: this.type.page });
         this.$parent.show = false;
@@ -827,11 +820,15 @@ export default {
       } else if (this.type.status == "minestudent") {
         this.getmStudent({ page: 1, form: {} });
         this.$parent.show = false;
-      }else if(this.type.status == "public"){
-        this.getPublicList({page:this.type.page,form:this.type.form})
+      } else if (this.type.status == "public") {
+        this.getPublicList({ page: this.type.page, form: this.type.form });
         this.$parent.show = false;
       } else {
-        this.getKehuList({ status: storage.getTabStatus() });
+        this.getKehuList({
+          status: storage.getTabStatus(),
+          page: this.type.page,
+          form: this.type.form
+        });
         this.$parent.show = false;
       }
     },
@@ -885,8 +882,6 @@ export default {
           } else {
             this.getKehuList({ status: storage.getTabStatus() });
           }
-        } else {
-          this.getPublicList({});
         }
         this.message = true;
         this.Loading = false;
@@ -923,7 +918,7 @@ export default {
         }).then(res => {
           if (res.data.ret) {
             this.$Message.success("跟进成功");
-          }else{
+          } else {
             this.$Message.error(res.data.error);
           }
           this.$parent.show = false;
@@ -938,7 +933,7 @@ export default {
         }).then(res => {
           if (res.data.ret) {
             this.$Message.success("跟进成功");
-          }else{
+          } else {
             this.$Message.error(res.data.error);
           }
           this.$parent.show = false;
@@ -953,7 +948,7 @@ export default {
         }).then(res => {
           if (res.data.ret) {
             this.$Message.success("跟进成功");
-          }else{
+          } else {
             this.$Message.error(res.data.error);
           }
           this.$parent.show = false;
@@ -968,7 +963,7 @@ export default {
         }).then(res => {
           if (res.data.ret) {
             this.$Message.success("跟进成功");
-          }else{
+          } else {
             this.$Message.error(res.data.error);
           }
           this.$parent.show = false;
@@ -983,7 +978,7 @@ export default {
         }).then(res => {
           if (res.data.ret) {
             this.$Message.success("跟进成功");
-          }else{
+          } else {
             this.$Message.error(res.data.error);
           }
           this.$parent.show = false;
@@ -1007,7 +1002,7 @@ export default {
         }).then(res => {
           if (res.data.ret) {
             this.$Message.success("跟进成功");
-          }else{
+          } else {
             this.$Message.error(res.data.error);
           }
           this.$parent.show = false;
@@ -1022,7 +1017,7 @@ export default {
         }).then(res => {
           if (res.data.ret) {
             this.$Message.success("跟进成功");
-          }else{
+          } else {
             this.$Message.error(res.data.error);
           }
           this.$parent.show = false;
@@ -1037,7 +1032,7 @@ export default {
         }).then(res => {
           if (res.data.ret) {
             this.$Message.success("跟进成功");
-          }else{
+          } else {
             this.$Message.error(res.data.error);
           }
           this.$parent.show = false;
@@ -1055,17 +1050,17 @@ export default {
         }).then(res => {
           if (res.data.ret) {
             this.$Message.success("跟进成功");
-          }else{
+          } else {
             this.$Message.error(res.data.error);
           }
           this.$parent.show = false;
           this.Loading = false;
           // 来自公共资源池呼出刷新
-          if(this.type.from == "public") {
+          if (this.type.from == "public") {
             return this.getPublicList({
-              ...this.type.form,
+              form: this.type.form,
               page: this.type.page
-            })
+            });
           }
           this.getKehuList({ status: storage.getTabStatus() });
         });
@@ -1074,7 +1069,6 @@ export default {
     },
     ...mapMutations(["setXiaoshowId", "setType", "setXiaoshowIdPay"]),
     ...mapActions([
-      "getReservedAllList",
       "removeData",
       "RingUp",
       "getReservedList",
@@ -1190,7 +1184,7 @@ export default {
       item: null,
       time: null,
       isItem: false,
-      sms: false,
+      sms: false
     };
   }
 };

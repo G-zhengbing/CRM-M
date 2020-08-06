@@ -178,7 +178,7 @@ export default {
           title: "跟进人",
           key: "follow_sale_name",
           align: "center",
-          width: 90
+          width: 130
         },
         {
           title: "上次跟进时间",
@@ -195,7 +195,6 @@ export default {
         },
         { title: "新/老用户", key: "highsea_id", width: 100 },
         {
-          
           title: "回访时间",
           key: "next_follow_time",
           align: "center",

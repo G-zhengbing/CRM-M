@@ -47,7 +47,6 @@ export default {
             status: 2
           }
         }).then(res => {
-          dispatch("getPublicList")
           resolve()
         }).catch(e => {
           reject(e)
@@ -58,7 +57,7 @@ export default {
     getPublicList({
       state,
       commit
-    }, form, page) {
+    }, {form, page}) {
       return new Promise((resolve, reject) => {
         axios({
           method: "get",

@@ -142,7 +142,6 @@ export default {
         ["20岁", 20],
       ])
 
-      type.grade = maps.get(type.grade)
       type.sex = gender.get(type.sex)
       type.age = age.get(type.age)
       type.type = follow.get(type.type)

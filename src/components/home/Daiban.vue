@@ -365,6 +365,8 @@ export default {
       this.show = true;
       this.type.classify = "datalis";
       this.type.data = { ...item };
+      this.type.form = {...this.form}
+      this.type.page = this.currentPage
     },
     //移出
     getBtnClick2(item) {
@@ -372,18 +374,14 @@ export default {
       this.type.classify = "shiftOut";
       this.type.data = { ...item };
     },
-    //跟进
-    getBtnClick3(item) {
-      this.setGenjinType(item);
-      this.show = true;
-      this.type.classify = "followUp";
-    },
     //呼出
     getBtnClick4(item) {
       this.setGenjinType(item);
       this.show = true;
       this.type.classify = "followUp";
       this.type.data = { ...this.Types };
+      this.type.form = {...this.form}
+      this.type.page = this.currentPage
       if(typeof item.spare_phone == 'undefined' || item.spare_phone == "" || item.spare_phone == null){
         this.isLoading = true;
         this.RingUp({form:item})
@@ -443,7 +441,7 @@ export default {
           { type: "selection" ,width:60},
           { title: "学员姓名",align: "center", key: "student_name" },
           { title: "注册手机",width:120,align: "center", key: "mobile" },
-          { title: "地址",align: "center", key: "area" },
+          { title: "城市",align: "center", key: "area" },
           { title: "在读学校",align: "center", key: "school" },
           { title: "年级",width: 80,align: "center", key: "grade" },
           { title: "意向科目",align: "center", key: "subject",width:75 },
@@ -482,7 +480,7 @@ export default {
          { type: "selection" ,width:60,fixed: 'left'},
           { title: "学员姓名",align: "center",width:100, key: "student_name",fixed: 'left', },
           { title: "注册手机",width:120,align: "center", key: "mobile",fixed: 'left', },
-          { title: "地址", width: 140,align: "center", key: "area" },
+          { title: "城市", width: 140,align: "center", key: "area" },
           { title: "年级",width: 100,align: "center", key: "grade" },
           { title: "意向科目", width: 100,align: "center", key: "subject" },
           { title: "渠道来源",width:140,align: "center", key: "refer" },
@@ -586,7 +584,7 @@ export default {
          { type: "selection" ,width:60},
           { title: "学员姓名",align: "center", key: "student_name" },
           { title: "注册手机",width:120,align: "center", key: "mobile" },
-          { title: "地址",align: "center", key: "area" },
+          { title: "城市",align: "center", key: "area" },
           { title: "在读学校",align: "center", key: "school" },
           { title: "购买课程",align: "center", key: "product_name" },
           { title: "课程类型",align: "center", key: "product_type" },
@@ -627,7 +625,7 @@ export default {
           { type: "selection" ,width:60},
           { title: "学员姓名",align: "center", key: "student_name" },
           { title: "注册手机",width:120,align: "center", key: "mobile" },
-          { title: "地址",align: "center", key: "area" },
+          { title: "城市",align: "center", key: "area" },
           { title: "在读学校",align: "center", key: "school" },
           { title: "年级",width: 80,align: "center", key: "grade" },
           { title: "意向科目",align: "center", key: "subject",width:75 },

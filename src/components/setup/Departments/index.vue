@@ -21,6 +21,7 @@
             <div class="left">
               <span style="padding-left: 10px;padding-right:5px;">已选{{Items.length}}条</span>
               <Button type="primary" @click="forbiddenUser(Items)">禁用</Button>
+              <Button type="primary" @click="outage()">停用</Button>
             </div>
             <div class="right" style="padding-right: 10px;">
               <Input v-model="value" placeholder="请输入用户名或手机号" style="width: 300px" />
@@ -44,7 +45,7 @@
         :last_page="last_page"
         @changePages="changePages"
       />
-      </div>
+    </div>
     <!-- 添加部门 -->
     <Modal
       title="添加部门"
@@ -95,6 +96,7 @@
 <script>
 import qs from "qs";
 import {
+  DELETE_USER,
   ADMINMERBERUSERLIST,
   CREATEDEPARTMENTNAME,
   UPDATEDEPARTMENTNAME,
@@ -158,7 +160,7 @@ export default {
           title: "操作",
           key: "operation",
           align: "center",
-          width: 160,
+          width: 200,
           render: (h, params) => {
             return h("div", [
               h(
@@ -177,27 +179,42 @@ export default {
                   }
                 },
                 "编辑"
-              ),
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "text",
-                    size: "small"
-                  },
-                  on: {
-                    click: () => {
-                      if (params.row.is_delete == 0) {
-                        this.forbiddenUser(params.row.id);
-                        this.getUserList();
-                      } else {
-                        this.$Message.error("该帐号已禁用!");
-                      }
-                    }
-                  }
-                },
-                params.row.is_delete == 0 ? "禁用" : "已禁用"
               )
+              // h(
+              //   "Button",
+              //   {
+              //     props: {
+              //       type: "text",
+              //       size: "small"
+              //     },
+              //     on: {
+              //       click: () => {
+              //         if (params.row.is_delete == 0) {
+              //           this.forbiddenUser(params.row.id);
+              //           this.getUserList();
+              //         } else {
+              //           this.$Message.error("该帐号已禁用!");
+              //         }
+              //       }
+              //     }
+              //   },
+              //   params.row.is_delete == 0 ? "禁用" : "已禁用"
+              // ),
+              // h(
+              //   "Button",
+              //   {
+              //     props: {
+              //       type: "text",
+              //       size: "small"
+              //     },
+              //     on: {
+              //       click: () => {
+              //         this.outage(params.row)
+              //       }
+              //     }
+              //   },
+              //   "停用"
+              // )
               // 暂不更新，待需求
               // h(
               //   "Button",
@@ -328,6 +345,30 @@ export default {
     };
   },
   methods: {
+    //停用
+    async outage(val) {
+      if (this.Items.length == 0) {
+        this.$Message.error("请选择要停用的用户");
+      } else {
+        var arr = [];
+        let uid = this.Items.map(i => {
+          arr.push(i.id);
+        });
+        let res = await this.$request({
+          method: "post",
+          url: DELETE_USER,
+          params: {
+            admin_member_ids: JSON.stringify(arr)
+          }
+        });
+        if (res.data.ret) {
+          this.$Message.success("停用成功");
+          this.getUserList();
+        } else {
+          this.$Message.error(res.data.error);
+        }
+      }
+    },
     // 禁用用户
     async forbiddenUser(id) {
       if (typeof id === "object") {

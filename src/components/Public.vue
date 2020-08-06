@@ -113,7 +113,7 @@ export default {
   mounted() {
     this.setCurrentPage(1);
     this.isLoading = true;
-    this.getPublicList().then(res => {
+    this.getPublicList({}).then(res => {
       this.isLoading = false;
     });
   },
@@ -188,7 +188,7 @@ export default {
           align: "center",
           key: "last_follow_time"
         },
-        { title: "说明", key: "assign_note", tooltip: true, width: 120 },
+        { title: "移出原因", key: "assign_note", tooltip: true, width: 120 },
         { title: "注册时间", width: 170, align: "center", key: "create_time" },
         {
           title: "操作",
@@ -208,7 +208,10 @@ export default {
                   on: {
                     click: () => {
                       this.setGet(params.row.id).then(res => {
-                        // this.$Message.success("领取成功！");
+                        this.getPublicList({
+                          form: this.form,
+                          page: this.currentPage
+                        });
                         this.getBtnClick4(params.row);
                         this.isLoading = false;
                       });
@@ -271,7 +274,7 @@ export default {
         this.setCurrentPage(1);
       }
       this.isLoading = true;
-      this.getPublicList({ ...this.form, page }).then(res => {
+      this.getPublicList({ form:this.form, page }).then(res => {
         this.isLoading = false;
       });
       this.setCurrentPage(page);
@@ -284,10 +287,9 @@ export default {
       this.setClientTypes(item);
       this.show = true;
       this.type.classify = "followUp";
-      this.type.page = this.currentPage;
-      this.type.form = this.form;
       this.type.data = { ...this.clientTypes };
-      this.type.from = "public";
+      this.type.page = this.currentPage;
+      this.type.form = { ...this.form };
       if (
         typeof item.spare_phone == "undefined" ||
         item.spare_phone == "" ||
@@ -322,7 +324,6 @@ export default {
       this.setCurrentPage(num);
       this.getPublicList({ ...this.form }).then(res => {
         this.isLoading = false;
-        // this.setCurrentPage(num);
       });
     }
   },

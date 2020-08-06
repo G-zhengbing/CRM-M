@@ -151,7 +151,7 @@ export default {
         { type: "selection", width: 60 ,fixed:'left'},
         { title: "学员姓名", key: "student_name", align: "center", width: 100 ,fixed:'left'},
         { title: "注册手机", key: "mobile", align: "center", width: 120 ,fixed:'left'},
-        { title: "地址", key: "area", align: "center", width: 120 },
+        { title: "城市", key: "area", align: "center", width: 120 },
         // { title: "购买课程", key: "product_subject", align: "center" , width: 100 },
         { title: "年级", key: "grade", align: "center" , width: 100 },
         { title: "意向科目", key: "subject", align: "center" , width: 100 },

@@ -232,7 +232,7 @@ export default {
         { type: "selection", width: 60, fixed: "left" },
         { title: "学员姓名", key: "student_name", width: 100, fixed: "left" },
         { title: "注册手机", key: "mobile", width: 120, fixed: "left" },
-        { title: "地址", key: "area", width: 100 },
+        { title: "城市", key: "area", width: 100 },
         { title: "年级", key: "grade", width: 80 },
         { title: "意向科目", key: "subject", width: 100 },
         {

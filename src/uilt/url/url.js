@@ -116,6 +116,7 @@ const GETPERMISSIONLIST = BASEURL + "get_permission_list" //设置，获取权�
 const UPDATEROLEPERMISSION = BASEURL + "update_role_permission" //设置，修改用户权限
 const GETROLEPERMISSION = BASEURL + "get_role_permission" //设置，角色权限获取
 const ADDROLE = BASEURL + "add_role" //设置，创建角色
+const DELETE_USER =  BASEURL + "destory_admin_user" //删除用户
 
 const MEPERMISSION = BASEURL + "me_permission" //获取当前角色权限列表
 
@@ -131,6 +132,7 @@ const TEACHER_RANKING = BASEURL + 'coach_appoint'//教师排名
 const MAKE_RANKING = BASEURL + 'appoint_order' //成交周期
 
 export {
+  DELETE_USER,
   MAKE_RANKING,
   TEACHER_RANKING,
   PERSON_STATISTICS,
