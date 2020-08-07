@@ -322,7 +322,7 @@ export default {
     pageChange(num) {
       this.isLoading = true;
       this.setCurrentPage(num);
-      this.getPublicList({ ...this.form }).then(res => {
+      this.getPublicList({ form:this.form }).then(res => {
         this.isLoading = false;
       });
     }
