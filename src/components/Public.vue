@@ -108,12 +108,12 @@ export default {
   components: {
     Loading,
     DaibanMessage,
-    MineclientMessage
+    MineclientMessage,
   },
   mounted() {
     this.setCurrentPage(1);
     this.isLoading = true;
-    this.getPublicList({}).then(res => {
+    this.getPublicList({}).then((res) => {
       this.isLoading = false;
     });
   },
@@ -126,7 +126,7 @@ export default {
       visitColumns: [
         { title: "回访内容", key: "visit_content" },
         { title: "跟进人", key: "sale_name", width: 100 },
-        { title: "回访时间", key: "time", width: 170 }
+        { title: "回访时间", key: "time", width: 170 },
       ],
       showVisitData: [],
 
@@ -136,7 +136,7 @@ export default {
       endTime: "",
       type: {
         page: 1,
-        status: "public"
+        status: "public",
       },
       show: false,
       isLoading: false,
@@ -144,7 +144,30 @@ export default {
       columns: [
         { type: "selection", width: 60, fixed: "left" },
         { title: "学员姓名", key: "student_name", fixed: "left", width: 100 },
-        { title: "注册手机", key: "mobile", fixed: "left", width: 120 },
+        {
+          title: "注册手机",
+          width: 120,
+          align: "center",
+          key: "mobile",
+          fixed: "left",
+          render: (h, params) => {
+            return h(
+              "Badge",
+              {
+                props: {
+                  dot: true,
+                  count: params.row.is_red,
+                  offset: [10, 0],
+                },
+                style: {
+                  height: "40px",
+                  "line-height": "40px",
+                },
+              },
+              params.row.mobile
+            );
+          },
+        },
         { title: "城市", width: 100, key: "area" },
         { title: "年级", width: 100, key: "grade" },
         { title: "科目", width: 100, key: "subject" },
@@ -165,31 +188,38 @@ export default {
                   on: {
                     props: {
                       type: "text",
-                      size: "small"
+                      size: "small",
                     },
                     click: () => {
                       this.visit(params.row);
-                    }
+                    },
                   },
                   style: {
                     textAlign: "center",
-                    cursor: "pointer"
+                    cursor: "pointer",
                   },
-                  class: "clickable"
+                  class: "clickable",
                 },
                 params.row.visit_num
-              )
+              ),
             ]);
-          }
+          },
         },
         {
           title: "上次回访时间",
           width: 170,
           align: "center",
-          key: "last_follow_time"
+          key: "last_follow_time",
         },
         { title: "移出原因", key: "assign_note", tooltip: true, width: 120 },
-        { title: "注册时间", width: 170, align: "center", key: "create_time" },
+        // { title: "注册时间", width: 170, align: "center", key: "create_time" },
+        { title: "活跃时间", width: 170, align: "center", key: "active_time" },
+        {
+          title: "活跃事件",
+          width: 170,
+          align: "center",
+          key: "active_action",
+        },
         {
           title: "操作",
           key: "action",
@@ -203,27 +233,27 @@ export default {
                 {
                   props: {
                     type: "text",
-                    size: "small"
+                    size: "small",
                   },
                   on: {
                     click: () => {
-                      this.setGet(params.row.id).then(res => {
+                      this.setGet(params.row.id).then((res) => {
                         this.getPublicList({
                           form: this.form,
-                          page: this.currentPage
+                          page: this.currentPage,
                         });
                         this.getBtnClick4(params.row);
                         this.isLoading = false;
                       });
-                    }
-                  }
+                    },
+                  },
                 },
                 "呼出"
-              )
+              ),
             ]);
-          }
-        }
-      ]
+          },
+        },
+      ],
     };
   },
   methods: {
@@ -274,7 +304,7 @@ export default {
         this.setCurrentPage(1);
       }
       this.isLoading = true;
-      this.getPublicList({ form:this.form, page }).then(res => {
+      this.getPublicList({ form: this.form, page }).then((res) => {
         this.isLoading = false;
       });
       this.setCurrentPage(page);
@@ -297,19 +327,19 @@ export default {
       ) {
         this.isLoading = true;
         this.RingUp({ form: item })
-          .then(res => {
+          .then((res) => {
             if (res.data.code == 200) {
               this.$Message.success("呼出成功");
             }
             if (res.data.code == 1000) {
               this.$Message.error({
                 content: res.data.error,
-                duration: 4
+                duration: 4,
               });
             }
             this.isLoading = false;
           })
-          .catch(e => {
+          .catch((e) => {
             if (e) {
               this.isLoading = false;
             }
@@ -322,21 +352,21 @@ export default {
     pageChange(num) {
       this.isLoading = true;
       this.setCurrentPage(num);
-      this.getPublicList({ form:this.form }).then(res => {
+      this.getPublicList({ form: this.form }).then((res) => {
         this.isLoading = false;
       });
-    }
+    },
   },
   computed: {
     ...mapGetters(["puliceData", "clientTypes"]),
     ...mapState({
-      data: state => state.publics.publicList,
-      refer: state => state.daiban.refer,
-      currentPage: state => state.daiban.currentPage,
-      total: state => state.daiban.total,
-      pageSize: state => state.daiban.pageSize
-    })
-  }
+      data: (state) => state.publics.publicList,
+      refer: (state) => state.daiban.refer,
+      currentPage: (state) => state.daiban.currentPage,
+      total: (state) => state.daiban.total,
+      pageSize: (state) => state.daiban.pageSize,
+    }),
+  },
 };
 </script>
 <style scoped>
