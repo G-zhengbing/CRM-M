@@ -440,7 +440,29 @@ export default {
         this.columns2 = [
           { type: "selection" ,width:60},
           { title: "学员姓名",align: "center", key: "student_name" },
-          { title: "注册手机",width:120,align: "center", key: "mobile" },
+          {
+            title: "注册手机",
+            width: 120,
+            align: "center",
+            key: "mobile",
+            render: (h, params) => {
+              return h(
+                "Badge",
+                {
+                  props: {
+                    dot: true,
+                    count: params.row.is_red,
+                    offset: [10,0]
+                  },
+                  style: {
+                    height: '40px',
+                    'line-height': '40px'
+                  }
+                },
+                params.row.mobile
+              );
+            },
+          },
           { title: "城市",align: "center", key: "area" },
           { title: "在读学校",align: "center", key: "school" },
           { title: "年级",width: 80,align: "center", key: "grade" },
@@ -449,7 +471,8 @@ export default {
           { title: "渠道来源",width:120,align: "center", key: "refer" },
           // { title: "数据来源",align: "center", key: "data_source" },
           // { title: "数据类型",align: "center", key: "data_type" },
-          { title: "注册时间",width:170,align: "center", key: "create_time" },
+          { title: "活跃时间",width:170,align: "center", key: "active_time" },
+          { title: "活跃事件",width:170,align: "center", key: "active_action" },
           {
             title: "操作",align: "center",
             key: "action",
@@ -479,7 +502,29 @@ export default {
         this.columns2 = [
          { type: "selection" ,width:60,fixed: 'left'},
           { title: "学员姓名",align: "center",width:100, key: "student_name",fixed: 'left', },
-          { title: "注册手机",width:120,align: "center", key: "mobile",fixed: 'left', },
+          {
+            title: "注册手机",
+            width: 120,
+            align: "center",
+            key: "mobile",
+            render: (h, params) => {
+              return h(
+                "Badge",
+                {
+                  props: {
+                    dot: true,
+                    count: params.row.is_red,
+                    offset: [10,0]
+                  },
+                  style: {
+                    height: '40px',
+                    'line-height': '40px'
+                  }
+                },
+                params.row.mobile
+              );
+            },
+          },
           { title: "城市", width: 140,align: "center", key: "area" },
           { title: "年级",width: 100,align: "center", key: "grade" },
           { title: "意向科目", width: 100,align: "center", key: "subject" },
@@ -521,7 +566,8 @@ export default {
           { title: "学习阶段", width: 100,align: "center", key: "stage" },
           { title: "流转类型", width: 100,align: "center", key: "transfer" },
           { title: "分配时间",width:170,align: "center", key: "receive_time" },
-          { title: "注册时间",width:170,align: "center", key: "create_time" },
+          { title: "活跃时间",width:170,align: "center", key: "active_time" },
+          { title: "活跃事件",width:170,align: "center", key: "active_action" },
           {
             title: "操作",align: "center",
             key: "action",
@@ -583,7 +629,29 @@ export default {
         this.columns2 = [
          { type: "selection" ,width:60},
           { title: "学员姓名",align: "center", key: "student_name" },
-          { title: "注册手机",width:120,align: "center", key: "mobile" },
+          {
+            title: "注册手机",
+            width: 120,
+            align: "center",
+            key: "mobile",
+            render: (h, params) => {
+              return h(
+                "Badge",
+                {
+                  props: {
+                    dot: true,
+                    count: params.row.is_red,
+                    offset: [10,0]
+                  },
+                  style: {
+                    height: '40px',
+                    'line-height': '40px'
+                  }
+                },
+                params.row.mobile
+              );
+            },
+          },
           { title: "城市",align: "center", key: "area" },
           { title: "在读学校",align: "center", key: "school" },
           { title: "购买课程",align: "center", key: "product_name" },
@@ -593,7 +661,8 @@ export default {
           { title: "渠道来源",width:120,align: "center", key: "refer" },
           { title: "跟进状态",width: 100,align: "center", key: "follow_status" },
           { title: "交易时间",width:170,align: "center", key: "paytime" },
-          { title: "注册时间",width:170,align: "center", key: "create_time" },
+          { title: "活跃时间",width:170,align: "center", key: "active_time" },
+          { title: "活跃事件",width:170,align: "center", key: "active_action" },
           {
             title: "操作",align: "center",
             key: "action",
@@ -624,7 +693,29 @@ export default {
         this.columns2 = [
           { type: "selection" ,width:60},
           { title: "学员姓名",align: "center", key: "student_name" },
-          { title: "注册手机",width:120,align: "center", key: "mobile" },
+          {
+            title: "注册手机",
+            width: 120,
+            align: "center",
+            key: "mobile",
+            render: (h, params) => {
+              return h(
+                "Badge",
+                {
+                  props: {
+                    dot: true,
+                    count: params.row.is_red,
+                    offset: [10,0]
+                  },
+                  style: {
+                    height: '40px',
+                    'line-height': '40px'
+                  }
+                },
+                params.row.mobile
+              );
+            },
+          },
           { title: "城市",align: "center", key: "area" },
           { title: "在读学校",align: "center", key: "school" },
           { title: "年级",width: 80,align: "center", key: "grade" },
@@ -633,7 +724,8 @@ export default {
           { title: "渠道来源",width:120,align: "center", key: "refer" },
           // { title: "数据来源",align: "center", key: "data_source" },
           // { title: "数据类型",align: "center", key: "data_type" },
-          { title: "注册时间",width:170,align: "center", key: "create_time" },
+          { title: "活跃时间",width:170,align: "center", key: "active_time" },
+          { title: "活跃事件",width:170,align: "center", key: "active_action" },
           {
             title: "操作",align: "center",
             key: "action",
