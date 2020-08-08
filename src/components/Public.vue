@@ -212,7 +212,7 @@ export default {
           key: "last_follow_time",
         },
         { title: "移出原因", key: "assign_note", tooltip: true, width: 120 },
-        // { title: "注册时间", width: 170, align: "center", key: "create_time" },
+        { title: "注册时间", width: 170, align: "center", key: "create_time" },
         { title: "活跃时间", width: 170, align: "center", key: "active_time" },
         {
           title: "活跃事件",

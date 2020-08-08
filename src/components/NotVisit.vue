@@ -190,6 +190,7 @@ export default {
         { title: "分配时间", key: "receive_time", align: "center", width: 170 },
         { title: "活跃时间",width:170,align: "center", key: "active_time" },
         { title: "活跃事件",width:170,align: "center", key: "active_action" },
+        { title: "注册时间",align: "center",  key: "create_time", width: 170 },
         {
           title: "操作",
           key: "action",
