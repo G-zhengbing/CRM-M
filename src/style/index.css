@@ -325,3 +325,33 @@ html{
   border-bottom: 1px solid;
 }
 /* </Clickable> */
+
+/* <CreateOrder> */
+.procued-footer div {
+  flex: 1;
+  text-align: right;
+}
+.procued-footer {
+  display: flex;
+  border-top: 1px solid #ccc;
+  align-items: center;
+}
+.procued-content .type {
+  display: flex;
+}
+.procude-top i {
+  flex: 1;
+  font-size: 20px;
+  cursor: pointer;
+  text-align: right;
+}
+.procude-top {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+  align-items: center;
+}
+.procude {
+  background-color: rgba(242, 242, 242, 1);
+  padding: 10px;
+}
+/* <CreateOrder/> */

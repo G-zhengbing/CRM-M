@@ -299,7 +299,7 @@ export default {
               form: state.forms
             })
           }
-          resolve()
+          resolve(res)
         }).catch(e => {
           reject(e)
         })

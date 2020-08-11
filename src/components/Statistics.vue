@@ -421,7 +421,7 @@ export default {
             fixed: "left"
           },
           { title: "接通电话数量", key: "valid_num", width: 130 },
-          { title: "接通率", key: "call_rate", width: 80 },
+          { title: "接通率", key: "call_rate", width: 120 },
           {
             title: "有效呼出时长",
             key: "call_time",
@@ -456,7 +456,7 @@ export default {
             fixed: "left"
           },
           { title: "接通电话数量", key: "valid_num", width: 130 },
-          { title: "接通率", key: "call_rate", width: 80 },
+          { title: "接通率", key: "call_rate", width: 120 },
           {
             title: "有效呼出时长",
             key: "call_time",
@@ -491,7 +491,7 @@ export default {
             fixed: "left"
           },
           { title: "接通电话数量", key: "valid_num", width: 130 },
-          { title: "接通率", key: "call_rate", width: 80 },
+          { title: "接通率", key: "call_rate", width: 120 },
           {
             title: "有效呼出时长",
             key: "call_time",

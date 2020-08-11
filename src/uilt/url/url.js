@@ -103,6 +103,8 @@ const GETMOBILE = BASEURL + "get_mobile" //教务/ 转介绍
 const ORDERPRODUCT = BASEURL + "order_product" //教务/ 订单 选择课程
 const GETACCOUNTSFOLLOW = BASEURL + "get_accounts_follow" //教务/ 跟进，信息展示
 const CALLRECORDSTATISTICS = BASEURL + "call_record_statistics" //教务/ 拨号预约统计分析
+const GIVELESSONS = BASEURL + "free_product" //教务/ 获取课程
+const GIVELESSONSCREADORDER = BASEURL + "create_free_order" //教务/ 赠课,创建订单
 
 const ADMINMERBERUSERLIST = BASEURL + "admin_merber_user_list" //设置，人员列表查询
 const CREATEDEPARTMENTNAME = BASEURL + "create_department_name" //设置，创建部门
@@ -132,6 +134,8 @@ const TEACHER_RANKING = BASEURL + 'coach_appoint'//教师排名
 const MAKE_RANKING = BASEURL + 'appoint_order' //成交周期
 
 export {
+  GIVELESSONSCREADORDER,
+  GIVELESSONS,
   DELETE_USER,
   MAKE_RANKING,
   TEACHER_RANKING,

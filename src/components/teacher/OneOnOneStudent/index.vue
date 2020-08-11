@@ -103,6 +103,7 @@
     />
     <Loading v-show="isLoading" />
     <MineclientMessage :type="types" v-if="showMine" />
+    <Message v-if="showMessage" :item="item" />
   </div>
 </template>
 
@@ -111,11 +112,13 @@ import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import { VIPUSERLIST } from "@/uilt/url/url";
 import storage from "@/uilt/storage";
 import MineclientMessage from "@/components/minecllient/MineclientMessage";
+import Message from "../../../uilt/components/give-lessons/Message";
 import qs from "qs";
 
 export default {
   components: {
-    MineclientMessage
+    MineclientMessage,
+    Message
   },
   computed: {
     ...mapState({
@@ -127,6 +130,8 @@ export default {
   },
   data() {
     return {
+      item: {}, //message组件接收参数
+      showMessage: false, //message
       isLoading: false, // loading开关
       dataList: [],
       mode: [], // 存放用户数据
@@ -346,6 +351,21 @@ export default {
                   }
                 },
                 "跟进"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.giveLessons(params.row);
+                    }
+                  }
+                },
+                "赠课"
               )
             ]);
           }
@@ -541,6 +561,12 @@ export default {
       "setStudentpayTypes"
     ]),
     ...mapActions(["getAccountList"]),
+    //赠课
+    giveLessons(item) {
+      this.showMessage = true;
+      this.item.classify = "order";
+      this.item.data = item;
+    },
     //补款升级
     upgrade(item) {
       this.getAccountList(item.account_id).then(res => {

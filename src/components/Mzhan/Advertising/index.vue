@@ -82,12 +82,12 @@ export default {
     }, 1000);
     window.addEventListener("resize", this.changeFixed);
   },
-  beforeDestroy(){
+  beforeDestroy() {
     window.removeEventListener("resize", this.changeFixed);
   },
   data() {
     return {
-      tableHeight:0,
+      tableHeight: 0,
       columns2: [
         {
           type: "selection",

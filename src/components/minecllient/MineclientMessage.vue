@@ -66,7 +66,6 @@
         <div class="procude">
           <div class="procude-top">
             <span>{{items.title}}</span>
-            <i>×</i>
           </div>
           <div class="procued-content">
             <FormItem label="课程名称" class="type">
@@ -91,7 +90,7 @@
           </div>
         </div>
         <FormItem label="支付信息"></FormItem>
-        <Table border :columns="orderColumns" :data="orderPay" height="100"></Table>
+        <Table border :columns="orderColumns" :data="orderPay"></Table>
       </Form>
       <div slot="footer">
         <Button type="text" size="large" @click="showOrder = false">取消</Button>
@@ -1890,33 +1889,6 @@ export default {
 }
 .tables ul {
   display: flex;
-}
-.procued-footer div {
-  flex: 1;
-  text-align: right;
-}
-.procued-footer {
-  display: flex;
-  border-top: 1px solid #ccc;
-  align-items: center;
-}
-.procued-content .type {
-  display: flex;
-}
-.procude-top i {
-  flex: 1;
-  font-size: 20px;
-  cursor: pointer;
-  text-align: right;
-}
-.procude-top {
-  display: flex;
-  border-bottom: 1px solid #ccc;
-  align-items: center;
-}
-.procude {
-  background-color: rgba(242, 242, 242, 1);
-  padding: 10px;
 }
 .demo-upload-list {
   display: inline-block;

@@ -1113,6 +1113,11 @@ export default {
         });
       } else {
         this.fenPai({ form: this.form, status: this.$parent.num }).then(res => {
+          if (res.data.ret) {
+            this.$Message.success("分配成功");
+          } else {
+            this.$Message.error(res.data.ret);
+          }
           this.message = false;
           this.$parent.show = false;
           this.$parent.checkall = "";
