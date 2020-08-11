@@ -150,7 +150,30 @@ export default {
       columns: [
         { type: "selection", width: 60 ,fixed:'left'},
         { title: "学员姓名", key: "student_name", align: "center", width: 100 ,fixed:'left'},
-        { title: "注册手机", key: "mobile", align: "center", width: 120 ,fixed:'left'},
+        {
+            title: "注册手机",
+            width: 120,
+            align: "center",
+            key: "mobile",
+            fixed:'left',
+            render: (h, params) => {
+              return h(
+                "Badge",
+                {
+                  props: {
+                    dot: true,
+                    count: params.row.is_red,
+                    offset: [10,0]
+                  },
+                  style: {
+                    height: '40px',
+                    'line-height': '40px'
+                  }
+                },
+                params.row.mobile
+              );
+            },
+          },
         { title: "城市", key: "area", align: "center", width: 120 },
         // { title: "购买课程", key: "product_subject", align: "center" , width: 100 },
         { title: "年级", key: "grade", align: "center" , width: 100 },
@@ -165,7 +188,9 @@ export default {
         { title: "新/老用户", key: "highsea_id", width: 100 },
         { title: "渠道来源", key: "refer", align: "center" , width: 100 },
         { title: "分配时间", key: "receive_time", align: "center", width: 170 },
-        { title: "注册时间", key: "create_time", align: "center", width: 170 },
+        { title: "活跃时间",width:170,align: "center", key: "active_time" },
+        { title: "活跃事件",width:170,align: "center", key: "active_action" },
+        { title: "注册时间",align: "center",  key: "create_time", width: 170 },
         {
           title: "操作",
           key: "action",
