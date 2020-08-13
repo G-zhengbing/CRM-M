@@ -96,6 +96,14 @@
             <span>{{collect.total_pay_amount}}</span>
             <p>签单金额</p>
           </li>
+          <li>
+            <span>{{collect.appoint_rate}}</span>
+            <p>邀约率</p>
+          </li>
+          <li>
+            <span>{{collect.pay_rate}}</span>
+            <p>转化率</p>
+          </li>
         </ul>
       </Col>
       <Col span="24" class="not_right">
@@ -128,7 +136,7 @@
               </Select>
             </Col>
             <Col span="2" v-if="analyzeType == 'day'">
-              <Button type="primary" @click="clear">清除</Button>
+              <Button type="primary" @click="clearAnalyzeForm">清除</Button>
             </Col>
           </Row>
           <Row class-name="exclusive" style="width:20%">
@@ -319,7 +327,7 @@ export default {
     clearAnalyzeForm() {
       this.analyzeForm = {};
       this.isLoading = true;
-      this.getsSatisticsList({ status: this.analyzeType }).then(res => {
+      this.getAnalyzeList({ status: this.analyzeType}).then(res => {
         this.isLoading = false;
       });
     },
@@ -373,22 +381,12 @@ export default {
     //设置返回的时间
     datePicker(time) {
       var d = new Date(time);
-      let shi = d.getHours();
-      let fen = d.getMinutes();
-      let miao = d.getSeconds();
-      if (shi < 10) shi = "0" + shi;
-      if (fen < 10) fen = "0" + fen;
-      if (miao < 10) miao = "0" + miao;
       d =
         d.getFullYear() +
         "-" +
         (d.getMonth() + 1 < 10 ? "0" + (d.getMonth() + 1) : d.getMonth() + 1) +
         "-" +
-        d.getDate() +
-        " " +
-        shi +
-        ":" +
-        fen;
+        d.getDate()
       return d;
     },
     seekClick() {

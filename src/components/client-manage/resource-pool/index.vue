@@ -1,6 +1,5 @@
 <template>
   <div>
-    <DaibanMessage v-if="show" :type="type" ref="message" />
     <div class="contaner">
       <ul class="tabs">
         <li @click="tab(1)" :class="[num == 1? 'active' : '']">
@@ -163,7 +162,6 @@
     </div>
     <Loading v-show="isLoading" />
     <SendSMS v-if="MODtype" :followForm="followForm" />
-    <MineclientMessage :type="type" v-if="showMine" />
     <Modal width="800" v-model="showVisit" title="回访记录" @on-cancel="showVisit = false">
       <Table border :columns="visitColumns" :data="showVisitData" height="500"></Table>
       <div slot="footer">
@@ -175,10 +173,8 @@
 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
-import DaibanMessage from "../../uilt/newErweima/DaibanMessage";
-import storage from "../../uilt/storage";
-import Loading from "../../uilt/loading/loading";
-import MineclientMessage from "../minecllient/MineclientMessage";
+import storage from "../../../uilt/storage";
+import Loading from "../../../uilt/loading/loading";
 export default {
   mounted() {
     this.getReferList().then(() => {
@@ -198,8 +194,6 @@ export default {
     });
   },
   components: {
-    DaibanMessage,
-    MineclientMessage,
     Loading
   },
   data() {
@@ -452,8 +446,7 @@ export default {
                   },
                   style: {
                     height: "40px",
-                    "line-height": "40px",
-                    "z-index": 0
+                    "line-height": "40px"
                   }
                 },
                 params.row.mobile
@@ -543,8 +536,7 @@ export default {
                   },
                   style: {
                     height: "40px",
-                    "line-height": "40px",
-                    "z-index": 0
+                    "line-height": "40px"
                   }
                 },
                 params.row.mobile
@@ -690,13 +682,12 @@ export default {
         ];
       } else if (this.num == 3) {
         this.columns2 = [
-          { type: "selection", width: 60, fixed: "left" },
+          { type: "selection", width: 60 },
           {
             title: "学员姓名",
             align: "center",
             key: "student_name",
-            width: 100,
-            fixed: "left"
+            width: 100
           },
           {
             title: "注册手机",
@@ -714,8 +705,7 @@ export default {
                   },
                   style: {
                     height: "40px",
-                    "line-height": "40px",
-                    "z-index": 0
+                    "line-height": "40px"
                   }
                 },
                 params.row.mobile
@@ -812,8 +802,7 @@ export default {
                   },
                   style: {
                     height: "40px",
-                    "line-height": "40px",
-                    "z-index": 0
+                    "line-height": "40px"
                   }
                 },
                 params.row.mobile

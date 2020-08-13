@@ -84,6 +84,7 @@ const router = new Router({
         {
           path: '/main/daiban',
           component: Daiban
+          // component: ()=>import('../components/client-manage/resource-pool/index.vue')
         },
         {
           path: '/main/notvisit',

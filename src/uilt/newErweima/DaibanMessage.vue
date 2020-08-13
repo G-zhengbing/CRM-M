@@ -91,7 +91,7 @@
             </Col>
             <Col span="4">
               <FormItem style="width:150px;" label="年龄">
-                <Input readonly v-model="type.data.age" placeholder="年龄"></Input>
+                <Input disabled v-model="type.data.age" placeholder="年龄"></Input>
               </FormItem>
             </Col>
             <Col span="4">
@@ -151,10 +151,10 @@
             <Col span="6">
               <FormItem label="意向度" style="margin-left: 10px">
                 <RadioGroup v-model="type.data.intention_option">
-                  <Radio label="1">高</Radio>
-                  <Radio label="2">中</Radio>
-                  <Radio label="3">低</Radio>
-                  <Radio label="4">无</Radio>
+                  <Radio label="1" disabled>高</Radio>
+                  <Radio label="2" disabled>中</Radio>
+                  <Radio label="3" disabled>低</Radio>
+                  <Radio label="4" disabled>无</Radio>
                 </RadioGroup>
               </FormItem>
             </Col>
@@ -171,7 +171,7 @@
             <Col span="24">
               <FormItem label="回访内容">
                 <Input
-                  disabled
+                  readonly
                   v-model="vist_content"
                   type="textarea"
                   :rows="4"
@@ -182,7 +182,7 @@
             <Col span="24">
               <FormItem label="下次回访">
                 <DatePicker
-                  disabled
+                  readonly
                   style="margin:0"
                   v-model="type.data.next_follow_time"
                   format="yyyy-MM-dd HH:mm:ss"
@@ -242,7 +242,27 @@
         title="线索跟进"
         @on-cancel="followUpColse"
       >
-        <Form :model="followForm" label-position="top" style="height:500px;overflow-y:auto;">
+        <ul class="tabs">
+          <li @click="tab(1)" :class="[num == 1? 'active' : '']">
+            <span>跟进</span>
+          </li>
+          <li
+            v-if=" type.status == 'studentpay'"
+            @click="tab(2)"
+            :class="[num == 2? 'active' : '']"
+          >
+            <span>订单</span>
+          </li>
+          <li @click="tab(3)" :class="[num == 3? 'active' : '']">
+            <span>预约单</span>
+          </li>
+        </ul>
+        <Form
+          :model="followForm"
+          label-position="top"
+          style="height:500px;overflow-y:auto;"
+          v-if="num ==1"
+        >
           <Row>
             <Col span="4">
               <FormItem style="width:150px;" label="学员姓名">
@@ -391,25 +411,30 @@
                 </li>
               </ul>
             </Col>
-            <Col span="24" v-if="type.status == 'studentpay'">
-              <span class="record">订单记录</span>
-              <p class="record-header">
-                <i>购买课程</i>
-                <span>年级</span>
-                <span>科目</span>
-                <span>购买时间</span>
-              </p>
-              <ul class="record-footer">
-                <li v-for="(item,i) in followForm.order" :key="i">
-                  <i>{{item.product_name}}</i>
-                  <span>{{item.grade}}</span>
-                  <span>{{item.subject}}</span>
-                  <span>{{item.create_time}}</span>
-                </li>
-              </ul>
-            </Col>
           </Row>
         </Form>
+        <template v-if="num ==2">
+          <div style="minHeight:500px">
+            <span class="record">订单记录</span>
+            <p class="record-header">
+              <i>购买课程</i>
+              <span>年级</span>
+              <span>科目</span>
+              <span>购买时间</span>
+            </p>
+            <ul class="record-footer">
+              <li v-for="(item,i) in followForm.order" :key="i">
+                <i>{{item.product_name}}</i>
+                <span>{{item.grade}}</span>
+                <span>{{item.subject}}</span>
+                <span>{{item.create_time}}</span>
+              </li>
+            </ul>
+          </div>
+        </template>
+        <template v-if="num == 3">
+          <Table border :columns="columns" :data="orderList" height="500"></Table>
+        </template>
         <div slot="footer">
           <Button class="followup" type="warning" size="large" @click="followUpRemoveOk">移出</Button>
           <Button class="order" type="warning" size="large" @click="createOrder">订单</Button>
@@ -682,6 +707,13 @@ export default {
     })
   },
   methods: {
+    //跟进tab
+    tab(num) {
+      this.num = num;
+      if (num == 3) {
+        this.orderList = this.type.data.appoint;
+      }
+    },
     openSms() {
       this.$parent.MODtype = true;
       this.$parent.followForm = this.followForm;
@@ -1155,6 +1187,23 @@ export default {
   },
   data() {
     return {
+      columns: [
+        { title: "试听课程", key: "course_name" },
+        { title: "年级/科目", key: "grade_subject" },
+        { title: "教师", key: "coach_id" },
+        { title: "上课日期", key: "date_time", width: 150 },
+        { title: "状态", key: "appoint_status" },
+        {
+          title: "备注",
+          key: "note",
+          align: "center",
+          tooltip: true,
+          ellipsis: true
+        },
+        { title: "创建人", key: "create_user", align: "center" },
+        { title: "创建时间", key: "create_time", width: 170 }
+      ],
+      num: 1,
       followForm: {},
       showRemove: false,
       removeNote: "",
