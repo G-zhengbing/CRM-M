@@ -270,6 +270,12 @@ export default {
           width: 180
         },
         {
+          title: "订单编号",
+          key: "order_sn",
+          align: "center",
+          width: 180
+        },
+        {
           title: "操作",
           key: "operation",
           align: "center",
@@ -352,21 +358,21 @@ export default {
                 },
                 "跟进"
               ),
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "text",
-                    size: "small"
-                  },
-                  on: {
-                    click: () => {
-                      this.giveLessons(params.row);
-                    }
-                  }
-                },
-                "赠课"
-              )
+              // h(
+              //   "Button",
+              //   {
+              //     props: {
+              //       type: "text",
+              //       size: "small"
+              //     },
+              //     on: {
+              //       click: () => {
+              //         this.giveLessons(params.row);
+              //       }
+              //     }
+              //   },
+              //   "赠课"
+              // )
             ]);
           }
         }
