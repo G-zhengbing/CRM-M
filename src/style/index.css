@@ -355,3 +355,13 @@ html{
   padding: 10px;
 }
 /* <CreateOrder/> */
+
+/* 选择老师 */
+.teacher-list {
+  display: flex;
+}
+.select-teacher {
+  cursor: pointer;
+  color: #0095ff;
+}
+/*  */
