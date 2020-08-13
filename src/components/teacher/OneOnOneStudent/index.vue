@@ -265,6 +265,12 @@ export default {
           width: 180
         },
         {
+          title: "订单编号",
+          key: "order_sn",
+          align: "center",
+          width: 180
+        },
+        {
           title: "操作",
           key: "operation",
           align: "center",
