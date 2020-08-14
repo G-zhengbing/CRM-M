@@ -206,6 +206,10 @@ const router = new Router({
           path: '/main/onemyreservation', // 我的预约单
           component: () => import('@/components/teacher/OneMyReservation')
         },
+        {
+          path: '/main/tclasshour', // 教师课时确认
+          component: () => import('@/components/teacher/teacher-classhour')
+        },
 
         // 设置
         {
