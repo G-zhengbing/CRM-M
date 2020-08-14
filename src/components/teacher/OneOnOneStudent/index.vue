@@ -358,21 +358,21 @@ export default {
                 },
                 "跟进"
               ),
-              // h(
-              //   "Button",
-              //   {
-              //     props: {
-              //       type: "text",
-              //       size: "small"
-              //     },
-              //     on: {
-              //       click: () => {
-              //         this.giveLessons(params.row);
-              //       }
-              //     }
-              //   },
-              //   "赠课"
-              // )
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.giveLessons(params.row);
+                    }
+                  }
+                },
+                "赠课"
+              )
             ]);
           }
         }
