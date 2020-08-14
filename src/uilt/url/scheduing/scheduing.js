@@ -1,7 +1,7 @@
 import { BASEURL } from '../env'
 
 const STUDENTLIST = BASEURL + 'paid_accounts' //学员管理
-const TEACHERLIST = BASEURL + 'coach_lists' //班课老师任列表
+const TEACHERLIST = BASEURL + 'coach_list' //班课老师任列表
 const CUORSECARD = BASEURL +'my_card' //课程卡 
 const CREATEDLESSONS = BASEURL +'lesson_store' //添加课节一对一
 const ADDCOURSE =BASEURL + 'create_fixed_schedule'//排课一对一

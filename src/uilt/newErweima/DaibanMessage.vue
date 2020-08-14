@@ -1094,7 +1094,6 @@ export default {
               page: this.type.page
             });
           }
-          this.getKehuList({ status: storage.getTabStatus() });
         });
       }
       this.disableBtn = false;

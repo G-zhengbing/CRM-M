@@ -1858,15 +1858,6 @@ export default {
 </script>
 
 <style scoped>
-/* 选择老师 */
-.teacher-list {
-  display: flex;
-}
-.select-teacher {
-  cursor: pointer;
-  color: #0095ff;
-}
-/*  */
 .totalprice > div span {
   margin-right: 30px;
 }

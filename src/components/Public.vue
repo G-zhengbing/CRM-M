@@ -293,9 +293,6 @@ export default {
       this.endTime = "";
       this.seekKuhu();
     },
-    goHome() {
-      this.$router.push("/main/home");
-    },
     //搜索
     seekKuhu() {
       let page = 1;

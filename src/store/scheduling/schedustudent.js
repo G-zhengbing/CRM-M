@@ -65,11 +65,11 @@ export default {
     getTeacherList({
       state,
       commit
-    },{type ,form}) {
+    },{ form}) {
       return new Promise((resolve, reject) => {
         axios({
           method: "get",
-          url: TEACHERLIST + '/' + type,
+          url: TEACHERLIST ,
           headers: {
             "content-type": "application/x-www-form-urlencoded",
             Authorization: "bearer " + storage.get()
