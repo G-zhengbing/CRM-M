@@ -1,5 +1,5 @@
 <template>
-  <div class="teacher-classHour">
+  <div class="SClassHour">
     <Tabs type="card" :value="tabs" @on-click="changeTab" :animated="false">
       <TabPane label="今日待确认" name="1"></TabPane>
       <TabPane label="逾期待确认" name="2"></TabPane>
@@ -7,7 +7,7 @@
     </Tabs>
     <Form class="select" ref="formValidate" :model="formItem" inline>
       <FormItem>
-        <Input v-model="formItem.student_name" placeholder="教师编号/姓名" style="width: 160px;"></Input>
+        <Input v-model="formItem.student_name" placeholder="学员编号/姓名" style="width: 160px;"></Input>
       </FormItem>
       <FormItem>
         <Select v-model="formItem.grade" placeholder="选择年级" style="width: 100px;">
@@ -26,7 +26,7 @@
         </Select>
       </FormItem>
       <FormItem>
-        <Select v-model="formItem.grade" placeholder="授课状态" style="width: 100px;">
+        <Select v-model="formItem.grade" placeholder="课程状态" style="width: 100px;">
           <Option value="0">正常</Option>
           <Option value="1">异常</Option>
         </Select>
@@ -36,7 +36,7 @@
           v-model="formItem.create_sts_time"
           type="datetimerange"
           placement="bottom-end"
-          placeholder="授课日期 - 授课日期"
+          placeholder="上课日期 - 上课日期"
           style="width: 165px"
           @on-change="changeCreateDate"
         ></DatePicker>
@@ -45,13 +45,14 @@
         <Button @click="deleteFormData" style="margin-left: 8px">清空选项</Button>
       </FormItem>
     </Form>
-    <TableBox
-      :allocationData="allocationData"
-      :selectData="selectData"
-      :columns="tabs === '3' ? columns2 : columns1"
-      :dataList="dataList"
-    >
-      <Button v-if="tabs !== '3'" @click="confirm(1)" type="primary" style="margin-left: 8px" slot="affirm">批量确认</Button>
+    <TableBox :columns="tabs === '3' ? columns2 : columns1" :dataList="dataList">
+      <Button
+        v-if="tabs !== '3'"
+        @click="confirm(1)"
+        type="primary"
+        style="margin-left: 8px"
+        slot="affirm"
+      >批量确认</Button>
     </TableBox>
     <PagingBox
       :total="total"
@@ -60,8 +61,8 @@
       :last_page="last_page"
       @changePages="changePages"
     />
-    <!-- edit -->
-    <edit />
+    <!-- edit  v-if 控制组件销毁，方便组件内请求 -->
+    <edit v-if="edit.switch" />
   </div>
 </template>
 
@@ -82,14 +83,21 @@ export default {
           align: "center",
         },
         {
-          title: "教师姓名",
+          title: "学员编号",
           align: "center",
           key: "name",
           width: 120,
           fixed: "left",
         },
         {
-          title: "教师级别",
+          title: "学员姓名",
+          align: "center",
+          key: "name",
+          width: 120,
+          fixed: "left",
+        },
+        {
+          title: "注册手机",
           align: "center",
           key: "name",
           width: 120,
@@ -120,13 +128,13 @@ export default {
           width: 120,
         },
         {
-          title: "授课状态",
+          title: "课程状态",
           align: "center",
           key: "name",
           width: 120,
         },
         {
-          title: "授课日期",
+          title: "上课日期",
           align: "center",
           key: "name",
           width: 160,
@@ -156,19 +164,7 @@ export default {
           width: 160,
         },
         {
-          title: "课时数",
-          align: "center",
-          key: "name",
-          width: 120,
-        },
-        {
-          title: "迟到罚款",
-          align: "center",
-          key: "name",
-          width: 120,
-        },
-        {
-          title: "总罚款",
+          title: "课时消耗",
           align: "center",
           key: "name",
           width: 120,
@@ -178,6 +174,25 @@ export default {
           align: "center",
           key: "name",
           width: 120,
+        },
+        {
+          title: "回放地址",
+          align: "center",
+          width: 120,
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "a",
+                {
+                  attrs: {
+                    href: params.row.name_url,
+                    target: '_blank'
+                  },
+                },
+                params.row.name_url
+              ),
+            ]);
+          },
         },
         {
           title: "操作",
@@ -230,14 +245,21 @@ export default {
           align: "center",
         },
         {
-          title: "教师姓名",
+          title: "学员编号",
           align: "center",
           key: "name",
           width: 120,
           fixed: "left",
         },
         {
-          title: "教师级别",
+          title: "学员姓名",
+          align: "center",
+          key: "name",
+          width: 120,
+          fixed: "left",
+        },
+        {
+          title: "注册手机",
           align: "center",
           key: "name",
           width: 120,
@@ -268,13 +290,13 @@ export default {
           width: 120,
         },
         {
-          title: "授课状态",
+          title: "课程状态",
           align: "center",
           key: "name",
           width: 120,
         },
         {
-          title: "授课日期",
+          title: "上课日期",
           align: "center",
           key: "name",
           width: 160,
@@ -304,31 +326,13 @@ export default {
           width: 160,
         },
         {
-          title: "课时数",
+          title: "课时消耗",
           align: "center",
           key: "name",
           width: 120,
         },
         {
-          title: "迟到罚款",
-          align: "center",
-          key: "name",
-          width: 120,
-        },
-        {
-          title: "确认课时数",
-          align: "center",
-          key: "name",
-          width: 120,
-        },
-        {
-          title: "备注",
-          align: "center",
-          key: "name",
-          width: 120,
-        },
-        {
-          title: "总罚款",
+          title: "确认课时消耗",
           align: "center",
           key: "name",
           width: 120,
@@ -350,6 +354,25 @@ export default {
           align: "center",
           key: "name",
           width: 120,
+        },
+        {
+          title: "回放地址",
+          align: "center",
+          width: 120,
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "a",
+                {
+                  attrs: {
+                    href: params.row.name_url,
+                    target: '_blank'
+                  },
+                },
+                params.row.name_url
+              ),
+            ]);
+          },
         },
         {
           title: "操作",
@@ -382,6 +405,7 @@ export default {
       dataList: [
         {
           name: "123",
+          name_url: "http://www.baidu.com",
         },
       ],
       total: 100,
@@ -389,9 +413,6 @@ export default {
       current_page: 1,
       last_page: 1,
       formItem: {},
-      // 这只是确保显示种条数
-      allocationData: "affirm",
-      selectData: true,
       edit: {
         switch: false,
         id: 0,
@@ -403,7 +424,7 @@ export default {
     confirm(i) {
       this.$Modal.confirm({
         title: "确认",
-        content: "<p>确认老师课时数，是否确认</p>",
+        content: "<p>确认学员课时数，是否确认</p>",
         onOk: () => {
           // 1 表示批量 0 不进入
           if (i) {
@@ -417,14 +438,7 @@ export default {
       });
     },
     changeTab(e) {
-			this.tabs = e;
-			if(e === '3') {
-				this.allocationData = ''
-				this.selectData = false
-			} else {
-				this.allocationData = 'affirm'
-				this.selectData = true
-			}
+      this.tabs = e;
       this.deleteFormData();
     },
     // 改变页码
@@ -448,7 +462,7 @@ export default {
 </script>
 
 <style scoped>
-.teacher-classHour {
+.SClassHour {
   padding: 20px;
 }
 </style>

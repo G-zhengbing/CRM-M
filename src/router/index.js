@@ -210,6 +210,10 @@ const router = new Router({
           path: '/main/tclasshour', // 教师课时确认
           component: () => import('@/components/teacher/teacher-classhour')
         },
+        {
+          path: '/main/sclasshour', // 学生课时确认
+          component: () => import('@/components/teacher/student-classhour')
+        },
 
         // 设置
         {
