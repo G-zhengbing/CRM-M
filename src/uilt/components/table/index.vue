@@ -12,6 +12,8 @@
           class="btns"
           :title="'批量分配'"
         />
+        <!-- 批量确认 -->
+        <slot v-if="allocationData == 'affirm'" name="affirm"></slot>
       </div>
       <div class="select" v-if="selectData">
         <Select v-model="model1">
@@ -144,6 +146,7 @@ export default {
   background-color: #f3f3f3;
   border: 1px solid #e4e4e4;
   box-sizing: border-box;
+  overflow: hidden;
 }
 /* 条数选择器 */
 .select {
