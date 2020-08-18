@@ -6,7 +6,8 @@ import {
   CREATEDLESSONS,
   LESSONSSTUDENT,
   ADDALLSTUDENT,
-  ADDLESSONSSTUDENT
+  ADDLESSONSSTUDENT,
+  TEACHERLISTS
 } from '../../uilt/url/scheduing/scheduing'
 import axios from 'axios'
 import storage from '../../uilt/storage'
@@ -14,9 +15,9 @@ import storage from '../../uilt/storage'
 export default {
   namespaced: true,
   state: {
-    studentCurrentpage:1,
-    studentPagesize:10,
-    studentTotal:0,
+    studentCurrentpage: 1,
+    studentPagesize: 10,
+    studentTotal: 0,
     lessonsStudent: [],
     lessonsList: [],
     lessonsCurrentpage: 1,
@@ -30,13 +31,13 @@ export default {
     lessonsCourseCard: []
   },
   mutations: {
-    setStudentCurrentpage(state,payload){
+    setStudentCurrentpage(state, payload) {
       state.studentCurrentpage = payload
     },
-    setStudentTotal(state,payload){
+    setStudentTotal(state, payload) {
       state.studentTotal = payload
     },
-    setStudentPagesize(state,payload){
+    setStudentPagesize(state, payload) {
       state.studentPagesize = payload
     },
     setLessonsCourseCard(state, payload) {
@@ -74,87 +75,147 @@ export default {
     }
   },
   actions: {
-    //一对一取消课节
-    cancelLesson({state,commit,dispatch},{uid}){
-      return new Promise((resolve,reject)=>{
+    //授课老师
+    getTeacherList({
+      state,
+      commit,
+      dispatch
+    }) {
+      return new Promise((resolve, reject) => {
         axios({
-          method:'put',
-          url:CANCELLESSONS + '/' + uid,
+          method: "get",
+          url: TEACHERLISTS + '/' + 4,
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            Authorization: "bearer " + storage.get()
+          }
+        }).then(res => {
+          commit('setLessonsTeacherList', res.data.data)
+          resolve()
+        }).catch(e => {
+          reject(e)
+        })
+      })
+    },
+    //一对一取消课节
+    cancelLesson({
+      state,
+      commit,
+      dispatch
+    }, {
+      uid
+    }) {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'put',
+          url: CANCELLESSONS + '/' + uid,
           headers: {
             "content-type": "application/x-www-form-urlencoded",
             Authorization: "bearer " + storage.get()
           },
-          params:{}
-        }).then(res=>{
+          params: {}
+        }).then(res => {
           resolve(res)
-        }).catch(e=>{
+        }).catch(e => {
           reject(e)
         })
       })
     },
     //一对一课节修改
-    updateLesson({stata,commit,dispatch},{form}){
-      return new Promise((resolve,reject)=>{
+    updateLesson({
+      stata,
+      commit,
+      dispatch
+    }, {
+      form
+    }) {
+      return new Promise((resolve, reject) => {
         axios({
-          method:"post",
-          url:UPDATELESSONLIST + '/' + form.uid,
+          method: "post",
+          url: UPDATELESSONLIST + '/' + form.uid,
           headers: {
             "content-type": "application/x-www-form-urlencoded",
             Authorization: "bearer " + storage.get()
           },
-          params:{
-            lesson_date:form.lesson_date,
-            start_time:form.start_time,
-            coach_id:form.coach_id,
-            end_time:form.end_time
+          params: {
+            lesson_date: form.lesson_date,
+            start_time: form.start_time,
+            coach_id: form.coach_id,
+            end_time: form.end_time
           }
-        }).then(res=>{
+        }).then(res => {
           resolve(res)
-        }).catch(e=>{
+        }).catch(e => {
           reject(e)
         })
       })
     },
     //班课添加课节学员
-    addLessonsStudent({state,commit,dispatch},{uid,form,page,parentForm,cid}){
-      return new Promise((resolve,reject)=>{
+    addLessonsStudent({
+      state,
+      commit,
+      dispatch
+    }, {
+      uid,
+      form,
+      page,
+      parentForm,
+      cid
+    }) {
+      return new Promise((resolve, reject) => {
         axios({
-          method:"post",
-          url:ADDLESSONSSTUDENT,
+          method: "post",
+          url: ADDLESSONSSTUDENT,
           headers: {
             "content-type": "application/x-www-form-urlencoded",
             Authorization: "bearer " + storage.get()
           },
-          params:{
+          params: {
             ...form,
-            lesson_id:uid
+            lesson_id: uid
           }
-        }).then(res=>{
-          dispatch('getLessonsList',{page,form:parentForm,uid:cid})
+        }).then(res => {
+          dispatch('getLessonsList', {
+            page,
+            form: parentForm,
+            uid: cid
+          })
           resolve(res)
-        }).catch(e=>{
+        }).catch(e => {
           reject(e)
         })
       })
     },
     //班课添加学员
-    addCourseStudents({state,commit,dispatch},{uid,form,page,parentForm}){
-      return new Promise((resolve,reject)=>{
+    addCourseStudents({
+      state,
+      commit,
+      dispatch
+    }, {
+      uid,
+      form,
+      page,
+      parentForm
+    }) {
+      return new Promise((resolve, reject) => {
         axios({
-          method:'post',
-          url:ADDALLSTUDENT,
+          method: 'post',
+          url: ADDALLSTUDENT,
           headers: {
             "content-type": "application/x-www-form-urlencoded",
             Authorization: "bearer " + storage.get()
           },
-          params:{
+          params: {
             ...form,
-            schedule_id:uid
+            schedule_id: uid
           }
-        }).then(res=>{
-          dispatch('getCourseList',{form:parentForm,page})
+        }).then(res => {
+          dispatch('getCourseList', {
+            form: parentForm,
+            page
+          })
           resolve(res)
-        }).catch(e=>{
+        }).catch(e => {
           reject(e)
         })
       })
@@ -163,7 +224,10 @@ export default {
     getlessonsStudent({
       state,
       commit
-    },{form,page}) {
+    }, {
+      form,
+      page
+    }) {
       return new Promise((resolve, reject) => {
         axios({
           method: "get",
@@ -172,9 +236,9 @@ export default {
             "content-type": "application/x-www-form-urlencoded",
             Authorization: "bearer " + storage.get()
           },
-          params:{
+          params: {
             ...form,
-            page:page?page:state.studentCurrentpage
+            page: page ? page : state.studentCurrentpage
           }
         }).then(res => {
           commit('setLessonsstudent', res.data.data.resources)
@@ -200,9 +264,10 @@ export default {
           headers: {
             "content-type": "application/x-www-form-urlencoded",
             Authorization: "bearer " + storage.get()
-          },params:{
-						...form
-					}
+          },
+          params: {
+            ...form
+          }
         }).then(res => {
           resolve(res)
         }).catch(e => {
@@ -218,7 +283,7 @@ export default {
     }, {
       uid,
       form,
-			page
+      page
     }) {
       return new Promise((resolve, reject) => {
         axios({
@@ -229,8 +294,8 @@ export default {
             Authorization: "bearer " + storage.get()
           },
           params: {
-						...form,
-						page:page?page:state.lessonsCurrentpage
+            ...form,
+            page: page ? page : state.lessonsCurrentpage
           }
         }).then(res => {
           commit('setLessonslist', res.data.data.resources)
@@ -264,7 +329,7 @@ export default {
           }
         }).then(res => {
           commit('setCourselist', res.data.data.resources)
-          commit('setCurrentpage',res.data.data.links.current_page)
+          commit('setCurrentpage', res.data.data.links.current_page)
           commit('setPagesize', res.data.data.links.per_page)
           commit('setTotal', res.data.data.links.total)
           resolve()

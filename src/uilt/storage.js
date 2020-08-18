@@ -68,9 +68,6 @@ export default {
   save(todo) {
     SESSION.setItem(USERS, JSON.stringify(todo))
   },
-  saveUser(todo) {
-    SESSION.setItem(USER, JSON.stringify(todo))
-  },
   clear() {
     SESSION.clear(USERS)
   },
@@ -79,16 +76,5 @@ export default {
   },
   getTabStatus() {
     return JSON.parse(LOCAL.getItem(TABSTATUS) || null)
-  },
-  setUserCid(todo) {
-    SESSION.setItem(USERCID, JSON.stringify(todo))
-  },
-  getUserCid() {
-    return JSON.parse(SESSION.getItem(USERCID) || null)
-  },
-  getTokenTime(token){
-    if(token == 403){
-      window.location.href = "/"
-    }
   }
 }

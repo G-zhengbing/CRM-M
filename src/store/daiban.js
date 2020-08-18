@@ -4,10 +4,7 @@ import {
   FENPEI,
   FENPAIXS,
   YIRUGONG,
-  DINGDAN,
-  HUCHU,
   ASSIGNPAIDALLOCATED,
-  REFER,
   PONESTATUS
 } from '../uilt/url/url'
 import storage from '../uilt/storage'
@@ -15,7 +12,6 @@ import storage from '../uilt/storage'
 export default {
   state: {
     forms: {},
-    datas: [],
     status: 1,
     type: null,
     genjinType: null,
@@ -32,21 +28,6 @@ export default {
     xiaoshowId: 0,
   },
   mutations: {
-    setCourse_type(state, payload) {
-      state.course_type = payload
-    },
-    setIntention(state, payload) {
-      state.intention = payload
-    },
-    setFollow_status(state, payload) {
-      state.follow_status = payload
-    },
-    setRefs(state, payload) {
-      state.refer = payload
-    },
-    setForm(state, payload) {
-      state.forms = payload
-    },
     setDatas(state, payload) {
       state.datas = payload
     },
@@ -85,6 +66,7 @@ export default {
     }
   },
   actions: {
+    //跟进/移出
     removeData({
       state,
       commit,
@@ -136,93 +118,6 @@ export default {
         })
       })
     },
-    //渠道来源列表
-    getReferList({
-      state,
-      commit
-    }) {
-      return new Promise((resolve, reject) => {
-        axios({
-          method: "get",
-          url: REFER,
-          headers: {
-            "content-type": "application/x-www-form-urlencoded",
-            Authorization: "bearer " + storage.get()
-          }
-        }).then(res => {
-          storage.savaDaiban(res.data.data)
-          commit("setRefs", res.data.data.channel)
-          commit("setFenpeiList", res.data.data.sale_list)
-          commit("setFollow_status", res.data.data.screen_list.follow_status)
-          commit("setIntention", res.data.data.screen_list.intention)
-          commit("setCourse_type", res.data.data.screen_list.course_type)
-          resolve()
-        }).catch(e => {
-          reject(e)
-        })
-      })
-    },
-    //呼出
-    RingUp({}, {
-      form,
-      status
-    }) {
-      return new Promise((resolve, reject) => {
-        var tel = form.tel
-        if (typeof status == 'undefined') {
-          tel = form.tel
-        } else {
-          if (status == 1) {
-            tel = form.tel
-          } else if (status == 2) {
-            tel = form.spare_phone
-          }
-        }
-        axios({
-          method: "post",
-          url: HUCHU,
-          params: {
-            mobile: tel,
-            id:form.id
-          },
-          headers: {
-            "content-type": "application/x-www-form-urlencoded",
-            Authorization: "bearer " + storage.get()
-          }
-        }).then(res => {
-          resolve(res)
-        }).catch(e => {
-          reject(e)
-        })
-      })
-    },
-    //创建订单
-    updataDing({
-      state,
-      commit,
-      dispatch
-    }, {
-      cid,
-      item
-    }) {
-      return new Promise((resolve, reject) => {
-        axios({
-          method: "post",
-          url: DINGDAN + '/' + cid,
-          params: {
-            ...item
-          },
-          headers: {
-            "content-type": "application/x-www-form-urlencoded",
-            Authorization: "bearer " + storage.get()
-          }
-        }).then(res => {
-          resolve(res)
-        }).catch(e => {
-          reject(e)
-        })
-      })
-    },
     //移入公共客户区域
     ShiftOut({
       state,
@@ -252,9 +147,8 @@ export default {
         })
       })
     },
-
     //分配
-    fenPai({
+    allocation({
       state,
       commit,
       dispatch
@@ -305,7 +199,7 @@ export default {
         })
       })
     },
-    //得到列表数据
+    //列表数据
     getKehuList({
       state,
       commit,
@@ -511,17 +405,6 @@ export default {
         [11, '高二'],
         [12, '高三'],
       ]);
-      // var subjects = new Map([
-      //   [1, '数学'],
-      //   [2, "英语"],
-      //   [3, "语文"],
-      //   [4, "物理"],
-      //   [5, "化学"],
-      //   [6, "政治"],
-      //   [7, "生物"],
-      //   [8, "地理"],
-      //   [9, "历史"]
-      // ])
       var intention = new Map([
         [1, "高"],
         [2, "中"],
@@ -559,21 +442,7 @@ export default {
         [20, "20岁"]
       ])
 
-      // var version = new Map([
-      //   [1,"人教版"],
-      //   [2,"北师大版"],
-      //   [3,"华师大版"],
-      //   [4,"苏教版"],
-      //   [5,"鄂教版"],
-      //   [6,"鲁教版"],
-      //   [7,"沪教版"],
-      //   [8,"冀教版"],
-      //   [9,"浙教版"],
-      //   [10,"河大版"],
-      // ])
-
       return data.map(element => {
-        // if (state.status == 1) {
         var phone = element.mobile.toString()
         var str = phone.split('')
         for (let i = 0; i < str.length; i++) {
@@ -588,15 +457,11 @@ export default {
             return element.refer = i.channel_title
           }
         }))
-        // }
-        // element.textbook_version = version.get(element.textbook_version);
         element.product_grade = product.get(element.product_grade);
         element.product_type = type.get(element.product_type);
         element.grade = maps.get(element.grade);
         element.sex = gender.get(element.sex);
         element.age = age.get(element.age);
-        // element.follow_status = follow.get(element.follow_status);
-        // element.subject = subjects.get(element.subject);
         element.intention_option = intention.get(element.intention_option);
 
         return element;

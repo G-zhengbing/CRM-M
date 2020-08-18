@@ -8,12 +8,7 @@
       @on-cancel="$parent.show = false"
       class-name="vertical-center-modal"
     >
-      <Form
-        ref="formValidate"
-        :model="form"
-        :rules="ruleValidate"
-        :label-width="80"
-      >
+      <Form ref="formValidate" :model="form" :rules="ruleValidate" :label-width="80">
         <FormItem class="keep-left">
           <span style="color:red">您当前可用课时为 : {{courseCard}}</span>
         </FormItem>
@@ -44,16 +39,18 @@
             </FormItem>
           </Col>
         </Row>
-        <FormItem label="授课教师" prop="coach_id">
-          <Select
-            v-model="form.coach_id"
-            placeholder="请选择"
-            filterable
-            style="width:225px"
-            @on-open-change="getTeacherData"
-          >
-            <Option :value="list.id" v-for="(list,i) in teacherList" :key="i">{{list.name}}</Option>
-          </Select>
+        <FormItem label="授课教师">
+          <span
+            v-if="selectTeacherList.length == 0"
+            class="select-teacher"
+            @click="getTeacherData"
+          >选择老师</span>
+          <Tag
+            v-if="selectTeacherList.length != 0"
+            type="border"
+            closable
+            @on-close="closetag"
+          >{{selectTeacherList[0].name}}</Tag>
         </FormItem>
         <FormItem label="班主任" prop="header_id">
           <Select v-model="form.header_id" placeholder="请选择" style="width:225px">
@@ -136,6 +133,54 @@
         >确定</Button>
       </div>
     </Modal>
+    <!-- 选择老师 -->
+    <Modal width="1200" v-model="showSelectTeacher" title="选择老师" @on-cancel="closeSelectTeacher">
+      <Form label-position="top" style="height:520px;overflow-y:auto;">
+        <Row class-name="exclusive">
+          <Col span="4">
+            <FormItem>
+              <Input
+                v-model="selectTeacherListForm.name"
+                placeholder="教师姓名"
+                @on-change="seekSelectForm"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="4">
+            <FormItem>
+              <Input
+                v-model="selectTeacherListForm.mobile"
+                placeholder="手机号"
+                @on-change="seekMobile"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="2">
+            <Button type="primary" @click="clearSelectTeacher">清除</Button>
+          </Col>
+        </Row>
+        <Table
+          :loading="showAuditionloading"
+          border
+          :columns="selectTeacherColumns"
+          :data="teacherList"
+          @on-selection-change="selectTeacherSelectionChange"
+        ></Table>
+        <Page
+          @on-change="selectTeacherPageChange"
+          :total="teacherTotal"
+          :current="teacherCurrentPage"
+          :page-size="teacherPageSize"
+          show-total
+          show-elevator
+          class="ive-page"
+        />
+      </Form>
+      <div slot="footer">
+        <Button type="text" size="large" @click="closeSelectTeacher">取消</Button>
+        <Button type="primary" size="large" @click="selectTeacher">确定</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -144,11 +189,19 @@ import storage from "../../../uilt/storage";
 import axios from "axios";
 import { ADDCOURSE } from "../../../uilt/url/scheduing/scheduing";
 import { createNamespacedHelpers } from "vuex";
-const { mapState, mapActions } = createNamespacedHelpers("schedustudent");
+const { mapState, mapActions, mapMutations } = createNamespacedHelpers(
+  "schedustudent"
+);
 export default {
   props: ["type"],
   computed: {
-    ...mapState(["teacherList", "courseCard"])
+    ...mapState([
+      "teacherList",
+      "courseCard",
+      "teacherCurrentPage",
+      "teacherPageSize",
+      "teacherTotal",
+    ]),
   },
   mounted() {
     this.getCoursecard(this.type.obj.id);
@@ -156,11 +209,85 @@ export default {
   },
   data() {
     return {
+      selectTeacherColumns: [
+        { type: "selection", width: 60 },
+        { title: "教师姓名", key: "name", width: 100 },
+        {
+          title: "手机号",
+          key: "mobile",
+          width: 130,
+          render: (h, params) => {
+            return h("div", [h("span", this.setMobile(params.row.mobile))]);
+          },
+        },
+        {
+          title: "性别",
+          key: "sex",
+          width: 100,
+          render: (h, params) => {
+            return h("div", [h("span", params.row.sex == 1 ? "男" : "女")]);
+          },
+        },
+        { title: "教授年级", key: "grade_ch", width: 300 },
+        { title: "教授科目", key: "subject", width: 100 },
+        {
+          title: "教师简介",
+          key: "teacher_userinfo_desc",
+          width: 200,
+          tooltip: true,
+          ellipsis: true,
+        },
+        {
+          title: "操作",
+          key: "action",
+          align: "center",
+          width: 200,
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small",
+                    disabled: params.row.teacher_userinfo_video ? false : true,
+                  },
+                  on: {
+                    click: () => {
+                      this.teacherDetails(params.row);
+                    },
+                  },
+                },
+                "视频简介"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small",
+                  },
+                  on: {
+                    click: () => {
+                      this.callOut(params.row);
+                    },
+                  },
+                },
+                "呼出"
+              ),
+            ]);
+          },
+        },
+      ],
+      showAuditionloading: false,
+      selectTeacherListForm: {},
+      showSelectTeacher: false,
+      selectTeacherList: [],
       dataArr: [],
       optionsDate: {
-        disabledDate: function(date) {
+        disabledDate: function (date) {
           return date < new Date(this.start_time.getTime() + 60000);
-        }.bind(this)
+        }.bind(this),
       },
       start_time: new Date(),
       setActive: [],
@@ -174,51 +301,146 @@ export default {
       subject: storage.getDaiban().screen_list.subject,
       form: {
         start_date: this.datePickerDate(),
-        student_name: this.type.obj.student_name
+        student_name: this.type.obj.student_name,
       },
       ruleValidate: {
         card_id: [
           {
             required: true,
-            message: "课程卡是必选的"
-          }
+            message: "课程卡是必选的",
+          },
         ],
         times: [
           {
             required: true,
             message: "开课日期是必填的",
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         coach_id: [
           {
             required: true,
-            message: "授课教师是必选的"
-          }
+            message: "授课教师是必选的",
+          },
         ],
         grade: [
           {
             required: true,
-            message: "年级是必选的"
-          }
+            message: "年级是必选的",
+          },
         ],
         subject: [
           {
             required: true,
-            message: "科目是必选的"
-          }
+            message: "科目是必选的",
+          },
         ],
         header_id: [
           {
             required: true,
-            message: "班主任是必选的"
-          }
-        ]
-      }
+            message: "班主任是必选的",
+          },
+        ],
+      },
     };
   },
   methods: {
-    ...mapActions(["getTeacherList", "getCoursecard"]),
+    ...mapActions(["getTeacherList", "getCoursecard", "RingUp"]),
+    ...mapMutations(["setTeacherCurrentPage"]),
+    //隐藏手机号中间的几位
+    setMobile(val) {
+      var phone = val.toString();
+      var str = phone.split("");
+      for (var i = 0; i < str.length; i++) {
+        if (i === 3 || i === 4 || i === 5 || i === 6) {
+          str[i] = "*";
+        }
+      }
+      return str.join("");
+    },
+    //选择老师/呼出
+    callOut(item) {
+      this.showAuditionloading = true;
+      this.RingUp({ form: item })
+        .then((res) => {
+          if (res.data.code == 200) {
+            this.$Message.success("呼出成功");
+          }
+          if (res.data.code == 1000) {
+            this.$Message.error({
+              content: res.data.error,
+              duration: 4,
+            });
+          }
+          this.showAuditionloading = false;
+        })
+        .catch((e) => {
+          if (e) {
+            this.showAuditionloading = false;
+          }
+        });
+    },
+    //教师详情
+    teacherDetails(item) {
+      if (item.teacher_userinfo_video) {
+        window.open(item.teacher_userinfo_video);
+      }
+    },
+    //选择老师
+    selectTeacher() {
+      if (this.selectTeacherList.length == 1) {
+        this.showSelectTeacher = false;
+      } else {
+        this.$Message.error("只可选择一位老师");
+      }
+    },
+    //选择老师分页
+    selectTeacherPageChange(num) {
+      this.setTeacherCurrentPage(num);
+      this.showAuditionloading = true;
+      this.getTeacherList({
+        form: { grade: this.form.grade, subject: this.form.subject, type: 4 },
+        type: this.selectTeacherListForm,
+      }).then(() => {
+        this.showAuditionloading = false;
+      });
+    },
+    //选择老师多选框
+    selectTeacherSelectionChange(item) {
+      this.selectTeacherList = item;
+      this.form.coach_id = item[0].id;
+    },
+    //选择老师清除按钮
+    clearSelectTeacher() {
+      this.selectTeacherListForm = {};
+      this.seekSelectForm();
+    },
+    //手机号
+    seekMobile() {
+      if (this.selectTeacherListForm.mobile.length >= 4) {
+        this.seekSelectForm();
+      }
+    },
+    //选择老师 查询
+    seekSelectForm() {
+      this.showAuditionloading = true;
+      this.getTeacherList({
+        form: { grade: this.form.grade, subject: this.form.subject, type: 4 },
+        type: this.selectTeacherListForm,
+        page: 1,
+      }).then(() => {
+        this.showAuditionloading = false;
+      });
+    },
+    //关闭选择老师
+    closeSelectTeacher() {
+      this.showSelectTeacher = false;
+    },
+    //删除选择的老师
+    closetag() {
+      this.selectTeacherList = [];
+      this.form.coach_id = "";
+    },
     //获取时间块的第一个时间,设置第二个时间
     getStartTime(i) {
       let startNum = this.dataArr[i].start_time.split(":")[0];
@@ -226,8 +448,8 @@ export default {
       var start = "";
       var end = "";
       if (endNum * 1 < 60) {
-        if (endNum * 1 + 50 >= 60) {
-          end = endNum * 1 + 50 - 60;
+        if (endNum * 1 + 45 >= 60) {
+          end = endNum * 1 + 45 - 60;
           start = startNum * 1 + 1;
           if (end < 10) {
             end = "0" + end;
@@ -237,7 +459,7 @@ export default {
           }
         } else {
           start = startNum;
-          end = endNum * 1 + 50;
+          end = endNum * 1 + 45;
         }
         this.dataArr[i].end_time = start + ":" + end;
       }
@@ -252,15 +474,17 @@ export default {
     },
     //获取老师列表
     getTeacherData(item) {
-      if (item) {
-        if (this.form.grade && this.form.subject) {
-          this.getTeacherList({
+      if (this.form.grade && this.form.subject) {
+        this.showSelectTeacher = true;
+        this.getTeacherList({
+          form: {
+            grade: this.form.grade,
+            subject: this.form.subject,
             type: 4,
-            form: { grade: this.form.grade, subject: this.form.subject }
-          });
-        } else {
-          this.$Message.error("请先选择年级和科目");
-        }
+          },
+        });
+      } else {
+        this.$Message.error("请先选择年级和科目");
       }
     },
     getTimes(value) {
@@ -305,14 +529,14 @@ export default {
     handleMaxSize(file) {
       this.$Notice.warning({
         title: "超过档案大小限制",
-        desc: "文件 " + file.name + "太大了，不超过2M。"
+        desc: "文件 " + file.name + "太大了，不超过2M。",
       });
     },
     //限制图片格式
     handleFormatError(file) {
       this.$Notice.warning({
         title: "文件格式不正确",
-        desc: "文件" + file.name + "格式不正确，请选择jpg或png。"
+        desc: "文件" + file.name + "格式不正确，请选择jpg或png。",
       });
     },
     //上传图片
@@ -325,25 +549,27 @@ export default {
       let reader = new FileReader();
       reader.readAsDataURL(file);
       const _this = this;
-      reader.onloadend = function(e) {
+      reader.onloadend = function (e) {
         file.url = reader.result;
         _this.uploadList.push(file);
       };
     },
     //创建课程
     handleSubmit(name) {
-      if (this.dataArr.length == 0) {
+      if (this.selectTeacherList.length == 0) {
+        this.$Message.error("授课教师是必填的");
+      } else if (this.dataArr.length == 0) {
         this.$Message.error("时间块是必填的");
       } else {
         for (var i = 0; i < this.dataArr.length; i++) {
-          if (this.dataArr[i].week.toString() == '') {
+          if (this.dataArr[i].week.toString() == "") {
             this.$Message.error("周不能为空");
           } else if (!this.dataArr[i].start_time) {
             this.$Message.error("开始时间不能为空");
           }
         }
       }
-      this.$refs[name].validate(valid => {
+      this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.dataArr.length == 0) {
             this.$Message.error("时间块是必填的");
@@ -362,10 +588,6 @@ export default {
             "coach_id",
             this.form.coach_id ? this.form.coach_id : ""
           );
-          // formData.append(
-          //   "card_id",
-          //   this.form.card_id ? this.form.card_id : ""
-          // );
           formData.append("grade", this.form.grade);
           formData.append("subject", this.form.subject);
           formData.append(
@@ -382,10 +604,10 @@ export default {
           let config = {
             headers: {
               "Content-Type": "multipart/form-data",
-              Authorization: "bearer " + storage.get()
-            }
+              Authorization: "bearer " + storage.get(),
+            },
           };
-          axios.post(ADDCOURSE, formData, config).then(response => {
+          axios.post(ADDCOURSE, formData, config).then((response) => {
             this.disableBtn = false;
             if (!response.data.ret) {
               this.$Message.error(response.data.error);
@@ -409,8 +631,8 @@ export default {
       });
     },
     //创建课程
-    createdCourse() {}
-  }
+    createdCourse() {},
+  },
 };
 </script>
 

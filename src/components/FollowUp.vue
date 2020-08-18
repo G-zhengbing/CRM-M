@@ -119,7 +119,7 @@ export default {
           width: 140
         },
         { title: "新/老用户", key: "highsea_id", width: 100 },
-        { title: "学习阶段", key: "stage", align: "center" , width: 100 },
+        // { title: "学习阶段", key: "stage", align: "center" , width: 100 },
         {
           title: "上次跟进时间",
           key: "last_follow_time",

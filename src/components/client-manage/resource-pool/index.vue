@@ -19,7 +19,7 @@
         <Row class-name="exclusive">
           <Col span="2">
             <FormItem>
-              <Input v-model="form.name" placeholder="学员姓名" @on-change="seekKuhu"></Input>
+              <Input v-model="form.name" placeholder="学员姓名" @on-change="seek"></Input>
             </FormItem>
           </Col>
           <Col span="2">
@@ -29,49 +29,49 @@
           </Col>
           <Col span="2">
             <FormItem>
-              <Select v-model="form.follow_status" @on-change="seekKuhu" placeholder="跟进状态">
+              <Select v-model="form.follow_status" @on-change="seek" placeholder="跟进状态">
                 <Option v-for="(list,i) in follow_status" :key="i" :value="i">{{list}}</Option>
               </Select>
             </FormItem>
           </Col>
           <Col span="2" v-if="num == 2">
             <FormItem>
-              <Select v-model="form.sale_id" @on-change="seekKuhu" placeholder="跟进人">
+              <Select v-model="form.sale_id" @on-change="seek" placeholder="跟进人">
                 <Option v-for="(list,i) in sale_list" :key="i" :value="list.id">{{list.login_name}}</Option>
               </Select>
             </FormItem>
           </Col>
           <Col span="2">
             <FormItem>
-              <Select v-model="form.refer" @on-change="seekKuhu" placeholder="渠道">
+              <Select v-model="form.refer" @on-change="seek" placeholder="渠道">
                 <Option v-for="(list,i) in refer" :key="i" :value="list.id">{{list.channel_title}}</Option>
               </Select>
             </FormItem>
           </Col>
           <Col span="2">
             <FormItem>
-              <Select v-model="form.grade" @on-change="seekKuhu" placeholder="年级">
+              <Select v-model="form.grade" @on-change="seek" placeholder="年级">
                 <Option :value="list.id" v-for="(list,i) in contant.GRADE" :key="i">{{list.title}}</Option>
               </Select>
             </FormItem>
           </Col>
           <Col span="2">
             <FormItem>
-              <Select v-model="form.subject" @on-change="seekKuhu" placeholder="意向科目">
+              <Select v-model="form.subject" @on-change="seek" placeholder="意向科目">
                 <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
               </Select>
             </FormItem>
           </Col>
           <Col span="2" v-if="num == 2">
             <FormItem>
-              <Select v-model="form.transfer" @on-change="seekKuhu" placeholder="流转类型">
+              <Select v-model="form.transfer" @on-change="seek" placeholder="流转类型">
                 <Option v-for="(list,i) in transfer" :key="i" :value="i">{{list}}</Option>
               </Select>
             </FormItem>
           </Col>
           <Col span="2" v-if="num == 2">
             <FormItem>
-              <Select v-model="form.visit_num" @on-change="seekKuhu" placeholder="回访次数">
+              <Select v-model="form.visit_num" @on-change="seek" placeholder="回访次数">
                 <Option
                   :value="list.id"
                   v-for="(list,i) in contant.VISIT_NUMBER"
@@ -113,7 +113,7 @@
           </Col>
           <Col span="5" v-if="num == 2">
             <FormItem label="意向度" :label-width="80">
-              <RadioGroup v-model="form.intention_option" @on-change="seekKuhu">
+              <RadioGroup v-model="form.intention_option" @on-change="seek">
                 <Radio
                   :label="list.id"
                   v-for="(list,i) in contant.INTENTION_OPTION"
@@ -177,24 +177,22 @@ import storage from "../../../uilt/storage";
 import Loading from "../../../uilt/loading/loading";
 export default {
   mounted() {
-    this.getReferList().then(() => {
-      this.setCurrentPage(1);
-      this.setStatus();
-      this.isLoading = true;
-      if (storage.getTabStatus() == null) {
-        this.num = 1;
-        this.setStatusNum(1);
-      } else {
-        this.num = storage.getTabStatus();
-        this.setStatusNum(storage.getTabStatus());
-      }
-      this.getKehuList({ status: this.num }).then(res => {
-        this.isLoading = false;
-      });
+    this.setCurrentPage(1);
+    this.setStatus();
+    this.isLoading = true;
+    if (storage.getTabStatus() == null) {
+      this.num = 1;
+      this.setStatusNum(1);
+    } else {
+      this.num = storage.getTabStatus();
+      this.setStatusNum(storage.getTabStatus());
+    }
+    this.getKehuList({ status: this.num }).then((res) => {
+      this.isLoading = false;
     });
   },
   components: {
-    Loading
+    Loading,
   },
   data() {
     return {
@@ -204,7 +202,7 @@ export default {
       visitColumns: [
         { title: "回访内容", key: "visit_content" },
         { title: "跟进人", key: "sale_name", width: 100 },
-        { title: "回访时间", key: "time", width: 170 }
+        { title: "回访时间", key: "time", width: 170 },
       ],
       showVisit: false,
       subjectList: storage.getDaiban().screen_list.subject,
@@ -230,9 +228,9 @@ export default {
       cid: [],
       type: {
         page: 1,
-        text: ""
+        text: "",
       },
-      form: {}
+      form: {},
     };
   },
   methods: {
@@ -240,14 +238,13 @@ export default {
       "setCurrentPage",
       "setXiansuoId",
       "setGenjinType",
-      "setStatusNum",
-      "setForm"
+      "setStatusNum"
     ]),
-    ...mapActions(["getKehuList", "getFenpeiList", "RingUp", "getReferList"]),
+    ...mapActions(["getKehuList", "RingUp"]),
     //手机号
     seekMobile() {
       if (this.form.mobile.length >= 4) {
-        this.seekKuhu();
+        this.seek();
       }
     },
     //回访记录
@@ -262,8 +259,8 @@ export default {
       this.getKehuList({
         form: this.form,
         status: this.num,
-        page_num: this.selectedNum
-      }).then(res => {
+        page_num: this.selectedNum,
+      }).then((res) => {
         this.isLoading = false;
       });
     },
@@ -271,18 +268,18 @@ export default {
       if (this.startTime && this.endTime) {
         this.form.create_time_start = this.datePicker(this.startTime);
         this.form.create_time_end = this.datePicker(this.endTime);
-        this.seekKuhu();
+        this.seek();
       }
     },
     getTimes2() {
       if (this.startTime2 && this.endTime2) {
         this.form.receivetime_start = this.datePicker(this.startTime2);
         this.form.receivetime_end = this.datePicker(this.endTime2);
-        this.seekKuhu();
+        this.seek();
       }
     },
     //分配
-    getBtnClick6(item) {
+    allocation(item) {
       var arr = [];
       arr.push(item.id);
       this.show = true;
@@ -317,15 +314,14 @@ export default {
       this.endTime = "";
       this.startTime2 = "";
       this.endTime2 = "";
-      this.seekKuhu();
+      this.seek();
     },
     //搜索
-    seekKuhu() {
+    seek() {
       let page = 1;
       this.isLoading = true;
-      this.setForm(this.form);
       this.getKehuList({ status: this.num, form: this.form, page }).then(
-        res => {
+        (res) => {
           this.isLoading = false;
           this.setCurrentPage(page);
         }
@@ -342,26 +338,20 @@ export default {
     pageChange(num) {
       this.isLoading = true;
       this.setCurrentPage(num);
-      this.getKehuList({ status: this.num, form: this.form }).then(res => {
+      this.getKehuList({ status: this.num, form: this.form }).then((res) => {
         this.isLoading = false;
       });
     },
     //查看
-    getBtnClick1(item) {
+    datalis(item) {
       this.show = true;
       this.type.classify = "datalis";
       this.type.data = { ...item };
       this.type.form = { ...this.form };
       this.type.page = this.currentPage;
     },
-    //移出
-    getBtnClick2(item) {
-      this.show = true;
-      this.type.classify = "shiftOut";
-      this.type.data = { ...item };
-    },
     //呼出
-    getBtnClick4(item) {
+    callOut(item) {
       this.setGenjinType(item);
       this.show = true;
       this.type.classify = "followUp";
@@ -375,19 +365,19 @@ export default {
       ) {
         this.isLoading = true;
         this.RingUp({ form: item })
-          .then(res => {
+          .then((res) => {
             if (res.data.code == 200) {
               this.$Message.success("呼出成功");
             }
             if (res.data.code == 1000) {
               this.$Message.error({
                 content: res.data.error,
-                duration: 4
+                duration: 4,
               });
             }
             this.isLoading = false;
           })
-          .catch(e => {
+          .catch((e) => {
             if (e) {
               this.isLoading = false;
             }
@@ -396,11 +386,7 @@ export default {
         this.type.classify = "ringupFollowUp";
       }
     },
-    getBtnClick5(item) {
-      this.show = true;
-      this.type.classify = "dingdan";
-      this.type.data = { ...item };
-    },
+    //全选复选
     selectionChange(item) {
       this.cid.length = 0;
       let arr = [];
@@ -410,6 +396,7 @@ export default {
       }
       this.setXiansuoId(arr);
     },
+    //tab切换
     tab(num) {
       this.endTime = "";
       this.startTime = "";
@@ -421,10 +408,11 @@ export default {
       this.setStatusNum(num);
       this.setCurrentPage(1);
       this.setStatus();
-      this.getKehuList({ status: this.num, page_num: 10 }).then(res => {
+      this.getKehuList({ status: this.num, page_num: 10 }).then((res) => {
         this.isLoading = false;
       });
     },
+    //动态设置表格字段
     setStatus() {
       if (this.num == 1) {
         this.columns2 = [
@@ -442,16 +430,16 @@ export default {
                   props: {
                     dot: true,
                     count: params.row.is_red,
-                    offset: [10, 0]
+                    offset: [10, 0],
                   },
                   style: {
                     height: "40px",
-                    "line-height": "40px"
-                  }
+                    "line-height": "40px",
+                  },
                 },
                 params.row.mobile
               );
-            }
+            },
           },
           { title: "城市", align: "center", key: "area" },
           { title: "在读学校", align: "center", key: "school" },
@@ -461,28 +449,26 @@ export default {
             title: "跟进状态",
             align: "center",
             key: "follow_status",
-            width: 95
+            width: 95,
           },
           { title: "渠道来源", width: 120, align: "center", key: "refer" },
-          // { title: "数据来源",align: "center", key: "data_source" },
-          // { title: "数据类型",align: "center", key: "data_type" },
           {
             title: "活跃时间",
             width: 170,
             align: "center",
-            key: "active_time"
+            key: "active_time",
           },
           {
             title: "活跃事件",
             width: 170,
             align: "center",
-            key: "active_action"
+            key: "active_action",
           },
           {
             title: "注册时间",
             align: "center",
             key: "create_time",
-            width: 170
+            width: 170,
           },
           {
             title: "操作",
@@ -496,19 +482,19 @@ export default {
                   {
                     props: {
                       type: "text",
-                      size: "small"
+                      size: "small",
                     },
                     on: {
                       click: () => {
-                        this.getBtnClick6(params.row);
-                      }
-                    }
+                        this.allocation(params.row);
+                      },
+                    },
                   },
                   "分配"
-                )
+                ),
               ]);
-            }
-          }
+            },
+          },
         ];
       } else if (this.num == 2) {
         this.columns2 = [
@@ -518,7 +504,7 @@ export default {
             align: "center",
             width: 100,
             key: "student_name",
-            fixed: "left"
+            fixed: "left",
           },
           {
             title: "注册手机",
@@ -532,16 +518,16 @@ export default {
                   props: {
                     dot: true,
                     count: params.row.is_red,
-                    offset: [10, 0]
+                    offset: [10, 0],
                   },
                   style: {
                     height: "40px",
-                    "line-height": "40px"
-                  }
+                    "line-height": "40px",
+                  },
                 },
                 params.row.mobile
               );
-            }
+            },
           },
           { title: "城市", width: 140, align: "center", key: "area" },
           { title: "年级", width: 100, align: "center", key: "grade" },
@@ -551,13 +537,13 @@ export default {
             title: "跟进人",
             width: 120,
             align: "center",
-            key: "follow_sale_name"
+            key: "follow_sale_name",
           },
           {
             title: "跟进状态",
             width: 100,
             align: "center",
-            key: "follow_status"
+            key: "follow_status",
           },
           {
             title: "回访次数",
@@ -572,55 +558,54 @@ export default {
                     on: {
                       props: {
                         type: "text",
-                        size: "small"
+                        size: "small",
                       },
                       click: () => {
                         this.visit(params.row);
-                      }
+                      },
                     },
                     style: {
                       width: "fit-content",
                       textAlign: "center",
-                      cursor: "pointer"
+                      cursor: "pointer",
                     },
-                    class: "clickable"
+                    class: "clickable",
                   },
                   params.row.visit_num
-                )
+                ),
               ]);
-            }
+            },
           },
           {
             title: "意向度 ",
             width: 100,
             align: "center",
-            key: "intention_option"
+            key: "intention_option",
           },
-          { title: "学习阶段", width: 100, align: "center", key: "stage" },
           { title: "流转类型", width: 100, align: "center", key: "transfer" },
           {
             title: "分配时间",
             width: 170,
             align: "center",
-            key: "receive_time"
+            key: "receive_time",
           },
           {
             title: "活跃时间",
             width: 170,
             align: "center",
-            key: "active_time"
+            key: "active_time",
           },
           {
             title: "活跃事件",
             width: 170,
             align: "center",
-            key: "active_action"
+            key: "active_action",
           },
           {
             title: "注册时间",
             align: "center",
             key: "create_time",
-            width: 170
+            width: 170,
           },
           {
             title: "操作",
@@ -636,13 +621,13 @@ export default {
                   {
                     props: {
                       type: "text",
-                      size: "small"
+                      size: "small",
                     },
                     on: {
                       click: () => {
-                        this.getBtnClick6(params.row);
-                      }
-                    }
+                        this.allocation(params.row);
+                      },
+                    },
                   },
                   "分配"
                 ),
@@ -651,13 +636,13 @@ export default {
                   {
                     props: {
                       type: "text",
-                      size: "small"
+                      size: "small",
                     },
                     on: {
                       click: () => {
-                        this.getBtnClick1(params.row);
-                      }
-                    }
+                        this.datalis(params.row);
+                      },
+                    },
                   },
                   "查看"
                 ),
@@ -666,19 +651,19 @@ export default {
                   {
                     props: {
                       type: "text",
-                      size: "small"
+                      size: "small",
                     },
                     on: {
                       click: () => {
-                        this.getBtnClick4(params.row);
-                      }
-                    }
+                        this.callOut(params.row);
+                      },
+                    },
                   },
                   "呼出"
-                )
+                ),
               ]);
-            }
-          }
+            },
+          },
         ];
       } else if (this.num == 3) {
         this.columns2 = [
@@ -687,7 +672,7 @@ export default {
             title: "学员姓名",
             align: "center",
             key: "student_name",
-            width: 100
+            width: 100,
           },
           {
             title: "注册手机",
@@ -701,16 +686,16 @@ export default {
                   props: {
                     dot: true,
                     count: params.row.is_red,
-                    offset: [10, 0]
+                    offset: [10, 0],
                   },
                   style: {
                     height: "40px",
-                    "line-height": "40px"
-                  }
+                    "line-height": "40px",
+                  },
                 },
                 params.row.mobile
               );
-            }
+            },
           },
           { title: "城市", align: "center", key: "area", width: 100 },
           { title: "在读学校", align: "center", key: "school", width: 100 },
@@ -718,13 +703,13 @@ export default {
             title: "购买课程",
             align: "center",
             key: "product_name",
-            width: 260
+            width: 260,
           },
           {
             title: "课程类型",
             align: "center",
             key: "product_type",
-            width: 100
+            width: 100,
           },
           { title: "年级", width: 80, align: "center", key: "product_grade" },
           { title: "科目", align: "center", width: 75, key: "product_subject" },
@@ -733,26 +718,26 @@ export default {
             title: "跟进状态",
             width: 100,
             align: "center",
-            key: "follow_status"
+            key: "follow_status",
           },
           { title: "交易时间", width: 170, align: "center", key: "paytime" },
           {
             title: "活跃时间",
             width: 170,
             align: "center",
-            key: "active_time"
+            key: "active_time",
           },
           {
             title: "活跃事件",
             width: 170,
             align: "center",
-            key: "active_action"
+            key: "active_action",
           },
           {
             title: "注册时间",
             align: "center",
             key: "create_time",
-            width: 170
+            width: 170,
           },
           {
             title: "操作",
@@ -768,19 +753,19 @@ export default {
                   {
                     props: {
                       type: "text",
-                      size: "small"
+                      size: "small",
                     },
                     on: {
                       click: () => {
-                        this.getBtnClick6(params.row);
-                      }
-                    }
+                        this.allocation(params.row);
+                      },
+                    },
                   },
                   "分配"
-                )
+                ),
               ]);
-            }
-          }
+            },
+          },
         ];
       } else if (this.num == 4) {
         this.columns2 = [
@@ -798,16 +783,16 @@ export default {
                   props: {
                     dot: true,
                     count: params.row.is_red,
-                    offset: [10, 0]
+                    offset: [10, 0],
                   },
                   style: {
                     height: "40px",
-                    "line-height": "40px"
-                  }
+                    "line-height": "40px",
+                  },
                 },
                 params.row.mobile
               );
-            }
+            },
           },
           { title: "城市", align: "center", key: "area" },
           { title: "在读学校", align: "center", key: "school" },
@@ -817,28 +802,26 @@ export default {
             title: "跟进状态",
             align: "center",
             key: "follow_status",
-            width: 95
+            width: 95,
           },
           { title: "渠道来源", width: 120, align: "center", key: "refer" },
-          // { title: "数据来源",align: "center", key: "data_source" },
-          // { title: "数据类型",align: "center", key: "data_type" },
           {
             title: "活跃时间",
             width: 170,
             align: "center",
-            key: "active_time"
+            key: "active_time",
           },
           {
             title: "活跃事件",
             width: 170,
             align: "center",
-            key: "active_action"
+            key: "active_action",
           },
           {
             title: "注册时间",
             align: "center",
             key: "create_time",
-            width: 170
+            width: 170,
           },
           {
             title: "操作",
@@ -852,35 +835,35 @@ export default {
                   {
                     props: {
                       type: "text",
-                      size: "small"
+                      size: "small",
                     },
                     on: {
                       click: () => {
-                        this.getBtnClick6(params.row);
-                      }
-                    }
+                        this.allocation(params.row);
+                      },
+                    },
                   },
                   "分配"
-                )
+                ),
               ]);
-            }
-          }
+            },
+          },
         ];
       }
-    }
+    },
   },
   computed: {
     ...mapState({
-      data: state => state.daiban.data,
-      datas: state => state.daiban.datas,
-      refer: state => state.daiban.refer,
-      currentPage: state => state.daiban.currentPage,
-      total: state => state.daiban.total,
-      pageSize: state => state.daiban.pageSize,
-      status: state => state.daiban.status
+      data: (state) => state.daiban.data,
+      datas: (state) => state.daiban.datas,
+      refer: (state) => state.daiban.refer,
+      currentPage: (state) => state.daiban.currentPage,
+      total: (state) => state.daiban.total,
+      pageSize: (state) => state.daiban.pageSize,
+      status: (state) => state.daiban.status,
     }),
-    ...mapGetters(["dataArr", "Types"])
-  }
+    ...mapGetters(["dataArr", "Types"]),
+  },
 };
 </script>
 <style scoped>
@@ -899,7 +882,7 @@ export default {
 }
 .allot {
   display: flex;
-  width: 150px;
+  width: 170px;
   height: 30px;
   background: #2d8cf0;
   color: #fff;

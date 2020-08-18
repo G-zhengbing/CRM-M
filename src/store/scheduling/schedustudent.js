@@ -4,6 +4,9 @@ import {
   TEACHERLIST,
   CUORSECARD
 } from '../../uilt/url/scheduing/scheduing'
+import {
+  HUCHU
+} from '../../uilt/url/url'
 import storage from '../../uilt/storage'
 
 export default {
@@ -14,9 +17,21 @@ export default {
     currentPage: 1,
     pageSize: 10,
     total: 0,
-    courseCard: []
+    courseCard: [],
+    teacherCurrentPage: 1,
+    teacherPageSize: 10,
+    teacherTotal: 0
   },
   mutations: {
+    setTeacherTotal(state, payload) {
+      state.teacherTotal = payload
+    },
+    setTeacherPageSize(state, payload) {
+      state.teacherPageSize = payload
+    },
+    setTeacherCurrentPage(state, payload) {
+      state.teacherCurrentPage = payload
+    },
     setCoursecard(state, payload) {
       state.courseCard = payload
     },
@@ -37,6 +52,30 @@ export default {
     }
   },
   actions: {
+    //呼出
+    RingUp({}, {
+      form,
+      status
+    }) {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "post",
+          url: HUCHU,
+          params: {
+            mobile: form.mobile,
+            id: form.id
+          },
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            Authorization: "bearer " + storage.get()
+          }
+        }).then(res => {
+          resolve(res)
+        }).catch(e => {
+          reject(e)
+        })
+      })
+    },
     //课程卡
     getCoursecard({
       state,
@@ -51,7 +90,7 @@ export default {
             Authorization: "bearer " + storage.get()
           }
         }).then(res => {
-					commit("setCoursecard", res.data.data)
+          commit("setCoursecard", res.data.data)
           commit('scheducourse/setLessonsCourseCard', res.data.data, {
             root: true
           })
@@ -65,23 +104,32 @@ export default {
     getTeacherList({
       state,
       commit
-    },{ form}) {
+    }, {
+      form,
+      type,
+      page
+    }) {
       return new Promise((resolve, reject) => {
         axios({
           method: "get",
-          url: TEACHERLIST ,
+          url: TEACHERLIST,
           headers: {
             "content-type": "application/x-www-form-urlencoded",
             Authorization: "bearer " + storage.get()
           },
-          params:{
-            ...form
+          params: {
+            ...form,
+            ...type,
+            page: page ? page : state.teacherCurrentPage
           }
         }).then(res => {
-          commit("setTEacherList", res.data.data)
-          commit('scheducourse/setLessonsTeacherList', res.data.data, {
-            root: true
-          })
+          commit("setTEacherList", res.data.data.resources)
+          // commit('scheducourse/setLessonsTeacherList', res.data.data, {
+          //   root: true
+          // })
+          commit('setTeacherPageSize', res.data.data.links.per_page)
+          commit('setTeacherTotal', res.data.data.links.total)
+          commit('setTeacherCurrentPage', res.data.data.links.current_page)
           resolve()
         }).catch(e => {
           reject(e)
@@ -110,9 +158,9 @@ export default {
           }
         }).then(res => {
           commit("setStudentList", res.data.data.resources)
-          commit('setPageSize',res.data.data.links.per_page)
-          commit('setTotal',res.data.data.links.total)
-          commit('setCurrentPage',res.data.data.links.current_page)
+          commit('setPageSize', res.data.data.links.per_page)
+          commit('setTotal', res.data.data.links.total)
+          commit('setCurrentPage', res.data.data.links.current_page)
           resolve()
         }).catch(e => {
           reject(e)

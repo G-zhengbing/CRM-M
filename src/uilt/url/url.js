@@ -28,7 +28,6 @@ const ERWEIMALIST = BASEURL + "channels_list" //二维码list
 const ERWEIMACITY = BASEURL + "city" //二维码城市
 const TYPESHOOL = BASEURL + "type_school" //类型/学校
 const QUDAO = BASEURL + "channel_account" //渠道转介绍
-const DINGDAN = BASEURL + "add_order" //创建订单
 const DAORU = BASEURL + "export" //导入
 const HUCHU = BASEURL + "callcellphone" //呼出
 const PAYSTUDENT = BASEURL + "paid_account" //我的付费学员
@@ -38,7 +37,6 @@ const TECPAY = BASEURL + "order_clue" //教务/付费学员
 const TEPAYSTU = BASEURL + "batch_assign" //教务/付费学员/分配
 const TEPAYLIST = BASEURL + "head_master" //教务/付费学员/班主任列表
 const TEPCHE = BASEURL + "order_update" //班主任跟进
-const TEPREPORT = BASEURL + "learn_report" //学情报告
 const TEPADDREPORT = BASEURL + "order_report" //新增学情报告
 // const REFER = "http://192.168.1.181:3000/api/" + 'screen_list' //渠道来源列表
 const REFER = BASEURL + 'screen_list' //渠道来源列表
@@ -222,7 +220,6 @@ export {
   REFER,
   SALES,
   TEPADDREPORT,
-  TEPREPORT,
   TEPCHE,
   TEPAYLIST,
   TEPAYSTU,
@@ -252,7 +249,6 @@ export {
   ERWEIMACITY,
   TYPESHOOL,
   QUDAO,
-  DINGDAN,
   DAORU,
   HUCHU
 }

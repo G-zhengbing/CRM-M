@@ -36,7 +36,8 @@ import learningReport from './learningReport'
 import {
   GENJIN,
   REFER,
-  MEPERMISSION
+  MEPERMISSION,
+  HUCHU
 } from "../uilt/url/url";
 import storage from '../uilt/storage'
 
@@ -60,7 +61,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    //渠道来源列表
+    //数据来源列表
     getReferList({
       state,
       commit
@@ -75,9 +76,41 @@ export default new Vuex.Store({
           }
         }).then(res => {
           storage.savaDaiban(res.data.data)
-          commit("setRefer", res.data.data.channel)
-          commit("setFenpeiList", res.data.data.sale_list)
           resolve()
+        }).catch(e => {
+          reject(e)
+        })
+      })
+    },
+    //呼出
+    RingUp({}, {
+      form,
+      status
+    }) {
+      return new Promise((resolve, reject) => {
+        var tel = form.tel
+        if (typeof status == 'undefined') {
+          tel = form.tel
+        } else {
+          if (status == 1) {
+            tel = form.tel
+          } else if (status == 2) {
+            tel = form.spare_phone
+          }
+        }
+        axios({
+          method: "post",
+          url: HUCHU,
+          params: {
+            mobile: tel,
+            id:form.id
+          },
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            Authorization: "bearer " + storage.get()
+          }
+        }).then(res => {
+          resolve(res)
         }).catch(e => {
           reject(e)
         })

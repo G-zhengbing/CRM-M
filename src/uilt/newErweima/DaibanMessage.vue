@@ -610,49 +610,6 @@
         </div>
       </div>
     </div>
-    <div class="report" v-if="type.classify == 'report'">
-      <div class="report-top">
-        <span>学情报告</span>
-        <i @click="$parent.show = false">×</i>
-      </div>
-      <div class="contanner">
-        <div class="report-content">
-          <div>
-            <span>报告内容:</span>
-            <div>
-              <textarea
-                v-model="reportContent"
-                class="textarea textlet"
-                cols="30"
-                placeholder="请输入报告内容"
-                rows="10"
-              ></textarea>
-            </div>
-          </div>
-          <h4>报告记录</h4>
-          <p>
-            <i>报告内容</i>
-            <span>提交时间</span>
-            <span>提交人</span>
-          </p>
-          <ul>
-            <li v-for="(item,i) in report" :key="i">
-              <i>{{item.order_report}}</i>
-              <span>{{item.create_time}}</span>
-              <span>{{item.master_id}}</span>
-            </li>
-          </ul>
-        </div>
-        <div class="report-bottom">
-          <p class="confirm" @click="$parent.show = false">
-            <span>取消</span>
-          </p>
-          <p @click="addreport">
-            <span>确定</span>
-          </p>
-        </div>
-      </div>
-    </div>
     <Loading v-show="Loading" />
   </div>
 </template>
@@ -667,6 +624,9 @@ export default {
   },
   props: ["type"],
   mounted() {
+    if(this.type.classify == 'shade'){
+      this.getFenpeiList()
+    }
     if (this.type.classify == "followUp") {
       this.followForm.id = this.type.data.id;
       this.followForm.student_name = this.type.data.student_name;
@@ -682,12 +642,8 @@ export default {
       this.followForm.textbook_version = this.type.data.textbook_version;
       this.followForm.subject = this.type.data.subject;
       this.followForm.intention_option = this.type.data.intention_option;
-      // this.followForm.next_follow_time = this.type.data.next_follow_time;
       this.followForm.visit_content = this.type.data.visit_content;
       this.followForm.order = this.type.data.order;
-    }
-    if (this.type.classify == "report") {
-      this.getReport(this.type.data.id);
     }
     if (this.type.data) {
       if (this.type.data.class_date) {
@@ -700,7 +656,6 @@ export default {
   },
   computed: {
     ...mapState({
-      report: state => state.minestudent.report,
       payList: state => state.payingstudent.payList,
       fenpeiList: state => state.daiban.fenpeiList,
       refer: state => state.daiban.refer
@@ -770,42 +725,6 @@ export default {
       this.sendPone(this.type.data.tel).then(() => {
         this.$Message.success("发送成功");
       });
-    },
-    //新增学情报告
-    addreport() {
-      this.isLoading = true;
-      this.addRepost({
-        id: this.type.data.id,
-        order_report: this.reportContent
-      }).then(() => {
-        this.isLoading = false;
-        this.$parent.show = false;
-      });
-    },
-    dingdan() {
-      if (!this.object.class_coach) {
-        alert("请输入上课的老师");
-        return;
-      } else if (!this.object.order_amount) {
-        alert("请输入报班金额");
-        return;
-      } else if (!this.object.pay_amount) {
-        alert("请输入下单金额");
-        return;
-      } else if (this.dingdanNext == "") {
-        alert("请选择上课的时间");
-        return;
-      } else if (this.dingdanClass == "") {
-        alert("请选择报班的时间");
-        return;
-      }
-      this.isLoading = true;
-      this.updataDing({ cid: this.type.data.id, item: this.object }).then(
-        res => {
-          this.isLoading = false;
-          this.$parent.show = false;
-        }
-      );
     },
     followUpColse() {
       if (this.type.status == "mineclient") {
@@ -1100,6 +1019,7 @@ export default {
     },
     ...mapMutations(["setXiaoshowId", "setType", "setXiaoshowIdPay"]),
     ...mapActions([
+      'getFenpeiList',
       "removeData",
       "RingUp",
       "getReservedList",
@@ -1107,15 +1027,12 @@ export default {
       "sendPone",
       "getStudentList",
       "getClientList",
-      "getFenStu",
       "addRepost",
-      "getReport",
       "setmStudent",
       "getmStudent",
       "setPayStu",
       "getPayList",
-      "getReferList",
-      "fenPai",
+      "allocation",
       "Genjin",
       "ShiftOut",
       "getPublicList",
@@ -1124,7 +1041,6 @@ export default {
       "getXinfenList",
       "getFollowUpList",
       "getFollowUpList",
-      "updataDing",
       "getYuQiList",
       "getPaystudent",
       "getUplist"
@@ -1143,7 +1059,7 @@ export default {
           this.Loading = false;
         });
       } else {
-        this.fenPai({ form: this.form, status: this.$parent.num }).then(res => {
+        this.allocation({ form: this.form, status: this.$parent.num }).then(res => {
           if (res.data.ret) {
             this.$Message.success("分配成功");
           } else {
@@ -1220,7 +1136,6 @@ export default {
       intention: storage.getDaiban().screen_list.inter_nation,
       subject: storage.getDaiban().screen_list.subject,
       vaersion: storage.getDaiban().screen_list.book_version,
-      reportContent: "",
       isHuchu: true,
       vist_content: "",
       note_content: "",
@@ -1288,120 +1203,6 @@ export default {
   line-height: 40px;
   background-color: rgba(242, 242, 242, 1);
   text-indent: 15px;
-}
-.report-bottom > p.confirm > span {
-  color: #fff;
-}
-.report-bottom > p.confirm {
-  background: #dbdbdb;
-  margin-right: 15px;
-}
-.report-bottom > p > span {
-  color: #fff;
-}
-.report-bottom > p > span.confirm {
-  background: #dbdbdb;
-}
-.report-bottom > p {
-  width: 120px;
-  height: 40px;
-  background: #1b73b0;
-  color: #fff;
-  font-size: 14px;
-  display: inline-block;
-  border-radius: 7px;
-  text-align: center;
-  line-height: 40px;
-  cursor: pointer;
-}
-.report-bottom {
-  height: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 30px;
-}
-.report-content > ul > li > span {
-  width: 150px;
-  text-align: center;
-}
-.report-content > ul > li > i {
-  font-style: normal;
-  flex: 1;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
-.report-content > ul > li {
-  display: flex;
-  height: 40px;
-  line-height: 40px;
-}
-.report-content > ul {
-  display: flex;
-  flex-direction: column;
-}
-.report-content > p > span {
-  width: 150px;
-  text-align: center;
-}
-.report-content > p > i {
-  font-style: normal;
-  flex: 1;
-}
-.report-content > p {
-  display: flex;
-  border-bottom: 1px solid #999;
-  height: 40px;
-  line-height: 40px;
-}
-.report-content > h4 {
-  height: 40px;
-  line-height: 40px;
-  background: #e8e8e8;
-  text-indent: 10px;
-  margin-top: 30px;
-}
-.report-content > div textarea {
-  border: 1px solid #999;
-  border-radius: 5px;
-}
-.report-content > div > div {
-  flex: 1;
-  margin-left: 15px;
-}
-.report-content > div {
-  display: flex;
-  margin-top: 15px;
-}
-.report > .report-top > i {
-  font-style: normal;
-  font-size: 25px;
-  text-align: right;
-  flex: 1;
-  cursor: pointer;
-  margin-right: 20px;
-}
-.report > .report-top {
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #999;
-}
-.report > .report-top > span {
-  font-size: 16px;
-  color: #333;
-  text-align: left;
-  flex: 1;
-  margin-left: 20px;
-}
-.report .contanner {
-  margin: 0 20px;
-}
-.report {
-  width: 900px;
-  height: 520px;
-  background: #fff;
-  overflow-y: auto;
 }
 .contaner.paystu {
   height: 240px;

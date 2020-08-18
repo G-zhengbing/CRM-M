@@ -317,11 +317,12 @@ export default {
   watch: {
     updateLessons(v, k) {
       if (v) {
-        this.$store.dispatch(
-          "schedustudent/getTeacherList",
-          { type: 4 },
-          { root: true }
-        );
+        this.getTeacherList()
+        // this.$store.dispatch(
+        //   "schedustudent/getTeacherList",
+        //   { type: 4 },
+        //   { root: true }
+        // );
       } else {
         this.updateLessonsForm = {};
       }
@@ -333,13 +334,14 @@ export default {
     },
     showLessons(v, k) {
       if (v) {
-        this.$store.dispatch(
-          "schedustudent/getTeacherList",
-          { type: 4 },
-          {
-            root: true
-          }
-        ),
+        this.getTeacherList()
+        // this.$store.dispatch(
+        //   "schedustudent/getTeacherList",
+        //   { type: 4 },
+        //   {
+        //     root: true
+        //   }
+        // )
           this.$store.dispatch(
             "schedustudent/getCoursecard",
             this.type.obj.account_id,
@@ -715,7 +717,8 @@ export default {
       "getLessonsList",
       "setCreatedlessons",
       "getlessonsStudent",
-      "addCourseStudents"
+      "addCourseStudents",
+      'getTeacherList'
     ]),
     //获取时间块的第一个时间,设置第二个时间/编辑课节
     setEndTime() {
@@ -747,8 +750,8 @@ export default {
       var start = "";
       var end = "";
       if (endNum * 1 < 60) {
-        if (endNum * 1 + 50 >= 60) {
-          end = endNum * 1 + 50 - 60;
+        if (endNum * 1 + 45 >= 60) {
+          end = endNum * 1 + 45 - 60;
           start = startNum * 1 + 1;
           if (end < 10) {
             end = "0" + end;
@@ -758,7 +761,7 @@ export default {
           }
         } else {
           start = startNum;
-          end = endNum * 1 + 50;
+          end = endNum * 1 + 45;
         }
         this.dataArr[i].end_time = start + ":" + end;
       }

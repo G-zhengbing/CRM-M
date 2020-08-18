@@ -7,7 +7,7 @@
         style="fill:lime;stroke:purple;stroke-width:5;fill-rule:evenodd;"
       />
     </svg>-->
-    <video
+    <!-- <video
       style="width:200px"
       :loop="true"
       poster="../../assets/logo.png"
@@ -16,7 +16,7 @@
       :autoplay="false"
       controlslist="nodownload"
       src="../../assets/hzw.mp4"
-    ></video>
+    ></video> -->
   </div>
 </template>
 

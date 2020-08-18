@@ -201,7 +201,6 @@ export default {
     ...mapActions([
       "getNotificationList",
       "RingUp",
-      "getReferList",
       "getUserReservedList"
     ]),
     //手机号

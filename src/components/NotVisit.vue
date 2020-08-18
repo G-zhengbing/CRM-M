@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DaibanMessage v-if="show" :type="type"/>
+    <DaibanMessage v-if="show" :type="type" />
     <Form :model="form">
       <Row class-name="exclusive">
         <Col span="4">
@@ -113,12 +113,12 @@ export default {
   components: {
     DaibanMessage,
     Loading,
-    MineclientMessage
+    MineclientMessage,
   },
   mounted() {
     this.setCurrentPage(1);
     this.isLoading = true;
-    this.getXinfenList({ form: {}, page: 1 }).then(res => {
+    this.getXinfenList({ form: {}, page: 1 }).then((res) => {
       this.isLoading = false;
     });
   },
@@ -127,7 +127,7 @@ export default {
       // <Shift>
       shiftLoading: false,
       shiftForm: {
-        account_ids: []
+        account_ids: [],
       },
       showShift: false,
       // </Shift>
@@ -143,89 +143,102 @@ export default {
       isLoading: false,
       type: {
         status: "notvisit",
-        page: 1
+        page: 1,
       },
       show: false,
       form: {},
       columns: [
-        { type: "selection", width: 60 ,fixed:'left'},
-        { title: "学员姓名", key: "student_name", align: "center", width: 100 ,fixed:'left'},
+        { type: "selection", width: 60, fixed: "left" },
         {
-            title: "注册手机",
-            width: 120,
-            align: "center",
-            key: "mobile",
-            fixed:'left',
-            render: (h, params) => {
-              return h(
-                "Badge",
-                {
-                  props: {
-                    dot: true,
-                    count: params.row.is_red,
-                    offset: [10,0]
-                  },
-                  style: {
-                    height: '40px',
-                    'line-height': '40px'
-                  }
+          title: "学员姓名",
+          key: "student_name",
+          align: "center",
+          width: 100,
+          fixed: "left",
+        },
+        {
+          title: "注册手机",
+          width: 120,
+          align: "center",
+          key: "mobile",
+          fixed: "left",
+          render: (h, params) => {
+            return h(
+              "Badge",
+              {
+                props: {
+                  dot: true,
+                  count: params.row.is_red,
+                  offset: [10, 0],
                 },
-                params.row.mobile
-              );
-            },
+                style: {
+                  height: "40px",
+                  "line-height": "40px",
+                },
+              },
+              params.row.mobile
+            );
           },
+        },
         { title: "城市", key: "area", align: "center", width: 120 },
-        // { title: "购买课程", key: "product_subject", align: "center" , width: 100 },
-        { title: "年级", key: "grade", align: "center" , width: 100 },
-        { title: "意向科目", key: "subject", align: "center" , width: 100 },
-        // { title: "渠道优先级", key: "subject",align: "center", },
-        // { title: "渠道类型", key: "refer",align: "center", },
-        { title: "跟进人", key: "follow_sale_name", align: "center" , width: 120 },
-        { title: "跟进状态", key: "follow_status", align: "center" , width: 100 },
-        // { title: "学习阶段", key: "follow_status",align: "center", },
-        { title: "呼出情况", key: "many_calls", align: "center" , width: 100 },
-        { title: "流转类型", key: "transfer", align: "center", width: 100  },
+        { title: "年级", key: "grade", align: "center", width: 100 },
+        { title: "意向科目", key: "subject", align: "center", width: 100 },
+        {
+          title: "跟进人",
+          key: "follow_sale_name",
+          align: "center",
+          width: 120,
+        },
+        {
+          title: "跟进状态",
+          key: "follow_status",
+          align: "center",
+          width: 100,
+        },
+        { title: "呼出情况", key: "many_calls", align: "center", width: 100 },
+        { title: "流转类型", key: "transfer", align: "center", width: 100 },
         { title: "新/老用户", key: "highsea_id", width: 100 },
-        { title: "渠道来源", key: "refer", align: "center" , width: 100 },
+        { title: "渠道来源", key: "refer", align: "center", width: 100 },
         { title: "分配时间", key: "receive_time", align: "center", width: 170 },
-        { title: "活跃时间",width:170,align: "center", key: "active_time" },
-        { title: "活跃事件",width:170,align: "center", key: "active_action" },
-        { title: "注册时间",align: "center",  key: "create_time", width: 170 },
+        { title: "活跃时间", width: 170, align: "center", key: "active_time" },
+        {
+          title: "活跃事件",
+          width: 170,
+          align: "center",
+          key: "active_action",
+        },
+        {
+          title: "注册时间",
+          align: "center",
+          key: "create_time",
+          width: 170,
+          render: (h, params) => {
+            return h(
+              "span",
+              this.timestamp(new Date(params.row.create_time * 1000))
+            );
+          },
+        },
         {
           title: "操作",
           key: "action",
           align: "center",
           width: 200,
-          fixed:'right',
+          fixed: "right",
           render: (h, params) => {
             return h("div", [
-              // h(
-              //   "Button",
-              //   {
-              //     props: {
-              //       type: "text",
-              //       size: "small"
-              //     },
-              //     on: {
-              //       click: () => {
-              //         this.audition(params.row);
-              //       }
-              //     }
-              //   },
-              //   "试听"
-              // ),
               h(
                 "Button",
                 {
                   props: {
                     type: "text",
-                    size: "small"
+                    size: "small",
                   },
                   on: {
                     click: () => {
                       this.getBtnClick3(params.row);
-                    }
-                  }
+                    },
+                  },
                 },
                 "跟进"
               ),
@@ -234,13 +247,13 @@ export default {
                 {
                   props: {
                     type: "text",
-                    size: "small"
+                    size: "small",
                   },
                   on: {
                     click: () => {
                       this.getBtnClick4(params.row);
-                    }
-                  }
+                    },
+                  },
                 },
                 "呼出"
               ),
@@ -249,20 +262,20 @@ export default {
                 {
                   props: {
                     type: "text",
-                    size: "small"
+                    size: "small",
                   },
                   on: {
                     click: () => {
                       this.order(params.row);
-                    }
-                  }
+                    },
+                  },
                 },
                 "订单"
-              )
+              ),
             ]);
-          }
-        }
-      ]
+          },
+        },
+      ],
     };
   },
   methods: {
@@ -274,7 +287,7 @@ export default {
     },
     //添加cc姓名
     addSaleName(uid) {
-      this.sale_list.map(i => {
+      this.sale_list.map((i) => {
         if (i.id == uid) {
           this.shiftForm.sale_name = i.login_name;
         }
@@ -286,7 +299,7 @@ export default {
         this.$Message.error("请先选择转移人员");
       } else {
         this.shiftLoading = true;
-        this.shiftSalelist({ form: this.shiftForm }).then(res => {
+        this.shiftSalelist({ form: this.shiftForm }).then((res) => {
           if (!res.data.ret) {
             this.$Message.error(res.data.error);
           } else {
@@ -313,6 +326,29 @@ export default {
       this.type.form = this.form;
       this.type.page = this.currentPage;
       this.type.data = { ...this.notvisitType };
+    },
+    //时间戳
+    timestamp(time) {
+      var d = new Date(time);
+      let shi = d.getHours();
+      let fen = d.getMinutes();
+      let miao = d.getSeconds();
+      if (shi < 10) shi = "0" + shi;
+      if (fen < 10) fen = "0" + fen;
+      if (miao < 10) miao = "0" + miao;
+      d =
+        d.getFullYear() +
+        "-" +
+        (d.getMonth() + 1 < 10 ? "0" + (d.getMonth() + 1) : d.getMonth() + 1) +
+        "-" +
+        (d.getDate() < 10 ? "0" + d.getDate() : d.getDate()) +
+        " " +
+        shi +
+        ":" +
+        fen +
+        ":" +
+        miao;
+      return d;
     },
     //设置返回的时间
     datePicker(time) {
@@ -358,12 +394,12 @@ export default {
         this.setCurrentPage(page);
       }
       this.isLoading = true;
-      this.getXinfenList({ form: this.form, page }).then(res => {
+      this.getXinfenList({ form: this.form, page }).then((res) => {
         this.setCurrentPage(page);
         this.isLoading = false;
       });
     },
-    ...mapActions(["getXinfenList", "RingUp",'shiftSalelist']),
+    ...mapActions(["getXinfenList", "RingUp", "shiftSalelist"]),
     ...mapMutations(["setCurrentPage", "setNotvisitTypes"]),
     //全选反选
     selectionChange(item) {
@@ -395,19 +431,19 @@ export default {
       ) {
         this.isLoading = true;
         this.RingUp({ form: item })
-          .then(res => {
+          .then((res) => {
             if (res.data.code == 200) {
               this.$Message.success("呼出成功");
             }
             if (res.data.code == 1000) {
               this.$Message.error({
                 content: res.data.error,
-                duration: 4
+                duration: 4,
               });
             }
             this.isLoading = false;
           })
-          .catch(e => {
+          .catch((e) => {
             if (e) {
               this.isLoading = false;
             }
@@ -420,19 +456,19 @@ export default {
     pageChange(num) {
       this.setCurrentPage(num);
       this.isLoading = true;
-      this.getXinfenList({ form: this.form }).then(res => {
+      this.getXinfenList({ form: this.form }).then((res) => {
         this.isLoading = false;
         this.setCurrentPage(num);
       });
-    }
+    },
   },
   computed: {
     ...mapGetters(["NotdataArr", "notvisitType"]),
     ...mapState({
-      data: state => state.notvisit.xinfenList,
-      currentPage: state => state.notvisit.currentPage,
-      total: state => state.notvisit.total,
-      pageSize: state => state.notvisit.pageSize
+      data: (state) => state.notvisit.xinfenList,
+      currentPage: (state) => state.notvisit.currentPage,
+      total: (state) => state.notvisit.total,
+      pageSize: (state) => state.notvisit.pageSize,
     }),
     //是否展示转移
     showShiftBtn() {
@@ -441,8 +477,8 @@ export default {
       } else {
         return false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

@@ -1,7 +1,8 @@
 import { BASEURL } from '../env'
 
 const STUDENTLIST = BASEURL + 'paid_accounts' //学员管理
-const TEACHERLIST = BASEURL + 'coach_list' //班课老师任列表
+const TEACHERLIST = BASEURL + 'check_coach' //班课老师任列表
+const TEACHERLISTS = BASEURL + 'coach_lists' //班课老师任列表
 const CUORSECARD = BASEURL +'my_card' //课程卡 
 const CREATEDLESSONS = BASEURL +'lesson_store' //添加课节一对一
 const ADDCOURSE =BASEURL + 'create_fixed_schedule'//排课一对一
@@ -15,6 +16,7 @@ const UPDATELESSONLIST = BASEURL  + 'modify_lesson' //一对一课节修改
 const CANCELLESSONS = BASEURL +'cancel_lesson'//一对一取消课节
 
 export {
+    TEACHERLISTS,
     CANCELLESSONS,
     UPDATELESSONLIST,
     SCHEDULESSONSLIST,

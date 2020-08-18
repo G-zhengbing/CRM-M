@@ -77,11 +77,11 @@
             <p>分配量</p>
           </li>
           <li>
-            <span>{{collect.appoint_num}}</span>
+            <span>{{collect.appoint_account_num + '/' +collect.appoint_num}}</span>
             <p>邀约量</p>
           </li>
           <li>
-            <span>{{collect.be_appoint_num}}</span>
+            <span>{{collect.be_appoint_account_num + '/' +collect.be_appoint_num}}</span>
             <p>有效试听</p>
           </li>
           <li>
@@ -89,7 +89,7 @@
             <p>跳票量</p>
           </li>
           <li>
-            <span>{{collect.sign_num}}</span>
+            <span>{{collect.sign_account_num+'/'+collect.sign_num}}</span>
             <p>签单量</p>
           </li>
           <li>
@@ -198,7 +198,7 @@ import Loading from "../uilt/loading/loading";
 import storage from "../uilt/storage";
 export default {
   components: {
-    Loading
+    Loading,
   },
   mounted() {
     if (JSON.stringify(storage.getStatistics()) == "{}") {
@@ -206,16 +206,16 @@ export default {
     }
     this.setStatus();
     this.isLoading = true;
-    this.getsSatisticsList({ status: this.num }).then(res => {
+    this.getsSatisticsList({ status: this.num }).then((res) => {
       this.isLoading = false;
     });
   },
   computed: {
     ...mapState({
-      data: state => state.statistics.statisticsList,
-      analyzeList: state => state.statistics.analyzeList,
-      personList: state => state.statistics.personList,
-      collect: state => state.statistics.collect
+      data: (state) => state.statistics.statisticsList,
+      analyzeList: (state) => state.statistics.analyzeList,
+      personList: (state) => state.statistics.personList,
+      collect: (state) => state.statistics.collect,
     }),
     ...mapGetters(["statisticsData"]),
     setFullYear() {
@@ -226,7 +226,7 @@ export default {
         arr.push(f + "-" + (i + 1 < 10 ? "0" + (i + 1) : i + 1));
       }
       return arr;
-    }
+    },
   },
   data() {
     return {
@@ -242,20 +242,50 @@ export default {
       analyzeColumns: [
         { title: "销售", key: "call_name", fixed: "left", width: 100 },
         { title: "分配量", key: "assign_num", fixed: "left", width: 100 },
-        { title: "邀约量", key: "appoint_num", width: 130 },
-        { title: "有效试听", key: "be_appoint_num", width: 130 },
+        {
+          title: "邀约量",
+          key: "appoint_num",
+          width: 130,
+          render: (h, params) => {
+            return h(
+              "span",
+              params.row.appoint_account_num + "/" + params.row.appoint_num
+            );
+          },
+        },
+        {
+          title: "有效试听",
+          key: "be_appoint_num",
+          width: 130,
+          render: (h, params) => {
+            return h(
+              "span",
+              params.row.be_appoint_account_num +
+                "/" +
+                params.row.be_appoint_num
+            );
+          },
+        },
         { title: "跳票量", key: "cancel_num", width: 130 },
-        { title: "签单量", key: "sign_num", width: 130 },
-        // { title: "退费量", key: "assign_num", width: 130 },
-        // { title: "退费率", key: "assign_num", width: 130 },
+        {
+          title: "签单量",
+          key: "sign_num",
+          width: 130,
+          render: (h, params) => {
+            return h(
+              "span",
+              params.row.sign_account_num + "/" + params.row.sign_num
+            );
+          },
+        },
         { title: "邀约率", key: "appoint_rate", width: 130 },
         { title: "跳票率", key: "cancel_rate", width: 130 },
         { title: "转化率", key: "pay_rate", width: 130 },
         { title: "签单率", key: "order_rate", width: 130 },
         { title: "平均单底", key: "order_avg", width: 130 },
-        { title: "总收款", key: "total_pay_amount", width: 130 }
+        { title: "总收款", key: "total_pay_amount", width: 130 },
       ],
-      personColumns: []
+      personColumns: [],
     };
   },
   methods: {
@@ -267,7 +297,7 @@ export default {
       this.isLoading = true;
       this.personColumns = [
         { title: "销售", key: "sale_name", fixed: "left", width: 100 },
-        { title: "核计", key: "total_amount", fixed: "right", width: 100 }
+        { title: "合计", key: "total_amount", fixed: "right", width: 100 },
       ];
       this.setPerson([]);
       if (val) {
@@ -288,10 +318,10 @@ export default {
         this.personColumns.push({
           title: i + 1,
           key: d + "-" + (i + 1),
-          width: 100
+          width: 100,
         });
       }
-      this.getPersonList({ form: this.personForm }).then(res => {
+      this.getPersonList({ form: this.personForm }).then((res) => {
         this.setPerson(res.data.data);
         this.isLoading = false;
       });
@@ -307,7 +337,7 @@ export default {
     clearPersonForm() {
       this.personForm = {};
       this.isLoading = true;
-      this.getPersonList({ form: this.personForm }).then(res => {
+      this.getPersonList({ form: this.personForm }).then((res) => {
         this.isLoading = false;
       });
     },
@@ -327,7 +357,7 @@ export default {
     clearAnalyzeForm() {
       this.analyzeForm = {};
       this.isLoading = true;
-      this.getAnalyzeList({ status: this.analyzeType}).then(res => {
+      this.getAnalyzeList({ status: this.analyzeType }).then((res) => {
         this.isLoading = false;
       });
     },
@@ -365,7 +395,7 @@ export default {
     clear() {
       this.isLoading = true;
       this.form = {};
-      this.getsSatisticsList({ status: this.num }).then(res => {
+      this.getsSatisticsList({ status: this.num }).then((res) => {
         this.isLoading = false;
       });
     },
@@ -386,13 +416,13 @@ export default {
         "-" +
         (d.getMonth() + 1 < 10 ? "0" + (d.getMonth() + 1) : d.getMonth() + 1) +
         "-" +
-        d.getDate()
+        d.getDate();
       return d;
     },
     seekClick() {
       this.isLoading = true;
       this.getsSatisticsList({ form: this.form, status: this.num }).then(
-        res => {
+        (res) => {
           this.isLoading = false;
         }
       );
@@ -416,7 +446,7 @@ export default {
             key: "call_second",
             sortable: true,
             width: 140,
-            fixed: "left"
+            fixed: "left",
           },
           { title: "接通电话数量", key: "valid_num", width: 130 },
           { title: "接通率", key: "call_rate", width: 120 },
@@ -424,23 +454,23 @@ export default {
             title: "有效呼出时长",
             key: "call_time",
             sortable: true,
-            width: 140
+            width: 140,
           },
           {
             title: "平均通话时长",
             key: "avg_time",
             sortable: true,
-            width: 140
+            width: 140,
           },
           { title: "今日新分总量", key: "assign_num", width: 130 },
           { title: "今日新分呼出电话总量", key: "assign_call_num", width: 180 },
           {
             title: "今日新分接通电话总量",
             key: "assin_valid_call",
-            width: 180
+            width: 180,
           },
           { title: "今日新分接通率", key: "assign_rate", width: 150 },
-          { title: "今日新增一对一预约量", key: "appoint_num", width: 180 }
+          { title: "今日新增一对一预约量", key: "appoint_num", width: 180 },
         ];
       } else if (this.num == "week") {
         this.columns = [
@@ -451,7 +481,7 @@ export default {
             key: "call_second",
             sortable: true,
             width: 140,
-            fixed: "left"
+            fixed: "left",
           },
           { title: "接通电话数量", key: "valid_num", width: 130 },
           { title: "接通率", key: "call_rate", width: 120 },
@@ -459,23 +489,23 @@ export default {
             title: "有效呼出时长",
             key: "call_time",
             sortable: true,
-            width: 140
+            width: 140,
           },
           {
             title: "平均通话时长",
             key: "avg_time",
             sortable: true,
-            width: 160
+            width: 160,
           },
           { title: "本周新分总量", key: "assign_num", width: 130 },
           { title: "本周新分呼出电话总量", key: "assign_call_num", width: 180 },
           {
             title: "本周新分接通电话总量",
             key: "assin_valid_call",
-            width: 180
+            width: 180,
           },
           { title: "本周新分接通率", key: "assign_rate", width: 150 },
-          { title: "本周新增一对一预约量", key: "appoint_num", width: 180 }
+          { title: "本周新增一对一预约量", key: "appoint_num", width: 180 },
         ];
       } else {
         this.columns = [
@@ -486,7 +516,7 @@ export default {
             key: "call_second",
             sortable: true,
             width: 140,
-            fixed: "left"
+            fixed: "left",
           },
           { title: "接通电话数量", key: "valid_num", width: 130 },
           { title: "接通率", key: "call_rate", width: 120 },
@@ -494,27 +524,27 @@ export default {
             title: "有效呼出时长",
             key: "call_time",
             sortable: true,
-            width: 140
+            width: 140,
           },
           {
             title: "平均通话时长",
             key: "avg_time",
             sortable: true,
-            width: 140
+            width: 140,
           },
           { title: "本月新分总量", key: "assign_num", width: 130 },
           { title: "本月新分呼出电话总量", key: "assign_call_num", width: 180 },
           {
             title: "本月新分接通电话总量",
             key: "assin_valid_call",
-            width: 180
+            width: 180,
           },
           { title: "本月新分接通率", key: "assign_rate", width: 150 },
           {
             title: "本月累计新增一对一预约量",
             key: "appoint_num",
-            width: 220
-          }
+            width: 220,
+          },
         ];
       }
     },
@@ -528,8 +558,8 @@ export default {
       this.getsSatisticsList({ status: num }).then(() => {
         this.isLoading = false;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

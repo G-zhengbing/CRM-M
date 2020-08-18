@@ -2,7 +2,6 @@ import axios from 'axios'
 import {
   TECHSTU,
   TEPCHE,
-  TEPREPORT,
   TEPADDREPORT
 } from "../uilt/url/url";
 import storage from '../uilt/storage'
@@ -17,9 +16,6 @@ export default {
     report:[]
   },
   mutations: {
-    setReport(state,payload){
-      state.report = payload
-    },
     setGenjinmStu(state, payload) {
       state.genjinType = payload
     },
@@ -53,24 +49,6 @@ export default {
           }
         }).then(res=>{
           dispatch("getmStudent",{page:1})
-          resolve()
-        }).catch(e=>{
-          reject(e)
-        })
-      })
-    },
-    //学情报告列表
-    getReport({state,commit},cid){
-      return new Promise((resolve,reject)=>{
-        axios({
-          method:"get",
-          url:TEPREPORT + "/" + cid,
-          headers: {
-            "content-type": "application/x-www-form-urlencoded",
-            Authorization: "bearer " + storage.get()
-          }
-        }).then(res=>{
-          commit("setReport",res.data.data.report)
           resolve()
         }).catch(e=>{
           reject(e)
