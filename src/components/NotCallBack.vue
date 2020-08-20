@@ -120,7 +120,6 @@ export default {
         { title: "意向度", key: "intention_option", align: "center", width: 100 },
         { title: "跟进人", key: "follow_sale_name", align: "center" , width: 100},
         { title: "新/老用户", key: "highsea_id", width: 100 },
-        // { title: "学习阶段", key: "stage", align: "center", width: 100 },
         {
           title: "上次跟进内容",
           key: "last_visit_content",
@@ -135,6 +134,8 @@ export default {
           width: 170
         },
         { title: "回访时间", key: "next_follow_time", align: "center" ,width: 170},
+        { title: "活跃时间", key: "active_time", align: "center" ,width: 170},
+        { title: "活跃事件", key: "active_action", align: "center" ,width: 170},
         { title: "注册时间", key: "create_time", align: "center" ,width: 170},
         {
           title: "操作",

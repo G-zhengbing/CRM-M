@@ -12,7 +12,6 @@ import advertising from './advertising'
 import special from './special'
 import curriculum from './curriculum'
 import databank from './databank'
-import minestudent from './minestudent'
 import bookcode from './bookcode'
 import studentpay from './studentpay'
 import mineclient from './mineclient'
@@ -190,7 +189,6 @@ export default new Vuex.Store({
     special,//专题管理
     curriculum,//课程管理
     databank,//资料管理
-    minestudent,//我的学员
     bookcode,//一书一码
     studentpay,//我的客户/付费学员
     mineclient,//我的客户

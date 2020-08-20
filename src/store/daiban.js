@@ -5,6 +5,7 @@ import {
   FENPAIXS,
   YIRUGONG,
   ASSIGNPAIDALLOCATED,
+  REFER,
   PONESTATUS
 } from '../uilt/url/url'
 import storage from '../uilt/storage'
@@ -17,17 +18,20 @@ export default {
     genjinType: null,
     data: [],
     refer: storage.getDaiban().channel,
-    follow_status: {},
-    intention: {},
-    course_type: {},
     currentPage: 1,
     total: 0,
     pageSize: 10,
     fenpeiList: [],
     xiansuoId: [],
-    xiaoshowId: 0,
+    xiaoshowId: 0
   },
   mutations: {
+    setRefs(state, payload) {
+      state.refer = payload
+    },
+    setForm(state, payload) {
+      state.forms = payload
+    },
     setDatas(state, payload) {
       state.datas = payload
     },
@@ -66,7 +70,7 @@ export default {
     }
   },
   actions: {
-    //跟进/移出
+    //跟进/移除
     removeData({
       state,
       commit,
@@ -118,6 +122,28 @@ export default {
         })
       })
     },
+    //渠道来源列表
+    getReferList({
+      state,
+      commit
+    }) {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "get",
+          url: REFER,
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            Authorization: "bearer " + storage.get()
+          }
+        }).then(res => {
+          storage.savaDaiban(res.data.data)
+          commit("setRefs", res.data.data.channel)
+          resolve()
+        }).catch(e => {
+          reject(e)
+        })
+      })
+    },
     //移入公共客户区域
     ShiftOut({
       state,
@@ -148,7 +174,7 @@ export default {
       })
     },
     //分配
-    allocation({
+    fenPai({
       state,
       commit,
       dispatch

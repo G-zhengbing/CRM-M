@@ -2,41 +2,19 @@
   <div class="boxs">
     <div class="shade" v-if="type.classify == 'shade'">
       <Modal v-model="showShade" title="分配" @on-cancel="colse">
-        <template v-if="type.status == 'payingstudent'">
-          <Select
-            v-model="form.sale_name"
-            style="width:150px;margin-bottom:20px"
-            @on-change="selected"
-            placeholder="选择人员"
-          >
-            <Option
-              v-for="(list,i) in payList"
-              :key="i"
-              :value="list.login_name"
-            >{{list.login_name}}</Option>
-          </Select>
-        </template>
-        <template v-else>
-          <Select
-            v-model="form.sale_name"
-            style="width:150px;margin-bottom:20px"
-            @on-change="selected"
-            placeholder="选择人员"
-          >
-            <Option
-              v-for="(list,i) in fenpeiList"
-              :key="i"
-              :value="list.login_name"
-            >{{list.login_name}}</Option>
-          </Select>
-        </template>
-        <Input
-          v-if="type.status != 'payingstudent'"
-          v-model="form.assign_note"
-          type="textarea"
-          :rows="4"
-          placeholder="分配说明"
-        />
+        <Select
+          v-model="form.sale_name"
+          style="width:150px;margin-bottom:20px"
+          @on-change="selected"
+          placeholder="选择人员"
+        >
+          <Option
+            v-for="(list,i) in fenpeiList"
+            :key="i"
+            :value="list.login_name"
+          >{{list.login_name}}</Option>
+        </Select>
+        <Input v-model="form.assign_note" type="textarea" :rows="4" placeholder="分配说明" />
         <div slot="footer">
           <Button type="text" size="large" @click="colse">取消</Button>
           <Button type="primary" size="large" @click="confirm">确定</Button>
@@ -52,11 +30,7 @@
       </div>
     </Modal>
     <!--  -->
-    <div class="message" v-if="message">
-      <span>操作成功</span>
-    </div>
-    <!--  -->
-    <div v-else-if="type.classify == 'datalis'">
+    <div v-if="type.classify == 'datalis'">
       <Modal
         class="modal"
         width="1100"
@@ -187,7 +161,6 @@
                   v-model="type.data.next_follow_time"
                   format="yyyy-MM-dd HH:mm:ss"
                   type="datetime"
-                  class="datepicker"
                   :title="item"
                   confirm
                   placeholder="下次回访日期"
@@ -257,165 +230,165 @@
             <span>预约单</span>
           </li>
         </ul>
-        <Form
-          :model="followForm"
-          label-position="top"
-          style="height:500px;overflow-y:auto;"
-          v-if="num ==1"
-        >
-          <Row>
-            <Col span="4">
-              <FormItem style="width:150px;" label="学员姓名">
-                <Input v-model="followForm.student_name" placeholder="姓名"></Input>
-              </FormItem>
-            </Col>
-            <Col span="4">
-              <FormItem style="width:150px;" label="注册手机">
-                <Input :title="followForm.tel" v-model="followForm.tel" placeholder="手机号"></Input>
-              </FormItem>
-            </Col>
-            <Col span="4">
-              <FormItem style="width:150px;" label="备用电话">
-                <Input v-model="followForm.spare_phone" placeholder="电话"></Input>
-              </FormItem>
-            </Col>
-            <Col span="4">
-              <FormItem label="性别">
-                <Select v-model="followForm.sex" style="width:150px" placeholder="性别">
-                  <Option :value="1">男</Option>
-                  <Option :value="2">女</Option>
-                </Select>
-              </FormItem>
-            </Col>
-            <Col span="4">
-              <FormItem style="width:150px;" label="年龄">
-                <Input v-model="followForm.age" placeholder="年龄"></Input>
-              </FormItem>
-            </Col>
-            <Col span="4">
-              <FormItem label="年级">
-                <Select v-model="followForm.grade" style="width:150px" placeholder="年级">
-                  <Option :value="1">一年级</Option>
-                  <Option :value="2">二年级</Option>
-                  <Option :value="3">三年级</Option>
-                  <Option :value="4">四年级</Option>
-                  <Option :value="5">五年级</Option>
-                  <Option :value="6">六年级</Option>
-                  <Option :value="7">七年级</Option>
-                  <Option :value="8">八年级</Option>
-                  <Option :value="9">九年级</Option>
-                  <Option :value="10">高一</Option>
-                  <Option :value="11">高二</Option>
-                  <Option :value="12">高三</Option>
-                </Select>
-              </FormItem>
-            </Col>
-            <Col span="4">
-              <FormItem style="width:150px;" label="微信昵称">
-                <Input v-model="followForm.wechat_nick_name" placeholder="学员微信昵称"></Input>
-              </FormItem>
-            </Col>
-            <Col span="4">
-              <FormItem style="width:150px;" label="微信号">
-                <Input v-model="followForm.wechat_id" placeholder="请输入微信号"></Input>
-              </FormItem>
-            </Col>
-            <Col span="4">
-              <FormItem style="width:150px;" label="城市">
-                <Input v-model="followForm.area" placeholder="请输入城市"></Input>
-              </FormItem>
-            </Col>
-            <Col span="4">
-              <FormItem style="width:150px;" label="学校">
-                <Input v-model="followForm.school" placeholder="就读学校"></Input>
-              </FormItem>
-            </Col>
-            <Col span="4">
-              <FormItem label="教材版本">
-                <Select
-                  v-model="followForm.textbook_version"
-                  style="width:150px"
-                  placeholder="教材版本"
-                >
-                  <Option v-for="(list,i) in vaersion" :value="i*1" :key="i">{{list}}</Option>
-                </Select>
-              </FormItem>
-            </Col>
-            <Col span="4">
-              <FormItem label="意向科目">
-                <Select v-model="followForm.subject" style="width:150px" placeholder="意向科目">
-                  <Option v-for="(list,i) in subject" :value="i*1" :key="i">{{list}}</Option>
-                </Select>
-              </FormItem>
-            </Col>
-            <Col span="6">
-              <FormItem label="意向度" style="margin-left: 10px">
-                <RadioGroup v-model="followForm.intention_option">
-                  <Radio :label="1">高</Radio>
-                  <Radio :label="2">中</Radio>
-                  <Radio :label="3">低</Radio>
-                  <Radio :label="4">无</Radio>
-                </RadioGroup>
-              </FormItem>
-            </Col>
-            <Col span="24">
-              <FormItem label="呼出请况">
-                <RadioGroup class="radios" v-model="phone_status">
-                  <Radio :label="1">正常接听</Radio>
-                  <Radio :label="2">无人接听</Radio>
-                  <Radio :label="3">空号</Radio>
-                  <Radio :label="4">挂断</Radio>
-                </RadioGroup>
-              </FormItem>
-            </Col>
-            <Col span="24">
-              <FormItem
-                label="发送短信"
-                v-if="type.data.many_calls == 2 && type.data.phone_status == 2"
-              >
-                <Button type="text" size="large" @click="send">发送未接通短信提醒</Button>
-              </FormItem>
-            </Col>
-            <Col span="24">
-              <FormItem label="回访内容">
-                <Input v-model="vist_content" type="textarea" :rows="4" placeholder="请输入回访内容" />
-              </FormItem>
-            </Col>
-            <Col span="24">
-              <FormItem label="下次回访">
-                <DatePicker
-                  style="margin:0"
-                  v-model="followForm.next_follow_time"
-                  format="yyyy-MM-dd HH:mm"
-                  type="datetime"
-                  class="datepicker"
-                  :options="optionsDate"
-                  :title="item"
-                  confirm
-                  placeholder="下次回访日期"
-                ></DatePicker>
-              </FormItem>
-            </Col>
-            <Col span="24">
-              <span class="record">跟进记录</span>
-              <p class="record-header">
-                <i>回访内容</i>
-                <span>跟进人</span>
-                <span>回访时间</span>
-              </p>
-              <ul class="record-footer">
-                <li v-for="(item,i) in followForm.visit_content" :key="i">
-                  <i>{{item.visit_content}}</i>
-                  <span>{{item.sale_name}}</span>
-                  <span>{{item.time}}</span>
-                </li>
-              </ul>
-            </Col>
-          </Row>
+        <Form :model="followForm" label-position="top" v-if="num ==1">
+          <div style="display:flex;">
+            <div style="flex:1">
+              <Row>
+                <Col span="8">
+                  <FormItem style="width:150px;" label="学员姓名">
+                    <Input v-model="followForm.student_name" placeholder="姓名"></Input>
+                  </FormItem>
+                </Col>
+                <Col span="8">
+                  <FormItem style="width:150px;" label="注册手机">
+                    <Input :title="followForm.tel" v-model="followForm.tel" placeholder="手机号"></Input>
+                  </FormItem>
+                </Col>
+                <Col span="8">
+                  <FormItem style="width:150px;" label="备用电话">
+                    <Input v-model="followForm.spare_phone" placeholder="电话"></Input>
+                  </FormItem>
+                </Col>
+                <Col span="8">
+                  <FormItem label="性别">
+                    <Select v-model="followForm.sex" style="width:150px" placeholder="性别">
+                      <Option :value="1">男</Option>
+                      <Option :value="2">女</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="8">
+                  <FormItem style="width:150px;" label="年龄">
+                    <Input v-model="followForm.age" placeholder="年龄"></Input>
+                  </FormItem>
+                </Col>
+                <Col span="8">
+                  <FormItem label="年级">
+                    <Select v-model="followForm.grade" style="width:150px" placeholder="年级">
+                      <Option :value="1">一年级</Option>
+                      <Option :value="2">二年级</Option>
+                      <Option :value="3">三年级</Option>
+                      <Option :value="4">四年级</Option>
+                      <Option :value="5">五年级</Option>
+                      <Option :value="6">六年级</Option>
+                      <Option :value="7">七年级</Option>
+                      <Option :value="8">八年级</Option>
+                      <Option :value="9">九年级</Option>
+                      <Option :value="10">高一</Option>
+                      <Option :value="11">高二</Option>
+                      <Option :value="12">高三</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="8">
+                  <FormItem style="width:150px;" label="微信昵称">
+                    <Input v-model="followForm.wechat_nick_name" placeholder="学员微信昵称"></Input>
+                  </FormItem>
+                </Col>
+                <Col span="8">
+                  <FormItem style="width:150px;" label="微信号">
+                    <Input v-model="followForm.wechat_id" placeholder="请输入微信号"></Input>
+                  </FormItem>
+                </Col>
+                <Col span="8">
+                  <FormItem style="width:150px;" label="城市">
+                    <Input v-model="followForm.area" placeholder="请输入城市"></Input>
+                  </FormItem>
+                </Col>
+                <Col span="8">
+                  <FormItem style="width:150px;" label="学校">
+                    <Input v-model="followForm.school" placeholder="就读学校"></Input>
+                  </FormItem>
+                </Col>
+                <Col span="8">
+                  <FormItem label="教材版本">
+                    <Select
+                      v-model="followForm.textbook_version"
+                      style="width:150px"
+                      placeholder="教材版本"
+                    >
+                      <Option v-for="(list,i) in vaersion" :value="i*1" :key="i">{{list}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="8">
+                  <FormItem label="意向科目">
+                    <Select v-model="followForm.subject" style="width:150px" placeholder="意向科目">
+                      <Option v-for="(list,i) in subject" :value="i*1" :key="i">{{list}}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="10">
+                  <FormItem label="意向度" style="margin-left: 10px">
+                    <RadioGroup v-model="followForm.intention_option">
+                      <Radio :label="1">高</Radio>
+                      <Radio :label="2">中</Radio>
+                      <Radio :label="3">低</Radio>
+                      <Radio :label="4">无</Radio>
+                    </RadioGroup>
+                  </FormItem>
+                </Col>
+                <Col span="14">
+                  <FormItem label="呼出请况">
+                    <RadioGroup class="radios" v-model="phone_status">
+                      <Radio :label="1">正常接听</Radio>
+                      <Radio :label="2">无人接听</Radio>
+                      <Radio :label="3">空号</Radio>
+                      <Radio :label="4">挂断</Radio>
+                    </RadioGroup>
+                  </FormItem>
+                </Col>
+                <Col span="24">
+                  <FormItem
+                    label="发送短信"
+                    v-if="type.data.many_calls == 2 && type.data.phone_status == 2"
+                  >
+                    <Button type="text" size="large" @click="send">发送未接通短信提醒</Button>
+                  </FormItem>
+                </Col>
+                <Col span="24">
+                  <FormItem label="回访内容">
+                    <Input v-model="vist_content" type="textarea" :rows="3" placeholder="请输入回访内容" />
+                  </FormItem>
+                </Col>
+                <Col span="24">
+                  <FormItem label="下次回访">
+                    <DatePicker
+                      style="margin:0"
+                      v-model="followForm.next_follow_time"
+                      format="yyyy-MM-dd HH:mm"
+                      type="datetime"
+                      :options="optionsDate"
+                      :title="item"
+                      confirm
+                      placeholder="下次回访日期"
+                    ></DatePicker>
+                  </FormItem>
+                </Col>
+              </Row>
+            </div>
+            <div style="flex:1;height:500px;overflow-y:auto;">
+              <Row>
+                <Col span="24">
+                  <p class="record-header">
+                    <i>回访内容</i>
+                    <span style="width:100px">跟进人</span>
+                    <span>回访时间</span>
+                  </p>
+                  <ul class="record-footer">
+                    <li v-for="(item,i) in followForm.visit_content" :key="i">
+                      <div>{{item.visit_content}}</div>
+                      <span style="width:100px">{{item.sale_name}}</span>
+                      <span>{{item.time}}</span>
+                    </li>
+                  </ul>
+                </Col>
+              </Row>
+            </div>
+          </div>
         </Form>
         <template v-if="num ==2">
           <div style="minHeight:500px">
-            <span class="record">订单记录</span>
             <p class="record-header">
               <i>购买课程</i>
               <span>年级</span>
@@ -463,153 +436,6 @@
         </div>
       </Modal>
     </template>
-    <!--  -->
-    <div class="shiftOut" v-if="type.classify == 'shiftOut'">
-      <p>确定将此客户移入至公共客户区域?</p>
-      <div>
-        <button class="btn confirm" @click="shiftOut">是</button>
-        <button class="btn cancel" @click="no">否</button>
-      </div>
-    </div>
-    <!--  -->
-    <div class="shiftOut" v-if="type.classify == 'shiftTo'">
-      <p>确定将此客户移入至代办客户区域?</p>
-      <div>
-        <button class="btn confirm" @click="shiftOut">是</button>
-        <button class="btn cancel" @click="no">否</button>
-      </div>
-    </div>
-    <div class="followUp dingdan" v-if="type.classify == 'dingdan'">
-      <i @click="$parent.show = false">×</i>
-      <div class="context">
-        <div class="shade-top">
-          <div>
-            <img src="../../assets/img/touxiang/png24.png" alt />
-            <span>创建订单</span>
-          </div>
-        </div>
-        <div class="shade-bottom">
-          <ul>
-            <li>
-              上课老师:
-              <input type="text" v-model="object.class_coach" style="width:150px" />
-            </li>
-            <li>
-              报班金额:
-              <input
-                type="text"
-                onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
-                v-model="object.order_amount"
-                style="width:150px"
-              />
-              <span>/元</span>
-            </li>
-            <li class="noRight">
-              下单金额:
-              <input
-                type="text"
-                onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
-                v-model="object.pay_amount"
-                style="width:150px"
-              />
-              <span>/元</span>
-            </li>
-
-            <li>
-              上课时间:
-              <DatePicker
-                v-model="dingdanNext"
-                format="YYYY-MM-DD HH:mm:ss"
-                type="datetime"
-                class="datepicker"
-                :lang="lang"
-                confirm
-                @confirm="setNextTime"
-              ></DatePicker>
-            </li>
-
-            <li>
-              报班时间 :
-              <DatePicker
-                value-format=" yyyy-MM-dd HH:mm:ss"
-                format="YYYY-MM-DD HH:mm:ss"
-                v-model="dingdanClass"
-                type="datetime"
-                class="datepicker"
-                :lang="lang"
-                confirm
-                @confirm="setClassTime"
-              ></DatePicker>
-            </li>
-          </ul>
-          <div class="btnThree">
-            <span @click="dingdan">确定</span>
-            <span class="cancel" @click="$parent.show = false">取消</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="followUp dingdan ding" v-if="type.classify == 'ding'">
-      <i @click="$parent.show = false">×</i>
-      <div class="context">
-        <div class="shade-top">
-          <div>
-            <img src="../../assets/img/touxiang/png24.png" alt />
-            <span v-if="type.status == 'ding'">订单详情</span>
-            <span v-else>创建订单</span>
-          </div>
-        </div>
-        <div class="shade-bottom">
-          <ul>
-            <li>
-              上课老师:
-              <input type="text" v-model="type.data.class_coach" readonly="readonly" />
-            </li>
-            <li>
-              报班金额:
-              <input type="text" v-model="type.data.order_amount" readonly="readonly" />
-              <span>/元</span>
-            </li>
-            <li class="noRight">
-              下单金额:
-              <input type="text" v-model="type.data.pay_amount" readonly="readonly" />
-              <span>/元</span>
-            </li>
-
-            <li>
-              上课时间:
-              <DatePicker
-                v-model="type.data.class_time"
-                format="YYYY-MM-DD HH:mm:ss"
-                type="datetime"
-                class="datepicker"
-                :lang="lang"
-                confirm
-                @confirm="setNextTime"
-              ></DatePicker>
-            </li>
-
-            <li>
-              报班时间 :
-              <DatePicker
-                value-format=" yyyy-MM-dd HH:mm:ss"
-                format="YYYY-MM-DD HH:mm:ss"
-                v-model="type.data.entry_time"
-                type="datetime"
-                class="datepicker"
-                :lang="lang"
-                confirm
-                @confirm="setClassTime"
-              ></DatePicker>
-            </li>
-          </ul>
-          <div class="btnThree">
-            <span @click="dingdan" v-if="type.status != 'ding'">确定</span>
-            <span class="cancel" @click="$parent.show = false" v-else>取消</span>
-          </div>
-        </div>
-      </div>
-    </div>
     <Loading v-show="Loading" />
   </div>
 </template>
@@ -620,12 +446,12 @@ import Loading from "../loading/loading";
 import storage from "../storage";
 export default {
   components: {
-    Loading
+    Loading,
   },
   props: ["type"],
   mounted() {
-    if(this.type.classify == 'shade'){
-      this.getFenpeiList()
+    if (this.type.classify == "shade") {
+      this.getFenpeiList();
     }
     if (this.type.classify == "followUp") {
       this.followForm.id = this.type.data.id;
@@ -645,21 +471,12 @@ export default {
       this.followForm.visit_content = this.type.data.visit_content;
       this.followForm.order = this.type.data.order;
     }
-    if (this.type.data) {
-      if (this.type.data.class_date) {
-        this.classTime = this.type.data.class_date;
-      }
-      if (this.type.data.next_follow_time) {
-        this.nextTime = this.type.data.next_follow_time;
-      }
-    }
   },
   computed: {
     ...mapState({
-      payList: state => state.payingstudent.payList,
-      fenpeiList: state => state.daiban.fenpeiList,
-      refer: state => state.daiban.refer
-    })
+      fenpeiList: (state) => state.daiban.fenpeiList,
+      refer: (state) => state.daiban.refer,
+    }),
   },
   methods: {
     //跟进tab
@@ -686,7 +503,7 @@ export default {
       }
       this.isLoading = true;
       this.removeData({ uid: this.type.data.id, note: this.vist_content }).then(
-        res => {
+        (res) => {
           if (res.data.ret) {
             this.$Message.success("移出成功");
           }
@@ -700,7 +517,7 @@ export default {
     ringup() {
       this.$parent.show = false;
       this.RingUp({ form: this.type.data, status: this.ringupType })
-        .then(res => {
+        .then((res) => {
           this.$parent.show = true;
           this.type.classify = "followUp";
           if (res.data.code == 200) {
@@ -709,12 +526,12 @@ export default {
           if (res.data.code == 1000) {
             this.$Message.error({
               content: res.data.error,
-              duration: 4
+              duration: 4,
             });
           }
           this.isLoading = false;
         })
-        .catch(e => {
+        .catch((e) => {
           if (e) {
             this.isLoading = false;
           }
@@ -726,14 +543,11 @@ export default {
         this.$Message.success("发送成功");
       });
     },
+    //跟进（关闭）
     followUpColse() {
       if (this.type.status == "mineclient") {
         this.getClientList({ form: this.type.form, page: this.type.page });
         this.$parent.show = false;
-        return;
-      } else if (this.type.status == "reserved") {
-        this.$parent.show = false;
-        this.getReservedList({ form: this.type.form, page: this.type.page });
         return;
       } else if (this.type.status == "studentpay") {
         this.getStudentList({ form: this.type.form, page: this.type.page });
@@ -754,7 +568,7 @@ export default {
       } else if (this.type.status == "notification") {
         this.getNotificationList({
           form: this.type.form,
-          page: this.type.page
+          page: this.type.page,
         });
         this.$parent.show = false;
         return;
@@ -762,15 +576,6 @@ export default {
         this.getReservedList({ ...this.type.form, page: this.type.page });
         this.$parent.show = false;
         return;
-      } else if (this.type.status == "paystudent") {
-        this.getPaystudent({ page: 1, form: {} });
-        this.$parent.show = false;
-      } else if (this.type.status == "uplist") {
-        this.getUplist({ page: 1, form: {} });
-        this.$parent.show = false;
-      } else if (this.type.status == "minestudent") {
-        this.getmStudent({ page: 1, form: {} });
-        this.$parent.show = false;
       } else if (this.type.status == "public") {
         this.getPublicList({ page: this.type.page, form: this.type.form });
         this.$parent.show = false;
@@ -778,23 +583,9 @@ export default {
         this.getKehuList({
           status: storage.getTabStatus(),
           page: this.type.page,
-          form: this.type.form
+          form: this.type.form,
         });
         this.$parent.show = false;
-      }
-    },
-    setNextTime(time) {
-      if (this.type.classify == "followUp") {
-        this.type.data.next_follow_time = this.datePicker(time);
-      } else {
-        this.object.class_time = this.datePicker(time);
-      }
-    },
-    setClassTime(time) {
-      if (this.type.classify == "followUp") {
-        this.type.data.class_date = this.datePicker(time);
-      } else {
-        this.object.entry_time = this.datePicker(time);
       }
     },
     datePicker(time) {
@@ -819,29 +610,6 @@ export default {
         miao;
       return d;
     },
-    shiftOut() {
-      this.Loading = true;
-      this.ShiftOut(this.type).then(res => {
-        if (this.type.classify == "shiftOut") {
-          if (this.type.status == "notvisit") {
-            this.getXinfenList({ form: this.type.form, page: this.type.page });
-          } else if (this.type.status == "followup") {
-            this.getFollowUpList({
-              form: this.type.form,
-              page: this.type.page
-            });
-          } else {
-            this.getKehuList({ status: storage.getTabStatus() });
-          }
-        }
-        this.message = true;
-        this.Loading = false;
-        setTimeout(() => {
-          this.message = false;
-          this.$parent.show = false;
-        }, 2000);
-      });
-    },
     //跟进
     genjin() {
       if (this.vist_content == "") {
@@ -865,8 +633,8 @@ export default {
       if (this.type.status == "notvisit") {
         this.Genjin({
           type: this.followForm,
-          status: storage.getTabStatus()
-        }).then(res => {
+          status: storage.getTabStatus(),
+        }).then((res) => {
           if (res.data.ret) {
             this.$Message.success("跟进成功");
           } else {
@@ -880,8 +648,8 @@ export default {
       } else if (this.type.status == "followup") {
         this.Genjin({
           type: this.followForm,
-          status: storage.getTabStatus()
-        }).then(res => {
+          status: storage.getTabStatus(),
+        }).then((res) => {
           if (res.data.ret) {
             this.$Message.success("跟进成功");
           } else {
@@ -895,8 +663,8 @@ export default {
       } else if (this.type.status == "notcallback") {
         this.Genjin({
           type: this.followForm,
-          status: storage.getTabStatus()
-        }).then(res => {
+          status: storage.getTabStatus(),
+        }).then((res) => {
           if (res.data.ret) {
             this.$Message.success("跟进成功");
           } else {
@@ -907,50 +675,11 @@ export default {
           this.getYuQiList({ form: this.type.form, page: this.type.page });
         });
         return;
-      } else if (this.type.status == "paystudent") {
-        this.Genjin({
-          type: this.followForm,
-          status: storage.getTabStatus()
-        }).then(res => {
-          if (res.data.ret) {
-            this.$Message.success("跟进成功");
-          } else {
-            this.$Message.error(res.data.error);
-          }
-          this.$parent.show = false;
-          this.Loading = false;
-          this.getPaystudent({ page: "", form: {} });
-        });
-        return;
-      } else if (this.type.status == "uplist") {
-        this.Genjin({
-          type: this.followForm,
-          status: storage.getTabStatus()
-        }).then(res => {
-          if (res.data.ret) {
-            this.$Message.success("跟进成功");
-          } else {
-            this.$Message.error(res.data.error);
-          }
-          this.$parent.show = false;
-          this.Loading = false;
-          this.getUplist({ page: "", form: {} });
-        });
-        return;
-      } else if (this.type.status == "minestudent") {
-        let cid = this.type.data.id;
-        let content = this.type.data.visit_content;
-        this.setmStudent({ cid, content }).then(res => {
-          this.$parent.show = false;
-          this.Loading = false;
-          this.getmStudent({ page: "", form: {} });
-        });
-        return;
       } else if (this.type.status == "mineclient") {
         this.Genjin({
           type: this.followForm,
-          status: storage.getTabStatus()
-        }).then(res => {
+          status: storage.getTabStatus(),
+        }).then((res) => {
           if (res.data.ret) {
             this.$Message.success("跟进成功");
           } else {
@@ -964,8 +693,8 @@ export default {
       } else if (this.type.status == "studentpay") {
         this.Genjin({
           type: this.followForm,
-          status: storage.getTabStatus()
-        }).then(res => {
+          status: storage.getTabStatus(),
+        }).then((res) => {
           if (res.data.ret) {
             this.$Message.success("跟进成功");
           } else {
@@ -979,8 +708,8 @@ export default {
       } else if (this.type.status == "notification") {
         this.Genjin({
           type: this.followForm,
-          status: storage.getTabStatus()
-        }).then(res => {
+          status: storage.getTabStatus(),
+        }).then((res) => {
           if (res.data.ret) {
             this.$Message.success("跟进成功");
           } else {
@@ -990,15 +719,15 @@ export default {
           this.Loading = false;
           this.getNotificationList({
             form: this.type.form,
-            page: this.type.page
+            page: this.type.page,
           });
         });
         return;
       } else {
         this.Genjin({
           type: this.followForm,
-          status: storage.getTabStatus()
-        }).then(res => {
+          status: storage.getTabStatus(),
+        }).then((res) => {
           if (res.data.ret) {
             this.$Message.success("跟进成功");
           } else {
@@ -1010,16 +739,16 @@ export default {
           if (this.type.from == "public") {
             return this.getPublicList({
               form: this.type.form,
-              page: this.type.page
+              page: this.type.page,
             });
           }
         });
       }
       this.disableBtn = false;
     },
-    ...mapMutations(["setXiaoshowId", "setType", "setXiaoshowIdPay"]),
+    ...mapMutations(["setXiaoshowId"]),
     ...mapActions([
-      'getFenpeiList',
+      "getFenpeiList",
       "removeData",
       "RingUp",
       "getReservedList",
@@ -1027,23 +756,13 @@ export default {
       "sendPone",
       "getStudentList",
       "getClientList",
-      "addRepost",
-      "setmStudent",
-      "getmStudent",
-      "setPayStu",
-      "getPayList",
-      "allocation",
+      "fenPai",
       "Genjin",
-      "ShiftOut",
       "getPublicList",
-      "getXinfenList",
       "getKehuList",
       "getXinfenList",
       "getFollowUpList",
-      "getFollowUpList",
       "getYuQiList",
-      "getPaystudent",
-      "getUplist"
     ]),
     no() {
       this.showFenpei = false;
@@ -1052,25 +771,16 @@ export default {
     yes() {
       this.Loading = true;
       this.showFenpei = false;
-      if (this.type.status == "payingstudent") {
-        this.setPayStu({ form: this.form }).then(res => {
-          this.message = false;
-          this.$parent.show = false;
-          this.Loading = false;
-        });
-      } else {
-        this.allocation({ form: this.form, status: this.$parent.num }).then(res => {
-          if (res.data.ret) {
-            this.$Message.success("分配成功");
-          } else {
-            this.$Message.error(res.data.ret);
-          }
-          this.message = false;
-          this.$parent.show = false;
-          this.$parent.checkall = "";
-          this.Loading = false;
-        });
-      }
+      this.fenPai({ form: this.form, status: this.$parent.num }).then((res) => {
+        if (res.data.ret) {
+          this.$Message.success("分配成功");
+        } else {
+          this.$Message.error(res.data.ret);
+        }
+        this.$parent.show = false;
+        this.$parent.checkall = "";
+        this.Loading = false;
+      });
     },
     colse() {
       this.showShade = false;
@@ -1085,20 +795,12 @@ export default {
       this.showFenpei = true;
     },
     selected(e) {
-      if (this.type.status == "payingstudent") {
-        for (var i = 0; i < this.payList.length; i++) {
-          if (this.payList[i].login_name == this.form.sale_name) {
-            this.setXiaoshowIdPay(this.payList[i]);
-          }
-        }
-      } else {
-        for (var i = 0; i < this.fenpeiList.length; i++) {
-          if (this.fenpeiList[i].login_name == this.form.sale_name) {
-            this.setXiaoshowId(this.fenpeiList[i]);
-          }
+      for (var i = 0; i < this.fenpeiList.length; i++) {
+        if (this.fenpeiList[i].login_name == this.form.sale_name) {
+          this.setXiaoshowId(this.fenpeiList[i]);
         }
       }
-    }
+    },
   },
   data() {
     return {
@@ -1113,10 +815,10 @@ export default {
           key: "note",
           align: "center",
           tooltip: true,
-          ellipsis: true
+          ellipsis: true,
         },
         { title: "创建人", key: "create_user", align: "center" },
-        { title: "创建时间", key: "create_time", width: 170 }
+        { title: "创建时间", key: "create_time", width: 170 },
       ],
       num: 1,
       followForm: {},
@@ -1125,36 +827,27 @@ export default {
       disableBtn: false,
       ringupType: 1,
       optionsDate: {
-        disabledDate: time => {
+        disabledDate: (time) => {
           let curDate = new Date().getTime();
           let three = 7 * 24 * 3600 * 1000;
           let threeMonths = curDate + three;
           return time.getTime() < Date.now() || time.getTime() > threeMonths;
-        }
+        },
       },
       phone_status: "",
       intention: storage.getDaiban().screen_list.inter_nation,
       subject: storage.getDaiban().screen_list.subject,
       vaersion: storage.getDaiban().screen_list.book_version,
-      isHuchu: true,
       vist_content: "",
       note_content: "",
-      dingdanClass: "",
-      dingdanNext: "",
       object: {},
-      nextTime: "",
-      classTime: "",
       Loading: false,
-      message: false,
       showFenpei: false,
       showShade: true,
       form: {},
       item: null,
-      time: null,
-      isItem: false,
-      sms: false
     };
-  }
+  },
 };
 </script>
 
@@ -1172,10 +865,14 @@ export default {
   left: 20px;
 }
 .record-footer li span {
-  width: 150px;
+  width: 130px;
 }
-.record-footer li i {
+.record-footer li div {
   flex: 1;
+  width: 300px;
+  max-width: 300px;
+  word-break: break-all;
+  word-wrap: break-word;
 }
 .record-footer li {
   display: flex;
@@ -1186,7 +883,7 @@ export default {
   flex-direction: column;
 }
 .record-header > span {
-  width: 150px;
+  width: 130px;
 }
 .record-header > i {
   flex: 1;
@@ -1204,14 +901,12 @@ export default {
   background-color: rgba(242, 242, 242, 1);
   text-indent: 15px;
 }
-.contaner.paystu {
-  height: 240px;
-}
+
 .shade-bottom div.record > ul > li > p {
-  width: 150px;
+  width: 100px;
 }
 .shade-bottom div.record > ul > li > span {
-  width: 150px;
+  width: 100px;
 }
 .shade-bottom div.record > ul > li > i {
   flex: 1;
@@ -1225,7 +920,7 @@ export default {
   display: flex;
 }
 .shade-bottom div.record > p > span {
-  width: 150px;
+  width: 100px;
 }
 .shade-bottom div.record > p > i {
   flex: 1;
@@ -1254,387 +949,5 @@ export default {
 .shade-bottom ul li .radios {
   margin: -34px;
   margin-left: 100px;
-}
-.ringdown > div {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.ringdown .btn {
-  background: #1b73b0;
-  border-radius: 5px;
-  font-size: 14px;
-  padding: 5px 30px;
-  margin-bottom: 10px;
-  cursor: pointer;
-}
-.ringdown p {
-  margin: 15px;
-  font-size: 14px;
-  color: #333;
-}
-.ringdown span {
-  display: inline-block;
-  background: #1b73b0;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  font-size: 13px;
-  text-align: center;
-  height: 30px;
-  line-height: 30px;
-  color: #fff;
-}
-.ringdown {
-  background: #fff;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-}
-.huchu span {
-  padding: 25px 10px;
-  color: #333;
-  font-size: 14px;
-  display: inline-block;
-}
-.huchu {
-  background: #fff;
-  border-radius: 10px;
-}
-.textlet {
-  border-right: 1px solid #ccc;
-}
-.followUp.dingdan .shade-bottom ul li span {
-  position: absolute;
-  right: -25px;
-}
-.followUp.dingdan .shade-bottom ul li {
-  position: relative;
-}
-.followUp.dingdan {
-  height: 420px;
-  width: 480px;
-}
-/*  */
-.shiftOut p {
-  margin-bottom: 20px;
-}
-.shiftOut div .btn.cancel {
-  border: 2px solid #1b73b0;
-  color: #1b73b0;
-}
-.shiftOut div .btn.confirm {
-  background: #1b73b0;
-  margin-right: 30px;
-}
-.shiftOut div .btn {
-  width: 100px;
-  height: 30px;
-  cursor: pointer;
-}
-.shiftOut {
-  width: 334px;
-  height: 110px;
-  border-radius: 10px;
-  color: #333;
-  font-size: 14px;
-  background: #fff;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.mx-datepicker.datepicker {
-  margin-top: -50px;
-  width: 172px;
-  height: 25px;
-  margin-left: 100px;
-  margin-top: -35px;
-}
-.mx-input {
-  width: 130px !important;
-  height: 25px;
-}
-/*  */
-.textarea {
-  resize: none;
-  border: none;
-  outline: none;
-  width: 100%;
-}
-/*  */
-.shade-content ul li {
-  width: 209px;
-  color: #333;
-  font-size: 14px;
-  margin: 30px 0;
-}
-/*  */
-.operation .close {
-  width: 150px;
-  height: 35px;
-  background-color: #1b73b0;
-  color: #fff;
-  font-size: 14px;
-  display: inline-block;
-  border-radius: 5px;
-  text-align: center;
-  line-height: 35px;
-  cursor: pointer;
-}
-.selected.info {
-  width: 130px;
-  height: 34px;
-  outline: none;
-  border-color: #c0c0c0;
-  border-radius: 5px;
-  appearance: none;
-  background: url("../../assets/img/xiala/png24.png") no-repeat scroll right
-    center transparent;
-  padding-right: 20px;
-  background-size: 12px 7px;
-  background-position-x: 110px;
-  text-indent: 5px;
-  float: right;
-  line-height: 34px;
-}
-.selected {
-  width: 150px;
-  height: 34px;
-  outline: none;
-  border-color: #c0c0c0;
-  border-radius: 5px;
-  appearance: none;
-  background: url("../../assets/img/xiala/png24.png") no-repeat scroll right
-    center transparent;
-  padding-right: 20px;
-  background-size: 12px 7px;
-  background-position-x: 124px;
-  text-indent: 5px;
-  float: right;
-  line-height: 34px;
-}
-.shade-bottom ul li.noRight {
-  margin-right: 0px;
-}
-.shade-bottom ul li {
-  width: 251px;
-  margin: 10px 63px 10px 0;
-  font-size: 14px;
-  color: #333;
-  height: 34px;
-  line-height: 34px;
-}
-.shade-bottom ul li input {
-  border: none;
-  border: 1px solid #c0c0c0;
-  width: 143px;
-  height: 34px;
-  border-radius: 5px;
-  outline: none;
-  text-indent: 5px;
-  box-sizing: border-box;
-  margin-left: 20px;
-  float: right;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  padding: 5px;
-  cursor: all-scroll;
-}
-.shade-bottom ul {
-  display: flex;
-  flex-wrap: wrap;
-}
-/*  */
-.xiaci {
-  margin-left: -26px;
-  display: inline-block;
-  margin-top: 10px;
-}
-.shade-bottom div.btnThree span.cancel {
-  border: 2px solid #1b73b0;
-  box-sizing: border-box;
-  color: #1b73b0;
-  background-color: #fff;
-  line-height: 30px;
-}
-.shade-bottom div.btnThree span {
-  display: inline-block;
-  width: 100px;
-  height: 35px;
-  color: #fff;
-  background-color: #1b73b0;
-  text-align: center;
-  line-height: 35px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-right: 50px;
-}
-.btnThree {
-  display: flex;
-  justify-content: center;
-}
-.followUp .shade-bottom {
-  text-align: left;
-  position: relative;
-}
-.followUp {
-  width: 1050px;
-  height: 700px;
-  background-color: #fff;
-  border-radius: 10px;
-  position: relative;
-  overflow-y: auto;
-}
-
-.shade-bottom div span {
-  width: 80px;
-  text-align: center;
-}
-.shade-bottom div {
-  display: flex;
-  width: 100%;
-  font-size: 14px;
-  color: #333;
-  margin-top: 30px;
-  margin-bottom: 20px;
-}
-.shade-bottom div div {
-  border: 1px solid #ccc;
-  height: 80px;
-  text-indent: 5px;
-  border-radius: 5px;
-  padding: 5px;
-  margin-top: 0;
-}
-.followUp > i {
-  font-size: 20px;
-  position: absolute;
-  top: 0;
-  right: 10px;
-  cursor: pointer;
-  color: #666;
-}
-.context .shade-top img {
-  width: 15px;
-  height: 19px;
-  margin-right: 5px;
-}
-.context .shade-top div {
-  display: flex;
-  background: #1b73b0;
-  color: #fff;
-  width: 100px;
-  height: 35px;
-  border-radius: 5px;
-  justify-content: center;
-  align-items: center;
-  font-size: 14px;
-}
-.context {
-  margin: 0 40px;
-}
-.message span {
-  color: #333;
-  font-size: 14px;
-}
-.message {
-  width: 134px;
-  height: 47px;
-  background: #fff;
-  border-radius: 10px;
-  text-align: center;
-  line-height: 47px;
-}
-/*  */
-.shade-content .handel {
-  margin: 40px auto;
-}
-.shade-content .btn.cancel {
-  border: 2px solid #1b73b0;
-  color: #1b73b0;
-}
-.shade-content .btn.confirm {
-  background: #1b73b0;
-  margin-right: 35px;
-}
-.shade-content .btn {
-  width: 80px;
-  height: 35px;
-  cursor: pointer;
-}
-.shade-content .text span {
-  display: inline-block;
-}
-.shade-content .text {
-  font-size: 14px;
-  color: #333;
-  display: flex;
-}
-.shade-content .text textarea {
-  resize: none;
-  outline: none;
-  border: none;
-  overflow: hidden;
-  text-indent: 2px;
-}
-input {
-  border: none;
-  outline: none;
-}
-.shade-content .text div {
-  border: 1px solid #ccc;
-  width: 491px;
-  height: 138px;
-  text-indent: 5px;
-  border-radius: 5px;
-  padding: 5px;
-  display: flex;
-  flex-direction: column;
-}
-.shade-content {
-  display: flex;
-  flex-direction: column;
-}
-
-.shade-top {
-  padding-bottom: 5px;
-  border-bottom: 1px solid #ccc;
-  margin-top: 20px;
-}
-.shade-top .btn {
-  width: 80px;
-  height: 35px;
-  background: #1b73b0;
-  margin-top: 20px;
-}
-.btn {
-  border: none;
-  outline: none;
-  color: #fff;
-  background: #fff;
-  border-radius: 5px;
-  font-size: 14px;
-}
-.boxs {
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.contaner {
-  width: 736px;
-  height: 390px;
-  background: #fff;
-  border-radius: 10px;
-}
-.contaner > div {
-  margin: 0 50px;
 }
 </style>

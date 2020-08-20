@@ -304,7 +304,6 @@ export default {
         { title: "下次跟进", key: "next_follow_time", width: 170 },
         { title: "分配时间", key: "receive_time", width: 170 },
         { title: "新/老用户", key: "highsea_id", width: 100 },
-        // { title: "学习阶段", key: "stage", width: 100 },
         { title: "流转类型", key: "transfer", width: 100 },
         { title: "注册时间", key: "create_time", width: 170 },
         { title: "活跃时间",width:170,align: "center", key: "active_time" },

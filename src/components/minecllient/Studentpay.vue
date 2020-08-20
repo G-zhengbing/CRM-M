@@ -200,7 +200,6 @@ export default {
           align: "center",
           width: 170
         },
-        // { title: "学习阶段", key: "stage", align: "center", width: 100 },
         { title: "注册时间", key: "create_time", align: "center", width: 170 },
         {
           title: "操作",

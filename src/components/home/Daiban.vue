@@ -98,7 +98,7 @@
                 v-model="allocationDates"
                 type="daterange"
                 split-panels
-                placeholder="注册时间 - 注册时间"
+                placeholder="分配时间 - 分配时间"
                 @on-change="allocationDate"
               ></DatePicker>
             </FormItem>

@@ -111,6 +111,7 @@ export default {
         { title: "意向科目", key: "subject", align: "center", width: 100 },
         { title: "意向度", key: "intention_option", align: "center" , width: 100 },
         { title: "跟进人", key: "follow_sale_name", align: "center" , width: 100 },
+        { title: "跟进状态", key: "follow_status", align: "center" , width: 100 },
         {
           title: "上次跟进内容",
           key: "last_visit_content",
@@ -119,7 +120,6 @@ export default {
           width: 140
         },
         { title: "新/老用户", key: "highsea_id", width: 100 },
-        // { title: "学习阶段", key: "stage", align: "center" , width: 100 },
         {
           title: "上次跟进时间",
           key: "last_follow_time",
