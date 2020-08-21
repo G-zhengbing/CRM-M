@@ -14,7 +14,7 @@
         </Col>
         <Col span="3">
           <FormItem>
-            <Select v-model="form.visit_num" @on-change="seekClick" placeholder="回访次数">
+            <Select v-model="form.visit_num" @on-change="seekClick" placeholder="跟进次数">
               <Option
                 :value="list.id"
                 v-for="(list,i) in contant.VISIT_NUMBER"
@@ -32,7 +32,7 @@
         </Col>
         <Col span="3">
           <FormItem>
-            <Select v-model="form.follow_status" @on-change="seekClick" placeholder="跟进状态">
+            <Select v-model="form.follow_status" @on-change="seekClick" placeholder="状态">
               <Option :value="i" v-for="(list,i) in follow_status" :key="i">{{list}}</Option>
             </Select>
           </FormItem>
@@ -158,7 +158,7 @@ export default {
   components: {
     Loading,
     DaibanMessage,
-    MineclientMessage
+    MineclientMessage,
   },
   mounted() {
     this.follow_status = storage.getDaiban().screen_list.follow_status;
@@ -168,18 +168,18 @@ export default {
     this.channel = storage.getDaiban().channel;
     this.setCurrentPage(1);
     this.isLoading = true;
-    this.getClientList({ form: {}, page: 1 }).then(res => {
+    this.getClientList({ form: {}, page: 1 }).then((res) => {
       this.isLoading = false;
     });
   },
   computed: {
     ...mapGetters(["clientkData", "clientTypes"]),
     ...mapState({
-      data: state => state.mineclient.setMineclient,
-      refer: state => state.mineclient.refer,
-      currentPage: state => state.mineclient.currentPage,
-      total: state => state.mineclient.total,
-      pageSize: state => state.mineclient.pageSize
+      data: (state) => state.mineclient.setMineclient,
+      refer: (state) => state.mineclient.refer,
+      currentPage: (state) => state.mineclient.currentPage,
+      total: (state) => state.mineclient.total,
+      pageSize: (state) => state.mineclient.pageSize,
     }),
     //是否展示转移
     showShiftBtn() {
@@ -188,7 +188,7 @@ export default {
       } else {
         return false;
       }
-    }
+    },
   },
   data() {
     return {
@@ -197,7 +197,7 @@ export default {
       // <Shift>
       shiftLoading: false,
       shiftForm: {
-        account_ids: []
+        account_ids: [],
       },
       showShift: false,
       // </Shift>
@@ -205,7 +205,7 @@ export default {
       visitColumns: [
         { title: "回访内容", key: "visit_content" },
         { title: "跟进人", key: "sale_name" },
-        { title: "回访时间", key: "time", width: 170 }
+        { title: "回访时间", key: "time", width: 170 },
       ],
       showVisitData: [],
       showVisit: false,
@@ -222,44 +222,46 @@ export default {
       transfer: "",
       show: false,
       type: {
-        status: "mineclient"
+        status: "mineclient",
       },
       isLoading: false,
       form: {
-        visit_num: ""
+        visit_num: "",
       },
       columns: [
         { type: "selection", width: 60, fixed: "left" },
         { title: "学员姓名", key: "student_name", width: 100, fixed: "left" },
         {
-            title: "注册手机",
-            width: 120,
-            align: "center",
-            key: "mobile",
-            fixed: "left",
-            render: (h, params) => {
-              return h(
-                "Badge",
-                {
-                  props: {
-                    dot: true,
-                    count: params.row.is_red,
-                    offset: [10,0]
-                  },
-                  style: {
-                    height: '40px',
-                    'line-height': '40px'
-                  }
+          title: "注册手机",
+          width: 120,
+          align: "center",
+          key: "mobile",
+          fixed: "left",
+          render: (h, params) => {
+            return h(
+              "Badge",
+              {
+                props: {
+                  dot: true,
+                  count: params.row.is_red,
+                  offset: [10, 0],
                 },
-                params.row.mobile
-              );
-            },
+                style: {
+                  height: "40px",
+                  "line-height": "40px",
+                },
+              },
+              params.row.mobile
+            );
           },
+        },
         { title: "城市", key: "area", width: 100 },
         { title: "年级", key: "grade", width: 80 },
-        { title: "意向科目", key: "subject", width: 100 },
+        { title: "科目", key: "subject", width: 100 },
+        { title: "意向度", key: "intention_option", width: 80 },
+        { title: "跟进人", key: "follow_sale_name", width: 120 },
         {
-          title: "回访次数",
+          title: "跟进次数",
           key: "visit_num",
           align: "center",
           width: 95,
@@ -271,45 +273,48 @@ export default {
                   on: {
                     props: {
                       type: "text",
-                      size: "small"
+                      size: "small",
                     },
                     click: () => {
                       this.visit(params.row);
-                    }
+                    },
                   },
                   style: {
                     width: "fit-content",
                     textAlign: "center",
-                    cursor: "pointer"
+                    cursor: "pointer",
                   },
-                  class: "clickable"
+                  class: "clickable",
                 },
                 params.row.visit_num
-              )
+              ),
             ]);
-          }
+          },
         },
-        { title: "跟进人", key: "follow_sale_name", width: 120 },
-        { title: "跟进状态", key: "follow_status", width: 95 },
+        { title: "状态", key: "follow_status", width: 95 },
         {
-          title: "上次跟进时间",
+          title: "跟进时间",
           key: "last_follow_time",
           width: 170,
           align: "center",
-          sortable: true
+          sortable: true,
         },
         { title: "渠道来源", key: "refer", width: 150 },
-        { title: "意向度", key: "intention_option", width: 80 },
         { title: "上次呼出", key: "phone_status", width: 100 },
-        { title: "下次跟进", key: "next_follow_time", width: 170 },
+        { title: "下次跟进时间", key: "next_follow_time", width: 170 },
         { title: "分配时间", key: "receive_time", width: 170 },
         { title: "新/老用户", key: "highsea_id", width: 100 },
         { title: "流转类型", key: "transfer", width: 100 },
         { title: "注册时间", key: "create_time", width: 170 },
-        { title: "活跃时间",width:170,align: "center", key: "active_time" },
-        { title: "活跃事件",width:170,align: "center", key: "active_action" },
+        { title: "活跃时间", width: 170, align: "center", key: "active_time" },
         {
-        title: "操作",
+          title: "活跃事件",
+          width: 170,
+          align: "center",
+          key: "active_action",
+        },
+        {
+          title: "操作",
           key: "action",
           align: "center",
           width: 200,
@@ -321,13 +326,13 @@ export default {
                 {
                   props: {
                     type: "text",
-                    size: "small"
+                    size: "small",
                   },
                   on: {
                     click: () => {
                       this.order(params.row);
-                    }
-                  }
+                    },
+                  },
                 },
                 "订单"
               ),
@@ -336,13 +341,13 @@ export default {
                 {
                   props: {
                     type: "text",
-                    size: "small"
+                    size: "small",
                   },
                   on: {
                     click: () => {
                       this.audition(params.row);
-                    }
-                  }
+                    },
+                  },
                 },
                 "试听"
               ),
@@ -351,13 +356,13 @@ export default {
                 {
                   props: {
                     type: "text",
-                    size: "small"
+                    size: "small",
                   },
                   on: {
                     click: () => {
                       this.trunIntroduce(params.row);
-                    }
-                  }
+                    },
+                  },
                 },
                 "转介绍"
               ),
@@ -366,13 +371,13 @@ export default {
                 {
                   props: {
                     type: "text",
-                    size: "small"
+                    size: "small",
                   },
                   on: {
                     click: () => {
                       this.getBtnClick3(params.row);
-                    }
-                  }
+                    },
+                  },
                 },
                 "跟进"
               ),
@@ -381,20 +386,20 @@ export default {
                 {
                   props: {
                     type: "text",
-                    size: "small"
+                    size: "small",
                   },
                   on: {
                     click: () => {
                       this.getBtnClick4(params.row);
-                    }
-                  }
+                    },
+                  },
                 },
                 "呼出"
-              )
+              ),
             ]);
-          }
-        }
-      ]
+          },
+        },
+      ],
     };
   },
   methods: {
@@ -406,7 +411,7 @@ export default {
     },
     //添加cc姓名
     addSaleName(uid) {
-      this.sale_list.map(i => {
+      this.sale_list.map((i) => {
         if (i.id == uid) {
           this.shiftForm.sale_name = i.login_name;
         }
@@ -419,7 +424,7 @@ export default {
       } else {
         this.shiftLoading = true;
         this.isLoading = true;
-        this.shiftSalelist({ form: this.shiftForm }).then(res => {
+        this.shiftSalelist({ form: this.shiftForm }).then((res) => {
           if (!res.data.ret) {
             this.$Message.error(res.data.error);
           } else {
@@ -427,7 +432,7 @@ export default {
           }
           this.getClientList({
             form: this.form,
-            sort: this.lastFollowTimeSort
+            sort: this.lastFollowTimeSort,
           });
           this.isLoading = false;
           this.shiftLoading = false;
@@ -455,8 +460,8 @@ export default {
       this.isLoading = true;
       this.getClientList({
         form: this.form,
-        sort: this.lastFollowTimeSort
-      }).then(res => {
+        sort: this.lastFollowTimeSort,
+      }).then((res) => {
         this.isLoading = false;
       });
     },
@@ -557,8 +562,8 @@ export default {
       this.getClientList({
         form: this.form,
         page,
-        sort: this.lastFollowTimeSort
-      }).then(res => {
+        sort: this.lastFollowTimeSort,
+      }).then((res) => {
         this.isLoading = false;
         this.setCurrentPage(page);
       });
@@ -594,19 +599,19 @@ export default {
       ) {
         this.isLoading = true;
         this.RingUp({ form: item })
-          .then(res => {
+          .then((res) => {
             if (res.data.code == 200) {
               this.$Message.success("呼出成功");
             }
             if (res.data.code == 1000) {
               this.$Message.error({
                 content: res.data.error,
-                duration: 4
+                duration: 4,
               });
             }
             this.isLoading = false;
           })
-          .catch(e => {
+          .catch((e) => {
             if (e) {
               this.isLoading = false;
             }
@@ -621,12 +626,12 @@ export default {
       this.setCurrentPage(num);
       this.getClientList({
         form: this.form,
-        sort: this.lastFollowTimeSort
-      }).then(res => {
+        sort: this.lastFollowTimeSort,
+      }).then((res) => {
         this.isLoading = false;
         this.setCurrentPage(num);
       });
-    }
-  }
+    },
+  },
 };
 </script>

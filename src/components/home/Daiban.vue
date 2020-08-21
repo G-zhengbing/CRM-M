@@ -28,9 +28,9 @@
               <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekMobile"></Input>
             </FormItem>
           </Col>
-          <Col span="2">
+          <Col span="2" v-if="num == 2">
             <FormItem>
-              <Select v-model="form.follow_status" @on-change="seek" placeholder="跟进状态">
+              <Select v-model="form.follow_status" @on-change="seek" placeholder="状态">
                 <Option v-for="(list,i) in follow_status" :key="i" :value="i">{{list}}</Option>
               </Select>
             </FormItem>
@@ -58,7 +58,7 @@
           </Col>
           <Col span="2">
             <FormItem>
-              <Select v-model="form.subject" @on-change="seek" placeholder="意向科目">
+              <Select v-model="form.subject" @on-change="seek" placeholder="科目">
                 <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
               </Select>
             </FormItem>
@@ -72,7 +72,7 @@
           </Col>
           <Col span="2" v-if="num == 2">
             <FormItem>
-              <Select v-model="form.visit_num" @on-change="seek" placeholder="回访次数">
+              <Select v-model="form.visit_num" @on-change="seek" placeholder="跟进次数">
                 <Option
                   :value="list.id"
                   v-for="(list,i) in contant.VISIT_NUMBER"
@@ -426,11 +426,10 @@ export default {
             },
           },
           { title: "城市", align: "center", key: "area" },
-          { title: "在读学校", align: "center", key: "school" },
           { title: "年级", width: 80, align: "center", key: "grade" },
-          { title: "意向科目", align: "center", key: "subject", width: 120 },
+          { title: "科目", align: "center", key: "subject", width: 120 },
           {
-            title: "跟进状态",
+            title: "状态",
             align: "center",
             key: "follow_status",
             width: 95,
@@ -516,22 +515,11 @@ export default {
           },
           { title: "城市", width: 140, align: "center", key: "area" },
           { title: "年级", width: 100, align: "center", key: "grade" },
-          { title: "意向科目", width: 120, align: "center", key: "subject" },
-          { title: "渠道来源", width: 140, align: "center", key: "refer" },
+          { title: "科目", width: 120, align: "center", key: "subject" },
+
+          { title: "跟进人", key: "follow_sale_name", width: 120 },
           {
-            title: "跟进人",
-            width: 120,
-            align: "center",
-            key: "follow_sale_name",
-          },
-          {
-            title: "跟进状态",
-            width: 100,
-            align: "center",
-            key: "follow_status",
-          },
-          {
-            title: "回访次数",
+            title: "跟进次数",
             key: "visit_num",
             align: "center",
             width: 95,
@@ -561,19 +549,13 @@ export default {
               ]);
             },
           },
-          {
-            title: "意向度 ",
-            width: 100,
-            align: "center",
-            key: "intention_option",
-          },
-          { title: "流转类型", width: 100, align: "center", key: "transfer" },
-          {
-            title: "分配时间",
-            width: 170,
-            align: "center",
-            key: "receive_time",
-          },
+          { title: "状态", key: "follow_status", width: 95 },
+          { title: "渠道来源", key: "refer", width: 150 },
+          { title: "意向度", key: "intention_option", width: 80 },
+          { title: "分配时间", key: "receive_time", width: 170 },
+          { title: "新/老用户", key: "highsea_id", width: 100 },
+          { title: "流转类型", key: "transfer", width: 100 },
+          { title: "注册时间", key: "create_time", width: 170 },
           {
             title: "活跃时间",
             width: 170,
@@ -585,12 +567,6 @@ export default {
             width: 170,
             align: "center",
             key: "active_action",
-          },
-          {
-            title: "注册时间",
-            align: "center",
-            key: "create_time",
-            width: 170,
           },
           {
             title: "操作",
@@ -685,7 +661,6 @@ export default {
             },
           },
           { title: "城市", align: "center", key: "area", width: 100 },
-          { title: "在读学校", align: "center", key: "school", width: 100 },
           {
             title: "购买课程",
             align: "center",
@@ -700,13 +675,13 @@ export default {
           },
           { title: "年级", width: 80, align: "center", key: "product_grade" },
           { title: "科目", align: "center", width: 75, key: "product_subject" },
-          { title: "渠道来源", width: 120, align: "center", key: "refer" },
           {
-            title: "跟进状态",
+            title: "状态",
             width: 100,
             align: "center",
             key: "follow_status",
           },
+          { title: "渠道来源", width: 120, align: "center", key: "refer" },
           { title: "交易时间", width: 170, align: "center", key: "paytime" },
           {
             title: "活跃时间",
@@ -783,11 +758,10 @@ export default {
             },
           },
           { title: "城市", align: "center", key: "area" },
-          { title: "在读学校", align: "center", key: "school" },
           { title: "年级", width: 80, align: "center", key: "grade" },
-          { title: "意向科目", align: "center", key: "subject", width: 120 },
+          { title: "科目", align: "center", key: "subject", width: 120 },
           {
-            title: "跟进状态",
+            title: "状态",
             align: "center",
             key: "follow_status",
             width: 95,

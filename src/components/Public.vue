@@ -22,7 +22,7 @@
         </Col>
         <Col span="3">
           <FormItem>
-            <Select v-model="form.subject" @on-change="seekKuhu" placeholder="意向科目">
+            <Select v-model="form.subject" @on-change="seekKuhu" placeholder="科目">
               <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
             </Select>
           </FormItem>
@@ -157,11 +157,11 @@ export default {
                 props: {
                   dot: true,
                   count: params.row.is_red,
-                  offset: [10, 0],
+                  offset: [10, 0]
                 },
                 style: {
                   height: "40px",
-                  "line-height": "40px",
+                  "line-height": "40px"
                 },
               },
               params.row.mobile
@@ -172,11 +172,8 @@ export default {
         { title: "年级", width: 100, key: "grade" },
         { title: "科目", width: 100, key: "subject" },
         { title: "上个跟进人", width: 110, key: "last_sale_name" },
-        { title: "渠道来源", width: 130, key: "refer" },
-        { title: "意向度", width: 100, key: "intention_option" },
-        // { title: "上次回访内容", key: "last_visit_content" ,tooltip:true},
         {
-          title: "回访次数",
+          title: "跟进次数",
           key: "visit_num",
           width: 100,
           align: "center",
@@ -205,13 +202,17 @@ export default {
             ]);
           },
         },
+        { title: "状态", width: 110, key: "follow_status" },
         {
-          title: "上次回访时间",
+          title: "跟进时间",
           width: 170,
           align: "center",
           key: "last_follow_time",
         },
         { title: "移出原因", key: "assign_note", tooltip: true, width: 120 },
+        { title: "渠道来源", width: 130, key: "refer" },
+        { title: "意向度", width: 100, key: "intention_option" },
+
         { title: "注册时间", width: 170, align: "center", key: "create_time" },
         { title: "活跃时间", width: 170, align: "center", key: "active_time" },
         {

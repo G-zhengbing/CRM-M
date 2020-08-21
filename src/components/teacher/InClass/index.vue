@@ -832,7 +832,7 @@ export default {
           width: 100
         },
         {
-          title: "上次跟进内容",
+          title: "跟进记录",
           key: "content_of_last_return_visit",
           align: "center",
           width: 180
@@ -1066,7 +1066,7 @@ export default {
           width: 140
         },
         {
-          title: "上次跟进内容",
+          title: "跟进记录",
           key: "content_of_last_return_visit",
           align: "center",
           width: 180
@@ -1293,13 +1293,13 @@ export default {
           width: 100
         },
         {
-          title: "上次跟进时间",
+          title: "跟进时间",
           key: "last_return_visit_time",
           align: "center",
           width: 140
         },
         {
-          title: "上次跟进内容",
+          title: "跟进记录",
           key: "content_of_last_return_visit",
           align: "center",
           width: 180

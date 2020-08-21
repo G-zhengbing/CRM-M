@@ -181,14 +181,6 @@ export default {
         [4, "无"],
         [5, "E"]
       ])
-
-      var follow = new Map([
-        [1, "待分配"],
-        [2, "已分配"],
-        [3, "跟进中"],
-        [4, "已调库"],
-        [5, "已移出"],
-      ])
       return data.map(element => {
         var phone = element.mobile.toString()
         var str = phone.split('')
@@ -205,7 +197,6 @@ export default {
         }))
         element.mobile = str.join("")
         element.grade = maps.get(element.grade);
-        element.follow_status = follow.get(element.follow_status);
         element.intention_option = intention.get(element.intention_option);
         return element;
       });

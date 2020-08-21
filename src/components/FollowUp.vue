@@ -21,7 +21,7 @@
         </Col>
         <Col span="2">
           <FormItem>
-            <Select v-model="form.subject" @on-change="seekKuhu" placeholder="意向科目">
+            <Select v-model="form.subject" @on-change="seekKuhu" placeholder="科目">
               <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
             </Select>
           </FormItem>
@@ -108,12 +108,12 @@ export default {
         { title: "学员姓名", key: "student_name", align: "center", width: 150 ,fixed:'left'},
         { title: "注册手机", key: "mobile", align: "center", width: 120 ,fixed:'left'},
         { title: "年级", key: "grade", align: "center" , width: 100 },
-        { title: "意向科目", key: "subject", align: "center", width: 100 },
+        { title: "科目", key: "subject", align: "center", width: 100 },
         { title: "意向度", key: "intention_option", align: "center" , width: 100 },
         { title: "跟进人", key: "follow_sale_name", align: "center" , width: 100 },
-        { title: "跟进状态", key: "follow_status", align: "center" , width: 100 },
+        { title: "状态", key: "follow_status", align: "center" , width: 100 },
         {
-          title: "上次跟进内容",
+          title: "跟进记录",
           key: "last_visit_content",
           align: "center",
           tooltip: true,
@@ -121,7 +121,7 @@ export default {
         },
         { title: "新/老用户", key: "highsea_id", width: 100 },
         {
-          title: "上次跟进时间",
+          title: "跟进时间",
           key: "last_follow_time",
           align: "center",
           width: 170
@@ -132,7 +132,6 @@ export default {
           align: "center",
           width: 170
         },
-        { title: "注册时间", key: "create_time", align: "center", width: 170 },
         {
           title: "操作",
           key: "action",

@@ -39,7 +39,7 @@
             <Select
               v-model="form.subject"
               @on-change="seekClick"
-              placeholder="意向科目"
+              placeholder="科目"
             >
               <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
             </Select>
@@ -167,13 +167,13 @@ export default {
         { title: "购买课程", key: "product_name", align: "center" , width: 150 },
         { title: "年级", key: "product_grade", align: "center", width: 80 },
         { title: "科目", key: "product_subject", align: "center", width: 80 },
+        { title: "课程类型", key: "product_type", align: "center", width: 100 },
         {
           title: "意向度",
           key: "intention_option",
           align: "center",
           width: 100
         },
-        { title: "课程类型", key: "product_type", align: "center", width: 100 },
         {
           title: "跟进人",
           key: "follow_sale_name",
@@ -181,17 +181,10 @@ export default {
           width: 130
         },
         {
-          title: "上次跟进时间",
+          title: "跟进时间",
           key: "last_follow_time",
           align: "center",
           width: 170
-        },
-        {
-          title: "上次跟进内容",
-          key: "last_visit_content",
-          align: "center",
-          width: 150,
-          tooltip: true
         },
         { title: "新/老用户", key: "highsea_id", width: 100 },
         {

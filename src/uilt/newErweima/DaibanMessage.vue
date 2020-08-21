@@ -116,8 +116,8 @@
               </FormItem>
             </Col>
             <Col span="4">
-              <FormItem label="意向科目">
-                <Select v-model="type.data.subject" style="width:150px" placeholder="意向科目" disabled>
+              <FormItem label="科目">
+                <Select v-model="type.data.subject" style="width:150px" placeholder="科目" disabled>
                   <Option v-for="(list,i) in subject" :key="i*1" :value="list">{{list}}</Option>
                 </Select>
               </FormItem>
@@ -312,8 +312,8 @@
                   </FormItem>
                 </Col>
                 <Col span="8">
-                  <FormItem label="意向科目">
-                    <Select v-model="followForm.subject" style="width:150px" placeholder="意向科目">
+                  <FormItem label="科目">
+                    <Select v-model="followForm.subject" style="width:150px" placeholder="科目">
                       <Option v-for="(list,i) in subject" :value="i*1" :key="i">{{list}}</Option>
                     </Select>
                   </FormItem>
@@ -367,19 +367,22 @@
                 </Col>
               </Row>
             </div>
-            <div style="flex:1;height:500px;overflow-y:auto;">
+            <div style="border-left:1px solid #ccc;margin:0 15px"></div>
+            <div style="flex:1;height:500px;overflow-y:auto">
               <Row>
                 <Col span="24">
-                  <p class="record-header">
-                    <i>回访内容</i>
-                    <span style="width:100px">跟进人</span>
-                    <span>回访时间</span>
-                  </p>
                   <ul class="record-footer">
-                    <li v-for="(item,i) in followForm.visit_content" :key="i">
-                      <div>{{item.visit_content}}</div>
-                      <span style="width:100px">{{item.sale_name}}</span>
-                      <span>{{item.time}}</span>
+                    <li v-if="followForm.visit_content" class="visit" v-for="(item,i) in followForm.visit_content" :key="i">
+                        <div>
+                          {{item.time}}&nbsp;&nbsp;&nbsp;<a href="javascript:;">跟进人:</a>
+                          {{item.sale_name}}。
+                          </br>
+                          <a href="javascript:;">内容:</a>
+                          {{item.visit_content }}
+                        </div>
+                    </li>
+                    <li v-else>
+                      暂无跟进记录
                     </li>
                   </ul>
                 </Col>
@@ -395,7 +398,7 @@
               <span>科目</span>
               <span>购买时间</span>
             </p>
-            <ul class="record-footer">
+            <ul class="record-order">
               <li v-for="(item,i) in followForm.order" :key="i">
                 <i>{{item.product_name}}</i>
                 <span>{{item.grade}}</span>
@@ -864,21 +867,30 @@ export default {
   position: absolute;
   left: 20px;
 }
-.record-footer li span {
-  width: 130px;
-}
-.record-footer li div {
-  flex: 1;
-  width: 300px;
-  max-width: 300px;
-  word-break: break-all;
-  word-wrap: break-word;
+.record-footer li.visit {
+  letter-spacing: 1px;
+  line-height: 25px;
+  margin-bottom: 15px;
 }
 .record-footer li {
   display: flex;
   width: 100%;
 }
 .record-footer {
+  display: flex;
+  flex-direction: column;
+}
+.record-order li span{
+  width: 130px;
+}
+.record-order li i{
+  flex: 1;
+}
+.record-order li{
+  display: flex;
+  width: 100%;
+}
+.record-order{
   display: flex;
   flex-direction: column;
 }

@@ -29,7 +29,7 @@
         </Col>
         <Col span="3">
           <FormItem>
-            <Select v-model="form.subject" @on-change="seekKuhu" placeholder="意向科目">
+            <Select v-model="form.subject" @on-change="seekKuhu" placeholder="科目">
               <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
             </Select>
           </FormItem>
@@ -182,7 +182,7 @@ export default {
         },
         { title: "城市", key: "area", align: "center", width: 120 },
         { title: "年级", key: "grade", align: "center", width: 100 },
-        { title: "意向科目", key: "subject", align: "center", width: 100 },
+        { title: "科目", key: "subject", align: "center", width: 100 },
         {
           title: "跟进人",
           key: "follow_sale_name",
@@ -190,16 +190,16 @@ export default {
           width: 120,
         },
         {
-          title: "跟进状态",
+          title: "状态",
           key: "follow_status",
           align: "center",
           width: 100,
         },
         { title: "呼出情况", key: "many_calls", align: "center", width: 100 },
-        { title: "流转类型", key: "transfer", align: "center", width: 100 },
-        { title: "新/老用户", key: "highsea_id", width: 100 },
         { title: "渠道来源", key: "refer", align: "center", width: 100 },
         { title: "分配时间", key: "receive_time", align: "center", width: 170 },
+        { title: "新/老用户", key: "highsea_id", width: 100 },
+        { title: "流转类型", key: "transfer", align: "center", width: 100 },
         { title: "活跃时间", width: 170, align: "center", key: "active_time" },
         {
           title: "活跃事件",

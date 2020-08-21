@@ -1,5 +1,6 @@
 <template>
   <div>
+    <DaibanMessage v-if="show" :type="type" ref="message" />
     <div class="contaner">
       <ul class="tabs">
         <li @click="tab(1)" :class="[num == 1? 'active' : '']">
@@ -27,9 +28,9 @@
               <Input v-model="form.mobile" placeholder="注册手机" @on-change="seekMobile"></Input>
             </FormItem>
           </Col>
-          <Col span="2">
+          <Col span="2" v-if="num == 2">
             <FormItem>
-              <Select v-model="form.follow_status" @on-change="seek" placeholder="跟进状态">
+              <Select v-model="form.follow_status" @on-change="seek" placeholder="状态">
                 <Option v-for="(list,i) in follow_status" :key="i" :value="i">{{list}}</Option>
               </Select>
             </FormItem>
@@ -44,7 +45,7 @@
           <Col span="2">
             <FormItem>
               <Select v-model="form.refer" @on-change="seek" placeholder="渠道">
-                <Option v-for="(list,i) in refer" :key="i" :value="list.id">{{list.channel_title}}</Option>
+                <Option v-for="(list,i) in channel" :key="i" :value="list.id">{{list.channel_title}}</Option>
               </Select>
             </FormItem>
           </Col>
@@ -57,7 +58,7 @@
           </Col>
           <Col span="2">
             <FormItem>
-              <Select v-model="form.subject" @on-change="seek" placeholder="意向科目">
+              <Select v-model="form.subject" @on-change="seek" placeholder="科目">
                 <Option :value="i" v-for="(list,i) in subjectList" :key="i">{{list}}</Option>
               </Select>
             </FormItem>
@@ -80,38 +81,29 @@
               </Select>
             </FormItem>
           </Col>
-          <Col span="5">
+          <Col span="4">
             <FormItem>
-              <div class="dateplc">
-                <DatePicker
-                  v-model="startTime"
-                  type="date"
-                  placeholder="注册时间"
-                  @on-change="getTimes"
-                ></DatePicker>
-                <DatePicker v-model="endTime" type="date" placeholder="注册时间" @on-change="getTimes"></DatePicker>
-              </div>
+              <DatePicker
+                v-model="loginDates"
+                type="daterange"
+                split-panels
+                placeholder="注册时间 - 注册时间"
+                @on-change="loginDate"
+              ></DatePicker>
             </FormItem>
           </Col>
-          <Col span="5" v-if="num == 2">
+          <Col span="4" v-if="num == 2">
             <FormItem>
-              <div class="dateplc">
-                <DatePicker
-                  v-model="startTime2"
-                  type="date"
-                  placeholder="分配时间"
-                  @on-change="getTimes2"
-                ></DatePicker>
-                <DatePicker
-                  v-model="endTime2"
-                  type="date"
-                  placeholder="分配时间"
-                  @on-change="getTimes2"
-                ></DatePicker>
-              </div>
+              <DatePicker
+                v-model="allocationDates"
+                type="daterange"
+                split-panels
+                placeholder="分配时间 - 分配时间"
+                @on-change="allocationDate"
+              ></DatePicker>
             </FormItem>
           </Col>
-          <Col span="5" v-if="num == 2">
+          <Col span="4" v-if="num == 2">
             <FormItem label="意向度" :label-width="80">
               <RadioGroup v-model="form.intention_option" @on-change="seek">
                 <Radio
@@ -122,7 +114,7 @@
               </RadioGroup>
             </FormItem>
           </Col>
-          <Col span="2">
+          <Col span="1">
             <Button type="primary" @click="clear">清除</Button>
           </Col>
         </Row>
@@ -145,7 +137,7 @@
       </div>
       <Table
         border
-        :columns="columns2"
+        :columns="columns"
         :data="dataArr"
         @on-selection-change="selectionChange"
         height="500"
@@ -162,6 +154,7 @@
     </div>
     <Loading v-show="isLoading" />
     <SendSMS v-if="MODtype" :followForm="followForm" />
+    <MineclientMessage :type="type" v-if="showMine" />
     <Modal width="800" v-model="showVisit" title="回访记录" @on-cancel="showVisit = false">
       <Table border :columns="visitColumns" :data="showVisitData" height="500"></Table>
       <div slot="footer">
@@ -173,8 +166,10 @@
 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
+import DaibanMessage from "./Message";
 import storage from "../../../uilt/storage";
 import Loading from "../../../uilt/loading/loading";
+import MineclientMessage from "../../minecllient/MineclientMessage";
 export default {
   mounted() {
     this.setCurrentPage(1);
@@ -192,6 +187,8 @@ export default {
     });
   },
   components: {
+    DaibanMessage,
+    MineclientMessage,
     Loading,
   },
   data() {
@@ -205,7 +202,7 @@ export default {
         { title: "回访时间", key: "time", width: 170 },
       ],
       showVisit: false,
-      subjectList: storage.getDaiban().screen_list.subject,
+      channel: storage.getDaiban().channel,
       internation: storage.getDaiban().screen_list.inter_nation,
       subjectList: storage.getDaiban().screen_list.subject,
       transfer: storage.getDaiban().screen_list.transfer,
@@ -213,16 +210,13 @@ export default {
       follow_status: storage.getDaiban().screen_list.follow_status,
       sale_list: storage.getDaiban().sale_list,
       selectedNum: 0,
-      endTime: "",
-      endTime2: "",
-      startTime: "",
-      startTime2: "",
-      Time: "",
-      classTime: "",
-      nextTime: "",
+      loginDates: "",
+      allocationDates: "",
+      allocationEndTime: "",
+      allocationStartTime: "",
       isLoading: false,
       num: storage.getTabStatus() * 1,
-      columns2: [],
+      columns: [],
       show: false,
       checkall: [],
       cid: [],
@@ -238,7 +232,7 @@ export default {
       "setCurrentPage",
       "setXiansuoId",
       "setGenjinType",
-      "setStatusNum"
+      "setStatusNum",
     ]),
     ...mapActions(["getKehuList", "RingUp"]),
     //手机号
@@ -264,19 +258,17 @@ export default {
         this.isLoading = false;
       });
     },
-    getTimes() {
-      if (this.startTime && this.endTime) {
-        this.form.create_time_start = this.datePicker(this.startTime);
-        this.form.create_time_end = this.datePicker(this.endTime);
-        this.seek();
-      }
+    //注册时间
+    loginDate(date) {
+      this.form.create_time_start = date[0];
+      this.form.create_time_end = date[1];
+      this.seek();
     },
-    getTimes2() {
-      if (this.startTime2 && this.endTime2) {
-        this.form.receivetime_start = this.datePicker(this.startTime2);
-        this.form.receivetime_end = this.datePicker(this.endTime2);
-        this.seek();
-      }
+    //分配时间
+    allocationDate(date) {
+      this.form.receivetime_start = date[0];
+      this.form.receivetime_end = date[1];
+      this.seek();
     },
     //分配
     allocation(item) {
@@ -298,22 +290,13 @@ export default {
       d = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
       return d;
     },
-    setTime(item) {
-      this.form.class_date = this.datePicker(item);
-    },
-    setClassTime(item) {
-      this.form.create_time_end = this.datePicker(item);
-    },
-    setNextTime(item) {
-      this.form.create_time_start = this.datePicker(item);
-    },
     //查询清空
     clear() {
+      this.loginDates = "";
+      this.allocationDates = "";
       this.form = {};
-      this.startTime = "";
-      this.endTime = "";
-      this.startTime2 = "";
-      this.endTime2 = "";
+      this.allocationStartTime = "";
+      this.allocationEndTime = "";
       this.seek();
     },
     //搜索
@@ -343,7 +326,7 @@ export default {
       });
     },
     //查看
-    datalis(item) {
+    examine(item) {
       this.show = true;
       this.type.classify = "datalis";
       this.type.data = { ...item };
@@ -398,8 +381,8 @@ export default {
     },
     //tab切换
     tab(num) {
-      this.endTime = "";
-      this.startTime = "";
+      this.loginDates = "";
+      this.allocationDates = "";
       this.selectedNum = "";
       this.form = {};
       this.isLoading = true;
@@ -415,7 +398,7 @@ export default {
     //动态设置表格字段
     setStatus() {
       if (this.num == 1) {
-        this.columns2 = [
+        this.columns = [
           { type: "selection", width: 60 },
           { title: "学员姓名", align: "center", key: "student_name" },
           {
@@ -435,6 +418,7 @@ export default {
                   style: {
                     height: "40px",
                     "line-height": "40px",
+                    "z-index": 0,
                   },
                 },
                 params.row.mobile
@@ -442,11 +426,10 @@ export default {
             },
           },
           { title: "城市", align: "center", key: "area" },
-          { title: "在读学校", align: "center", key: "school" },
           { title: "年级", width: 80, align: "center", key: "grade" },
-          { title: "意向科目", align: "center", key: "subject", width: 120 },
+          { title: "科目", align: "center", key: "subject", width: 120 },
           {
-            title: "跟进状态",
+            title: "状态",
             align: "center",
             key: "follow_status",
             width: 95,
@@ -497,7 +480,7 @@ export default {
           },
         ];
       } else if (this.num == 2) {
-        this.columns2 = [
+        this.columns = [
           { type: "selection", width: 60, fixed: "left" },
           {
             title: "学员姓名",
@@ -523,6 +506,7 @@ export default {
                   style: {
                     height: "40px",
                     "line-height": "40px",
+                    "z-index": 0,
                   },
                 },
                 params.row.mobile
@@ -531,7 +515,7 @@ export default {
           },
           { title: "城市", width: 140, align: "center", key: "area" },
           { title: "年级", width: 100, align: "center", key: "grade" },
-          { title: "意向科目", width: 120, align: "center", key: "subject" },
+          { title: "科目", width: 120, align: "center", key: "subject" },
           { title: "渠道来源", width: 140, align: "center", key: "refer" },
           {
             title: "跟进人",
@@ -540,7 +524,7 @@ export default {
             key: "follow_sale_name",
           },
           {
-            title: "跟进状态",
+            title: "状态",
             width: 100,
             align: "center",
             key: "follow_status",
@@ -640,7 +624,7 @@ export default {
                     },
                     on: {
                       click: () => {
-                        this.datalis(params.row);
+                        this.examine(params.row);
                       },
                     },
                   },
@@ -666,13 +650,14 @@ export default {
           },
         ];
       } else if (this.num == 3) {
-        this.columns2 = [
-          { type: "selection", width: 60 },
+        this.columns = [
+          { type: "selection", width: 60, fixed: "left" },
           {
             title: "学员姓名",
             align: "center",
             key: "student_name",
             width: 100,
+            fixed: "left",
           },
           {
             title: "注册手机",
@@ -691,6 +676,7 @@ export default {
                   style: {
                     height: "40px",
                     "line-height": "40px",
+                    "z-index": 0,
                   },
                 },
                 params.row.mobile
@@ -698,7 +684,6 @@ export default {
             },
           },
           { title: "城市", align: "center", key: "area", width: 100 },
-          { title: "在读学校", align: "center", key: "school", width: 100 },
           {
             title: "购买课程",
             align: "center",
@@ -715,7 +700,7 @@ export default {
           { title: "科目", align: "center", width: 75, key: "product_subject" },
           { title: "渠道来源", width: 120, align: "center", key: "refer" },
           {
-            title: "跟进状态",
+            title: "状态",
             width: 100,
             align: "center",
             key: "follow_status",
@@ -768,7 +753,7 @@ export default {
           },
         ];
       } else if (this.num == 4) {
-        this.columns2 = [
+        this.columns = [
           { type: "selection", width: 60 },
           { title: "学员姓名", align: "center", key: "student_name" },
           {
@@ -788,6 +773,7 @@ export default {
                   style: {
                     height: "40px",
                     "line-height": "40px",
+                    "z-index": 0,
                   },
                 },
                 params.row.mobile
@@ -795,11 +781,10 @@ export default {
             },
           },
           { title: "城市", align: "center", key: "area" },
-          { title: "在读学校", align: "center", key: "school" },
           { title: "年级", width: 80, align: "center", key: "grade" },
-          { title: "意向科目", align: "center", key: "subject", width: 120 },
+          { title: "科目", align: "center", key: "subject", width: 120 },
           {
-            title: "跟进状态",
+            title: "状态",
             align: "center",
             key: "follow_status",
             width: 95,
@@ -855,8 +840,6 @@ export default {
   computed: {
     ...mapState({
       data: (state) => state.daiban.data,
-      datas: (state) => state.daiban.datas,
-      refer: (state) => state.daiban.refer,
       currentPage: (state) => state.daiban.currentPage,
       total: (state) => state.daiban.total,
       pageSize: (state) => state.daiban.pageSize,
@@ -882,7 +865,7 @@ export default {
 }
 .allot {
   display: flex;
-  width: 170px;
+  width: 150px;
   height: 30px;
   background: #2d8cf0;
   color: #fff;

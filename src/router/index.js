@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '../components/Home.vue'
 import Erweima from '../components/Erweima.vue'
-import Daiban from '../components/home/Daiban'
 import NotVisit from '../components/NotVisit'
 import Public from '../components/Public'
 import FollowUp from '../components/FollowUp'
@@ -83,8 +82,7 @@ const router = new Router({
         },
         {
           path: '/main/daiban',
-          component: Daiban
-          // component: ()=>import('../components/client-manage/resource-pool/index.vue')
+          component: ()=>import('../components/client-manage/resource-pool/index.vue')
         },
         {
           path: '/main/notvisit',

@@ -173,13 +173,13 @@ export default {
           width: 140
         },
         {
-          title: "上次跟进时间",
+          title: "跟进时间",
           key: "operation_time",
           align: "center",
           width: 170
         },
         {
-          title: "上次跟进内容",
+          title: "跟进记录",
           key: "visit_content",
           align: "center",
           width: 200,
