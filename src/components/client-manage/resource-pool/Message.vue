@@ -318,16 +318,6 @@
                     </Select>
                   </FormItem>
                 </Col>
-                <Col span="10">
-                  <FormItem label="意向度" style="margin-left: 10px">
-                    <RadioGroup v-model="followForm.intention_option">
-                      <Radio :label="1">高</Radio>
-                      <Radio :label="2">中</Radio>
-                      <Radio :label="3">低</Radio>
-                      <Radio :label="4">无</Radio>
-                    </RadioGroup>
-                  </FormItem>
-                </Col>
                 <Col span="14">
                   <FormItem label="呼出请况">
                     <RadioGroup class="radios" v-model="phone_status">
@@ -335,6 +325,16 @@
                       <Radio :label="2">无人接听</Radio>
                       <Radio :label="3">空号</Radio>
                       <Radio :label="4">挂断</Radio>
+                    </RadioGroup>
+                  </FormItem>
+                </Col>
+                 <Col span="10">
+                  <FormItem label="意向度" style="margin-left: 10px">
+                    <RadioGroup v-model="followForm.intention_option">
+                      <Radio :label="1">高</Radio>
+                      <Radio :label="2">中</Radio>
+                      <Radio :label="3">低</Radio>
+                      <Radio :label="4">无</Radio>
                     </RadioGroup>
                   </FormItem>
                 </Col>

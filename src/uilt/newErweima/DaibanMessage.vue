@@ -372,17 +372,17 @@
               <Row>
                 <Col span="24">
                   <ul class="record-footer">
-                    <li v-if="followForm.visit_content" class="visit" v-for="(item,i) in followForm.visit_content" :key="i">
-                        <div>
-                          {{item.time}}&nbsp;&nbsp;&nbsp;<a href="javascript:;">跟进人:</a>
-                          {{item.sale_name}}。
-                          </br>
-                          <a href="javascript:;">内容:</a>
-                          {{item.visit_content }}
-                        </div>
-                    </li>
-                    <li v-else>
+                    <li  v-if="JSON.stringify(followForm.visit_content) == 'null'">
                       暂无跟进记录
+                    </li>
+                    <li v-else class="visit" v-for="(item,i) in followForm.visit_content" :key="i">
+                      <div>
+                        {{item.time}}&nbsp;&nbsp;&nbsp;<a href="javascript:;">跟进人:</a>
+                        {{item.sale_name}}。
+                        </br>
+                        <a href="javascript:;">内容:</a>
+                        {{item.visit_content }}
+                      </div>
                     </li>
                   </ul>
                 </Col>
