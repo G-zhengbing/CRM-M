@@ -14,5 +14,3 @@ yarn-error.log*
 *.sln
 
 # 基础路基配置
-
-env.js
