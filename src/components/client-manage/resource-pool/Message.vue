@@ -220,7 +220,7 @@
             <span>跟进</span>
           </li>
           <li
-            v-if=" type.status == 'studentpay'"
+            v-if=" type.status == 'studentpay' || type.status == 'notcallback' || type.status == 'daiban'"
             @click="tab(2)"
             :class="[num == 2? 'active' : '']"
           >
@@ -230,7 +230,11 @@
             <span>预约单</span>
           </li>
         </ul>
-        <Form :model="followForm" label-position="top" v-if="num ==1">
+        <Form
+          :model="followForm"
+          label-position="top"
+          v-if="num ==1"
+        >
           <div style="display:flex;">
             <div style="flex:1">
               <Row>
@@ -328,7 +332,7 @@
                     </RadioGroup>
                   </FormItem>
                 </Col>
-                 <Col span="10">
+                <Col span="10">
                   <FormItem label="意向度" style="margin-left: 10px">
                     <RadioGroup v-model="followForm.intention_option">
                       <Radio :label="1">高</Radio>
@@ -372,17 +376,16 @@
               <Row>
                 <Col span="24">
                   <ul class="record-footer">
-                    <li v-if="followForm.visit_content" class="visit" v-for="(item,i) in followForm.visit_content" :key="i">
-                        <div>
-                          {{item.time}}&nbsp;&nbsp;&nbsp;<a href="javascript:;">跟进人:</a>
-                          {{item.sale_name}}。
-                          </br>
-                          <a href="javascript:;">内容:</a>
-                          {{item.visit_content }}
-                        </div>
-                    </li>
-                    <li v-else>
-                      暂无跟进记录
+                    <li v-if="JSON.stringify(followForm.visit_content) == 'null'">暂无跟进记录</li>
+                    <li v-else class="visit" v-for="(item,i) in followForm.visit_content" :key="i">
+                      <div>
+                        {{item.time}}&nbsp;&nbsp;&nbsp;
+                        <a href="javascript:;">跟进人:</a>
+                        {{item.sale_name}}。
+                         </br>
+                        <a href="javascript:;">内容:</a>
+                        {{item.visit_content }}
+                      </div>
                     </li>
                   </ul>
                 </Col>

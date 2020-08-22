@@ -69,7 +69,7 @@
 import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
 import Loading from "../../uilt/loading/loading";
 import storage from "../../uilt/storage";
-import DaibanMessage from "../../uilt/newErweima/DaibanMessage";
+import DaibanMessage from "../client-manage/resource-pool/Message";
 import MineclientMessage from "./MineclientMessage";
 export default {
   components: {

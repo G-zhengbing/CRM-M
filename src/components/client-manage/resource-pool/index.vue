@@ -223,6 +223,7 @@ export default {
       type: {
         page: 1,
         text: "",
+        status:'daiban'
       },
       form: {},
     };
