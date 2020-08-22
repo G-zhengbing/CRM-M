@@ -198,27 +198,6 @@ export default {
             Authorization: "bearer " + storage.get()
           }
         }).then(res => {
-          if (status == 3) {
-            dispatch("getKehuList", {
-              status: 3,
-              form: state.forms
-            })
-          } else if (status == 2) {
-            dispatch("getKehuList", {
-              status: 2,
-              form: state.forms
-            })
-          } else if(status == 4){
-            dispatch("getKehuList", {
-              status: 4,
-              form: state.forms
-            })
-          }else if(status == 1) {
-            dispatch("getKehuList", {
-              status: 1,
-              form: state.forms
-            })
-          }
           resolve(res)
         }).catch(e => {
           reject(e)

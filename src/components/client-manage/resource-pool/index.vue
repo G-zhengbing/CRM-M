@@ -223,7 +223,7 @@ export default {
       type: {
         page: 1,
         text: "",
-        status:'daiban'
+        status: "daiban",
       },
       form: {},
     };
@@ -277,6 +277,8 @@ export default {
       arr.push(item.id);
       this.show = true;
       this.type.classify = "shade";
+      this.type.form = { ...this.form };
+      this.type.page = this.currentPage;
       this.setXiansuoId(arr);
     },
     //设置返回的时间
@@ -315,6 +317,8 @@ export default {
     allot() {
       this.type.classify = "shade";
       if (this.checkall.length > 0) {
+        this.type.form = { ...this.form };
+        this.type.page = this.currentPage;
         this.show = true;
       }
     },

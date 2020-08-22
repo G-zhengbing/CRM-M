@@ -780,6 +780,11 @@ export default {
       this.fenPai({ form: this.form, status: this.$parent.num }).then((res) => {
         if (res.data.ret) {
           this.$Message.success("分配成功");
+          this.getKehuList({
+            status: storage.getTabStatus(),
+            page: this.type.page,
+            form: this.type.form,
+          });
         } else {
           this.$Message.error(res.data.ret);
         }
@@ -851,7 +856,7 @@ export default {
       showFenpei: false,
       showShade: true,
       form: {},
-      item: null,
+      item: null
     };
   },
 };
